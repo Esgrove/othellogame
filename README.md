@@ -6,17 +6,24 @@ I originally did this in Python for a programming course, and then a few years l
 
 I started working on a Rust version of the same thing as a learning excercise, and I'll probably do a few other languages, such as C, C#, Swift, Kotlin etc... in the future as well for learning and comparison purposes. One of the interesting things to compare will be the different level and type of OOP support in each language, and how that changes the implementation and program structure. For example Rust does OOP a bit differently, and of course C does not have classes at all out of the box.
 
+### Program structure
+
+_main_: just the main game loop
+_othello_: the game logic implementation and game board
+_player_: player object used for playing one move and storing player information
+_util_: helper structs and functions for printing and formatting
+
 ### Python
 
 Python 3 only. Uses the [colorama](https://pypi.org/project/colorama/) package as an extra for colored text in the terminal.
 
 ##### Files
 
-*_main.py_ 
-*_othello.py_
-*_player.py_
-*_util.py_
-*_color.py_
+* main.py
+* othello.py
+* player.py
+* util.py
+* color.py
 
 ### C++
 
@@ -24,7 +31,7 @@ Primarily done in VS2017 on Win10, but also includes a makefile for mac/linux an
 
 ##### Files
 
-*_main.cpp_ 
-*_othello.hpp & _othello.cpp_
-*_player.hpp & player.cpp_
-*_util.hpp & _util.cpp_
+* main.cpp
+* othello.hpp & othello.cpp
+* player.hpp & player.cpp
+* util.hpp & util.cpp
