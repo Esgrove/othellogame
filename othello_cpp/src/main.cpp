@@ -4,7 +4,7 @@
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
 //==========================================================
-#include <algorithm>
+#include <algorithm> // max, min
 
 #include "othello.hpp"
 #include "player.hpp"
