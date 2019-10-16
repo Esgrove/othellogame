@@ -5,44 +5,37 @@
 //==========================================================
 
 #pragma once
-#include "othello.hpp"
-#include "util.hpp"
-//==========================================================
+#include <random>
 
-enum PlayType {
-    HUMAN = 100,
-    COMPUTER
-};
-//==========================================================
+#include "board.hpp"
+
+namespace game {
 
 class Player {
 public:
-    Player(Color col) : rounds(0), m_color(col), m_type(HUMAN) {};
-    Player(Color col, PlayType type) : rounds(0), m_color(col), m_type(type) {};
-    ~Player() {};
-    //------------------------------------------------------
+    Player() : rounds(0), m_color(BLACK), human(true) {};
+    explicit Player(Disk col) : rounds(0), m_color(col), human(true) {};
+    Player(Disk col, bool type) : rounds(0), m_color(col), human(type) {};
+    ~Player() = default;;
 
-    Color           color() const { return m_color; }
-    std::string     colorString() const { return getColorString(this->m_color); }
-    std::string     colorStringUpper() const;
+    Disk            color() const { return m_color; }
+    std::string     color_string() const { return get_disk_string(this->m_color); }
+    std::string     color_string_upper() const;
+    std::string     type_string() const;
 
-    PlayType        type() const { return m_type; }
-    std::string     typeString() const;
-    void            setType(PlayType type) { m_type = type; }
-    bool            human() const { return m_type == HUMAN; }
-
-    void            playOneMove(Othello& game);
-    void            printMoves(const std::vector<Move>& moves);
-    //------------------------------------------------------
+    void            play_one_move(Board& game);
+    static void     print_moves(const std::vector<Move>& moves);
+    void            set_human(bool is_human) { this->human = is_human; }
 
     int             rounds;
-    bool            canPlay = true;
-    //------------------------------------------------------
+    bool            canPlay {true};
 
     friend std::ostream& operator<< (std::ostream& out, Player& p);
-    //------------------------------------------------------
 
 private:
-    Color           m_color;
-    PlayType        m_type;
+    Disk            m_color;
+    bool            human;
+    std::mt19937    rand_gen {std::mt19937 { std::random_device{}() }};
 };
+
+} // namespace game

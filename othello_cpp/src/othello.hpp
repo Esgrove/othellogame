@@ -6,36 +6,26 @@
 //==========================================================
 
 #pragma once
-#include <vector>
-#include "util.hpp"
-//==========================================================
+#include "player.hpp"
 
-class Othello {
+namespace game {
+
+class Othello
+{
 
 public:
-    static const int directions[8][2];
+    Othello();
+    ~Othello() = default;;
 
-    Othello(int dim);
-    ~Othello();
-
-    bool                canPlaceDisc(const Color color);
-    bool                canPlaceToSquare(const int rx, const int ry, const Color color);
-    bool                checkCoordinates(const int x, const int y);
-
-    Color               getOtherColor(const Color color);
-    std::vector<Move>   getPossibleMoves(const Color color);
-    Color               getResult();
-    Color               getSquare(const int x, const int y);
-    bool                setSquare(const int x, const int y, const Color disk);
-
-    bool                placeDisc(const int rx, const int ry, const Color color);
-    void                printBoard();
-    void                printScore();
-
-    friend std::ostream& operator<< (std::ostream& out, const Othello& othello);
+    void                    playGame();
 
 private:
-    std::vector<Color>  board;
-    int        dim;
-    int        size;
+    static std::string      getAnswer(const std::string& text);
+    static int              getBoardSize();
+
+    Board                   board;
+    Player                  player_black;
+    Player                  player_white;
 };
+
+} // namespace game

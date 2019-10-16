@@ -6,18 +6,13 @@
 
 #include "util.hpp"
 
-bool Move::operator<(const Move& other) const
+bool game::Move::operator<(const Move& other) const
 {
-    if (value > other.value) {
-        return true;
-    }
-    else if (value == other.value && square < other.square) {
-        return true;
-    }
-    return false;
+    // biggest value with smallest coordinates first
+    return value > other.value || (value == other.value && square < other.square);
 }
 
-bool Square::operator<(const Square& other) const
+bool game::Square::operator<(const Square& other) const
 {
     return x < other.x || (x <= other.x && y < other.y);
 }

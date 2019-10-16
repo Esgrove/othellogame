@@ -11,12 +11,12 @@ EXECUTABLE=othello
 all: $(EXECUTABLE)
   
 $(EXECUTABLE): $(OBJECTS) 
-	$(CXX) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJECTS)
+    $(CXX) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJECTS)
 
 .cpp.o:
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+    $(CXX) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: clean
 
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+    rm -f $(OBJECTS) $(EXECUTABLE)
