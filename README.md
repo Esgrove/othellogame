@@ -2,23 +2,23 @@
 
 A simple [Othello / Reversi](https://en.wikipedia.org/wiki/Reversi) command line game implementation in different programming languages.
 
-I originally did this years ago in Python for a programming course, and then a few years later redid the thing in C++ for fun. Now I though that this could actually be a nice way to compare languages directly and to illustrate the differences in syntax and usage. Also, these work well as a source code formatting reference. I cleaned up both of my old implementations in Python and C++, and refactored them to match eatch other as closely as is reasonable. The program structure and all the functions are basically identical, so it is very easy to compare them. 
+I originally did this years ago in Python for a programming course, and then a few years later redid the thing in C++ for fun. Now I though that this could actually be a nice way to compare languages directly and to illustrate the differences in syntax and usage. Also, these work well as a code formatting reference. I cleaned up both of my old implementations in Python and C++, and refactored them to match eatch other as closely as is reasonable. The program structure and all the functions are basically identical, so it is very easy to compare them.
 
-I started working on a Rust version of the same thing as a learning excercise, and I'll probably do a few other languages, such as C, C#, Swift, Kotlin etc... in the future as well for learning and comparison purposes. One of the interesting things to compare will be the different level and type of OOP support in each language, and how that changes the implementation and program structure. For example Rust does OOP a bit differently, and of course C does not have classes at all out of the box.
+I started working on a Rust version of the same thing as a learning excercise, and I'll probably do a few other languages, such as C#, Swift, Kotlin etc... in the future as well for learning purposes.
 
 ### Program structure
 
-_main_: Just the main game loop.
+_othello_: The main gameplay loop.
 
-_othello_: The game logic implementation and game board storage.
+_board_: Game board storage and functions.
 
 _player_: Player object used for making moves and storing player information.
 
-_util_: Some helper utilities like structs, enums and functions for printing and formatting.
+_util_: Some helper utilities and functions for example for string formatting and printing.
 
 ### Python
 
-Python 3 only. Uses the [colorama](https://pypi.org/project/colorama/) package as an extra for colored text in the terminal.
+Python 3.6+ only. Uses [colorama](https://pypi.org/project/colorama/) for colored text in the terminal.
 
 ##### Files
 
@@ -26,11 +26,11 @@ Python 3 only. Uses the [colorama](https://pypi.org/project/colorama/) package a
 * othello.py
 * player.py
 * util.py
-* color.py
+* colorprint.py
 
 ### C++
 
-Primarily done in VS2017 on Win10, but also includes a makefile for mac/linux and checked to work on my Macbook Pro under Mojave. 
+C++17. Uses [termcolor](https://github.com/ikalnytskyi/termcolor) for colored text in the terminal.
 
 ##### Files
 
@@ -38,3 +38,4 @@ Primarily done in VS2017 on Win10, but also includes a makefile for mac/linux an
 * othello.hpp & othello.cpp
 * player.hpp & player.cpp
 * util.hpp & util.cpp
+* colorprint.hpp & colorprint.cpp
