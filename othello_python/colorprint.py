@@ -11,13 +11,13 @@ colorama.init()
 
 class Color(Enum):
     """Enum interface to Colorama colors."""
-    red = colorama.Fore.RED
-    green = colorama.Fore.GREEN
-    yellow = colorama.Fore.YELLOW
     blue = colorama.Fore.BLUE
-    magenta = colorama.Fore.MAGENTA
     cyan = colorama.Fore.CYAN
+    green = colorama.Fore.GREEN
+    magenta = colorama.Fore.MAGENTA
+    red = colorama.Fore.RED
     white = colorama.Fore.WHITE
+    yellow = colorama.Fore.YELLOW
 
 
 def get_color(text, color=Color.white, bold=False):
