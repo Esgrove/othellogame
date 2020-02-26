@@ -3,11 +3,14 @@ Color print helper
 Akseli Lukkarila
 2019
 """
+from enum import Enum
+
 import colorama
 colorama.init()
 
 
-class Color:
+class Color(Enum):
+    """Enum interface to Colorama colors."""
     red = colorama.Fore.RED
     green = colorama.Fore.GREEN
     yellow = colorama.Fore.YELLOW
@@ -17,15 +20,15 @@ class Color:
     white = colorama.Fore.WHITE
 
 
-def get_color(text, color=colorama.Fore.WHITE, bold=False):
+def get_color(text, color=Color.white, bold=False):
     return f"{colorama.Style.BRIGHT if bold else ''}{color}{text}{colorama.Style.RESET_ALL}"
 
 
-def print_bold(text, color=colorama.Fore.WHITE):
+def print_bold(text, color=Color.white):
     print(get_color(text, color, True))
 
 
-def print_color(text, color=colorama.Fore.WHITE, bold=False):
+def print_color(text, color=Color.white, bold=False):
     print(get_color(text, color, bold))
 
 
