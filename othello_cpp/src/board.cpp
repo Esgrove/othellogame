@@ -7,8 +7,8 @@
 
 #include <numeric>  // std::accumulate
 
-#include "colorprint.hpp"
 #include "board.hpp"
+#include "colorprint.hpp"
 
 const int game::Board::directions[8][2] = {{0,-1}, {1, 0}, {0, 1}, {-1, 0}, {1,-1}, {1, 1}, {-1, 1}, {-1,-1}};
 
@@ -142,7 +142,7 @@ bool game::Board::place_disc(int x, int y, Disk color) {
     return false;
 }
 
-/// Print current score for both playes
+/// Print current score for both players
 void game::Board::print_score() {
     int black = 0; // std::accumulate(board.begin(), board.end(), 0, [](Disk col){return col == WHITE; })
     int white = 0; // std::accumulate(board.begin(), board.end(), 0, [](Disk col){return col == BLACK; })

@@ -13,27 +13,27 @@ namespace game {
 
 class Player {
 public:
-    Player() : rounds(0), m_color(BLACK), human(true) {};
-    explicit Player(Disk col) : rounds(0), m_color(col), human(true) {};
-    Player(Disk col, bool type) : rounds(0), m_color(col), human(type) {};
+    Player() : rounds(0), color(BLACK), human(true) {};
+    explicit Player(Disk col) : rounds(0), color(col), human(true) {};
+    Player(Disk col, bool type) : rounds(0), color(col), human(type) {};
     ~Player() = default;;
 
-    Disk            color() const { return m_color; }
-    std::string     color_string() const { return get_disk_string(this->m_color); }
-    std::string     color_string_upper() const;
-    std::string     type_string() const;
+    // nodiscard == compiler should warn if value returned by function call is not used
+    [[nodiscard]] std::string     color_string() const { return get_disk_string(this->color); }
+    [[nodiscard]] std::string     color_string_upper() const;
+    [[nodiscard]] std::string     type_string() const;
 
     void            play_one_move(Board& game);
     static void     print_moves(const std::vector<Move>& moves);
     void            set_human(bool is_human) { this->human = is_human; }
 
-    int             rounds;
-    bool            canPlay {true};
-
     friend std::ostream& operator<< (std::ostream& out, Player& p);
 
+    int             rounds;
+    bool            can_play {true};
+
 private:
-    Disk            m_color;
+    Disk            color;
     bool            human;
     std::mt19937    rand_gen {std::mt19937 { std::random_device{}() }};
 };

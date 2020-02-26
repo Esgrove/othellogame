@@ -11,5 +11,5 @@
 int main() {
     print_color("OTHELLO GAME - C++\n", Color::GREEN);
     game::Othello game;
-    game.playGame();
+    game.play_game();
 }
