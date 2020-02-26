@@ -14,7 +14,7 @@ class Disk(IntEnum):
     EMPTY = 0
     WHITE = 1
 
-    def color(self):
+    def color(self) -> Color:
         """Return the associated color for this disk."""
         if self.value == self.EMPTY:
             return Color.white

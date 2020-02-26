@@ -12,6 +12,7 @@ from util import Disk, clamp
 
 
 class Othello:
+    """Implements Othello CLI game."""
     def __init__(self):
         self.board = None
         self.player_black = None
@@ -37,17 +38,6 @@ class Othello:
         print(self.player_black)
         print(self.player_white, end="\n\n")
         print(self.board)
-
-    @staticmethod
-    def get_board_size():
-        """Ask the desired board size from user."""
-        while True:
-            try:
-                size = int(input("Choose board size (default is 8): "))
-                return clamp(size, 4, 8)
-            except ValueError:
-                print_error("Give a number...")
-                continue
 
     def play_game(self):
         """Play one full game of Othello."""
@@ -76,6 +66,17 @@ class Othello:
 
         if input("Would you like to play again (y/n)? ").lower() == "y":
             self.play_game()
+
+    @staticmethod
+    def get_board_size():
+        """Ask the desired board size from user."""
+        while True:
+            try:
+                size = int(input("Choose board size (default is 8): "))
+                return clamp(size, 4, 8)
+            except ValueError:
+                print_error("Give a number...")
+                continue
 
 
 if __name__ == "__main__":
