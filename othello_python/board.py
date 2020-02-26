@@ -11,10 +11,11 @@ from util import Disk, Move, Square
 
 class Board:
     """Handles game board state and logic."""
+    DIRECTIONS = ((0, -1), (0, 1), (1, 0), (-1, 0), (1, -1), (1, 1), (-1, 1), (-1, -1))
+
     def __init__(self, size):
         self._size = size
         self._board = [[Disk.EMPTY for _ in range(self._size)] for _ in range(self._size)]
-        self.directions = ((0, -1), (0, 1), (1, 0), (-1, 0), (1, -1), (1, 1), (-1, 1), (-1, -1))
 
         # set starting positions
         row = (self._size - 1) // 2
@@ -28,7 +29,7 @@ class Board:
         """Check can the given disk color be placed in the given position."""
         if self.get_square(x, y) == Disk.EMPTY:
             other = disk.other_disk()
-            for i, j in self.directions:
+            for i, j in self.DIRECTIONS:
                 tx = x + i
                 ty = y + j
                 if self.get_square(tx, ty) == other:
@@ -51,7 +52,7 @@ class Board:
             for x in range(self._size):
                 if self.get_square(x, y) == Disk.EMPTY:
                     value = 0
-                    for i, j in self.directions:
+                    for i, j in self.DIRECTIONS:
                         tx = x + i
                         ty = y + j
                         steps = 0
@@ -92,7 +93,7 @@ class Board:
         """Tries to place the given disk color to the given square."""
         if self.can_place_to_square(x, y, disk):
             other = disk.other_disk()
-            for i, j in self.directions:
+            for i, j in self.DIRECTIONS:
                 tx = x + i
                 ty = y + j
                 while self.get_square(tx, ty) == other:
