@@ -11,7 +11,6 @@ add_executable(othello_cpp
         src/board.hpp
         src/colorprint.cpp
         src/colorprint.hpp
-        src/main.cpp
         src/othello.cpp
         src/othello.hpp
         src/player.cpp
