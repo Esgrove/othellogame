@@ -10,8 +10,6 @@
 #include "board.hpp"
 #include "colorprint.hpp"
 
-const int game::Board::directions[8][2] = {{0,-1}, {1, 0}, {0, 1}, {-1, 0}, {1,-1}, {1, 1}, {-1, 1}, {-1,-1}};
-
 game::Board::Board(int dim) : dim(dim), size(dim * dim) {
     // init board
     board.resize(size, EMPTY);

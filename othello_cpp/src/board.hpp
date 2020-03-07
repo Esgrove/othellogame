@@ -15,7 +15,7 @@ namespace game {
 class Board {
 
 public:
-    static const int directions[8][2];
+    constexpr static const int directions[8][2] = {{0,-1}, {1, 0}, {0, 1}, {-1, 0}, {1,-1}, {1, 1}, {-1, 1}, {-1,-1}};
 
     Board() : dim(0), size(8) {};
     explicit Board(int dim);
