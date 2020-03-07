@@ -1,6 +1,6 @@
 //==========================================================
 // Class Othello source
-// Othello (Reversi) game
+// Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
 //==========================================================
@@ -55,14 +55,16 @@ int game::Othello::get_board_size()
 void game::Othello::play_game()
 {
     while (player_black.can_play || player_white.can_play) {
+        std::cout << "=========== ROUND: " << std::to_string(rounds + 1) << " ===========\n";
         player_black.play_one_move(board);
         player_white.play_one_move(board);
         board.print_score();
+        ++rounds;
     }
 
     print_color("The game is finished!", Color::GREEN);
     print("total rounds played: ", false);
-    print(std::to_string(this->rounds));
+    print(std::to_string(rounds));
     print("Result:");
     print(board);
     print(player_black, false);
@@ -76,4 +78,10 @@ void game::Othello::play_game()
     } else {
         print("The game ended in a tie...");
     }
+}
+
+int main() {
+    print_color("OTHELLO GAME - C++\n", Color::GREEN);
+    game::Othello othello;
+    othello.play_game();
 }

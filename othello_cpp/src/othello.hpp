@@ -15,7 +15,7 @@ class Othello
 
 public:
     Othello();
-    ~Othello() = default;;
+    ~Othello() = default;
 
     void                    play_game();
 
