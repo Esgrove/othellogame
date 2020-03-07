@@ -13,7 +13,7 @@
 game::Board::Board(int dim) : dim(dim), size(dim * dim) {
     // init board
     board.resize(size, EMPTY);
-    int row = (dim - 1) / 2;
+    int row = dim % 2 == 0 ? (dim-1)/2 : (dim-1)/2 - 1;
     int col = dim / 2;
     board[row * dim + row] = BLACK;
     board[row * dim + col] = WHITE;
