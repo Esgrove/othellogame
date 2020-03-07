@@ -18,7 +18,7 @@ class Board:
         self._board = [[Disk.EMPTY for _ in range(self._size)] for _ in range(self._size)]
 
         # set starting positions
-        row = (self._size - 1) // 2
+        row = (self._size - 1) // 2 if self._size % 2 == 0 else (self._size - 1) // 2 - 1
         col = self._size // 2
         self._board[row][row] = Disk.BLACK
         self._board[row][col] = Disk.WHITE
