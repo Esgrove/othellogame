@@ -20,7 +20,7 @@ std::string game::Player::color_string_upper() const
 
 std::ostream& game::operator<<(std::ostream& out, Player& p)
 {
-    out << p.color_string_upper() << " (" << p.type_string() << ")" << " // moves: " << p.rounds << std::endl;
+    out << p.color_string_upper() << " | " << p.type_string() << " | " << "moves: " << p.rounds << std::endl;
     return out;
 }
 
@@ -85,5 +85,5 @@ void game::Player::print_moves(const std::vector<Move>& moves) {
 
 std::string game::Player::type_string() const
 {
-    return this->human ? std::string("Human") : std::string("Computer");
+    return this->human ? "Human   " : "Computer";
 }

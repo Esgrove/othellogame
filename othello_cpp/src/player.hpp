@@ -16,9 +16,9 @@ public:
     Player() : rounds(0), color(BLACK), human(true) {};
     explicit Player(Disk col) : rounds(0), color(col), human(true) {};
     Player(Disk col, bool type) : rounds(0), color(col), human(type) {};
-    ~Player() = default;;
+    ~Player() = default;
 
-    // nodiscard == compiler should warn if value returned by function call is not used
+    // nodiscard -> compiler should warn if value returned by function call is not used
     [[nodiscard]] std::string     color_string() const { return get_disk_string(this->color); }
     [[nodiscard]] std::string     color_string_upper() const;
     [[nodiscard]] std::string     type_string() const;
