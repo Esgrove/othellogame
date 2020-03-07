@@ -6,9 +6,10 @@ Akseli Lukkarila
 2019
 """
 from board import Board
-from colorprint import Color, print_bold, print_error
 from player import Player
 from util import Disk, clamp
+
+from colorprint import Color, print_bold, print_error
 
 
 class Othello:
@@ -25,6 +26,7 @@ class Othello:
         self.board = Board(board_size)
         self.player_black = Player(Disk.BLACK)
         self.player_white = Player(Disk.WHITE)
+        self.rounds = 0
 
         play_against_computer = input("Would you like to play against the computer (y/n)? ")
         if play_against_computer.lower() == "y":
@@ -43,7 +45,7 @@ class Othello:
         """Play one full game of Othello."""
         self.init_game()
         while self.player_black.can_play or self.player_white.can_play:
-            print(f"=========== ROUND: {self.rounds} ===========")
+            print(f"=========== ROUND: {self.rounds + 1} ===========")
             self.player_black.play_one_move(self.board)
             self.player_white.play_one_move(self.board)
             self.board.print_score()

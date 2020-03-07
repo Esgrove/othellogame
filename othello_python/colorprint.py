@@ -3,14 +3,12 @@ Color print helper
 Akseli Lukkarila
 2019
 """
-from enum import Enum
-
 import colorama
 colorama.init()
 
 
-class Color(Enum):
-    """Enum interface to Colorama colors."""
+class Color:
+    """Nicer interface to Colorama colors."""
     blue = colorama.Fore.BLUE
     cyan = colorama.Fore.CYAN
     green = colorama.Fore.GREEN
