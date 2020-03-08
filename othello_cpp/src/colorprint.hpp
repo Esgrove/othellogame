@@ -5,10 +5,10 @@
 //==========================================================
 
 #pragma once
-#include <iostream>     // std::cout
-#include <string>	    // std::string
+#include <iostream>  // std::cout
+#include <string>	 // std::string
 
-#include "../termcolor/termcolor.hpp"
+#include <termcolor/termcolor.hpp>
 
 /// Color options
 enum class Color {
@@ -22,5 +22,5 @@ enum class Color {
     WHITE
 };
 
-/// Print given text with given color.
+/// Outputs text to std::cout with given color. Does not add a linebreak to the end.
 void print_color(const std::string& text, Color color=Color::WHITE);

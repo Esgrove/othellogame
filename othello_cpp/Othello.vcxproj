@@ -113,12 +113,12 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>D:\Dropbox\CODE\othellogame\othello_cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\board.cpp" />
     <ClCompile Include="src\colorprint.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\othello.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\util.cpp" />
