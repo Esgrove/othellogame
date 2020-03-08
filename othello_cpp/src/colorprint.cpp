@@ -1,6 +1,7 @@
 #include "colorprint.hpp"
 
 void print_color(const std::string& text, Color color) {
+    // TODO: figure out a nicer way to do this...
     switch (color) {
     case Color::GREY:
         std::cout << termcolor::grey;
@@ -27,6 +28,5 @@ void print_color(const std::string& text, Color color) {
         std::cout << termcolor::white;
         break;
     }
-    std::cout << text << "\n";
-    std::cout << termcolor::reset;
+    std::cout << text << termcolor::reset;
 }
