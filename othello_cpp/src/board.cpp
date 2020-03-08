@@ -84,8 +84,7 @@ game::Disk game::Board::get_result() {
     int sum = std::accumulate(board.begin(), board.end(), 0);
     if (sum > 0) {
         return WHITE;
-    }
-    else if (sum < 0) {
+    } else if (sum < 0) {
         return BLACK;
     }
     return EMPTY;
@@ -96,7 +95,7 @@ game::Disk game::Board::square(const int x, const int y) {
     if (check_coordinates(x, y)) {
         return board[y * dim + x];
     } else {
-        return ERROR;
+        return INVALID;
     }
 }
 

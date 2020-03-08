@@ -14,7 +14,7 @@ enum Disk {
     BLACK = -1,
     EMPTY =  0,
     WHITE =  1,
-    ERROR =  2
+    INVALID =  2
 };
 
 struct Square {
