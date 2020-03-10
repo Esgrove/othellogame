@@ -80,9 +80,9 @@ std::vector<othello::Move> othello::Board::get_possible_moves(Disk color) const 
     return moves;
 }
 
-/// Calculates the final score and returns the winner color
-othello::Disk othello::Board::get_result() const {
-    int sum = std::accumulate(board.begin(), board.end(), 0);
+/// Calculates the final score and returns the winner color.
+othello::Disk othello::Board::result() const {
+    int sum = score();
     if (sum > 0) {
         return Disk::WHITE;
     } else if (sum < 0) {
@@ -91,7 +91,12 @@ othello::Disk othello::Board::get_result() const {
     return Disk::EMPTY;
 }
 
-/// Returns the state of the board (empty, white, black) at the given coordinates
+/// Returns the total score (positive means more white disks and negative means more black disks).
+int othello::Board::score() const {
+    return std::accumulate(board.begin(), board.end(), 0, [](int s, Disk d) {return s + static_cast<int>(d); });;
+}
+
+/// Returns the state of the board (empty, white, black) at the given coordinates.
 othello::Disk othello::Board::square(const int x, const int y) const {
     if (check_coordinates(x, y)) {
         return board[y * dim + x];
@@ -100,7 +105,7 @@ othello::Disk othello::Board::square(const int x, const int y) const {
     }
 }
 
-/// Sets the given square to given value
+/// Sets the given square to given value.
 bool othello::Board::set_square(int x, int y, Disk disk) {
     if (check_coordinates(x, y)) {
         board[y * dim + x] = disk;
@@ -109,7 +114,7 @@ bool othello::Board::set_square(int x, int y, Disk disk) {
     return false;
 }
 
-/// Tries to place the given disk color to the given square
+/// Tries to place the given disk color to the given square.
 bool othello::Board::place_disc(int x, int y, Disk color) {
     if (can_place_to_square(x, y, color)) {
         Disk other = other_disk(color);
@@ -135,10 +140,10 @@ bool othello::Board::place_disc(int x, int y, Disk color) {
     return false;
 }
 
-/// Print current score for both players
+/// Print current score for both players.
 void othello::Board::print_score() const {
-    int black = 0; // std::accumulate(board.begin(), board.end(), 0, [](Disk col){return col == WHITE; })
-    int white = 0; // std::accumulate(board.begin(), board.end(), 0, [](Disk col){return col == BLACK; })
+    int black = 0;
+    int white = 0;
     for (auto& col : board) {
         if (col == Disk::WHITE) {
             ++white;
@@ -146,9 +151,10 @@ void othello::Board::print_score() const {
             ++black;
         }
     }
-    std::cout << "Score: " << termcolor::magenta << std::to_string(white) << termcolor::reset;
-    std::cout << " | ";
-    std::cout << termcolor::cyan << std::to_string(black) << termcolor::reset << "\n\n";
+    print("Score: ");
+    print_color(std::to_string(white), disk_color(Disk::WHITE));
+    print(" | ", false);
+    print_color(std::to_string(black) + "\n\n", disk_color(Disk::BLACK));
 }
 
 /// Print board

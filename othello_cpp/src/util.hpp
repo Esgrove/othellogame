@@ -42,9 +42,9 @@ struct Move {
 
 enum class Disk {
     BLACK = -1,
-    EMPTY =  0,
-    WHITE =  1,
-    INVALID =  2
+    EMPTY = 0,
+    WHITE = 1,
+    INVALID = 2
 };
 
 /// Returns print color for given Disk.

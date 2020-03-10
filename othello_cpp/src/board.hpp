@@ -22,7 +22,8 @@ public:
     ~Board() = default;
 
     [[nodiscard]] std::vector<Move>     get_possible_moves(Disk color) const;
-    [[nodiscard]] Disk                  get_result() const;
+    [[nodiscard]] Disk                  result() const;
+    [[nodiscard]] int                   score() const;
     [[nodiscard]] Disk                  square(int x, int y) const;
 
     [[nodiscard]] bool                  can_place_to_square(int x, int y, Disk color) const;

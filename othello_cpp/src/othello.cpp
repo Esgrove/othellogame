@@ -72,7 +72,7 @@ void othello::Othello::play_game()
     print(player_black, false);
     print(player_white);
 
-    Disk winner = board.get_result();
+    Disk winner = board.result();
     if (winner == Disk::WHITE) {
         print_color("The white player won!", disk_color(Disk::WHITE));
     } else if (winner == Disk::BLACK) {
