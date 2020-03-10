@@ -24,3 +24,5 @@ enum class Color {
 
 /// Outputs text to std::cout with given color. Does not add a linebreak to the end.
 void print_color(const std::string& text, Color color=Color::WHITE);
+
+void print_bold(const std::string& text, Color color=Color::WHITE);

@@ -30,3 +30,8 @@ void print_color(const std::string& text, Color color) {
     }
     std::cout << text << termcolor::reset;
 }
+
+void print_bold(const std::string& text, Color color) {
+    std::cout << termcolor::bold;
+    print_color(text, color);
+}
