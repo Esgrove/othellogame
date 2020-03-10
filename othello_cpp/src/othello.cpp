@@ -15,8 +15,8 @@
 void othello::Othello::init_game() {
     int board_size = get_board_size();
     board = Board(board_size);
-    player_black = Player(BLACK);
-    player_white = Player(WHITE);
+    player_black = Player(Disk::BLACK);
+    player_white = Player(Disk::WHITE);
 
     auto play_against_computer = get_answer("Would you like to play against the computer (y/n)? ");
     if (play_against_computer == "y") {
@@ -73,10 +73,10 @@ void othello::Othello::play_game()
     print(player_white);
 
     Disk winner = board.get_result();
-    if (winner == WHITE) {
-        print_color("The white player won!", disk_color(WHITE));
-    } else if (winner == BLACK) {
-        print_color("The black player won!", disk_color(BLACK));
+    if (winner == Disk::WHITE) {
+        print_color("The white player won!", disk_color(Disk::WHITE));
+    } else if (winner == Disk::BLACK) {
+        print_color("The black player won!", disk_color(Disk::BLACK));
     } else {
         print("The game ended in a tie...");
     }

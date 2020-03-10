@@ -13,18 +13,18 @@
 
 othello::Board::Board(int dim) : dim(dim), size(dim * dim) {
     // init board
-    board.resize(size, EMPTY);
+    board.resize(size, Disk::EMPTY);
     int row = dim % 2 == 0 ? (dim-1)/2 : (dim-1)/2 - 1;
     int col = dim / 2;
-    board[row * dim + row] = BLACK;
-    board[row * dim + col] = WHITE;
-    board[col * dim + row] = WHITE;
-    board[col * dim + col] = BLACK;
+    board[row * dim + row] = Disk::BLACK;
+    board[row * dim + col] = Disk::WHITE;
+    board[col * dim + row] = Disk::WHITE;
+    board[col * dim + col] = Disk::BLACK;
 }
 
 /// Check can the given disk color be placed in the given position
 bool othello::Board::can_place_to_square(const int x, const int y, const Disk color) const {
-    if (square(x, y) == EMPTY) {
+    if (square(x, y) == Disk::EMPTY) {
         Disk other = other_disk(color);
         for (auto dir : directions) {
             int tx = x + dir[0];
@@ -54,7 +54,7 @@ std::vector<othello::Move> othello::Board::get_possible_moves(Disk color) const 
     Disk other = other_disk(color);
     for (int y = 0; y < dim; ++y) {
         for (int x = 0; x < dim; ++x) {
-            if (square(x, y) == EMPTY) {
+            if (square(x, y) == Disk::EMPTY) {
                 int value = 0;
                 for (auto dir : directions) {
                     int tx = x + dir[0];
@@ -84,11 +84,11 @@ std::vector<othello::Move> othello::Board::get_possible_moves(Disk color) const 
 othello::Disk othello::Board::get_result() const {
     int sum = std::accumulate(board.begin(), board.end(), 0);
     if (sum > 0) {
-        return WHITE;
+        return Disk::WHITE;
     } else if (sum < 0) {
-        return BLACK;
+        return Disk::BLACK;
     }
-    return EMPTY;
+    return Disk::EMPTY;
 }
 
 /// Returns the state of the board (empty, white, black) at the given coordinates
@@ -96,7 +96,7 @@ othello::Disk othello::Board::square(const int x, const int y) const {
     if (check_coordinates(x, y)) {
         return board[y * dim + x];
     } else {
-        return INVALID;
+        return Disk::INVALID;
     }
 }
 
@@ -140,10 +140,9 @@ void othello::Board::print_score() const {
     int black = 0; // std::accumulate(board.begin(), board.end(), 0, [](Disk col){return col == WHITE; })
     int white = 0; // std::accumulate(board.begin(), board.end(), 0, [](Disk col){return col == BLACK; })
     for (auto& col : board) {
-        if (col == WHITE) {
+        if (col == Disk::WHITE) {
             ++white;
-        }
-        else if (col == BLACK) {
+        } else if (col == Disk::BLACK) {
             ++black;
         }
     }

@@ -43,17 +43,14 @@ void othello::Player::play_one_move(Board& game) {
                     int y = input[2] - '0'; // std::stoi(input.substr(2,1));
                     if (game.place_disc(x, y, this->color)) {
                         break;
-                    }
-                    else {
+                    } else {
                         std::cout << "  Error: can't place a " << this->color_string() << " disk in square (" << x << "," << y << ").\n";
                     }
-                }
-                else {
+                } else {
                     print("  Error: give coordinates in the form \"x,y\".");
                 }
             }
-        }
-        else {
+        } else {
             // computer plays: pick a random move
             print("  Computer plays...");
             std::uniform_int_distribution<int> rand_time(1000, 3000);
@@ -61,15 +58,14 @@ void othello::Player::play_one_move(Board& game) {
             std::this_thread::sleep_for(sleep_duration);
 
             std::uniform_int_distribution<int> rand_item(0, moves.size() - 1);
-            auto pos = moves[rand_item(this->rand_gen)].square; // C++17 std::sample is even more convoluted here :(
+            auto pos = moves[rand_item(this->rand_gen)].square;  // C++17 std::sample is even more convoluted here :(
             std::cout << "  -> " << pos << "\n";
             game.place_disc(pos.x, pos.y, color);
         }
         ++this->rounds;
         print("\nResult:");
         std::cout << game;
-    }
-    else {
+    } else {
         print("  No moves available...");
         this->can_play = false;
     }

@@ -40,7 +40,7 @@ struct Move {
     int      value;
 };
 
-enum Disk {
+enum class Disk {
     BLACK = -1,
     EMPTY =  0,
     WHITE =  1,
@@ -49,15 +49,15 @@ enum Disk {
 
 /// Returns print color for given Disk.
     inline Color disk_color(const Disk color) {
-        if (color == EMPTY) {
+        if (color == Disk::EMPTY) {
             return Color::WHITE;
         }
-        return color == WHITE ? Color::MAGENTA : Color::CYAN;
+        return color == Disk::WHITE ? Color::MAGENTA : Color::CYAN;
     }
 
 /// Returns the opponents color
 inline Disk other_disk(const Disk color) {
-    return color == WHITE ? BLACK : WHITE;
+    return color == Disk::WHITE ? Disk::BLACK : Disk::WHITE;
 }
 
 inline std::string get_disk_string(const Disk color) {
@@ -65,9 +65,9 @@ inline std::string get_disk_string(const Disk color) {
 }
 
 inline std::string get_board_char(const Disk color) {
-    if (color == WHITE) {
+    if (color == Disk::WHITE) {
         return "W";
-    } else if (color == BLACK) {
+    } else if (color == Disk::BLACK) {
         return "B";
     }
     return "_";

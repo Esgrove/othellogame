@@ -13,7 +13,7 @@ namespace othello {
 
 class Player {
 public:
-    Player() : color(BLACK), human(true) {};
+    Player() : color(Disk::BLACK), human(true) {};
     explicit Player(Disk col) : color(col), human(true) {};
     Player(Disk col, bool type) : color(col), human(type) {};
     ~Player() = default;
