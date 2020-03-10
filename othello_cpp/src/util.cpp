@@ -6,13 +6,13 @@
 
 #include "util.hpp"
 
-bool game::Move::operator<(const Move& other) const
+bool othello::Move::operator<(const Move& other) const
 {
     // biggest value with smallest coordinates first
     return value > other.value || (value == other.value && square < other.square);
 }
 
-bool game::Square::operator<(const Square& other) const
+bool othello::Square::operator<(const Square& other) const
 {
     return x < other.x || (x <= other.x && y < other.y);
 }

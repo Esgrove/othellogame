@@ -9,13 +9,13 @@
 
 #include "board.hpp"
 
-namespace game {
+namespace othello {
 
 class Player {
 public:
-    Player() : rounds(0), color(BLACK), human(true) {};
-    explicit Player(Disk col) : rounds(0), color(col), human(true) {};
-    Player(Disk col, bool type) : rounds(0), color(col), human(type) {};
+    Player() : color(BLACK), human(true) {};
+    explicit Player(Disk col) : color(col), human(true) {};
+    Player(Disk col, bool type) : color(col), human(type) {};
     ~Player() = default;
 
     // nodiscard -> compiler should warn if value returned by function call is not used
@@ -29,7 +29,7 @@ public:
 
     friend std::ostream& operator<< (std::ostream& out, Player& p);
 
-    int             rounds;
+    int             rounds {0};
     bool            can_play {true};
 
 private:
@@ -38,4 +38,4 @@ private:
     std::mt19937    rand_gen {std::mt19937 { std::random_device{}() }};
 };
 
-} // namespace game
+} // namespace othello

@@ -8,13 +8,13 @@
 #pragma once
 #include "player.hpp"
 
-namespace game {
+namespace othello {
 
 class Othello
 {
 
 public:
-    Othello();
+    Othello() = default;
     ~Othello() = default;
 
     void                    play_game();
@@ -23,10 +23,12 @@ private:
     static std::string      get_answer(const std::string& text);
     static int              get_board_size();
 
+    void                    init_game();
+
     Board                   board;
     Player                  player_black;
     Player                  player_white;
-    int                     rounds;
+    int                     rounds {0};
 };
 
-} // namespace game
+} // namespace othello

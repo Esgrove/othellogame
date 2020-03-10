@@ -11,21 +11,22 @@
 #include "colorprint.hpp"
 #include "player.hpp"
 
-std::string game::Player::color_string_upper() const
+std::string othello::Player::color_string_upper() const
 {
     std::string disk = get_disk_string(color);
     std::transform(disk.begin(), disk.end(), disk.begin(), ::toupper);
     return disk;
 }
 
-std::ostream& game::operator<<(std::ostream& out, Player& p)
+std::ostream& othello::operator<<(std::ostream& out, Player& p)
 {
     out << p.color_string_upper() << " | " << p.type_string() << " | " << "moves: " << p.rounds << std::endl;
     return out;
 }
 
-void game::Player::play_one_move(Board& game) {
-    std::cout << "Turn: " << this->color_string_upper() << "\n";
+void othello::Player::play_one_move(Board& game) {
+    print("Turn: ", false);  // std::cout << "Turn: ";
+    print_color(this->color_string_upper() + "\n", disk_color(this->color));
     auto moves = game.get_possible_moves(this->color);
     if (!moves.empty()) {
         this->can_play = true;
@@ -72,18 +73,17 @@ void game::Player::play_one_move(Board& game) {
         print("  No moves available...");
         this->can_play = false;
     }
-    print("-------------------------------");
+    print("--------------------------------");
 }
 
-void game::Player::print_moves(const std::vector<Move>& moves) {
-    std::string message {"  Possible plays (" + std::to_string(moves.size()) + "):"};
-    print_color(message, Color::YELLOW);
+void othello::Player::print_moves(const std::vector<Move>& moves) {
+    print_color("  Possible plays (" + std::to_string(moves.size()) + "):\n", Color::YELLOW);
     for (const Move& move : moves) {
         std::cout << "  " << move << "\n";
     }
 }
 
-std::string game::Player::type_string() const
+std::string othello::Player::type_string() const
 {
     return this->human ? "Human   " : "Computer";
 }

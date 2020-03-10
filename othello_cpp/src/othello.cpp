@@ -5,14 +5,14 @@
 // Akseli Lukkarila
 //==========================================================
 
-#include <algorithm> // std::clamp
+#include <algorithm> // clamp, transform
 #include <iostream>
 
 #include "colorprint.hpp"
 #include "othello.hpp"
 
-game::Othello::Othello() : rounds{0}
-{
+/// Initialize board for a new game
+void othello::Othello::init_game() {
     int board_size = get_board_size();
     board = Board(board_size);
     player_black = Player(BLACK);
@@ -33,17 +33,18 @@ game::Othello::Othello() : rounds{0}
     print(board);
 }
 
-/// Read user input.
-std::string game::Othello::get_answer(const std::string& text)
+/// Read user input and return it in lowercase.
+std::string othello::Othello::get_answer(const std::string& text)
 {
     std::string input;
     std::cout << text;
     std::cin >> input;
+    std::transform(input.begin(), input.end(), input.begin(), ::tolower);
     return input;
 }
 
 /// Ask the desired board size from user.
-int game::Othello::get_board_size()
+int othello::Othello::get_board_size()
 {
     int size;
     std::cout << "Choose board size (default is 8): ";
@@ -52,10 +53,11 @@ int game::Othello::get_board_size()
 }
 
 /// Play one full game of Othello.
-void game::Othello::play_game()
+void othello::Othello::play_game()
 {
+    init_game();
     while (player_black.can_play || player_white.can_play) {
-        std::cout << "=========== ROUND: " << std::to_string(rounds + 1) << " ===========\n";
+        print_bold("=========== ROUND: " + std::to_string(rounds + 1) + " ===========\n");
         player_black.play_one_move(board);
         player_white.play_one_move(board);
         board.print_score();
@@ -72,16 +74,20 @@ void game::Othello::play_game()
 
     Disk winner = board.get_result();
     if (winner == WHITE) {
-        print_color("The white player won!", Color::MAGENTA);
+        print_color("The white player won!", disk_color(WHITE));
     } else if (winner == BLACK) {
-        print_color("The black player won!", Color::CYAN);
+        print_color("The black player won!", disk_color(BLACK));
     } else {
         print("The game ended in a tie...");
+    }
+    auto play_again = get_answer("\nWould you like to play again (y/n)? ");
+    if (play_again == "y") {
+        play_game();
     }
 }
 
 int main() {
-    print_color("OTHELLO GAME - C++\n\n", Color::GREEN);
-    game::Othello othello;
+    print_bold("OTHELLO GAME - C++\n", Color::GREEN);
+    othello::Othello othello;
     othello.play_game();
 }

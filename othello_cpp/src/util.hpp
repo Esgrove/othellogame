@@ -5,17 +5,12 @@
 //==========================================================
 
 #pragma once
-#include <iostream> // std::cout, std::cin
-#include <string>	// std::string
+#include <iostream> // cout, cin
+#include <string>	// string
 
-namespace game {
+#include "colorprint.hpp"
 
-enum Disk {
-    BLACK = -1,
-    EMPTY =  0,
-    WHITE =  1,
-    INVALID =  2
-};
+namespace othello {
 
 struct Square {
     Square() : x(0), y(0) {}
@@ -41,24 +36,44 @@ struct Move {
 
     bool operator< (const Move& other) const;
 
-    Square	 square;
+    Square   square;
     int      value;
 };
 
-inline std::string get_disk_string(const Disk color) {
-    return color == Disk::BLACK ? std::string("black") : std::string("white");
+enum Disk {
+    BLACK = -1,
+    EMPTY =  0,
+    WHITE =  1,
+    INVALID =  2
+};
+
+/// Returns print color for given Disk.
+    inline Color disk_color(const Disk color) {
+        if (color == EMPTY) {
+            return Color::WHITE;
+        }
+        return color == WHITE ? Color::MAGENTA : Color::CYAN;
+    }
+
+/// Returns the opponents color
+inline Disk other_disk(const Disk color) {
+    return color == WHITE ? BLACK : WHITE;
 }
 
-inline std::string get_board_string(const Disk color) {
+inline std::string get_disk_string(const Disk color) {
+    return color == Disk::BLACK ? "black" : "white";
+}
+
+inline std::string get_board_char(const Disk color) {
     if (color == WHITE) {
         return "W";
-    }
-    else if (color == BLACK) {
+    } else if (color == BLACK) {
         return "B";
     }
     return "_";
 }
 
+/// Print object to std::cout
 template<typename T>
 inline void print(T object, bool newline=true) {
     std::cout << object;
@@ -67,4 +82,4 @@ inline void print(T object, bool newline=true) {
     }
 }
 
-} // namespace game
+} // namespace othello
