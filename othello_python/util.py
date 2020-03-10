@@ -9,7 +9,7 @@ from colorprint import get_color, Color
 
 
 class Disk(IntEnum):
-    """Board state enums."""
+    """Board state enums and utility methods."""
     BLACK = -1
     EMPTY = 0
     WHITE = 1
@@ -46,9 +46,6 @@ class Square:
         self.x = x
         self.y = y
 
-    def __str__(self):
-        return f"({self.x},{self.y})"
-
     def __eq__(self, other):
         return (self.x, self.y) == (other.x, other.y)
 
@@ -66,6 +63,9 @@ class Square:
 
     def __ge__(self, other):
         return self.x >= other.x and self.y >= other.y
+
+    def __str__(self):
+        return f"({self.x},{self.y})"
 
 
 class Move:

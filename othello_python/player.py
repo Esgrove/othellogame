@@ -18,7 +18,7 @@ class Player:
         self.color = color
         self.human = human
         self.can_play = True
-        self.rounds = 0
+        self.rounds_played = 0
 
     def play_one_move(self, board: Board):
         """Play one round as this player."""
@@ -42,7 +42,7 @@ class Player:
                         except ValueError:
                             print_error("Coordinates have to be integer numbers.")
                     else:
-                        print_error("Give coordinates in the form x,y.")
+                        print_error("Give coordinates in the form 'x,y'.")
             else:
                 # computer plays: pick a random move
                 print("  Computer plays...")
@@ -51,7 +51,7 @@ class Player:
                 print(f"  -> {square}")
                 board.place_disk(square.x, square.y, self.color)
 
-            self.rounds += 1
+            self.rounds_played += 1
             print("\nResult:")
             print(board)
 
@@ -67,5 +67,8 @@ class Player:
         for move in sorted(moves):
             print(f"  {move}")
 
+    def type_string(self):
+        return "Human   " if self.human else "Computer"
+
     def __str__(self):
-        return f"{str(self.color)} | {'Human' if self.human else 'Computer':8s} | Moves: {self.rounds}"
+        return f"{str(self.color)} | {self.type_string()} | Moves: {self.rounds_played}"

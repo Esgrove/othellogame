@@ -109,7 +109,7 @@ class Board:
 
         return False
 
-    def set_square(self, x: int, y: int, disk: Disk):
+    def set_square(self, x: int, y: int, disk: Disk) -> bool:
         """Sets the given square to given value."""
         if self.check_coordinates(x, y):
             self._board[y][x] = disk

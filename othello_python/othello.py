@@ -18,7 +18,7 @@ class Othello:
         self.board = None
         self.player_black = None
         self.player_white = None
-        self.rounds = 0
+        self.rounds_played = 0
 
     def init_game(self):
         """Initialize game board and players."""
@@ -26,7 +26,7 @@ class Othello:
         self.board = Board(board_size)
         self.player_black = Player(Disk.BLACK)
         self.player_white = Player(Disk.WHITE)
-        self.rounds = 0
+        self.rounds_played = 0
 
         play_against_computer = input("Would you like to play against the computer (y/n)? ")
         if play_against_computer.lower() == "y":
@@ -45,14 +45,14 @@ class Othello:
         """Play one full game of Othello."""
         self.init_game()
         while self.player_black.can_play or self.player_white.can_play:
-            print(f"=========== ROUND: {self.rounds + 1} ===========")
+            print(f"=========== ROUND: {self.rounds_played + 1} ===========")
             self.player_black.play_one_move(self.board)
             self.player_white.play_one_move(self.board)
             self.board.print_score()
-            self.rounds += 1
+            self.rounds_played += 1
 
         print_bold("The game is finished!", Color.green)
-        print(f"total rounds played: {self.rounds}\n")
+        print(f"total rounds played: {self.rounds_played}\n")
         print_bold("Result:")
         print(self.board)
         print(self.player_black)
@@ -66,7 +66,7 @@ class Othello:
         else:
             print_bold("The game ended in a tie...")
 
-        if input("Would you like to play again (y/n)? ").lower() == "y":
+        if input("\nWould you like to play again (y/n)? ").lower() == "y":
             self.play_game()
 
     @staticmethod
