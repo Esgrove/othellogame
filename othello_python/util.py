@@ -53,13 +53,13 @@ class Square:
         return (self.x, self.y) != (other.x, other.y)
 
     def __lt__(self, other):
-        return self.x <= other.x and self.y < other.y
+        return self.x < other.x or (self.x <= other.x and self.y < other.y)
 
     def __le__(self, other):
-        return self.x <= other.x and self.y <= other.y
+        return self.x <= other.x and self.y < other.y
 
     def __gt__(self, other):
-        return self.x >= other.x and self.y > other.y
+        return self.x > other.x or (self.x >= other.x and self.y > other.y)
 
     def __ge__(self, other):
         return self.x >= other.x and self.y >= other.y
@@ -81,13 +81,13 @@ class Move:
         return (self.square, self.value) != (other.square, other.value)
 
     def __lt__(self, other):
-        return self.value > other.value or (self.value <= other.value and self.square < other.square)
+        return self.value > other.value or (self.value == other.value and self.square < other.square)
 
     def __le__(self, other):
         return self.value >= other.value and self.square <= other.square
 
     def __gt__(self, other):
-        return self.value < other.value or (self.value >= other.value and self.square > other.square)
+        return self.value < other.value or (self.value == other.value and self.square > other.square)
 
     def __ge__(self, other):
         return self.value <= other.value and self.square >= other.square
