@@ -47,6 +47,15 @@ enum class Disk {
     INVALID = 2
 };
 
+inline std::string board_char(const Disk color) {
+    if (color == Disk::WHITE) {
+        return "W";
+    } else if (color == Disk::BLACK) {
+        return "B";
+    }
+    return "_";
+}
+
 /// Returns print color for given Disk.
     inline Color disk_color(const Disk color) {
         if (color == Disk::EMPTY) {
@@ -55,22 +64,21 @@ enum class Disk {
         return color == Disk::WHITE ? Color::MAGENTA : Color::CYAN;
     }
 
-/// Returns the opponents color
-inline Disk other_disk(const Disk color) {
-    return color == Disk::WHITE ? Disk::BLACK : Disk::WHITE;
-}
-
-inline std::string get_disk_string(const Disk color) {
+inline std::string disk_string(const Disk color) {
     return color == Disk::BLACK ? "black" : "white";
 }
 
-inline std::string get_board_char(const Disk color) {
-    if (color == Disk::WHITE) {
-        return "W";
-    } else if (color == Disk::BLACK) {
-        return "B";
+/// Returns the opponents color
+inline Disk other_disk(const Disk color) {
+    if (color == Disk::EMPTY) {
+        return Disk::EMPTY;
     }
-    return "_";
+    return color == Disk::WHITE ? Disk::BLACK : Disk::WHITE;
+}
+
+inline std::ostream& operator<<(std::ostream &out, const Disk& color) {
+    out << disk_string(color);
+    return out;
 }
 
 /// Print object to std::cout

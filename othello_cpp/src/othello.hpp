@@ -17,18 +17,18 @@ public:
     Othello() = default;
     ~Othello() = default;
 
-    void                    play_game();
+    void                    play();
 
 private:
-    static std::string      get_answer(const std::string& text);
+    static bool             get_answer(const std::string& text, const std::string& yes="y", const std::string& no="n");
     static int              get_board_size();
 
     void                    init_game();
 
-    Board                   board;
-    Player                  player_black;
-    Player                  player_white;
-    int                     rounds {0};
+    Board                   board_;
+    Player                  player_black_;
+    Player                  player_white_;
+    int                     rounds_played_ {0};
 };
 
 } // namespace othello

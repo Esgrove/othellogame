@@ -11,29 +11,21 @@
 #include "colorprint.hpp"
 #include "player.hpp"
 
-std::string othello::Player::color_string_upper() const
+std::string othello::Player::disk_string_upper() const
 {
-    std::string disk = get_disk_string(color);
+    std::string disk = disk_string(color_);
     std::transform(disk.begin(), disk.end(), disk.begin(), ::toupper);
     return disk;
 }
 
-std::ostream& othello::operator<<(std::ostream& out, Player& p)
-{
-    out << p.color_string_upper() << " | " << p.type_string() << " | " << "moves: " << p.rounds << std::endl;
-    return out;
-}
-
-void othello::Player::play_one_move(Board& game) {
-    print("Turn: ", false);  // std::cout << "Turn: ";
-    print_color(this->color_string_upper() + "\n", disk_color(this->color));
-    auto moves = game.get_possible_moves(this->color);
+void othello::Player::play_one_move(Board& board) {
+    std::cout << "Turn: ";
+    print_color(this->disk_string_upper() + "\n", disk_color(this->color_));
+    auto moves = board.possible_moves(this->color_);
     if (!moves.empty()) {
-        this->can_play = true;
-        if (this->human) {
-            // sort moves in descending order according to value
-            std::sort(moves.begin(), moves.end());
-            print_moves(moves);
+        this->can_play_ = true;
+        if (this->human_) {
+            board.print_possible_moves(moves);
             std::string input;
             while (true) {
                 std::cout << "  Give disk position (x,y): ";
@@ -41,45 +33,40 @@ void othello::Player::play_one_move(Board& game) {
                 if (input.size() == 3 && input[1] == ',') {
                     int x = input[0] - '0'; // ascii hack
                     int y = input[2] - '0'; // std::stoi(input.substr(2,1));
-                    if (game.place_disc(x, y, this->color)) {
+                    if (board.place_disc(x, y, this->color_)) {
                         break;
-                    } else {
-                        std::cout << "  Error: can't place a " << this->color_string() << " disk in square (" << x << "," << y << ").\n";
                     }
+                    print_error("  Error: can't place a " + disk_string() + " disk in square (" + std::to_string(x) + "," + std::to_string(y) + ").\n");
                 } else {
-                    print("  Error: give coordinates in the form \"x,y\".");
+                    print_error("  Error: give coordinates in the form 'x,y'.");
                 }
             }
         } else {
             // computer plays: pick a random move
             print("  Computer plays...");
-            std::uniform_int_distribution<int> rand_time(1000, 3000);
-            auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen));
+            std::uniform_int_distribution<int> rand_time(1000, 2000);
+            auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen_));
             std::this_thread::sleep_for(sleep_duration);
 
             std::uniform_int_distribution<int> rand_item(0, moves.size() - 1);
-            auto pos = moves[rand_item(this->rand_gen)].square;  // C++17 std::sample is even more convoluted here :(
+            // C++17 std::sample is even more convoluted here :(
+            Square pos = moves[rand_item(this->rand_gen_)].square;
             std::cout << "  -> " << pos << "\n";
-            game.place_disc(pos.x, pos.y, color);
+            board.place_disc(pos.x, pos.y, color_);
         }
-        ++this->rounds;
-        print("\nResult:");
-        std::cout << game;
+        ++this->rounds_played_;
+        print("");
+        print(board);
+        board.print_score();
     } else {
-        print("  No moves available...");
-        this->can_play = false;
-    }
-    print("--------------------------------");
-}
-
-void othello::Player::print_moves(const std::vector<Move>& moves) {
-    print_color("  Possible plays (" + std::to_string(moves.size()) + "):\n", Color::YELLOW);
-    for (const Move& move : moves) {
-        std::cout << "  " << move << "\n";
+        print_color("  No moves available...", Color::YELLOW);
+        this->can_play_ = false;
     }
 }
 
-std::string othello::Player::type_string() const
+std::ostream& othello::operator<<(std::ostream& out, Player& p)
 {
-    return this->human ? "Human   " : "Computer";
+    print_color(p.disk_string_upper(), disk_color(p.color_), out);
+    out << " | " << p.type_string() << " | " << "moves: " << p.rounds_played_;
+    return out;
 }

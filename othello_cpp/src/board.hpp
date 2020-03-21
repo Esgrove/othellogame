@@ -17,19 +17,21 @@ class Board {
 public:
     constexpr static int directions[8][2] = {{0,-1}, {1, 0}, {0, 1}, {-1, 0}, {1,-1}, {1, 1}, {-1, 1}, {-1,-1}};
 
-    Board() : dim(0), size(8) {};
-    explicit Board(int dim);
+    Board() : size_(8) {};
+    explicit Board(int size);
     ~Board() = default;
 
-    [[nodiscard]] std::vector<Move>     get_possible_moves(Disk color) const;
+    static void                         print_possible_moves(const std::vector<Move>& moves);
+
+    [[nodiscard]] bool                  can_place_to_square(int x, int y, Disk color) const;
+    [[nodiscard]] bool                  can_play() const;
+    [[nodiscard]] bool                  check_coordinates(int x, int y) const;
+    [[nodiscard]] std::vector<Move>     possible_moves(Disk color) const;
     [[nodiscard]] Disk                  result() const;
     [[nodiscard]] int                   score() const;
     [[nodiscard]] Disk                  square(int x, int y) const;
 
-    [[nodiscard]] bool                  can_place_to_square(int x, int y, Disk color) const;
-    [[nodiscard]] bool                  check_coordinates(int x, int y) const;
     bool                                place_disc(int x, int y, Disk color);
-
     void                                print_score() const;
 
     friend std::ostream& operator<< (std::ostream& out, const Board& othello);
@@ -37,9 +39,8 @@ public:
 private:
     bool                set_square(int x, int y, Disk disk);
 
-    std::vector<Disk>   board;
-    int                 dim;
-    int                 size;
+    std::vector<Disk>   board_;
+    int                 size_;
 };
 
 } // namespace othello

@@ -14,33 +14,32 @@
 /// Initialize board for a new game
 void othello::Othello::init_game() {
     int board_size = get_board_size();
-    board = Board(board_size);
-    player_black = Player(Disk::BLACK);
-    player_white = Player(Disk::WHITE);
+    board_ = Board(board_size);
+    player_black_ = Player(Disk::BLACK);
+    player_white_ = Player(Disk::WHITE);
 
-    auto play_against_computer = get_answer("Would you like to play against the computer (y/n)? ");
-    if (play_against_computer == "y") {
-        auto side = get_answer("Would you like to play as black or white (b/w)? ");
-        if (side == "b") {
-            player_white.set_human(false);
+    if (get_answer("Would you like to play against the computer")) {
+        if (get_answer("Would you like to play as black or white", "b", "w")) {
+            player_white_.set_human(false);
         } else {
-            player_black.set_human(false);
+            player_black_.set_human(false);
         }
     }
-    print("\nPlayers:");
-    print(player_black, false);
-    print(player_white);
-    print(board);
+    print_bold("\nPlayers:\n");
+    print(player_black_);
+    print(player_white_);
+    print("");
+    print(board_);
 }
 
-/// Read user input and return it in lowercase.
-std::string othello::Othello::get_answer(const std::string& text)
+/// Read user input for yes/no question and return bool.
+bool othello::Othello::get_answer(const std::string& text, const std::string& yes, const std::string& no)
 {
     std::string input;
-    std::cout << text;
+    std::cout << text << " (" << yes << "/" << no << ")? ";
     std::cin >> input;
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);
-    return input;
+    return input == yes;
 }
 
 /// Ask the desired board size from user.
@@ -53,41 +52,39 @@ int othello::Othello::get_board_size()
 }
 
 /// Play one full game of Othello.
-void othello::Othello::play_game()
+void othello::Othello::play()
 {
-    init_game();
-    while (player_black.can_play || player_white.can_play) {
-        print_bold("=========== ROUND: " + std::to_string(rounds + 1) + " ===========\n");
-        player_black.play_one_move(board);
-        player_white.play_one_move(board);
-        board.print_score();
-        ++rounds;
-    }
+    while (true) {
+        init_game();
+        while (board_.can_play() && (player_black_.can_play() || player_white_.can_play())) {
+            print_bold("\n=========== ROUND: " + std::to_string(rounds_played_ + 1) + " ===========\n");
+            player_black_.play_one_move(board_);
+            print("--------------------------------");
+            player_white_.play_one_move(board_);
+            ++rounds_played_;
+        }
 
-    print_color("The game is finished!", Color::GREEN);
-    print("total rounds played: ", false);
-    print(std::to_string(rounds));
-    print("Result:");
-    print(board);
-    print(player_black, false);
-    print(player_white);
+        print_color("The game is finished!\n", Color::GREEN);
+        print("Result:");
+        print(board_);
+        print(player_black_);
+        print(player_white_);
 
-    Disk winner = board.result();
-    if (winner == Disk::WHITE) {
-        print_color("The white player won!", disk_color(Disk::WHITE));
-    } else if (winner == Disk::BLACK) {
-        print_color("The black player won!", disk_color(Disk::BLACK));
-    } else {
-        print("The game ended in a tie...");
-    }
-    auto play_again = get_answer("\nWould you like to play again (y/n)? ");
-    if (play_again == "y") {
-        play_game();
+        Disk winner = board_.result();
+        if (winner == Disk::EMPTY) {
+            print("The game ended in a tie...");
+        } else {
+            print_color("The " + disk_string(winner) + " player won!", disk_color(winner));
+        }
+
+        if (!get_answer("\nWould you like to play again")) {
+            break;
+        }
     }
 }
 
 int main() {
     print_bold("OTHELLO GAME - C++\n", Color::GREEN);
     othello::Othello othello;
-    othello.play_game();
+    othello.play();
 }
