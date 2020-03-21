@@ -5,6 +5,8 @@ https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
 2019
 """
+import sys
+
 from board import Board
 from player import Player
 from util import Disk, clamp
@@ -28,46 +30,52 @@ class Othello:
         self.player_white = Player(Disk.WHITE)
         self.rounds_played = 0
 
-        play_against_computer = input("Would you like to play against the computer (y/n)? ")
-        if play_against_computer.lower() == "y":
-            side = input("Would you like to play as black or white (b/w)? ")
-            if side.lower() == "b":
-                self.player_white.human = False
+        if self.get_answer("Would you like to play against the computer"):
+            if self.get_answer("Would you like to play as black or white", yes="b", no="w"):
+                self.player_white._human = False
             else:
-                self.player_black.human = False
+                self.player_black._human = False
 
         print_bold("\nPlayers:")
         print(self.player_black)
         print(self.player_white, end="\n\n")
         print(self.board)
 
-    def play_game(self):
+    def play(self):
         """Play one full game of Othello."""
-        self.init_game()
-        while self.player_black.can_play or self.player_white.can_play:
-            print(f"=========== ROUND: {self.rounds_played + 1} ===========")
-            self.player_black.play_one_move(self.board)
-            self.player_white.play_one_move(self.board)
-            self.board.print_score()
-            self.rounds_played += 1
+        try:
+            while True:
+                self.init_game()
+                while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
+                    print(f"\n=========== ROUND: {self.rounds_played + 1} ===========")
+                    self.player_black.play_one_move(self.board)
+                    print("-------------------------------")
+                    self.player_white.play_one_move(self.board)
+                    self.rounds_played += 1
 
-        print_bold("The game is finished!", Color.green)
-        print(f"total rounds played: {self.rounds_played}\n")
-        print_bold("Result:")
-        print(self.board)
-        print(self.player_black)
-        print(self.player_white, end="\n\n")
+                print_bold(" \nThe game is finished!", Color.green)
+                print(f"total rounds played: {self.rounds_played}")
+                print_bold("Result:")
+                print(self.board, end="\n\n")
+                print(self.player_black)
+                print(self.player_white, end="\n\n")
 
-        winner = self.board.get_result()
-        if winner == Disk.WHITE:
-            print_bold("The white player won!", Disk.WHITE.color())
-        elif winner == Disk.BLACK:
-            print_bold("The black player won!", Disk.BLACK.color())
-        else:
-            print_bold("The game ended in a tie...")
+                winner = self.board.result()
+                if winner == Disk.EMPTY:
+                    print_bold("The game ended in a tie...")
+                else:
+                    print_bold(f"The {str(winner)} player won!", winner.color())
 
-        if input("\nWould you like to play again (y/n)? ").lower() == "y":
-            self.play_game()
+                if not self.get_answer("\nWould you like to play again"):
+                    break
+        except KeyboardInterrupt:
+            sys.exit("\nGame aborted...")
+
+    @staticmethod
+    def get_answer(message: str, yes="y", no="n") -> bool:
+        """Ask a question with two options, and return bool from user answer."""
+        ans = input(f"{message} ({yes}/{no})? ")
+        return ans.lower() == yes
 
     @staticmethod
     def get_board_size():
@@ -84,4 +92,4 @@ class Othello:
 if __name__ == "__main__":
     print_bold("OTHELLO GAME - Python\n", Color.green)
     game = Othello()
-    game.play_game()
+    game.play()

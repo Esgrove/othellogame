@@ -21,7 +21,7 @@ class Disk(IntEnum):
 
         return Color.magenta if self.value == self.BLACK else Color.cyan
 
-    def get_board_char(self) -> str:
+    def board_char(self) -> str:
         """Returns the single character identifier string for the given disk."""
         if self.value == self.EMPTY:
             return "_"
@@ -45,6 +45,15 @@ class Square:
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
+
+    def __getitem__(self, key):
+        """Enable iteration so coordinates can be unpacked: x,y = square"""
+        if key == 0:
+            return self.x
+        elif key == 1:
+            return self.y
+
+        raise IndexError
 
     def __eq__(self, other):
         return (self.x, self.y) == (other.x, other.y)

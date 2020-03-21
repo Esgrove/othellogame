@@ -41,7 +41,7 @@ def test_disk_other_disk_for_empty(empty):
 
 
 def test_disk_get_board_string(empty):
-    assert empty.get_board_char() == "_"
+    assert empty.board_char() == "_"
 
 
 def test_square_string(square):

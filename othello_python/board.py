@@ -5,7 +5,7 @@ https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
 2019
 """
-from colorprint import get_color
+from colorprint import Color, get_color, print_color
 from util import Disk, Move, Square
 
 
@@ -27,95 +27,92 @@ class Board:
 
     def can_place_to_square(self, x: int, y: int, disk: Disk) -> bool:
         """Check can the given disk color be placed in the given position."""
-        if self.get_square(x, y) == Disk.EMPTY:
-            other = disk.other_disk()
-            for i, j in self.DIRECTIONS:
-                tx = x + i
-                ty = y + j
-                if self.get_square(tx, ty) == other:
-                    while self.get_square(tx, ty) == other:
-                        tx += i
-                        ty += j
-                    if self.get_square(tx, ty) == disk:
-                        return True
+        if self.square(x, y) != Disk.EMPTY:
+            return False
+
+        other = disk.other_disk()
+        for i, j in self.DIRECTIONS:
+            tx = x + i
+            ty = y + j
+            if self.square(tx, ty) != other:
+                continue
+            while self.square(tx, ty) == other:
+                tx += i
+                ty += j
+            if self.square(tx, ty) == disk:
+                return True
 
         return False
+
+    def can_play(self) -> bool:
+        """Return true if board contains empty squares."""
+        return any(Disk.EMPTY in row for row in self._board)
 
     def check_coordinates(self, x: int, y: int) -> bool:
         """Check that the given coordinates are inside the board."""
         return 0 <= x < self._size and 0 <= y < self._size
 
-    def get_possible_moves(self, disk: Disk):
+    def place_disk(self, x: int, y: int, disk) -> bool:
+        """Tries to place the given disk color to the given square."""
+        if not self.can_place_to_square(x, y, disk):
+            return False
+
+        for i, j in self.DIRECTIONS:
+            tx = x + i
+            ty = y + j
+            while self.square(tx, ty) == disk.other_disk():
+                tx += i
+                ty += j
+            if self.square(tx, ty) == disk:
+                while (tx != x) or (ty != y):
+                    tx -= i
+                    ty -= j
+                    self.set_square(tx, ty, disk)
+
+        return True
+
+    def possible_moves(self, disk: Disk):
         """Returns a list of all possible moves for the given disk color."""
         moves = []
         for y in range(self._size):
             for x in range(self._size):
-                if self.get_square(x, y) == Disk.EMPTY:
-                    value = 0
-                    for i, j in self.DIRECTIONS:
-                        tx = x + i
-                        ty = y + j
-                        steps = 0
-                        while self.get_square(tx, ty) == disk.other_disk():
-                            tx += i
-                            ty += j
-                            steps += 1
-                        if self.get_square(tx, ty) == disk:
-                            value += steps
+                if self.square(x, y) != Disk.EMPTY:
+                    continue
+                value = 0
+                for i, j in self.DIRECTIONS:
+                    tx = x + i
+                    ty = y + j
+                    steps = 0
+                    while self.square(tx, ty) == disk.other_disk():
+                        tx += i
+                        ty += j
+                        steps += 1
+                    if self.square(tx, ty) == disk:
+                        value += steps
 
-                    if value:
-                        moves.append(Move(Square(x, y), value))
+                if value:
+                    moves.append(Move(Square(x, y), value))
 
         return moves
 
-    def get_result(self) -> Disk:
-        """Calculates the final score and returns the winning player color."""
-        total_score = self.get_score()
-        if total_score > 0:
-            return Disk.WHITE
-        elif total_score < 0:
-            return Disk.BLACK
+    def print_possible_moves(self, moves):
+        print_color(f"  Possible plays ({len(moves)}):", Color.yellow)
+        # convert board from Disk enums to strings
+        board = [[disk.board_char() for disk in row] for row in self._board]
 
-        return Disk.EMPTY
+        # add move values to board
+        for move in moves:
+            x, y = move.square
+            board[y][x] = get_color(str(move.value), Color.yellow)
 
-    def get_score(self) -> int:
-        """Returns the total score (positive means more white disks and negative means more black disks)."""
-        return sum(sum(row) for row in self._board)
+        print(f"    {' '.join(get_color(str(x), bold=True) for x in range(self._size))}")
+        for index, row in enumerate(board):
+            text = get_color(f"  {index} ", bold=True)
+            text += ' '.join(disk for disk in row)
+            print(text)
 
-    def get_square(self, x: int, y: int):
-        """Returns the state of the board (empty, white, black) at the given coordinates."""
-        if self.check_coordinates(x, y):
-            return self._board[y][x]
-
-        return False
-
-    def place_disk(self, x: int, y: int, disk) -> bool:
-        """Tries to place the given disk color to the given square."""
-        if self.can_place_to_square(x, y, disk):
-            other = disk.other_disk()
-            for i, j in self.DIRECTIONS:
-                tx = x + i
-                ty = y + j
-                while self.get_square(tx, ty) == other:
-                    tx += i
-                    ty += j
-                if self.get_square(tx, ty) == disk:
-                    while (tx != x) or (ty != y):
-                        tx -= i
-                        ty -= j
-                        self.set_square(tx, ty, disk)
-
-            return True
-
-        return False
-
-    def set_square(self, x: int, y: int, disk: Disk) -> bool:
-        """Sets the given square to given value."""
-        if self.check_coordinates(x, y):
-            self._board[y][x] = disk
-            return True
-
-        return False
+        for move in sorted(moves):
+            print(f"  {move}")
 
     def print_score(self):
         """ Count and print the number of black and white disks."""
@@ -128,13 +125,33 @@ class Board:
                 elif disk == Disk.BLACK:
                     black += 1
 
-        print(f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}\n")
+        print(f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}")
+
+    def result(self) -> Disk:
+        """Calculates the final score and returns the winning player color."""
+        total_score = self.score()
+        if total_score == 0:
+            return Disk.EMPTY
+
+        return Disk.WHITE if total_score > 0 else Disk.BLACK
+
+    def score(self) -> int:
+        """Returns the total score (positive means more white disks and negative means more black disks)."""
+        return sum(sum(row) for row in self._board)
+
+    def set_square(self, x: int, y: int, disk: Disk):
+        """Sets the given square to given value."""
+        if not self.check_coordinates(x, y):
+            raise ValueError(f"Invalid coordinates ({x},{y})!")
+        self._board[y][x] = disk
+
+    def square(self, x: int, y: int):
+        """Returns the state of the board (empty, white, black) at the given coordinates."""
+        return self._board[y][x] if self.check_coordinates(x, y) else None
 
     def __str__(self):
-        board = f"  {' '.join(get_color(str(x), bold=True) for x in range(self._size))}\n"
+        text = f"  {' '.join(get_color(str(x), bold=True) for x in range(self._size))}"
         for index, row in enumerate(self._board):
-            board += get_color(f"{index} ", bold=True)
-            board += ' '.join(disk.get_board_char() for disk in row)
-            board += "\n"
-
-        return board
+            text += get_color(f"\n{index} ", bold=True)
+            text += ' '.join(disk.board_char() for disk in row)
+        return text

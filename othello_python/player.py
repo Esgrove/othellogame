@@ -14,20 +14,25 @@ from util import Disk
 
 class Player:
     """Defines one player."""
-    def __init__(self, color: Disk, human=True):
-        self.color = color
-        self.human = human
-        self.can_play = True
-        self.rounds_played = 0
+    def __init__(self, color: Disk, human=True, show_helpers=True):
+        self._color = color
+        self._human = human
+        self._show_helpers = show_helpers
+        self._can_play = True
+        self._rounds_played = 0
+
+    def can_play(self):
+        return self._can_play
 
     def play_one_move(self, board: Board):
         """Play one round as this player."""
-        print(f"Turn: {str(self.color)}")
-        moves = board.get_possible_moves(self.color)
+        print(f"Turn: {str(self._color)}")
+        moves = board.possible_moves(self._color)
         if moves:
-            self.can_play = True
-            if self.human:
-                self.print_possible_moves(moves)
+            self._can_play = True
+            if self._human:
+                if self._show_helpers:
+                    board.print_possible_moves(moves)
                 while True:
                     pos = input("  Give disk position (x,y): ")
                     square = [x.strip() for x in pos.split(",") if x.strip()]
@@ -35,40 +40,31 @@ class Player:
                         try:
                             x = int(square[0])
                             y = int(square[1])
-                            if board.place_disk(x, y, self.color):
+                            if board.place_disk(x, y, self._color):
                                 break
-                            else:
-                                print_error(f"Can't place a {str(self.color)} disk in square ({x},{y})!")
+                            print_error(f"Can't place a {self._color} disk in square ({x},{y})!")
                         except ValueError:
-                            print_error("Coordinates have to be integer numbers.")
+                            print_error("Coordinates have to be integer numbers!")
                     else:
-                        print_error("Give coordinates in the form 'x,y'.")
+                        print_error("Give coordinates in the form 'x,y'!")
             else:
-                # computer plays: pick a random move
+                # computer plays: wait a bit and pick a random move
                 print("  Computer plays...")
                 time.sleep(random.uniform(1.0, 3.0))
                 square = random.choice(moves).square
                 print(f"  -> {square}")
-                board.place_disk(square.x, square.y, self.color)
+                board.place_disk(square.x, square.y, self._color)
 
-            self.rounds_played += 1
-            print("\nResult:")
+            self._rounds_played += 1
+            print("")
             print(board)
-
+            board.print_score()
         else:
-            print_color("  No moves available...", Color.red)
-            self.can_play = False
-
-        print("-------------------------------")
-
-    @staticmethod
-    def print_possible_moves(moves):
-        print_color(f"  Possible plays ({len(moves)}):", Color.yellow)
-        for move in sorted(moves):
-            print(f"  {move}")
+            print_color("  No moves available...", Color.yellow)
+            self._can_play = False
 
     def type_string(self):
-        return "Human   " if self.human else "Computer"
+        return "Human   " if self._human else "Computer"
 
     def __str__(self):
-        return f"{str(self.color)} | {self.type_string()} | Moves: {self.rounds_played}"
+        return f"{str(self._color)} | {self.type_string()} | Moves: {self._rounds_played}"
