@@ -178,3 +178,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+othello_csharp/Othello/.vs/
+othello_csharp/Othello/bin/
+othello_csharp/Othello/obj/
