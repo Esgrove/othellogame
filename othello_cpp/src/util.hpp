@@ -8,7 +8,8 @@
 #include <iostream> // cout, cin
 #include <string>	// string
 
-#include "colorprint.hpp"
+#include <fmt/ostream.h>
+#include <fmt/color.h>
 
 namespace othello {
 
@@ -17,7 +18,7 @@ struct Square {
     Square(int x, int y) : x(x), y(y) {}
 
     friend std::ostream& operator<< (std::ostream& out, const Square& sqr) {
-        return out << "(" << sqr.x << "," << sqr.y << ")";
+        return out << fmt::format("({},{})", sqr.x, sqr.y);
     }
 
     bool operator<(const Square& other) const;
@@ -31,8 +32,8 @@ struct Move {
     Move(int x, int y, int value) : square(x, y), value(value) {}
 
     friend std::ostream& operator<< (std::ostream& out, const Move& move) {
-        return out << "point: " << move.square << " -> value: " << move.value;
-    }
+        return out << fmt::format("point: {} -> value: {}", move.square, move.value);
+}
 
     bool operator< (const Move& other) const;
 
@@ -48,27 +49,36 @@ enum class Disk {
 };
 
 inline std::string board_char(const Disk color) {
-    if (color == Disk::WHITE) {
-        return "W";
-    } else if (color == Disk::BLACK) {
-        return "B";
+    if (color == Disk::EMPTY) {
+        return "_";
     }
-    return "_";
+    return color == Disk::WHITE ? "W" : "B";
 }
 
 /// Returns print color for given Disk.
-    inline Color disk_color(const Disk color) {
-        if (color == Disk::EMPTY) {
-            return Color::WHITE;
-        }
-        return color == Disk::WHITE ? Color::MAGENTA : Color::CYAN;
+inline fmt::color disk_color(const Disk disk) {
+    if (disk == Disk::EMPTY) {
+        return fmt::color::white;
     }
-
-inline std::string disk_string(const Disk color) {
-    return color == Disk::BLACK ? "black" : "white";
+    return disk == Disk::WHITE ? fmt::color::magenta : fmt::color::cyan;
 }
 
-/// Returns the opponents color
+/// Returns disk color as a string.
+inline std::string disk_string(const Disk& disk) {
+    if (disk == Disk::EMPTY) {
+        return "empty";
+    }
+    return disk == Disk::BLACK ? "black" : "white";
+}
+
+/// Returns disk color as an uppercase string.
+inline std::string disk_string_upper(const Disk& disk) {
+    std::string text = disk_string(disk);
+    std::transform(text.begin(), text.end(), text.begin(), ::toupper);
+    return text;
+}
+
+/// Returns the opponents disk color
 inline Disk other_disk(const Disk color) {
     if (color == Disk::EMPTY) {
         return Disk::EMPTY;
@@ -77,16 +87,15 @@ inline Disk other_disk(const Disk color) {
 }
 
 inline std::ostream& operator<<(std::ostream &out, const Disk& color) {
-    out << disk_string(color);
-    return out;
+    return out << disk_string(color);
 }
 
-/// Print object to std::cout
+/// Print an object to stream (default is std::cout)
 template<typename T>
-inline void print(T object, bool newline=true) {
-    std::cout << object;
-    if (newline) { 
-        std::cout << "\n";
+inline void print(T object, bool newline=true, std::ostream& out=std::cout) {
+    out << object;
+    if (newline) {
+        out << "\n";
     }
 }
 

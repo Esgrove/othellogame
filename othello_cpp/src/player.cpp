@@ -11,21 +11,14 @@
 #include "colorprint.hpp"
 #include "player.hpp"
 
-std::string othello::Player::disk_string_upper() const
-{
-    std::string disk = disk_string(color_);
-    std::transform(disk.begin(), disk.end(), disk.begin(), ::toupper);
-    return disk;
-}
-
 void othello::Player::play_one_move(Board& board) {
     std::cout << "Turn: ";
-    print_color(this->disk_string_upper() + "\n", disk_color(this->color_));
-    auto moves = board.possible_moves(this->color_);
+    print_color(disk_string_upper(color_) + "\n", disk_color(color_));
+    auto moves = board.possible_moves(color_);
     if (!moves.empty()) {
-        this->can_play_ = true;
-        if (this->human_) {
-            board.print_possible_moves(moves);
+        can_play_ = true;
+        if (human_) {
+            othello::Board::print_possible_moves(moves);
             std::string input;
             while (true) {
                 std::cout << "  Give disk position (x,y): ";
@@ -33,10 +26,10 @@ void othello::Player::play_one_move(Board& board) {
                 if (input.size() == 3 && input[1] == ',') {
                     int x = input[0] - '0'; // ascii hack
                     int y = input[2] - '0'; // std::stoi(input.substr(2,1));
-                    if (board.place_disc(x, y, this->color_)) {
+                    if (board.place_disc(x, y, color_)) {
                         break;
                     }
-                    print_error("  Error: can't place a " + disk_string() + " disk in square (" + std::to_string(x) + "," + std::to_string(y) + ").\n");
+                    //print_error(fmt::format("  Error: can't place a {} disk in square ({}, {}).\n", disk_string(color_), x, y));
                 } else {
                     print_error("  Error: give coordinates in the form 'x,y'.");
                 }
@@ -54,19 +47,19 @@ void othello::Player::play_one_move(Board& board) {
             std::cout << "  -> " << pos << "\n";
             board.place_disc(pos.x, pos.y, color_);
         }
-        ++this->rounds_played_;
+        ++rounds_played_;
         print("");
         print(board);
         board.print_score();
     } else {
-        print_color("  No moves available...", Color::YELLOW);
-        this->can_play_ = false;
+        print_color("  No moves available...", fmt::color::yellow);
+        can_play_ = false;
     }
 }
 
 std::ostream& othello::operator<<(std::ostream& out, Player& p)
 {
-    print_color(p.disk_string_upper(), disk_color(p.color_), out);
+    out << fmt::format(fmt::fg(disk_color(p.color_)), disk_string_upper(p.color_));
     out << " | " << p.type_string() << " | " << "moves: " << p.rounds_played_;
     return out;
 }

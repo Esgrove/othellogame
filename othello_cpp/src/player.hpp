@@ -18,8 +18,6 @@ public:
     ~Player() = default;
 
     // nodiscard -> compiler should warn if value returned by function call is not used
-    [[nodiscard]] std::string     disk_string() const { return disk_string(this->color_); }
-    [[nodiscard]] std::string     disk_string_upper() const;
     [[nodiscard]] std::string     type_string() const { return this->human_ ? "Human   " : "Computer"; }
     [[nodiscard]] bool            can_play() const { return this->can_play_; }
 

@@ -8,6 +8,9 @@
 #include <algorithm> // clamp, transform
 #include <iostream>
 
+#include <fmt/ostream.h>
+#include <fmt/color.h>
+
 #include "colorprint.hpp"
 #include "othello.hpp"
 
@@ -57,14 +60,14 @@ void othello::Othello::play()
     while (true) {
         init_game();
         while (board_.can_play() && (player_black_.can_play() || player_white_.can_play())) {
-            print_bold("\n=========== ROUND: " + std::to_string(rounds_played_ + 1) + " ===========\n");
+            fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played_ + 1);
             player_black_.play_one_move(board_);
             print("--------------------------------");
             player_white_.play_one_move(board_);
             ++rounds_played_;
         }
 
-        print_color("The game is finished!\n", Color::GREEN);
+        fmt::print(fmt::fg(fmt::color::green), "The game is finished!\n");
         print("Result:");
         print(board_);
         print(player_black_);
@@ -74,7 +77,7 @@ void othello::Othello::play()
         if (winner == Disk::EMPTY) {
             print("The game ended in a tie...");
         } else {
-            print_color("The " + disk_string(winner) + " player won!", disk_color(winner));
+            fmt::print(fmt::fg(disk_color(winner)), "The {} player won!\n", disk_string(winner));
         }
 
         if (!get_answer("\nWould you like to play again")) {
@@ -84,7 +87,7 @@ void othello::Othello::play()
 }
 
 int main() {
-    print_bold("OTHELLO GAME - C++\n", Color::GREEN);
+    print_bold("OTHELLO GAME: C++\n", fmt::color::green);
     othello::Othello othello;
     othello.play();
 }

@@ -120,9 +120,9 @@ bool othello::Board::place_disc(int x, int y, Disk color) {
 }
 
 void othello::Board::print_possible_moves(const std::vector<Move>& moves) {
-    print_color("  Possible plays (" + std::to_string(moves.size()) + "):\n", Color::YELLOW);
+    fmt::print(fmt::fg(fmt::color::yellow), "  Possible plays ({}):\n", std::to_string(moves.size()));
     for (const Move& move : moves) {
-        std::cout << "  " << move << "\n";
+        fmt::print("  {}\n", move);
     }
 }
 
@@ -136,7 +136,7 @@ void othello::Board::print_score() const {
             ++black;
         }
     }
-    print("Score: ", false);
+    fmt::print("Score: ");
     print_color(std::to_string(white), disk_color(Disk::WHITE));
     print(" | ", false);
     print_color(std::to_string(black) + "\n", disk_color(Disk::BLACK));
@@ -183,7 +183,7 @@ std::ostream& othello::operator<<(std::ostream& out, const Board& othello) {
         out << "\n" + std::to_string(y);
         for (int x = 0; x < othello.size_; ++x) {
             auto disk = othello.board_[y * othello.size_ + x];
-            print_color(" " + board_char(disk), disk_color(disk), out);
+            out << fmt::format(fmt::fg(disk_color(disk)), " {}", board_char(disk));
         }
     }
     return out;

@@ -6,18 +6,18 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(
     src
     include
-    include
 )
 
 add_executable(
     othello_cpp
     src/board.cpp
     src/board.hpp
-    src/colorprint.hpp
+    src/format.cc
     src/othello.cpp
     src/othello.hpp
     src/player.cpp
     src/player.hpp
     src/util.cpp
     src/util.hpp
+    src/colorprint.hpp
 )
