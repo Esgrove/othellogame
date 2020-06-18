@@ -6,4 +6,3 @@ edition = "2018"
 
 [dependencies]
 colored = "1.7.0"
-ferris-says = "0.1.1"
