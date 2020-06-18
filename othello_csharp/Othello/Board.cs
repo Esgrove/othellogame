@@ -22,12 +22,16 @@ namespace Othello
 
         private bool CanPlaceToSquare(int x, int y, Disk color)
         {
-            if (Square(x, y) != Disk.Empty) return false;
+            if (Square(x, y) != Disk.Empty) {
+                return false;
+            }
             var other = color.OtherDisk();
             foreach (var dir in Directions) {
                 var tx = x + dir[0];
                 var ty = y + dir[1];
-                if (Square(tx, ty) != other) continue;
+                if (Square(tx, ty) != other) {
+                    continue;
+                }
                 while (Square(tx, ty) == other) {
                     tx += dir[0];
                     ty += dir[1];
@@ -50,12 +54,16 @@ namespace Othello
             var other = color.OtherDisk();
             for (var y = 0; y < _dim; ++y) {
                 for (var x = 0; x < _dim; ++x) {
-                    if (Square(x, y) != Disk.Empty) continue;
+                    if (Square(x, y) != Disk.Empty) {
+                        continue;
+                    }
                     var value = 0;
                     foreach (var dir in Directions) {
                         var tx = x + dir[0];
                         var ty = y + dir[1];
-                        if (Square(tx, ty) != other) continue;
+                        if (Square(tx, ty) != other) {
+                            continue;
+                        }
                         var steps = 0;
                         while (Square(tx, ty) == other) {
                             tx += dir[0];
@@ -76,17 +84,23 @@ namespace Othello
 
         public bool PlaceDisc(int x, int y, Disk color)
         {
-            if (!CanPlaceToSquare(x, y, color)) return false;
+            if (!CanPlaceToSquare(x, y, color)) {
+                return false;
+            }
             var other = color.OtherDisk();
             foreach (var dir in Directions) {
                 var tx = x + dir[0];
                 var ty = y + dir[1];
-                if (Square(tx, ty) != other) continue;
+                if (Square(tx, ty) != other) {
+                    continue;
+                }
                 while (Square(tx, ty) == other) {
                     tx += dir[0];
                     ty += dir[1];
                 }
-                if (Square(tx, ty) != color) continue;
+                if (Square(tx, ty) != color) {
+                    continue;
+                }
                 while ( tx != x || ty != y ) {
                     tx -= dir[0];
                     ty -= dir[1];

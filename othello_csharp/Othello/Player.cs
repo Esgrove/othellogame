@@ -56,7 +56,7 @@ namespace Othello
                     Console.WriteLine($"  -> {pos}");
                     game.PlaceDisc(pos.X, pos.Y, _color);
                 }
-                ++_rounds;
+                ++_roundsPlayed;
                 Console.WriteLine("\nResult:");
                 game.Print();
             } else {
@@ -72,12 +72,12 @@ namespace Othello
         public void Print()
         {
             ColorPrint.Write(_color.ToString().ToUpper(), _color.DiskColor());
-            Console.WriteLine($" | {TypeString()} | moves: {_rounds}");
+            Console.WriteLine($" | {TypeString()} | moves: {_roundsPlayed}");
         }
 
         public override string ToString()
         {
-            return $"{_color.ToString().ToUpper()} | {TypeString()} | moves: {_rounds}";
+            return $"{_color.ToString().ToUpper()} | {TypeString()} | moves: {_roundsPlayed}";
         }
         private string DiskStringUpper()
         {
@@ -99,6 +99,6 @@ namespace Othello
         private readonly Random _random;
         private bool _canPlay;
         private bool _human;
-        private int _rounds;
+        private int _roundsPlayed;
     }
 }

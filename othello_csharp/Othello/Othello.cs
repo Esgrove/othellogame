@@ -9,7 +9,7 @@ namespace Othello
             _board = null;
             _playerBlack = null;
             _playerWhite = null;
-            _rounds = 0;
+            _roundsPlayed = 0;
         }
 
         private void InitGame()
@@ -51,22 +51,20 @@ namespace Othello
             return size;
         }
 
-        private void PlayGame()
+        private void Play()
         {
-            while (true)
-            {
+            while (true) {
                 InitGame();
-                while (_playerBlack.CanPlay() || _playerWhite.CanPlay())
-                {
-                    Console.Write($"=========== ROUND: {_rounds + 1} ===========\n");
+                while (_playerBlack.CanPlay() || _playerWhite.CanPlay()) {
+                    Console.WriteLine($"=========== ROUND: {_roundsPlayed + 1} ===========");
                     _playerBlack.PlayOneMove(_board);
                     _playerWhite.PlayOneMove(_board);
                     _board.PrintScore();
-                    ++_rounds;
+                    ++_roundsPlayed;
                 }
 
                 ColorPrint.Write("The game is finished!\n", ConsoleColor.Green);
-                Console.WriteLine($"total rounds played: {_rounds}");
+                Console.WriteLine($"total rounds played: {_roundsPlayed}");
                 Console.WriteLine("Result:");
                 _board.Print();
                 _playerBlack.Print();
@@ -79,23 +77,22 @@ namespace Othello
                     ColorPrint.Write($"The {winner} player won!", winner.DiskColor());
                 }
 
-                if (GetAnswer("\nWould you like to play again")) {
-                    continue;
+                if (!GetAnswer("\nWould you like to play again")) {
+                    break;
                 }
-                break;
             }
         }
 
         private Board _board;
         private Player _playerBlack;
         private Player _playerWhite;
-        private int _rounds;
+        private int _roundsPlayed;
 
         public static void Main(string[] args)
         {
             ColorPrint.Write("OTHELLO GAME - C#\n", ConsoleColor.Green);
             var othello = new Othello();
-            othello.PlayGame();
+            othello.Play();
         }
     }
 }

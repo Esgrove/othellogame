@@ -43,33 +43,26 @@ namespace Othello
 
     public static class Extensions
     {
-        public static ConsoleColor DiskColor(this Disk color)
-        {
-            if (color == Disk.Empty)
-            {
+        public static ConsoleColor DiskColor(this Disk color) {
+            if (color == Disk.Empty) {
                 return ConsoleColor.White;
             }
-
             return color == Disk.White ? ConsoleColor.DarkMagenta : ConsoleColor.Cyan;
         }
 
         public static Disk OtherDisk(this Disk color) {
-            if (color == Disk.Empty)
-            {
+            if (color == Disk.Empty) {
                 return Disk.Empty;
             }
             return color == Disk.White ? Disk.Black : Disk.White;
         }
 
-        public static string Name(this Disk color)
-        {
+        public static string Name(this Disk color) {
             return color.ToString().ToLower();
         }
 
-        public static string GetBoardChar(this Disk color)
-        {
-            switch (color)
-            {
+        public static string GetBoardChar(this Disk color) {
+            switch (color) {
                 case Disk.White:
                     return "W";
                 case Disk.Black:
