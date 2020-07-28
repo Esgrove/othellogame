@@ -23,7 +23,7 @@
     <ClCompile Include="src\othello.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\colorprint.cpp">
+    <ClCompile Include="src\format.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

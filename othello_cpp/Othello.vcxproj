@@ -118,7 +118,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\board.cpp" />
-    <ClCompile Include="src\colorprint.cpp" />
+    <ClCompile Include="src\format.cc" />
     <ClCompile Include="src\othello.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\util.cpp" />
