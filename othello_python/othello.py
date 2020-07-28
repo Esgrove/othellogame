@@ -43,33 +43,30 @@ class Othello:
 
     def play(self):
         """Play one full game of Othello."""
-        try:
-            while True:
-                self.init_game()
-                while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
-                    print(f"\n=========== ROUND: {self.rounds_played + 1} ===========")
-                    self.player_black.play_one_move(self.board)
-                    print("-------------------------------")
-                    self.player_white.play_one_move(self.board)
-                    self.rounds_played += 1
+        while True:
+            self.init_game()
+            while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
+                self.rounds_played += 1
+                print(f"\n=========== ROUND: {self.rounds_played} ===========")
+                self.player_black.play_one_move(self.board)
+                print("-------------------------------")
+                self.player_white.play_one_move(self.board)
 
-                print_bold(" \nThe game is finished!", Color.green)
-                print(f"total rounds played: {self.rounds_played}")
-                print_bold("Result:")
-                print(self.board, end="\n\n")
-                print(self.player_black)
-                print(self.player_white, end="\n\n")
+            print_bold(" \nThe game is finished!", Color.green)
+            print(f"total rounds played: {self.rounds_played}")
+            print_bold("Result:")
+            print(self.board, end="\n\n")
+            print(self.player_black)
+            print(self.player_white, end="\n\n")
 
-                winner = self.board.result()
-                if winner == Disk.EMPTY:
-                    print_bold("The game ended in a tie...")
-                else:
-                    print_bold(f"The {str(winner)} player won!", winner.color())
+            winner = self.board.result()
+            if winner == Disk.EMPTY:
+                print_bold("The game ended in a tie...")
+            else:
+                print_bold(f"The winner is {str(winner)}!")
 
-                if not self.get_answer("\nWould you like to play again"):
-                    break
-        except KeyboardInterrupt:
-            sys.exit("\nGame aborted...")
+            if not self.get_answer("\nWould you like to play again"):
+                break
 
     @staticmethod
     def get_answer(message: str, yes="y", no="n") -> bool:
@@ -78,8 +75,8 @@ class Othello:
         return ans.lower() == yes
 
     @staticmethod
-    def get_board_size():
-        """Ask the desired board size from user."""
+    def get_board_size() -> int:
+        """Ask and return the desired board size."""
         while True:
             try:
                 size = int(input("Choose board size (default is 8): "))
@@ -91,5 +88,8 @@ class Othello:
 
 if __name__ == "__main__":
     print_bold("OTHELLO GAME - Python\n", Color.green)
-    game = Othello()
-    game.play()
+    try:
+        game = Othello()
+        game.play()
+    except KeyboardInterrupt:
+        sys.exit("\nGame aborted...")

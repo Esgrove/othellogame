@@ -5,7 +5,7 @@ Akseli Lukkarila
 """
 from enum import IntEnum
 
-from colorprint import get_color, Color
+from colorprint import Color, get_color
 
 
 class Disk(IntEnum):
@@ -47,13 +47,29 @@ class Square:
         self.y = y
 
     def __getitem__(self, key):
-        """Enable iteration so coordinates can be unpacked: x,y = square"""
+        # enable iteration so coordinates can be unpacked: x,y = square
         if key == 0:
             return self.x
         elif key == 1:
             return self.y
 
         raise IndexError
+
+    def __add__(self, other):
+        # enable addition for a pair of squares or a square and an iterable with two values (square + tuple etc...)
+        return Square(self.x + other[0], self.y + other[1])
+
+    def __iadd__(self, other):
+        # += operator
+        return self + other
+
+    def __radd__(self, other):
+        # other + self
+        return self + other
+
+    def __hash__(self):
+        # needed to enable using this class in sets or as a dictionary key
+        return hash((self.x, self.y))
 
     def __eq__(self, other):
         return (self.x, self.y) == (other.x, other.y)
@@ -79,8 +95,9 @@ class Square:
 
 class Move:
     """Represents one disk place position and the resulting value gained."""
-    def __init__(self, square: Square, value=0):
+    def __init__(self, square: Square, disk: Disk, value=0):
         self.square = square
+        self.disk = disk
         self.value = value
 
     def __eq__(self, other):
@@ -102,7 +119,7 @@ class Move:
         return self.value <= other.value and self.square >= other.square
 
     def __str__(self):
-        return f"point: {self.square} -> value: {self.value}"
+        return f"Square: {self.square} -> value: {self.value}"
 
 
 def clamp(number, minimum, maximum):

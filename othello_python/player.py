@@ -18,8 +18,8 @@ class Player:
         self._color = color
         self._human = human
         self._show_helpers = show_helpers
-        self._can_play = True
         self._rounds_played = 0
+        self._can_play = True
 
     def can_play(self):
         return self._can_play
@@ -50,7 +50,7 @@ class Player:
             else:
                 # computer plays: wait a bit and pick a random move
                 print("  Computer plays...")
-                time.sleep(random.uniform(1.0, 3.0))
+                time.sleep(random.uniform(1.0, 2.0))
                 square = random.choice(moves).square
                 print(f"  -> {square}")
                 board.place_disk(square.x, square.y, self._color)

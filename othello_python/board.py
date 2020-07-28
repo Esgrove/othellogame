@@ -5,6 +5,8 @@ https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
 2019
 """
+from typing import List, Optional
+
 from colorprint import Color, get_color, print_color
 from util import Disk, Move, Square
 
@@ -13,7 +15,7 @@ class Board:
     """Handles game board state and logic."""
     DIRECTIONS = ((0, -1), (0, 1), (1, 0), (-1, 0), (1, -1), (1, 1), (-1, 1), (-1, -1))
 
-    def __init__(self, size):
+    def __init__(self, size=8):
         self._size = size
         self._board = [[Disk.EMPTY for _ in range(self._size)] for _ in range(self._size)]
 
@@ -24,6 +26,11 @@ class Board:
         self._board[row][col] = Disk.WHITE
         self._board[col][row] = Disk.WHITE
         self._board[col][col] = Disk.BLACK
+
+        # keep a list of empty squares to avoid having to iterate through the whole board constantly
+        # when checking for available moves
+        self.empty_squares = set((x, y) for x in range(self._size) for y in range(self._size) if
+                                 self._board[y][x] == Disk.EMPTY)
 
     def can_place_to_square(self, x: int, y: int, disk: Disk) -> bool:
         """Check can the given disk color be placed in the given position."""
@@ -46,7 +53,7 @@ class Board:
 
     def can_play(self) -> bool:
         """Return true if board contains empty squares."""
-        return any(Disk.EMPTY in row for row in self._board)
+        return bool(self.empty_squares)
 
     def check_coordinates(self, x: int, y: int) -> bool:
         """Check that the given coordinates are inside the board."""
@@ -69,48 +76,48 @@ class Board:
                     ty -= j
                     self.set_square(tx, ty, disk)
 
+        self.empty_squares.remove((x, y))
         return True
 
-    def possible_moves(self, disk: Disk):
+    def possible_moves(self, disk: Disk) -> List[Move]:
         """Returns a list of all possible moves for the given disk color."""
         moves = []
-        for y in range(self._size):
-            for x in range(self._size):
-                if self.square(x, y) != Disk.EMPTY:
-                    continue
-                value = 0
-                for i, j in self.DIRECTIONS:
-                    tx = x + i
-                    ty = y + j
-                    steps = 0
-                    while self.square(tx, ty) == disk.other_disk():
-                        tx += i
-                        ty += j
-                        steps += 1
-                    if self.square(tx, ty) == disk:
-                        value += steps
+        for x, y in self.empty_squares:
+            value = 0
+            for i, j in self.DIRECTIONS:
+                tx = x + i
+                ty = y + j
+                steps = 0
+                while self.square(tx, ty) == disk.other_disk():
+                    tx += i
+                    ty += j
+                    steps += 1
+                if self.square(tx, ty) == disk:
+                    value += steps
 
-                if value:
-                    moves.append(Move(Square(x, y), value))
+            if value:
+                moves.append(Move(Square(x, y), disk, value))
 
         return moves
 
-    def print_possible_moves(self, moves):
-        print_color(f"  Possible plays ({len(moves)}):", Color.yellow)
+    def print_possible_moves(self, moves: List[Move]):
+        """Print available move coordinates and resulting points gained."""
         # convert board from Disk enums to strings
         board = [[disk.board_char() for disk in row] for row in self._board]
 
-        # add move values to board
+        # add value gained to matching position on board
         for move in moves:
             x, y = move.square
             board[y][x] = get_color(str(move.value), Color.yellow)
 
+        print_color(f"  Possible plays ({len(moves)}):", Color.yellow)
         print(f"    {' '.join(get_color(str(x), bold=True) for x in range(self._size))}")
         for index, row in enumerate(board):
             text = get_color(f"  {index} ", bold=True)
             text += ' '.join(disk for disk in row)
             print(text)
 
+        # print coordinate info
         for move in sorted(moves):
             print(f"  {move}")
 
@@ -145,7 +152,7 @@ class Board:
             raise ValueError(f"Invalid coordinates ({x},{y})!")
         self._board[y][x] = disk
 
-    def square(self, x: int, y: int):
+    def square(self, x: int, y: int) -> Optional[Disk]:
         """Returns the state of the board (empty, white, black) at the given coordinates."""
         return self._board[y][x] if self.check_coordinates(x, y) else None
 

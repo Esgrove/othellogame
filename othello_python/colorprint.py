@@ -31,4 +31,4 @@ def print_color(text, color=Color.white, bold=False):
 
 
 def print_error(text):
-    print(f"{get_color('Error', Color.red)}: {text}")
+    print(f"{get_color('Error:', Color.red)} {text}")
