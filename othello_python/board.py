@@ -27,76 +27,47 @@ class Board:
         self._board[col][row] = Disk.WHITE
         self._board[col][col] = Disk.BLACK
 
-        # keep a list of empty squares to avoid having to iterate through the whole board constantly
-        # when checking for available moves
-        self.empty_squares = set((x, y) for x in range(self._size) for y in range(self._size) if
-                                 self._board[y][x] == Disk.EMPTY)
-
-    def can_place_to_square(self, x: int, y: int, disk: Disk) -> bool:
-        """Check can the given disk color be placed in the given position."""
-        if self.square(x, y) != Disk.EMPTY:
-            return False
-
-        other = disk.other_disk()
-        for i, j in self.DIRECTIONS:
-            tx = x + i
-            ty = y + j
-            if self.square(tx, ty) != other:
-                continue
-            while self.square(tx, ty) == other:
-                tx += i
-                ty += j
-            if self.square(tx, ty) == disk:
-                return True
-
-        return False
+        self.empty_squares = set([Square(x, y) for x in range(self._size) for y in range(self._size) if
+                                  self._board[y][x] == Disk.EMPTY])
 
     def can_play(self) -> bool:
-        """Return true if board contains empty squares."""
+        """Return true if board contains empty squares -> still possible to make a move."""
         return bool(self.empty_squares)
 
     def check_coordinates(self, x: int, y: int) -> bool:
         """Check that the given coordinates are inside the board."""
         return 0 <= x < self._size and 0 <= y < self._size
 
-    def place_disk(self, x: int, y: int, disk) -> bool:
-        """Tries to place the given disk color to the given square."""
-        if not self.can_place_to_square(x, y, disk):
-            return False
-
-        for i, j in self.DIRECTIONS:
-            tx = x + i
-            ty = y + j
-            while self.square(tx, ty) == disk.other_disk():
-                tx += i
-                ty += j
-            if self.square(tx, ty) == disk:
-                while (tx != x) or (ty != y):
-                    tx -= i
-                    ty -= j
-                    self.set_square(tx, ty, disk)
-
-        self.empty_squares.remove((x, y))
-        return True
+    def place_disk(self, move: Move):
+        """Update board for given move."""
+        self.set_square(move.square, move.disk)
+        self.empty_squares.remove(move.square)
+        for step in move.directions:
+            pos = move.square + step
+            while self.square(pos) == move.disk.other_disk():
+                self.set_square(pos, move.disk)
+                pos += step
 
     def possible_moves(self, disk: Disk) -> List[Move]:
         """Returns a list of all possible moves for the given disk color."""
         moves = []
-        for x, y in self.empty_squares:
+        for square in self.empty_squares:
             value = 0
-            for i, j in self.DIRECTIONS:
-                tx = x + i
-                ty = y + j
+            directions = []
+            # Walk to all possible directions from starting position, and check if
+            # there is a line of one or more opponents disks followed by this disk:
+            for step in self.DIRECTIONS:
+                pos = square + step
                 steps = 0
-                while self.square(tx, ty) == disk.other_disk():
-                    tx += i
-                    ty += j
+                while self.square(pos) == disk.other_disk():
+                    pos += step
                     steps += 1
-                if self.square(tx, ty) == disk:
+                if self.square(pos) == disk:
                     value += steps
+                    directions.append(step)
 
             if value:
-                moves.append(Move(Square(x, y), disk, value))
+                moves.append(Move(square, disk, value, directions))
 
         return moves
 
@@ -146,15 +117,18 @@ class Board:
         """Returns the total score (positive means more white disks and negative means more black disks)."""
         return sum(sum(row) for row in self._board)
 
-    def set_square(self, x: int, y: int, disk: Disk):
+    def set_square(self, square: Square, disk: Disk):
         """Sets the given square to given value."""
         if not self.check_coordinates(x, y):
             raise ValueError(f"Invalid coordinates ({x},{y})!")
-        self._board[y][x] = disk
+        self._board[square.y][square.x] = disk
 
-    def square(self, x: int, y: int) -> Optional[Disk]:
-        """Returns the state of the board (empty, white, black) at the given coordinates."""
-        return self._board[y][x] if self.check_coordinates(x, y) else None
+    def square(self, square: Square) -> Optional[Disk]:
+        """Returns the state of the board (empty, white, black) at the given square."""
+        return self._board[square.y][square.x] if self.check_coordinates(square.x, square.y) else None
+
+    def valid(self, square):
+        return self.check_coordinates(square.x, square.y)
 
     def __str__(self):
         text = f"  {' '.join(get_color(str(x), bold=True) for x in range(self._size))}"

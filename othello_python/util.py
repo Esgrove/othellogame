@@ -47,12 +47,11 @@ class Square:
         self.y = y
 
     def __getitem__(self, key):
-        # enable iteration so coordinates can be unpacked: x,y = square
+        # enable iteration so coordinates can be unpacked: x,y = Square
         if key == 0:
             return self.x
         elif key == 1:
             return self.y
-
         raise IndexError
 
     def __add__(self, other):
@@ -95,10 +94,11 @@ class Square:
 
 class Move:
     """Represents one disk place position and the resulting value gained."""
-    def __init__(self, square: Square, disk: Disk, value=0):
+    def __init__(self, square: Square, disk: Disk, value=0, directions=None):
         self.square = square
         self.disk = disk
         self.value = value
+        self.directions = directions
 
     def __eq__(self, other):
         return (self.square, self.value) == (other.square, other.value)
