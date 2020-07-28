@@ -9,7 +9,6 @@
 
 #include "board.hpp"
 #include "colorprint.hpp"
-#include "util.hpp"
 
 othello::Board::Board(int size) : size_(size) {
     board_.resize(size * size, Disk::EMPTY);

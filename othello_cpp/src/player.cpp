@@ -29,9 +29,9 @@ void othello::Player::play_one_move(Board& board) {
                     if (board.place_disc(x, y, color_)) {
                         break;
                     }
-                    //print_error(fmt::format("  Error: can't place a {} disk in square ({}, {}).\n", disk_string(color_), x, y));
+                    print_color(fmt::format("  Error: can't place a {} disk in square ({},{}).\n", disk_string(color_), x, y), fmt::color::red);
                 } else {
-                    print_error("  Error: give coordinates in the form 'x,y'.");
+                    print_color("  Error: give coordinates in the form 'x,y'!\n", fmt::color::red);
                 }
             }
         } else {
@@ -52,7 +52,7 @@ void othello::Player::play_one_move(Board& board) {
         print(board);
         board.print_score();
     } else {
-        print_color("  No moves available...", fmt::color::yellow);
+        print_color("  No moves available...\n", fmt::color::yellow);
         can_play_ = false;
     }
 }
