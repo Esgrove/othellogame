@@ -70,9 +70,10 @@ void othello::Othello::play()
         print_color("\nThe game is finished!\n", fmt::color::green);
         print("Result:");
         print(board_);
+        print("");
         print(player_black_);
         print(player_white_);
-        print("\n");
+        print("");
 
         Disk winner = board_.result();
         if (winner == Disk::EMPTY) {
