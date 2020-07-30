@@ -32,58 +32,33 @@ class Board:
         self.empty_squares = set((x, y) for x in range(self._size) for y in range(self._size) if
                                  self._board[y][x] == Disk.EMPTY)
 
-    def can_place_to_square(self, x: int, y: int, disk: Disk) -> bool:
-        """Check can the given disk color be placed in the given position."""
-        if self.square(x, y) != Disk.EMPTY:
-            return False
-
-        other = disk.other_disk()
-        for i, j in self.DIRECTIONS:
-            tx = x + i
-            ty = y + j
-            if self.square(tx, ty) != other:
-                continue
-            while self.square(tx, ty) == other:
-                tx += i
-                ty += j
-            if self.square(tx, ty) == disk:
-                return True
-
-        return False
-
     def can_play(self) -> bool:
-        """Return true if board contains empty squares."""
+        """Return true if board contains empty squares -> still possible to make a move."""
         return bool(self.empty_squares)
 
     def check_coordinates(self, x: int, y: int) -> bool:
         """Check that the given coordinates are inside the board."""
         return 0 <= x < self._size and 0 <= y < self._size
 
-    def place_disk(self, x: int, y: int, disk) -> bool:
-        """Tries to place the given disk color to the given square."""
-        if not self.can_place_to_square(x, y, disk):
-            return False
-
-        for i, j in self.DIRECTIONS:
+    def place_disk(self, x: int, y: int, disk: Disk, directions: List):
+        """Update board for given disk placement."""
+        assert self.square(x, y) == Disk.EMPTY, "Trying to place a disk to an occupied square!"
+        self.set_square(x, y, disk)
+        self.empty_squares.remove((x, y))
+        for i, j in directions:
             tx = x + i
             ty = y + j
             while self.square(tx, ty) == disk.other_disk():
+                self.set_square(tx, ty, disk)
                 tx += i
                 ty += j
-            if self.square(tx, ty) == disk:
-                while (tx != x) or (ty != y):
-                    tx -= i
-                    ty -= j
-                    self.set_square(tx, ty, disk)
-
-        self.empty_squares.remove((x, y))
-        return True
 
     def possible_moves(self, disk: Disk) -> List[Move]:
         """Returns a list of all possible moves for the given disk color."""
         moves = []
         for x, y in self.empty_squares:
             value = 0
+            directions = []
             for i, j in self.DIRECTIONS:
                 tx = x + i
                 ty = y + j
@@ -94,9 +69,10 @@ class Board:
                     steps += 1
                 if self.square(tx, ty) == disk:
                     value += steps
+                    directions.append((i, j))
 
             if value:
-                moves.append(Move(Square(x, y), disk, value))
+                moves.append(Move(Square(x, y), disk, value, directions))
 
         return moves
 

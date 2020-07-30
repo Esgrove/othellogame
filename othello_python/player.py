@@ -9,7 +9,7 @@ import time
 
 from board import Board
 from colorprint import Color, print_color, print_error
-from util import Disk
+from util import Disk, Square
 
 
 class Player:
@@ -35,25 +35,28 @@ class Player:
                     board.print_possible_moves(moves)
                 while True:
                     pos = input("  Give disk position (x,y): ")
-                    square = [x.strip() for x in pos.split(",") if x.strip()]
-                    if len(square) == 2:
-                        try:
-                            x = int(square[0])
-                            y = int(square[1])
-                            if board.place_disk(x, y, self._color):
-                                break
-                            print_error(f"Can't place a {self._color} disk in square ({x},{y})!")
-                        except ValueError:
-                            print_error("Coordinates have to be integer numbers!")
-                    else:
+                    try:
+                        coordinates = [int(x.strip()) for x in pos.split(",") if x.strip()]
+                        if not len(coordinates) == 2:
+                            raise ValueError
+                        x, y = coordinates
+                        square = Square(x, y)
+                        # check if given square is one of the possible moves
+                        move = next((move for move in moves if move.square == square), None)
+                        if move:
+                            board.place_disk(x, y, self._color, move.directions)
+                            break
+                        else:
+                            print_error(f"Can't place a {str(self._color)} disk in square {square}!")
+                    except ValueError:
                         print_error("Give coordinates in the form 'x,y'!")
             else:
                 # computer plays: wait a bit and pick a random move
                 print("  Computer plays...")
                 time.sleep(random.uniform(1.0, 2.0))
-                square = random.choice(moves).square
-                print(f"  -> {square}")
-                board.place_disk(square.x, square.y, self._color)
+                move = random.choice(moves)
+                print(f"  -> {move.square}")
+                board.place_disk(move.square.x, move.square.y, self._color, move.directions)
 
             self._rounds_played += 1
             print("")
