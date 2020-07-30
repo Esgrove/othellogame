@@ -95,7 +95,7 @@ class Square:
 
 class Move:
     """Represents one disk place position and the resulting value gained."""
-    def __init__(self, square: Square, disk: Disk, value=0, directions=None):
+    def __init__(self, square: Square, disk=Disk.EMPTY, value=0, directions=None):
         self.square = square
         self.disk = disk
         self.value = value

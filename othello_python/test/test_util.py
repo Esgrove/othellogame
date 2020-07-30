@@ -25,7 +25,7 @@ def square():
 
 @pytest.fixture
 def move():
-    return Move(Square(1, 1), value=1)
+    return Move(Square(1, 1), disk=Disk.WHITE, value=1)
 
 
 def test_disk_other_disk_for_white(white):
@@ -49,16 +49,16 @@ def test_square_string(square):
 
 
 def test_move_string(move):
-    assert str(move) == "point: (1,1) -> value: 1"
+    assert str(move) == "Square: (1,1) -> value: 1"
 
 
 def test_move_equal_operator(move):
-    assert move == Move(Square(1, 1), 1)
-    assert not move == Move(Square(1, 1), 0)
-    assert not move == Move(Square(1, 1), 2)
-    assert not move == Move(Square(0, 1), 1)
-    assert not move == Move(Square(0, 0), 1)
-    assert not move == Move(Square(0, 0), 0)
+    assert move == Move(Square(1, 1), value=1)
+    assert not move == Move(Square(1, 1), value=0)
+    assert not move == Move(Square(1, 1), value=2)
+    assert not move == Move(Square(0, 1), value=1)
+    assert not move == Move(Square(0, 0), value=1)
+    assert not move == Move(Square(0, 0), value=0)
 
 
 def test_square_equal_operator(square):

@@ -27,8 +27,7 @@ class Board:
         self._board[col][row] = Disk.WHITE
         self._board[col][col] = Disk.BLACK
 
-        # keep a list of empty squares to avoid having to iterate through the whole board constantly
-        # when checking for available moves
+        # keep a list of empty squares to avoid iterating over occupied squares
         self.empty_squares = set((x, y) for x in range(self._size) for y in range(self._size) if
                                  self._board[y][x] == Disk.EMPTY)
 
@@ -59,14 +58,21 @@ class Board:
         for x, y in self.empty_squares:
             value = 0
             directions = []
+            # try stepping in all directions from this starting point
             for i, j in self.DIRECTIONS:
                 tx = x + i
                 ty = y + j
+                # not valid if next disk in line is own
+                if self.square(tx, ty) == disk:
+                    continue
+
                 steps = 0
+                # keep stepping over opponents disks
                 while self.square(tx, ty) == disk.other_disk():
                     tx += i
                     ty += j
                     steps += 1
+                # successful move if this direction ends in own disk
                 if self.square(tx, ty) == disk:
                     value += steps
                     directions.append((i, j))
@@ -74,40 +80,32 @@ class Board:
             if value:
                 moves.append(Move(Square(x, y), disk, value, directions))
 
-        return moves
+        return sorted(moves)
 
     def print_possible_moves(self, moves: List[Move]):
         """Print available move coordinates and resulting points gained."""
+        print_color(f"  Possible plays ({len(moves)}):", Color.yellow)
         # convert board from Disk enums to strings
         board = [[disk.board_char() for disk in row] for row in self._board]
 
-        # add value gained to matching position on board
         for move in moves:
+            print(f"  {move}")
             x, y = move.square
+            # add value gained to matching position on board
             board[y][x] = get_color(str(move.value), Color.yellow)
 
-        print_color(f"  Possible plays ({len(moves)}):", Color.yellow)
+        # print board with move positions
         print(f"    {' '.join(get_color(str(x), bold=True) for x in range(self._size))}")
         for index, row in enumerate(board):
             text = get_color(f"  {index} ", bold=True)
             text += ' '.join(disk for disk in row)
             print(text)
 
-        # print coordinate info
-        for move in sorted(moves):
-            print(f"  {move}")
-
     def print_score(self):
-        """ Count and print the number of black and white disks."""
-        white = 0
-        black = 0
-        for row in self._board:
-            for disk in row:
-                if disk == Disk.WHITE:
-                    white += 1
-                elif disk == Disk.BLACK:
-                    black += 1
-
+        """Count and print the number of black and white disks."""
+        white, black = self.player_scores()
+        print("")
+        print(self)
         print(f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}")
 
     def result(self) -> Disk:
@@ -121,6 +119,19 @@ class Board:
     def score(self) -> int:
         """Returns the total score (positive means more white disks and negative means more black disks)."""
         return sum(sum(row) for row in self._board)
+
+    def player_scores(self):
+        """Count and return the number of black and white disks (white, black)."""
+        white = 0
+        black = 0
+        for row in self._board:
+            for disk in row:
+                if disk == Disk.WHITE:
+                    white += 1
+                elif disk == Disk.BLACK:
+                    black += 1
+
+        return white, black
 
     def set_square(self, x: int, y: int, disk: Disk):
         """Sets the given square to given value."""

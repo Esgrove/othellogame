@@ -43,30 +43,34 @@ class Othello:
 
     def play(self):
         """Play one full game of Othello."""
-        while True:
-            self.init_game()
-            while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
-                self.rounds_played += 1
-                print(f"\n=========== ROUND: {self.rounds_played} ===========")
-                self.player_black.play_one_move(self.board)
-                print("-------------------------------")
-                self.player_white.play_one_move(self.board)
+        self.init_game()
+        self.play_loop()
+        self.show_result()
+        if self.get_answer("\nWould you like to play again"):
+            self.play()
 
-            print_bold(" \nThe game is finished!", Color.green)
-            print(f"total rounds played: {self.rounds_played}")
-            print_bold("Result:")
-            print(self.board, end="\n\n")
-            print(self.player_black)
-            print(self.player_white, end="\n\n")
+    def play_loop(self):
+        while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
+            self.rounds_played += 1
+            print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")
+            self.player_black.play_one_move(self.board)
+            print("-------------------------------")
+            self.player_white.play_one_move(self.board)
 
-            winner = self.board.result()
-            if winner == Disk.EMPTY:
-                print_bold("The game ended in a tie...")
-            else:
-                print_bold(f"The winner is {str(winner)}!")
+    def show_result(self):
+        print_bold("===============================")
+        print_bold("\nThe game is finished!", Color.green)
+        print(f"total rounds played: {self.rounds_played}")
+        print_bold("Result:")
+        print(self.board, end="\n\n")
+        print(self.player_black)
+        print(self.player_white, end="\n\n")
 
-            if not self.get_answer("\nWould you like to play again"):
-                break
+        winner = self.board.result()
+        if winner == Disk.EMPTY:
+            print_bold("The game ended in a tie...")
+        else:
+            print_bold(f"The winner is {str(winner)}!")
 
     @staticmethod
     def get_answer(message: str, yes="y", no="n") -> bool:
