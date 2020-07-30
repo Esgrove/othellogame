@@ -7,7 +7,6 @@
 
 #pragma once
 #include <vector>
-
 #include "util.hpp"
 
 namespace othello {
@@ -17,7 +16,7 @@ class Board {
 public:
     constexpr static int directions[8][2] = {{0,-1}, {1, 0}, {0, 1}, {-1, 0}, {1,-1}, {1, 1}, {-1, 1}, {-1,-1}};
 
-    Board() : size_(8) {};
+    Board() : size(8) {};
     explicit Board(int size);
     ~Board() = default;
 
@@ -39,8 +38,9 @@ public:
 private:
     bool                set_square(int x, int y, Disk disk);
 
-    std::vector<Disk>   board_;
-    int                 size_;
+    std::vector<Disk>    board;
+    std::vector<Square>  empty_squares;
+    int                  size;
 };
 
 } // namespace othello

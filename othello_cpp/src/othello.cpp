@@ -8,7 +8,6 @@
 #include <algorithm> // clamp, transform
 #include <iostream>
 
-#include <fmt/ostream.h>
 #include <fmt/color.h>
 
 #include "colorprint.hpp"
@@ -20,6 +19,7 @@ void othello::Othello::init_game() {
     board_ = Board(board_size);
     player_black_ = Player(Disk::BLACK);
     player_white_ = Player(Disk::WHITE);
+    rounds_played_ = 0;
 
     if (get_answer("Would you like to play against the computer")) {
         if (get_answer("Would you like to play as black or white", "b", "w")) {
@@ -59,37 +59,44 @@ void othello::Othello::play()
 {
     while (true) {
         init_game();
-        while (board_.can_play() && (player_black_.can_play() || player_white_.can_play())) {
-            fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played_ + 1);
-            player_black_.play_one_move(board_);
-            print("--------------------------------");
-            player_white_.play_one_move(board_);
-            ++rounds_played_;
-        }
-
-        print_color("\nThe game is finished!\n", fmt::color::green);
-        print("Result:");
-        print(board_);
-        print("");
-        print(player_black_);
-        print(player_white_);
-        print("");
-
-        Disk winner = board_.result();
-        if (winner == Disk::EMPTY) {
-            print("The game ended in a tie...");
-        } else {
-            fmt::print(fmt::fg(disk_color(winner)), "The {} player won!\n", disk_string(winner));
-        }
-
+        play_loop();
+        show_result();
         if (!get_answer("\nWould you like to play again")) {
             break;
         }
     }
 }
 
+void othello::Othello::play_loop() {
+    while (board_.can_play() && (player_black_.can_play() || player_white_.can_play())) {
+        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played_ + 1);
+        player_black_.play_one_move(board_);
+        print("--------------------------------");
+        player_white_.play_one_move(board_);
+        ++rounds_played_;
+    }
+}
+
+void othello::Othello::show_result() {
+    print_bold("\n================================\n");
+    print_color("\nThe game is finished!\n", fmt::color::green);
+    print("Result:");
+    print(board_);
+    print("");
+    print(player_black_);
+    print(player_white_);
+    print("");
+
+    Disk winner = board_.result();
+    if (winner == Disk::EMPTY) {
+        print("The game ended in a tie...");
+    } else {
+        fmt::print(fmt::fg(disk_color(winner)), "The {} player won!\n", disk_string(winner));
+    }
+}
+
 int main() {
-    print_bold("OTHELLO GAME: C++\n", fmt::color::green);
+    print_bold("OTHELLO GAME - C++\n", fmt::color::green);
     othello::Othello othello;
     othello.play();
 }

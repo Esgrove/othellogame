@@ -24,6 +24,8 @@ private:
     static int              get_board_size();
 
     void                    init_game();
+    void                    play_loop();
+    void                    show_result();
 
     Board                   board_;
     Player                  player_black_;

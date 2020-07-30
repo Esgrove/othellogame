@@ -6,12 +6,19 @@
 
 #pragma once
 #include <iostream> // cout, cin
-#include <string>	// string
+#include <string>   // string
 
 #include <fmt/ostream.h>
 #include <fmt/color.h>
 
 namespace othello {
+
+enum class Disk {
+    BLACK = -1,
+    EMPTY = 0,
+    WHITE = 1,
+    ERROR = 2
+};
 
 struct Square {
     Square() : x(0), y(0) {}
@@ -28,7 +35,7 @@ struct Square {
 };
 
 struct Move {
-    Move() : value(0) {}
+    Move() : square(0,0), value(0) {}
     Move(int x, int y, int value) : square(x, y), value(value) {}
 
     friend std::ostream& operator<< (std::ostream& out, const Move& move) {
@@ -37,15 +44,9 @@ struct Move {
 
     bool operator< (const Move& other) const;
 
-    Square   square;
-    int      value;
-};
-
-enum class Disk {
-    BLACK = -1,
-    EMPTY = 0,
-    WHITE = 1,
-    INVALID = 2
+    Square              square;
+    int                 value;
+    std::vector<Square> directions;
 };
 
 inline std::string board_char(const Disk color) {
@@ -60,7 +61,7 @@ inline fmt::color disk_color(const Disk disk) {
     if (disk == Disk::EMPTY) {
         return fmt::color::white;
     }
-    return disk == Disk::WHITE ? fmt::color::magenta : fmt::color::cyan;
+    return disk == Disk::WHITE ? fmt::color::cyan : fmt::color::magenta;
 }
 
 /// Returns disk color as a string.
