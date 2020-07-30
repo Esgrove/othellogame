@@ -18,6 +18,7 @@ namespace Othello
             _board = new Board(boardSize);
             _playerBlack = new Player(Disk.Black);
             _playerWhite = new Player(Disk.White);
+            _roundsPlayed = 0;
 
             if (GetAnswer("Would you like to play against the computer")) {
                 if (GetAnswer("Would you like to play as black or white", "b", "w")) {
@@ -56,11 +57,11 @@ namespace Othello
             while (true) {
                 InitGame();
                 while (_playerBlack.CanPlay() || _playerWhite.CanPlay()) {
-                    Console.WriteLine($"=========== ROUND: {_roundsPlayed + 1} ===========");
+                    ++_roundsPlayed;
+                    Console.WriteLine($"=========== ROUND: {_roundsPlayed} ===========");
                     _playerBlack.PlayOneMove(_board);
                     _playerWhite.PlayOneMove(_board);
                     _board.PrintScore();
-                    ++_roundsPlayed;
                 }
 
                 ColorPrint.Write("The game is finished!\n", ConsoleColor.Green);

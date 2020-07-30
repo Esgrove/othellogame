@@ -18,7 +18,7 @@ namespace Othello
         public readonly int X;
         public readonly int Y;
     }
-    public struct Move
+    public readonly struct Move
     {
         public Move(int x, int y, int value)
         {
@@ -27,7 +27,7 @@ namespace Othello
         }
         public override string ToString()
         {
-            return $"point: {Square} -> value: {Value}";
+            return $"Square: {Square} -> value: {Value}";
         }
 
         public readonly Square Square;
