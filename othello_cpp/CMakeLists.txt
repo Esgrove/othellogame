@@ -20,7 +20,7 @@ add_executable(
     src/colorprint.hpp
 )
 
-find_package(fmt)
+find_package(fmt 7 REQUIRED)
 target_link_libraries(othello_cpp fmt::fmt)
 
 message("CMAKE_CXX_FLAGS_DEBUG is ${CMAKE_CXX_FLAGS_DEBUG}")
