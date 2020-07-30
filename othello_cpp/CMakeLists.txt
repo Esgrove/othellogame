@@ -5,14 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(
     src
-    include
 )
 
 add_executable(
     othello_cpp
     src/board.cpp
     src/board.hpp
-    src/format.cc
     src/othello.cpp
     src/othello.hpp
     src/player.cpp
@@ -21,3 +19,9 @@ add_executable(
     src/util.hpp
     src/colorprint.hpp
 )
+
+find_package(fmt)
+target_link_libraries(othello_cpp fmt::fmt)
+
+message("CMAKE_CXX_FLAGS_DEBUG is ${CMAKE_CXX_FLAGS_DEBUG}")
+message("CMAKE_CXX_FLAGS_RELEASE is ${CMAKE_CXX_FLAGS_RELEASE}")
