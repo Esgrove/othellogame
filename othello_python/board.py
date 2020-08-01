@@ -52,6 +52,19 @@ class Board:
                 tx += i
                 ty += j
 
+    def player_scores(self):
+        """Count and return the number of black and white disks (white, black)."""
+        white = 0
+        black = 0
+        for row in self._board:
+            for disk in row:
+                if disk == Disk.WHITE:
+                    white += 1
+                elif disk == Disk.BLACK:
+                    black += 1
+
+        return white, black
+
     def possible_moves(self, disk: Disk) -> List[Move]:
         """Returns a list of all possible moves for the given disk color."""
         moves = []
@@ -119,19 +132,6 @@ class Board:
     def score(self) -> int:
         """Returns the total score (positive means more white disks and negative means more black disks)."""
         return sum(sum(row) for row in self._board)
-
-    def player_scores(self):
-        """Count and return the number of black and white disks (white, black)."""
-        white = 0
-        black = 0
-        for row in self._board:
-            for disk in row:
-                if disk == Disk.WHITE:
-                    white += 1
-                elif disk == Disk.BLACK:
-                    black += 1
-
-        return white, black
 
     def set_square(self, x: int, y: int, disk: Disk):
         """Sets the given square to given value."""
