@@ -68,6 +68,7 @@ class Player:
 
     @staticmethod
     def get_square():
+        """Ask human player for square coordinates."""
         try:
             pos = input("  Give disk position (x,y): ")
             coordinates = [int(x.strip()) for x in pos.split(",") if x.strip()]
@@ -80,6 +81,10 @@ class Player:
 
     def type_string(self):
         return "Human   " if self._human else "Computer"
+
+    def set_player_type(self, is_human: bool):
+        """Set player to be controlled by human or computer."""
+        self._human = is_human
 
     def __str__(self):
         return f"{str(self._color)} | {self.type_string()} | Moves: {self._rounds_played}"

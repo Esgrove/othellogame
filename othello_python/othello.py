@@ -44,12 +44,12 @@ class Othello:
     def play(self):
         """Play one full game of Othello."""
         self.init_game()
-        self.play_loop()
+        self.game_loop()
         self.show_result()
         if self.get_answer("\nWould you like to play again"):
             self.play()
 
-    def play_loop(self):
+    def game_loop(self):
         while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
             self.rounds_played += 1
             print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")
@@ -58,8 +58,8 @@ class Othello:
             self.player_white.play_one_move(self.board)
 
     def show_result(self):
-        print_bold("===============================")
-        print_bold("\nThe game is finished!", Color.green)
+        print_bold("===============================\n")
+        print_bold("The game is finished!", Color.green)
         print(f"total rounds played: {self.rounds_played}")
         print_bold("Result:")
         print(self.board, end="\n\n")
@@ -73,10 +73,10 @@ class Othello:
             print_bold(f"The winner is {str(winner)}!")
 
     @staticmethod
-    def get_answer(message: str, yes="y", no="n") -> bool:
+    def get_answer(question: str, yes="y", no="n") -> bool:
         """Ask a question with two options, and return bool from user answer."""
-        ans = input(f"{message} ({yes}/{no})? ")
-        return ans.lower() == yes
+        ans = input(f"{question} ({yes}/{no})? ")
+        return ans.lower() == yes.lower()
 
     @staticmethod
     def get_board_size() -> int:
