@@ -1,44 +1,68 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Othello
 {
+    public enum Disk : int
+    {
+        Black = -1,
+        Empty = 0,
+        White = 1,
+        ERROR = 2
+    }
+
+    ///  Represents one square location on the board.
     public struct Square
     {
-        public Square(int x, int y)
-        {
+        public Square(int x, int y) {
             X = x;
             Y = y;
         }
 
-        public override string ToString()
-        {
+        public override int GetHashCode() {
+            return HashCode.Combine(X, Y);
+        }
+
+        public override bool Equals(Object obj) {
+            if (!(obj is Square square)) {
+                return false;
+            }
+            return Equals(square);
+        }
+
+        public bool Equals(Square other) {
+            return X.Equals(other.X) && Y.Equals(other.Y);
+        }
+
+        public override string ToString() {
             return $"({X},{Y})";
+        }
+
+        public static Square operator +(Square left, Square right) {
+            return new Square(left.X + right.X, left.Y + right.Y);
         }
 
         public readonly int X;
         public readonly int Y;
     }
+
+    /// Represents one possible disk placement for given disk color.
     public readonly struct Move
     {
-        public Move(int x, int y, int value)
-        {
-            Square = new Square(x, y);
+        public Move(Square square, int value, Disk disk, List<Square> directions) {
+            Square = square;
             Value = value;
+            Disk = disk;
+            Directions = directions;
         }
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"Square: {Square} -> value: {Value}";
         }
 
         public readonly Square Square;
         public readonly int Value;
-    }
-    public enum Disk // : int
-    {
-        Black = -1,
-        Empty = 0,
-        White = 1,
-        Invalid = 2
+        public readonly Disk Disk;
+        public readonly List<Square> Directions;
     }
 
     public static class Extensions
@@ -47,7 +71,7 @@ namespace Othello
             if (color == Disk.Empty) {
                 return ConsoleColor.White;
             }
-            return color == Disk.White ? ConsoleColor.DarkMagenta : ConsoleColor.Cyan;
+            return color == Disk.White ? ConsoleColor.Cyan : ConsoleColor.DarkMagenta;
         }
 
         public static Disk OtherDisk(this Disk color) {
