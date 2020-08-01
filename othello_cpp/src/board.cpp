@@ -33,12 +33,13 @@ othello::Board::Board(int size) : size(size) {
     }
 }
 
-/// Return true if board contains empty squares
+/// Return true if board contains empty squares.
 bool othello::Board::can_play() const {
-    return std::find(board.begin(), board.end(), Disk::EMPTY) != board.end();
+    // std::find(board.begin(), board.end(), Disk::EMPTY) != board.end();
+    return !empty_squares.empty();
 }
 
-/// Check that the given coordinates are inside the board
+/// Check that the given coordinates are inside the board.
 bool othello::Board::check_coordinates(const int x, const int y) const {
     return ( x >= 0 && x < size) && (y >= 0 && y < size );
 }
@@ -60,9 +61,9 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk color) const {
             int steps = 0;
             // keep stepping forward while opponents disks are found
             while (square(tx, ty) == other) {
+                ++steps;
                 tx += dir[0];
                 ty += dir[1];
-                ++steps;
             }
             // valid move if a line of opponents disks ends in own disk
             if (square(tx, ty) == color) {
@@ -154,12 +155,11 @@ int othello::Board::score() const {
 }
 
 /// Sets the given square to given value.
-bool othello::Board::set_square(int x, int y, Disk disk) {
+void othello::Board::set_square(int x, int y, Disk disk) {
     if (!check_coordinates(x, y)) {
-        return false;
+        throw std::invalid_argument(fmt::format("Invalid coordinates ({},{})!", x, y));
     }
     board[y * size + x] = disk;
-    return true;
 }
 
 /// Returns the state of the board (empty, white, black) at the given coordinates.
@@ -167,7 +167,7 @@ othello::Disk othello::Board::square(const int x, const int y) const {
     return check_coordinates(x, y) ? board[y * size + x] : Disk::ERROR;
 }
 
-/// Print board
+/// Format game board to string
 std::ostream& othello::operator<<(std::ostream& out, const othello::Board& board) {
     out << " ";
     for (int i = 0; i < board.size; ++i) {

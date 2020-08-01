@@ -97,6 +97,6 @@ void othello::Othello::show_result() {
 
 int main() {
     print_bold("OTHELLO GAME - C++\n", fmt::color::green);
-    othello::Othello othello;
-    othello.play();
+    othello::Othello game{};
+    game.play();
 }

@@ -21,6 +21,7 @@ enum class Disk {
     ERROR = 2
 };
 
+/// Represents one square location on the board.
 struct Square {
     Square() : x(0), y(0) {}
     Square(int x, int y) : x(x), y(y) {}
@@ -42,6 +43,7 @@ struct Square {
     int y;
 };
 
+/// Represents one possible disk placement for given disk color.
 struct Move {
     Move() : square(0,0), value(0), disk(Disk::EMPTY) {}
     Move(Square square, int value, Disk disk, std::vector<Square> directions) :

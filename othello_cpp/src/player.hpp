@@ -13,8 +13,8 @@ namespace othello {
 
 class Player {
 public:
-    Player() : color(Disk::BLACK), human(true) {};
-    explicit Player(Disk col) : color(col), human(true) {};
+    Player() : disk(Disk::BLACK), human(true) {};
+    explicit Player(Disk disk) : disk(disk), human(true) {};
     ~Player() = default;
 
     // nodiscard -> compiler should warn if value returned by function call is not used
@@ -31,9 +31,9 @@ private:
     Move            get_human_move(std::vector<Move> moves);
     static Square   get_square();
 
-    Disk            color;
-    bool            human;
+    Disk            disk;
     bool            can_play_ {true};
+    bool            human;
     bool            show_helpers {true};
     int             rounds_played {0};
     std::mt19937    rand_gen { std::mt19937 {std::random_device{}() } };

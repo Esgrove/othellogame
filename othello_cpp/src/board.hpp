@@ -35,7 +35,7 @@ public:
 
 private:
     [[nodiscard]] bool                  check_coordinates(int x, int y) const;
-    bool                                set_square(int x, int y, Disk disk);
+    void                                set_square(int x, int y, Disk disk);
 
 
     std::vector<Disk>    board;
