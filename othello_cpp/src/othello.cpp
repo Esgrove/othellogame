@@ -23,9 +23,9 @@ void othello::Othello::init_game() {
 
     if (get_answer("Would you like to play against the computer")) {
         if (get_answer("Would you like to play as black or white", "b", "w")) {
-            player_white_.set_human(false);
+            player_white_.set_player_type(false);
         } else {
-            player_black_.set_human(false);
+            player_black_.set_player_type(false);
         }
     }
     print_bold("\nPlayers:\n");
@@ -36,10 +36,12 @@ void othello::Othello::init_game() {
 }
 
 /// Read user input for yes/no question and return bool.
-bool othello::Othello::get_answer(const std::string& text, const std::string& yes, const std::string& no)
+bool othello::Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no)
 {
+    // fmt lib enables nice (modern) string formatting instead of having to use the horrible stringstream stuff
+    // std::cout << question << " (" << yes << "/" << no << ")? ";
+    fmt::print("{} ({}/{})? ", question, yes, no);
     std::string input;
-    std::cout << text << " (" << yes << "/" << no << ")? ";
     std::cin >> input;
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);
     return input == yes;
@@ -57,17 +59,15 @@ int othello::Othello::get_board_size()
 /// Play one full game of Othello.
 void othello::Othello::play()
 {
-    while (true) {
-        init_game();
-        play_loop();
-        show_result();
-        if (!get_answer("\nWould you like to play again")) {
-            break;
-        }
+    init_game();
+    game_loop();
+    show_result();
+    if (get_answer("\nWould you like to play again")) {
+        play();
     }
 }
 
-void othello::Othello::play_loop() {
+void othello::Othello::game_loop() {
     while (board_.can_play() && (player_black_.can_play() || player_white_.can_play())) {
         fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played_ + 1);
         player_black_.play_one_move(board_);
@@ -79,7 +79,7 @@ void othello::Othello::play_loop() {
 
 void othello::Othello::show_result() {
     print_bold("\n================================\n");
-    print_color("\nThe game is finished!\n", fmt::color::green);
+    print_color("The game is finished!\n", fmt::color::green);
     print("Result:");
     print(board_);
     print("");

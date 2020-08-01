@@ -7,6 +7,7 @@
 #include <algorithm>  // sort, transform
 #include <chrono>
 #include <thread>     // sleep_for
+#include <stdexcept>  // exceptions
 
 #include "colorprint.hpp"
 #include "player.hpp"
@@ -17,41 +18,12 @@ void othello::Player::play_one_move(Board& board) {
     auto moves = board.possible_moves(color);
     if (!moves.empty()) {
         can_play_ = true;
-        if (human) {
-            if(show_helpers) {
-                othello::Board::print_possible_moves(moves);
-            }
-            std::string input;
-            while (true) {
-                std::cout << "  Give disk position (x,y): ";
-                std::cin >> input;
-                if (input.size() == 3 && input[1] == ',') {
-                    int x = input[0] - '0'; // ascii hack
-                    int y = input[2] - '0'; // std::stoi(input.substr(2,1));
-                    if (board.place_disc(x, y, color)) {
-                        break;
-                    }
-                    print_color(fmt::format("  Error: can't place a {} disk in square ({},{}).\n", disk_string(color), x, y), fmt::color::red);
-                } else {
-                    print_color("  Error: give coordinates in the form 'x,y'!\n", fmt::color::red);
-                }
-            }
-        } else {
-            // computer plays: pick a random move
-            print("  Computer plays...");
-            std::uniform_int_distribution<int> rand_time(1000, 2000);
-            auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen_));
-            std::this_thread::sleep_for(sleep_duration);
-
-            std::uniform_int_distribution<int> rand_item(0, static_cast<int>(moves.size() - 1));
-            // C++17 std::sample is even more convoluted here :(
-            Square pos = moves[rand_item(this->rand_gen_)].square;
-            std::cout << "  -> " << pos << "\n";
-            board.place_disc(pos.x, pos.y, color);
+        if(show_helpers && human) {
+            board.print_possible_moves(moves);
         }
-        ++rounds_played_;
-        print("");
-        print(board);
+        auto move = human ? get_human_move(moves) : get_computer_move(moves);
+        board.place_disc(move);
+        ++rounds_played;
         board.print_score();
     } else {
         print_color("  No moves available...\n", fmt::color::yellow);
@@ -62,6 +34,54 @@ void othello::Player::play_one_move(Board& board) {
 std::ostream& othello::operator<<(std::ostream& out, Player& p)
 {
     out << fmt::format(fmt::fg(disk_color(p.color)), disk_string_upper(p.color));
-    out << " | " << p.type_string() << " | " << "moves: " << p.rounds_played_;
+    out << " | " << p.type_string() << " | " << "moves: " << p.rounds_played;
     return out;
+}
+
+/// Return move chosen by computer.
+othello::Move othello::Player::get_computer_move(std::vector<Move> moves) {
+    print("  Computer plays...");
+    // wait a bit and pick a random move
+    std::uniform_int_distribution<int> rand_time(1000, 2000);
+    auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen));
+    std::this_thread::sleep_for(sleep_duration);
+
+    std::uniform_int_distribution<int> rand_item(0, static_cast<int>(moves.size() - 1));
+    // C++17 std::sample is even more convoluted here :(
+    auto move = moves[rand_item(this->rand_gen)];
+    std::cout << "  -> " << move.square << "\n";
+    return move;
+}
+
+/// Return move chosen by a human player.
+othello::Move othello::Player::get_human_move(std::vector<Move> moves) {
+    while (true) {
+        Square square = get_square();
+        auto move_iter = std::find_if(moves.begin(), moves.end(), [&square](const Move& move){ return move.square == square; });
+        if (move_iter != moves.end()) {
+            // dereference iterator to get value
+            return *move_iter;
+        } else {
+            print_error(fmt::format("can't place a {} disk in square {}.\n", disk_string(color), square));
+        }
+    }
+}
+
+/// Ask human player for square coordinates.
+othello::Square othello::Player::get_square() {
+    std::string input;
+    while (true) {
+        try {
+            std::cout << "  Give disk position (x,y): ";
+            std::cin >> input;
+            if (input.size() != 3 || input[1] != ',') {
+                throw std::invalid_argument("");
+            }
+            int x = std::stoi(input.substr(0, 1));
+            int y = std::stoi(input.substr(2, 1));
+            return Square(x, y);
+        } catch (const std::invalid_argument& e) {
+            print_error("give coordinates in the form 'x,y'!\n");
+        }
+    }
 }

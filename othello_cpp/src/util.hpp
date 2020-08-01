@@ -7,6 +7,7 @@
 #pragma once
 #include <iostream> // cout, cin
 #include <string>   // string
+#include <utility>
 
 #include <fmt/ostream.h>
 #include <fmt/color.h>
@@ -28,36 +29,54 @@ struct Square {
         return out << fmt::format("({},{})", sqr.x, sqr.y);
     }
 
-    bool operator<(const Square& other) const;
+    bool operator<(const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
+    bool operator==(const Square& other) const { return x == other.x && y == other.y; }
+    Square operator+(const Square& other) const { return Square(x + other.x, y + other.y); }
+    Square& operator+=(const Square& other) {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
 
     int x;
     int y;
 };
 
 struct Move {
-    Move() : square(0,0), value(0) {}
-    Move(int x, int y, int value) : square(x, y), value(value) {}
+    Move() : square(0,0), value(0), disk(Disk::EMPTY) {}
+    Move(Square square, int value, Disk disk, std::vector<Square> directions) :
+        square(square), value(value), disk(disk), directions(std::move(directions)) {}
 
     friend std::ostream& operator<< (std::ostream& out, const Move& move) {
-        return out << fmt::format("point: {} -> value: {}", move.square, move.value);
-}
+        return out << fmt::format("Square: {} -> value: {}", move.square, move.value);
+    }
 
-    bool operator< (const Move& other) const;
+    bool operator< (const Move& other) const {
+        // biggest value with smallest coordinates first
+        return value > other.value || (value == other.value && square < other.square);
+    }
 
     Square              square;
     int                 value;
+    Disk                disk;
     std::vector<Square> directions;
 };
 
-inline std::string board_char(const Disk color) {
-    if (color == Disk::EMPTY) {
+struct Step {
+    Step(int x, int y) : x(x), y(y) {}
+    int x;
+    int y;
+};
+
+inline std::string board_char(const Disk& disk) {
+    if (disk == Disk::EMPTY) {
         return "_";
     }
-    return color == Disk::WHITE ? "W" : "B";
+    return disk == Disk::WHITE ? "W" : "B";
 }
 
 /// Returns print color for given Disk.
-inline fmt::color disk_color(const Disk disk) {
+inline fmt::color disk_color(const Disk& disk) {
     if (disk == Disk::EMPTY) {
         return fmt::color::white;
     }
@@ -69,10 +88,10 @@ inline std::string disk_string(const Disk& disk) {
     if (disk == Disk::EMPTY) {
         return "empty";
     }
-    return disk == Disk::BLACK ? "black" : "white";
+    return disk == Disk::WHITE ? "white" : "black";
 }
 
-/// Returns disk color as an uppercase string.
+/// Returns disk color string in uppercase.
 inline std::string disk_string_upper(const Disk& disk) {
     std::string text = disk_string(disk);
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);

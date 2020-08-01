@@ -20,12 +20,12 @@ public:
     void                    play();
 
 private:
-    static bool             get_answer(const std::string& text, const std::string& yes="y", const std::string& no="n");
-    static int              get_board_size();
-
     void                    init_game();
-    void                    play_loop();
+    void                    game_loop();
     void                    show_result();
+
+    static bool             get_answer(const std::string& question, const std::string& yes="y", const std::string& no="n");
+    static int              get_board_size();
 
     Board                   board_;
     Player                  player_black_;
