@@ -4,8 +4,8 @@ A simple [Othello / Reversi](https://en.wikipedia.org/wiki/Reversi) command line
 
 I originally did this in Python many years ago for a programming course, and then a few years later redid it in C++ for fun (and learning purposes). Since then I figured that this could actually be an useful project to: 
 1. learn new languages by re-implenting it,
-2. compare different languages directly with each other, 
-3. Exist as a practical code formatting and syntax reference.
+2. compare different languages directly with each other, and
+3. be a practical code formatting and syntax reference.
 
 I have since cleaned up and improved both my old implementations in Python and C++, the two languages I have been using the most. For each language, I try to make the program structure and all the functions match as close as possible, while also trying to follow the best practices and guidelines for each language. This makes it very easy to compare the implementations to each other. While the project is small and trivial-to-implement, it also covers pretty well all the basic functionality and tooling one would need from a programming language. It is also easy to check that the code is working correctly.
 
@@ -18,10 +18,6 @@ _board_: Game board state and functions.
 _player_: Player object used for making moves and storing player information.  
 _util_: Helper classes and functions.
 _colorprint_: Helpers / wrappers for color and style formatting.
-
-### TODO
-
-* Add unit tests for each language
 
 ### Languages
 
@@ -45,7 +41,7 @@ C++17. [Cmake](https://cmake.org/) as build system. Uses [fmt](https://github.co
 
 #### C#
 
-No external dependencies. Follows the C# style guide (Pascal case etc) otherwise, except for putting opening brackets on their own line (all that wasted whitespace :grimacing:)
+No external dependencies. Follows the C# style guide (PascalCase) otherwise, except for always putting opening brackets on their own line (all that wasted whitespace :grimacing:)
 * Othello.cs
 * Board.cs
 * Player.cs
@@ -55,3 +51,8 @@ No external dependencies. Follows the C# style guide (Pascal case etc) otherwise
 #### Rust
 
 *In progress...*
+
+
+### TODO
+
+* Add unit tests for each language
