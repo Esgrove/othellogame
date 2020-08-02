@@ -69,11 +69,11 @@ void othello::Othello::play()
 
 void othello::Othello::game_loop() {
     while (board_.can_play() && (player_black_.can_play() || player_white_.can_play())) {
-        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played_ + 1);
+        ++rounds_played_;
+        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played_);
         player_black_.play_one_move(board_);
         print("--------------------------------");
         player_white_.play_one_move(board_);
-        ++rounds_played_;
     }
 }
 
