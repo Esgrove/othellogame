@@ -8,7 +8,7 @@ Akseli Lukkarila
 from typing import List, Optional
 
 from colorprint import Color, get_color, print_color
-from util import Disk, Move, Square
+from utils import Disk, Move, Square
 
 
 class Board:
@@ -17,6 +17,7 @@ class Board:
 
     def __init__(self, size=8):
         self._size = size
+        # init game board with empty disks
         self._board = [[Disk.EMPTY for _ in range(self._size)] for _ in range(self._size)]
 
         # set starting positions
@@ -27,48 +28,32 @@ class Board:
         self._board[col][row] = Disk.WHITE
         self._board[col][col] = Disk.BLACK
 
-        # keep a list of empty squares to avoid iterating over occupied squares
-        self.empty_squares = set((x, y) for x in range(self._size) for y in range(self._size) if
-                                 self._board[y][x] == Disk.EMPTY)
+        # keep track of empty squares on board to avoid checking already filled positions
+        self._empty_squares = set((x, y) for x in range(self._size) for y in range(self._size) if
+                                  self._board[y][x] == Disk.EMPTY)
 
     def can_play(self) -> bool:
         """Return true if board contains empty squares -> still possible to make a move."""
-        return bool(self.empty_squares)
+        return bool(self._empty_squares)
 
-    def check_coordinates(self, x: int, y: int) -> bool:
-        """Check that the given coordinates are inside the board."""
-        return 0 <= x < self._size and 0 <= y < self._size
-
-    def place_disk(self, x: int, y: int, disk: Disk, directions: List):
+    def place_disk(self, move: Move) -> None:
         """Update board for given disk placement."""
-        assert self.square(x, y) == Disk.EMPTY, "Trying to place a disk to an occupied square!"
-        self.set_square(x, y, disk)
-        self.empty_squares.remove((x, y))
-        for i, j in directions:
+        x, y = move.square
+        assert self._square(x, y) == Disk.EMPTY, f"Trying to place disk to an occupied square {move.square}!"
+        self._set_square(x, y, move.disk)
+        self._empty_squares.remove((x, y))
+        for i, j in move.directions:
             tx = x + i
             ty = y + j
-            while self.square(tx, ty) == disk.other_disk():
-                self.set_square(tx, ty, disk)
+            while self._square(tx, ty) == move.disk.other_disk():
+                self._set_square(tx, ty, move.disk)
                 tx += i
                 ty += j
-
-    def player_scores(self):
-        """Count and return the number of black and white disks (white, black)."""
-        white = 0
-        black = 0
-        for row in self._board:
-            for disk in row:
-                if disk == Disk.WHITE:
-                    white += 1
-                elif disk == Disk.BLACK:
-                    black += 1
-
-        return white, black
 
     def possible_moves(self, disk: Disk) -> List[Move]:
         """Returns a list of all possible moves for the given disk color."""
         moves = []
-        for x, y in self.empty_squares:
+        for x, y in self._empty_squares:
             value = 0
             directions = []
             # try stepping in all directions from this starting point
@@ -76,17 +61,17 @@ class Board:
                 tx = x + i
                 ty = y + j
                 # not valid if next disk in line is own
-                if self.square(tx, ty) == disk:
+                if self._square(tx, ty) == disk:
                     continue
 
                 steps = 0
                 # keep stepping over opponents disks
-                while self.square(tx, ty) == disk.other_disk():
+                while self._square(tx, ty) == disk.other_disk():
                     tx += i
                     ty += j
                     steps += 1
                 # successful move if this direction ends in own disk
-                if self.square(tx, ty) == disk:
+                if self._square(tx, ty) == disk:
                     value += steps
                     directions.append((i, j))
 
@@ -97,10 +82,9 @@ class Board:
 
     def print_possible_moves(self, moves: List[Move]):
         """Print available move coordinates and resulting points gained."""
-        print_color(f"  Possible plays ({len(moves)}):", Color.yellow)
+        print_color(f"  Possible moves ({len(moves)}):", Color.yellow)
         # convert board from Disk enums to strings
         board = [[disk.board_char() for disk in row] for row in self._board]
-
         for move in moves:
             print(f"  {move}")
             x, y = move.square
@@ -116,32 +100,49 @@ class Board:
 
     def print_score(self):
         """Count and print the number of black and white disks."""
-        white, black = self.player_scores()
+        white, black = self._player_scores()
         print("")
         print(self)
         print(f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}")
 
     def result(self) -> Disk:
-        """Calculates the final score and returns the winning player color."""
-        total_score = self.score()
+        """Calculates the final score and returns the winning player disk."""
+        total_score = self._score()
         if total_score == 0:
             return Disk.EMPTY
 
         return Disk.WHITE if total_score > 0 else Disk.BLACK
 
-    def score(self) -> int:
+    def _check_coordinates(self, x: int, y: int) -> bool:
+        """Check that the given coordinates are inside the board."""
+        return 0 <= x < self._size and 0 <= y < self._size
+
+    def _player_scores(self):
+        """Count and return the number of black and white disks (white, black)."""
+        white = 0
+        black = 0
+        for row in self._board:
+            for disk in row:
+                if disk == Disk.WHITE:
+                    white += 1
+                elif disk == Disk.BLACK:
+                    black += 1
+
+        return white, black
+
+    def _score(self) -> int:
         """Returns the total score (positive means more white disks and negative means more black disks)."""
         return sum(sum(row) for row in self._board)
 
-    def set_square(self, x: int, y: int, disk: Disk):
+    def _set_square(self, x: int, y: int, disk: Disk):
         """Sets the given square to given value."""
-        if not self.check_coordinates(x, y):
+        if not self._check_coordinates(x, y):
             raise ValueError(f"Invalid coordinates ({x},{y})!")
         self._board[y][x] = disk
 
-    def square(self, x: int, y: int) -> Optional[Disk]:
+    def _square(self, x: int, y: int) -> Optional[Disk]:
         """Returns the state of the board (empty, white, black) at the given coordinates."""
-        return self._board[y][x] if self.check_coordinates(x, y) else None
+        return self._board[y][x] if self._check_coordinates(x, y) else None
 
     def __str__(self):
         text = f"  {' '.join(get_color(str(x), bold=True) for x in range(self._size))}"

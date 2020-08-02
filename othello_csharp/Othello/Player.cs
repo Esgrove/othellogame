@@ -6,6 +6,13 @@ namespace Othello
 {
     internal class Player
     {
+        private bool _canPlay;
+        private bool _human;
+        private int _roundsPlayed;
+        private readonly Disk _disk;
+        private readonly Random _random;
+        private readonly bool _showHelpers;
+
         public Player(Disk color) {
             _disk = color;
             _human = true;
@@ -18,36 +25,37 @@ namespace Othello
             return _canPlay;
         }
 
+        /// Play one round as this player.
         public void PlayOneMove(Board board) {
             Console.Write("Turn: ");
-            ColorPrint.Write(DiskStringUpper() + "\n", _disk.DiskColor());
+            ColorPrint.Write(DiskStringUpper() + "\n", _disk.Color());
             var moves = board.PossibleMoves(_disk);
             if (moves.Count > 0) {
                 _canPlay = true;
-                if (_showHelpers && _human) {
-                    PrintPossibleMoves(moves);
+                if (_human && _showHelpers) {
+                    board.PrintPossibleMoves(moves);
                 }
-                var move = _human ? GetHumanMove(moves) : GetComputerMove(moves);
-                board.PlaceDisc(move);
-                ++_roundsPlayed;
+                var chosenMove = _human ? GetHumanMove(moves) : GetComputerMove(moves);
+                board.PlaceDisc(chosenMove);
                 board.PrintScore();
+                ++_roundsPlayed;
             } else {
-                Console.WriteLine("  No moves available...");
                 _canPlay = false;
+                Console.WriteLine("  No moves available...");
             }
         }
 
         public void Print() {
-            ColorPrint.Write(_disk.ToString().ToUpper(), _disk.DiskColor());
+            ColorPrint.Write(_disk.ToString().ToUpper(), _disk.Color());
             Console.WriteLine($" | {TypeString()} | moves: {_roundsPlayed}");
         }
 
-        public void SetPlayerType(bool isHuman) {
+        public void SetHuman(bool isHuman) {
             _human = isHuman;
         }
 
         public override string ToString() {
-            return $"{_disk.ToString().ToUpper()} | {TypeString()} | moves: {_roundsPlayed}";
+            return $"{_disk.ToString().ToUpper()} | {TypeString()} | Moves: {_roundsPlayed}";
         }
 
         /// Return move chosen by computer.
@@ -60,12 +68,13 @@ namespace Othello
             return move;
         }
 
-        /// Return move chosen by computer.
+        /// Return move chosen by a human player.
         private Move GetHumanMove(List<Move> moves) {
             while (true) {
                 var square = GetSquare();
-                if (moves.Exists(x => x.Square.Equals(square))) {
-                    var move = moves.Find(x => x.Square.Equals(square));
+                // check if given square is one of the possible moves
+                if (moves.Exists(x => square.Equals(x.Square))) {
+                    var move = moves.Find(x => square.Equals(x.Square));
                     return move;
                 }
                 ColorPrint.Error($"can't place a {_disk.Name()} disk in square {square}!\n");
@@ -90,13 +99,6 @@ namespace Othello
             }
         }
 
-        private static void PrintPossibleMoves(IReadOnlyCollection<Move> moves) {
-            ColorPrint.Write($"  Possible plays ({moves.Count}):\n", ConsoleColor.Yellow);
-            foreach (var move in moves) {
-                Console.WriteLine($"  {move}");
-            }
-        }
-
         private string DiskStringUpper() {
             return _disk.ToString().ToUpper();
         }
@@ -104,12 +106,5 @@ namespace Othello
         private string TypeString() {
             return _human ? "Human   " : "Computer";
         }
-
-        private bool _canPlay;
-        private bool _human;
-        private int _roundsPlayed;
-        private readonly bool _showHelpers;
-        private readonly Disk _disk;
-        private readonly Random _random;
     }
 }

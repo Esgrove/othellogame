@@ -2,7 +2,7 @@ import pytest
 
 from board import Board
 from player import Player
-from util import Disk
+from utils import Disk
 
 
 @pytest.fixture

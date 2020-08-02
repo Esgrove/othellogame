@@ -8,7 +8,7 @@
 #pragma once
 #include <set>
 #include <vector>
-#include "util.hpp"
+#include "utils.hpp"
 
 namespace othello {
 

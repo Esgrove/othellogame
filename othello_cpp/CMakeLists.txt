@@ -16,7 +16,7 @@ add_executable(
     src/othello.hpp
     src/player.cpp
     src/player.hpp
-    src/util.hpp
+    src/utils.hpp
 )
 
 find_package(fmt 7 REQUIRED)

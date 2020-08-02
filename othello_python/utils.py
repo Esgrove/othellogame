@@ -9,10 +9,16 @@ from colorprint import Color, get_color
 
 
 class Disk(IntEnum):
-    """Board state enums and utility methods."""
     BLACK = -1
     EMPTY = 0
     WHITE = 1
+
+    def board_char(self) -> str:
+        """Returns a single character identifier string for the given disk."""
+        if self.value == self.EMPTY:
+            return "_"
+
+        return get_color(self.name[0], self.color())
 
     def color(self) -> Color:
         """Return the associated color for this disk."""
@@ -20,13 +26,6 @@ class Disk(IntEnum):
             return Color.white
 
         return Color.magenta if self.value == self.BLACK else Color.cyan
-
-    def board_char(self) -> str:
-        """Returns the single character identifier string for the given disk."""
-        if self.value == self.EMPTY:
-            return "_"
-
-        return get_color(self.name[0], self.color())
 
     def other_disk(self):
         """Returns the opposing disk."""
@@ -55,6 +54,10 @@ class Square:
 
         raise IndexError
 
+    def __hash__(self):
+        # needed to enable using this class in sets or as a dictionary key
+        return hash((self.x, self.y))
+
     def __add__(self, other):
         # enable addition for a pair of squares or a square and an iterable with two values (square + tuple etc...)
         return Square(self.x + other[0], self.y + other[1])
@@ -66,10 +69,6 @@ class Square:
     def __radd__(self, other):
         # other + self
         return self + other
-
-    def __hash__(self):
-        # needed to enable using this class in sets or as a dictionary key
-        return hash((self.x, self.y))
 
     def __eq__(self, other):
         return (self.x, self.y) == (other.x, other.y)

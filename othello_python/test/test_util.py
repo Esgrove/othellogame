@@ -1,6 +1,6 @@
 import pytest
 
-from util import Disk, Move, Square, clamp
+from utils import Disk, Move, Square, clamp
 
 
 @pytest.fixture

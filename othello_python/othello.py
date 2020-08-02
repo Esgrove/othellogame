@@ -9,47 +9,46 @@ import sys
 
 from board import Board
 from player import Player
-from util import Disk, clamp
+from utils import Disk, clamp
 
 from colorprint import Color, print_bold, print_error
 
 
 class Othello:
-    """Implements Othello CLI game."""
-    def __init__(self):
+    """Play Othello CLI game."""
+    def __init__(self, board_size: int):
         self.board = None
         self.player_black = None
         self.player_white = None
         self.rounds_played = 0
+        self.size = board_size
 
     def init_game(self):
         """Initialize game board and players."""
-        board_size = self.get_board_size()
-        self.board = Board(board_size)
+        self.board = Board(self.size)
         self.player_black = Player(Disk.BLACK)
         self.player_white = Player(Disk.WHITE)
         self.rounds_played = 0
 
         if self.get_answer("Would you like to play against the computer"):
             if self.get_answer("Would you like to play as black or white", yes="b", no="w"):
-                self.player_white._human = False
+                self.player_white.set_human(False)
             else:
-                self.player_black._human = False
+                self.player_black.set_human(False)
 
         print_bold("\nPlayers:")
-        print(self.player_black)
-        print(self.player_white, end="\n\n")
-        print(self.board)
+        self.print_status()
 
     def play(self):
         """Play one full game of Othello."""
         self.init_game()
         self.game_loop()
-        self.show_result()
+        self.print_result()
         if self.get_answer("\nWould you like to play again"):
             self.play()
 
     def game_loop(self):
+        """Keep making moves until both players can't make a move anymore."""
         while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
             self.rounds_played += 1
             print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")
@@ -57,20 +56,24 @@ class Othello:
             print("-------------------------------")
             self.player_white.play_one_move(self.board)
 
-    def show_result(self):
+    def print_result(self):
+        """Print ending status and winner info."""
         print_bold("===============================\n")
-        print_bold("The game is finished!", Color.green)
-        print(f"total rounds played: {self.rounds_played}")
-        print_bold("Result:")
-        print(self.board, end="\n\n")
-        print(self.player_black)
-        print(self.player_white, end="\n\n")
+        print_bold("The game is finished!\n", Color.green)
+        print_bold("Result:\n")
+        self.print_status()
 
         winner = self.board.result()
         if winner == Disk.EMPTY:
             print_bold("The game ended in a tie...")
         else:
             print_bold(f"The winner is {str(winner)}!")
+
+    def print_status(self):
+        """Print current board and player statuses."""
+        print(self.player_black)
+        print(self.player_white, end="\n\n")
+        print(self.board)
 
     @staticmethod
     def get_answer(question: str, yes="y", no="n") -> bool:
@@ -83,17 +86,20 @@ class Othello:
         """Ask and return the desired board size."""
         while True:
             try:
-                size = int(input("Choose board size (default is 8): "))
-                return clamp(size, 4, 8)
+                ans = int(input("Choose board size (default is 8): "))
+                return clamp(ans, 4, 8)
             except ValueError:
                 print_error("Give a number...")
-                continue
 
 
 if __name__ == "__main__":
-    print_bold("OTHELLO GAME - Python\n", Color.green)
+    print_bold("OTHELLO GAME - Python", Color.green)
     try:
-        game = Othello()
+        size = int(sys.argv[1])
+    except (ValueError, IndexError):
+        size = Othello.get_board_size()
+    try:
+        game = Othello(size)
         game.play()
     except KeyboardInterrupt:
-        sys.exit("\nGame aborted...")
+        sys.exit("\nGame stopped...")

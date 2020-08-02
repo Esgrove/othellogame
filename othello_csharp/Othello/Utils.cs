@@ -7,11 +7,10 @@ namespace Othello
     {
         Black = -1,
         Empty = 0,
-        White = 1,
-        ERROR = 2
+        White = 1
     }
 
-    ///  Represents one square location on the board.
+    /// Represents one square location on the board.
     public struct Square
     {
         public Square(int x, int y) {
@@ -42,6 +41,22 @@ namespace Othello
             return new Square(left.X + right.X, left.Y + right.Y);
         }
 
+        public static bool operator ==(Square left, Square right) {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Square left, Square right) {
+            return !left.Equals(right);
+        }
+
+        public static bool operator <(Square left, Square right) {
+            return left.X < right.X || (left.X <= right.X && left.Y < right.Y);
+        }
+
+        public static bool operator >(Square left, Square right) {
+            return left.X > right.X || (left.X >= right.X && left.Y > right.Y);
+        }
+
         public readonly int X;
         public readonly int Y;
     }
@@ -55,8 +70,17 @@ namespace Othello
             Disk = disk;
             Directions = directions;
         }
+
         public override string ToString() {
             return $"Square: {Square} -> value: {Value}";
+        }
+
+        public static bool operator <(Move left, Move right) {
+            return left.Value > right.Value || (left.Value == right.Value && left.Square < right.Square);
+        }
+
+        public static bool operator >(Move left, Move right) {
+            return left.Value < right.Value || (left.Value == right.Value && left.Square > right.Square);
         }
 
         public readonly Square Square;
@@ -67,7 +91,7 @@ namespace Othello
 
     public static class Extensions
     {
-        public static ConsoleColor DiskColor(this Disk color) {
+        public static ConsoleColor Color(this Disk color) {
             if (color == Disk.Empty) {
                 return ConsoleColor.White;
             }
