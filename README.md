@@ -16,7 +16,7 @@ Since then I have added a C# implementation, and started working on a Rust versi
 _othello_: The main gameplay loop.  
 _board_: Game board state and functions.  
 _player_: Player object used for making moves and storing player information.  
-_util_: Helper classes and functions.
+_utils_: Helper classes and functions.  
 _colorprint_: Helpers / wrappers for color and style formatting.
 
 ## Languages
