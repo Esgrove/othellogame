@@ -27,7 +27,7 @@ namespace Othello
                 if (_showHelpers && _human) {
                     PrintPossibleMoves(moves);
                 }
-                var move = _human ? getHumanMove(moves) : getComputerMove(moves);
+                var move = _human ? GetHumanMove(moves) : GetComputerMove(moves);
                 board.PlaceDisc(move);
                 ++_roundsPlayed;
                 board.PrintScore();
@@ -51,7 +51,7 @@ namespace Othello
         }
 
         /// Return move chosen by computer.
-        private Move getComputerMove(List<Move> moves) {
+        private Move GetComputerMove(IReadOnlyList<Move> moves) {
             Console.WriteLine("  Computer plays...");
             // wait a bit and pick a random move
             Thread.Sleep(_random.Next(1000, 2000));
@@ -61,20 +61,19 @@ namespace Othello
         }
 
         /// Return move chosen by computer.
-        private Move getHumanMove(List<Move> moves) {
+        private Move GetHumanMove(List<Move> moves) {
             while (true) {
-                var square = getSquare();
+                var square = GetSquare();
                 if (moves.Exists(x => x.Square.Equals(square))) {
                     var move = moves.Find(x => x.Square.Equals(square));
                     return move;
-                } else {
-                    ColorPrint.Error($"can't place a {_disk.Name()} disk in square {square}!\n");
                 }
+                ColorPrint.Error($"can't place a {_disk.Name()} disk in square {square}!\n");
             }
         }
 
         /// Ask human player for square coordinates.
-        private Square getSquare() {
+        private static Square GetSquare() {
             while (true) {
                 try {
                     Console.Write("  Give disk position (x,y): ");

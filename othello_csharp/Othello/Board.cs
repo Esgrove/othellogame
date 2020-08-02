@@ -174,6 +174,6 @@ namespace Othello
 
         private readonly List<Disk> _board;
         private readonly int _size;
-        private List<Square> emptySquares;
+        private readonly List<Square> emptySquares;
     }
 }

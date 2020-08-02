@@ -35,7 +35,7 @@ namespace Othello
         private static bool GetAnswer(string message, string yes = "y", string no = "n") {
             Console.Write($"{message} ({yes}/{no})? ");
             var ans = Console.ReadLine();
-            return !string.IsNullOrEmpty(ans) && ans.ToLower() == yes.ToLower();
+            return !string.IsNullOrEmpty(ans) && string.Equals(ans, yes, StringComparison.CurrentCultureIgnoreCase);
         }
 
         private static int GetBoardSize() {
@@ -45,7 +45,7 @@ namespace Othello
             return size;
         }
 
-        public void Play() {
+        private void Play() {
             while (true) {
                 InitGame();
                 GameLoop();
