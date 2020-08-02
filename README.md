@@ -11,7 +11,7 @@ I have since cleaned up and improved both my old implementations in Python and C
 
 Since then I have added a C# implementation, and started working on a Rust version as a learning excercise. I'll probably do a few other (modern) languages that interest me, such as Swift and Kotlin. It would also be interesting to try to make a functional / non-OOP version at some point...
 
-### Program structure
+## Program structure
 
 _othello_: The main gameplay loop.  
 _board_: Game board state and functions.  
@@ -19,40 +19,37 @@ _player_: Player object used for making moves and storing player information.
 _util_: Helper classes and functions.
 _colorprint_: Helpers / wrappers for color and style formatting.
 
-### Languages
+## Languages
 
-#### Python
-
-Requires Python 3.6+. Uses [colorama](https://pypi.org/project/colorama/) for colored text in the terminal.  
+### Python
+Python 3.6+. Uses [colorama](https://pypi.org/project/colorama/) for colored text in the terminal.  
 * othello.py
 * board.py
 * player.py
-* util.py
+* utils.py
 * colorprint.py
 
-#### C++
-
+### C++
 C++17. [Cmake](https://cmake.org/) as build system. Uses [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text (stringstreams :unamused:). Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-naming) recommended naming style (snake_case), which sadly very few C++ codebases seem to be using (in my experience).
 * othello.hpp & othello.cpp
 * board.hpp & board.cpp
 * player.hpp & player.cpp
-* util.hpp
+* utils.hpp
 * colorprint.hpp
 
-#### C#
-
-No external dependencies. Follows the C# style guide (PascalCase) otherwise, except for always putting opening brackets on their own line (all that wasted whitespace :grimacing:)
+### C#
+Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal. Follows the C# style guide (PascalCase) otherwise, except for always putting opening brackets on their own line (all that wasted whitespace :grimacing:).
 * Othello.cs
 * Board.cs
 * Player.cs
 * Utils.cs
 * ColorPrint.cs
 
-#### Rust
+### Rust
 
 *In progress...*
 
 
-### TODO
+## TODO
 
 * Add unit tests for each language
