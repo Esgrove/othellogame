@@ -5,4 +5,4 @@ authors = ["Esgrove <esgrove@outlook.com>"]
 edition = "2018"
 
 [dependencies]
-colored = "1.7.0"
+colored = "2"

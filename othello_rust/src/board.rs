@@ -7,25 +7,33 @@
 
 extern crate colored; // print with color to terminal
 
+use std::fmt;
+
 use crate::utils::{Disk};
 
-pub struct Board {
+pub(crate) struct Board {
     board: Vec<Disk>,
     size: u8
 }
 
 impl Board {
-    pub fn default() -> Board {
+    pub(crate) fn default() -> Board {
         Board {
             board: vec![Disk::EMPTY; 64usize],
-            size
+            size: 8
         }
     }
 
-    pub fn new(size: u8) -> Board {
+    pub(crate) fn new(size: u8) -> Board {
         Board {
             board: vec![Disk::EMPTY; (size * size) as usize],
             size
         }
+    }
+}
+
+impl fmt::Display for Board {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Board: {}", self.size)
     }
 }

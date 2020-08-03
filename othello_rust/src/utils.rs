@@ -6,6 +6,7 @@
 
 use std::fmt;
 
+#[derive(Debug, Copy, Clone)]
 pub(crate) enum Disk {
     BLACK = -1,
     EMPTY = 0,

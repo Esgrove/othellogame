@@ -15,17 +15,19 @@ use crate::board::Board;
 use crate::player::Player;
 use crate::utils::Disk;
 
-pub struct Othello {
+pub(crate) struct Othello {
     board: Board,
     player_black: Player,
     player_white: Player,
-    rounds_played: i32
+    rounds_played: u32,
+    board_size: u8
 }
 
 impl Othello {
-    pub fn new() -> Othello {
+    pub fn new(size: u8) -> Othello {
         Othello {
-            board: Board::default(),
+            board: Board::new(size),
+            board_size: size,
             player_black: Player::new(Disk::BLACK),
             player_white: Player::new(Disk::WHITE),
             rounds_played: 0
@@ -43,8 +45,7 @@ impl Othello {
     }
 
     fn init_game(&mut self) {
-        let board_size: u8 = Othello::get_board_size();
-        println!("Board size: {}", board_size);
+        println!("Board size: {}", self.board_size);
 
         if Othello::get_answer("Would you like to play against the computer", "y", "n") {
             if Othello::get_answer("Would you like to play as black or white", "b", "w") {
@@ -56,9 +57,9 @@ impl Othello {
 
         println!(
             "{}\n{}\n{}",
-            self.board.bold(),
-            self.player_black.green(),
-            self.player_white.red()
+            self.board,
+            self.player_black,
+            self.player_white
         );
         self.rounds_played = 0;
     }
@@ -72,7 +73,7 @@ impl Othello {
         return input.trim().to_lowercase() == yes.to_string();
     }
 
-    fn get_board_size() -> u8 {
+    pub(crate) fn get_board_size() -> u8 {
         print!("Choose board size (default is 8): ");
         let mut input = String::new();
         io::stdout().flush().unwrap();

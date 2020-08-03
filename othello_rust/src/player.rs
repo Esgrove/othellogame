@@ -11,7 +11,8 @@ use crate::board::Board;
 
 use std::fmt;
 
-pub struct Player {
+#[derive(Debug)]
+pub(crate) struct Player {
     color: Disk,
     human: bool,
     can_play: bool,
@@ -47,9 +48,7 @@ impl Player {
 }
 
 impl fmt::Display for Player {
-    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        let mut str = self.color.to_string().to_uppercase().parse().unwrap();
-        fmt.write_str(str)?;
-        Ok(())
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.color.to_string())
     }
 }
