@@ -58,10 +58,11 @@ class Othello:
 
     def print_result(self):
         """Print ending status and winner info."""
-        print_bold("===============================\n")
+        print_bold("\n===============================")
         print_bold("The game is finished!\n", Color.green)
-        print_bold("Result:\n")
+        print_bold("Result:")
         self.print_status()
+        print("")
 
         winner = self.board.result()
         if winner == Disk.EMPTY:
@@ -94,9 +95,9 @@ class Othello:
 
 if __name__ == "__main__":
     print_bold("OTHELLO GAME - Python", Color.green)
-    # try to read board size from command line args
     try:
         try:
+            # try to read board size from command line args
             board_size = int(sys.argv[1])
             print(f"Using board size: {board_size}")
         except (ValueError, IndexError):
