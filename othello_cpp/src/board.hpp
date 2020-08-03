@@ -18,7 +18,7 @@ class Board {
 public:
     constexpr static int step_directions[8][2] = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
 
-    Board() : size(8) {};
+    Board() : size(8), indices(8) {};
     explicit Board(int size);
     ~Board() = default;
 
