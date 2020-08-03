@@ -5,8 +5,8 @@
 //==========================================================
 
 #pragma once
-#include <iostream> // cout, cin
-#include <string>   // string
+#include <iostream>  // cout, cin
+#include <string>    // string
 #include <utility>
 
 #include <fmt/ostream.h>
@@ -15,10 +15,9 @@
 namespace othello {
 
 enum class Disk {
-    BLACK = -1,
-    EMPTY = 0,
-    WHITE = 1,
-    ERROR = 2
+    Black = -1,
+    Empty = 0,
+    White = 1
 };
 
 /// Represents one square location on the board.
@@ -30,10 +29,10 @@ struct Square {
         return out << fmt::format("({},{})", sqr.x, sqr.y);
     }
 
-    bool operator<(const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
-    bool operator==(const Square& other) const { return x == other.x && y == other.y; }
-    Square operator+(const Square& other) const { return Square(x + other.x, y + other.y); }
-    Square& operator+=(const Square& other) {
+    bool operator< (const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
+    bool operator== (const Square& other) const { return x == other.x && y == other.y; }
+    Square operator+ (const Square& other) const { return Square(x + other.x, y + other.y); }
+    Square& operator+= (const Square& other) {
         x += other.x;
         y += other.y;
         return *this;
@@ -45,7 +44,7 @@ struct Square {
 
 /// Represents one possible disk placement for given disk color.
 struct Move {
-    Move() : square(0,0), value(0), disk(Disk::EMPTY) {}
+    Move() : square(0,0), value(0), disk(Disk::Empty) {}
     Move(Square square, int value, Disk disk, std::vector<Square> directions) :
         square(square), value(value), disk(disk), directions(std::move(directions)) {}
 
@@ -58,39 +57,37 @@ struct Move {
         return value > other.value || (value == other.value && square < other.square);
     }
 
-    Square              square;
-    int                 value;
-    Disk                disk;
-    std::vector<Square> directions;
-};
-
-struct Step {
-    Step(int x, int y) : x(x), y(y) {}
-    int x;
-    int y;
+    Disk                    disk;
+    Square                  square;
+    int                     value;
+    std::vector<Square>     directions;
 };
 
 inline std::string board_char(const Disk& disk) {
-    if (disk == Disk::EMPTY) {
-        return "_";
+    switch (disk) {
+        case Disk::Black:
+            return "B";
+        case Disk::White:
+            return "W";
+        default:
+            return "_";
     }
-    return disk == Disk::WHITE ? "W" : "B";
 }
 
 /// Returns print color for given Disk.
 inline fmt::color disk_color(const Disk& disk) {
-    if (disk == Disk::EMPTY) {
+    if (disk == Disk::Empty) {
         return fmt::color::white;
     }
-    return disk == Disk::WHITE ? fmt::color::cyan : fmt::color::magenta;
+    return disk == Disk::White ? fmt::color::cyan : fmt::color::magenta;
 }
 
 /// Returns disk color as a string.
 inline std::string disk_string(const Disk& disk) {
-    if (disk == Disk::EMPTY) {
+    if (disk == Disk::Empty) {
         return "empty";
     }
-    return disk == Disk::WHITE ? "white" : "black";
+    return disk == Disk::White ? "white" : "black";
 }
 
 /// Returns disk color string in uppercase.
@@ -102,10 +99,10 @@ inline std::string disk_string_upper(const Disk& disk) {
 
 /// Returns the opponents disk color
 inline Disk other_disk(const Disk color) {
-    if (color == Disk::EMPTY) {
-        return Disk::EMPTY;
+    if (color == Disk::Empty) {
+        return Disk::Empty;
     }
-    return color == Disk::WHITE ? Disk::BLACK : Disk::WHITE;
+    return color == Disk::White ? Disk::Black : Disk::White;
 }
 
 inline std::ostream& operator<<(std::ostream &out, const Disk& color) {

@@ -6,27 +6,30 @@
 //==========================================================
 
 #include <algorithm>  // std::remove
-#include <numeric>    // std::accumulate
+#include <numeric>    // std::accumulate, std::iota
 
 #include "board.hpp"
 #include "colorprint.hpp"
 
-othello::Board::Board(int size) : size(size) {
+othello::Board::Board(int size) : size(size), indices(size) {
     // init game board with empty disks.
-    board.resize(size * size, Disk::EMPTY);
+    board.resize(size * size, Disk::Empty);
 
     // set starting positions
     auto row = size % 2 == 0 ? (size - 1) / 2 : (size - 1) / 2 - 1;
     auto col = size / 2;
-    board[row * size + row] = Disk::BLACK;
-    board[row * size + col] = Disk::WHITE;
-    board[col * size + row] = Disk::WHITE;
-    board[col * size + col] = Disk::BLACK;
+    board[row * size + row] = Disk::Black;
+    board[row * size + col] = Disk::White;
+    board[col * size + row] = Disk::White;
+    board[col * size + col] = Disk::Black;
+
+    // index list (0...size) to avoid repeating same range in for loops
+    std::iota(indices.begin(), indices.end(), 0);
 
     // keep track of empty squares on board to avoid checking already filled positions
-    for(int y = 0; y < size; ++y) {
-        for(int x = 0; x < size; ++x) {
-            if(board[y * size + x] == Disk::EMPTY) {
+    for (int y : indices) {
+        for (int x : indices) {
+            if (board[y * size + x] == Disk::Empty) {
                 empty_squares.emplace(Square(x, y));
             }
         }
@@ -41,58 +44,61 @@ bool othello::Board::can_play() const {
 
 /// Check that the given coordinates are inside the board.
 bool othello::Board::check_coordinates(const int x, const int y) const {
-    return ( x >= 0 && x < size) && (y >= 0 && y < size );
+    return 0 <= x && x < size && 0 <= y && y < size;
+}
+
+/// Update board for given disk placement.
+void othello::Board::place_disc(const othello::Move& move) {
+    auto start = move.square;
+    if (get_square(start.x, start.y) != Disk::Empty) {
+        throw std::invalid_argument(fmt::format("Trying to place disk to an occupied square {}!", start));
+    }
+    set_square(start.x, start.y, move.disk);
+    empty_squares.erase(start);
+    for (auto& dir : move.directions) {
+        Square pos = start + dir;
+        while (get_square(pos.x, pos.y) == other_disk(move.disk)) {
+            set_square(pos.x, pos.y, move.disk);
+            pos += dir;
+        }
+    }
 }
 
 /// Returns a list of possible moves for given player.
 std::vector<othello::Move> othello::Board::possible_moves(Disk color) const {
     std::vector<Move> moves;
     Disk other = other_disk(color);
-    for (auto& pos : empty_squares) {
-        int value = 0;
+    for (const Square& square : empty_squares) {
+        int value {0};
         std::vector<Square> directions;
-        for (auto& dir : DIRECTIONS) {
-            int tx = pos.x + dir[0];
-            int ty = pos.y + dir[1];
+        for (auto& dir : step_directions) {
+            Square step {Square(dir[0], dir[1])};
+            Square pos {square + step};
             // next square in this directions needs to be opponents disk
-            if (square(tx, ty) != other) {
+            if (get_square(pos.x, pos.y) != other) {
                 continue;
             }
-            int steps = 0;
+            int steps {0};
             // keep stepping forward while opponents disks are found
-            while (square(tx, ty) == other) {
+            while (get_square(pos.x, pos.y) == other) {
                 ++steps;
-                tx += dir[0];
-                ty += dir[1];
+                pos += step;
             }
             // valid move if a line of opponents disks ends in own disk
-            if (square(tx, ty) == color) {
-                value += steps;
-                directions.emplace_back(Square(dir[0], dir[1]));
+            if (get_square(pos.x, pos.y) != color) {
+                continue;
             }
+            value += steps;
+            directions.emplace_back(step);
         }
         if (value > 0) {
-            moves.emplace_back(Move(pos, value, color, directions));
+            moves.emplace_back(Move(square, value, color, directions));
         }
     }
     if (!moves.empty()) {
         std::sort(moves.begin(), moves.end());
     }
     return moves;
-}
-
-/// Tries to place the given disk color to the given square.
-void othello::Board::place_disc(const othello::Move& move) {
-    auto start = move.square;
-    set_square(start.x, start.y, move.disk);
-    empty_squares.erase(start);
-    for (auto& dir : move.directions) {
-        Square step = start + dir;
-        while (square(step.x, step.y) == other_disk(move.disk)) {
-            set_square(step.x, step.y, move.disk);
-            step += dir;
-        }
-    }
 }
 
 void othello::Board::print_possible_moves(const std::vector<Move>& moves) {
@@ -107,12 +113,12 @@ void othello::Board::print_possible_moves(const std::vector<Move>& moves) {
         board_str[move.square.y * size + move.square.x] = get_color(move.value, fmt::color::yellow);
     }
     print("   ", false);
-    for (int i = 0; i < size; ++i) {
+    for (int i : indices) {
         fmt::print(" {}", i);
     }
-    for (int y = 0; y < size; ++y) {
+    for (int y : indices) {
         fmt::print("\n  {}", y);
-        for (int x = 0; x < size; ++x) {
+        for (int x : indices) {
             fmt::print(" {}", board_str[y * size + x]);
         }
     }
@@ -121,29 +127,40 @@ void othello::Board::print_possible_moves(const std::vector<Move>& moves) {
 
 /// Print current score for both players.
 void othello::Board::print_score() const {
-    int black = 0, white = 0;
-    for (auto& disk : board) {
-        if (disk == Disk::WHITE) {
-            ++white;
-        } else if (disk == Disk::BLACK) {
-            ++black;
-        }
-    }
+    auto [black, white] = player_scores();
     print("");
     print(*this);
     fmt::print("Score: ");
-    print_color(std::to_string(white), disk_color(Disk::WHITE));
+    print_color(std::to_string(black), disk_color(Disk::Black));
     print(" | ", false);
-    print_color(std::to_string(black) + "\n", disk_color(Disk::BLACK));
+    print_color(std::to_string(white) + "\n", disk_color(Disk::White));
+}
+
+/// Count and return the number of black and white disks.
+std::tuple<int, int> othello::Board::player_scores() const {
+    int black = 0, white = 0;
+    for (auto& disk : board) {
+        switch (disk) {
+            case Disk::White:
+                ++white;
+                break;
+            case Disk::Black:
+                ++black;
+                break;
+            default:
+                break;
+        }
+    }
+    return std::tuple<int, int>(black, white);
 }
 
 /// Calculates the final score and returns the winner color.
 othello::Disk othello::Board::result() const {
     int sum = score();
     if (sum == 0) {
-        return Disk::EMPTY;
+        return Disk::Empty;
     }
-    return sum > 0 ? Disk::WHITE : Disk::BLACK;
+    return sum > 0 ? Disk::White : Disk::Black;
 }
 
 /// Returns the total score (positive means more white disks and negative means more black disks).
@@ -163,19 +180,19 @@ void othello::Board::set_square(int x, int y, Disk disk) {
 }
 
 /// Returns the state of the board (empty, white, black) at the given coordinates.
-othello::Disk othello::Board::square(const int x, const int y) const {
-    return check_coordinates(x, y) ? board[y * size + x] : Disk::ERROR;
+std::optional<othello::Disk> othello::Board::get_square(const int x, const int y) const {
+    return check_coordinates(x, y) ? std::optional<Disk>{board[y * size + x]} : std::nullopt;
 }
 
 /// Format game board to string
 std::ostream& othello::operator<<(std::ostream& out, const othello::Board& board) {
     out << " ";
-    for (int i = 0; i < board.size; ++i) {
+    for (int i : board.indices) {
         out << " " << i;
     }
-    for (int y = 0; y < board.size; ++y) {
+    for (int y : board.indices) {
         out << "\n" << y;
-        for (int x = 0; x < board.size; ++x) {
+        for (int x : board.indices) {
             auto disk = board.board[y * board.size + x];
             out << fmt::format(fmt::fg(disk_color(disk)), " {}", board_char(disk));
         }

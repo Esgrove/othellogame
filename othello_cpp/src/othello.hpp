@@ -10,27 +10,27 @@
 
 namespace othello {
 
-class Othello
-{
-
+class Othello {
 public:
-    Othello() = default;
+    explicit Othello(int board_size) : board_size(board_size) {};
     ~Othello() = default;
 
-    void                    play();
+    void            play();
+    static int      get_board_size();
 
 private:
-    void                    init_game();
-    void                    game_loop();
-    void                    show_result();
+    void            init_game();
+    void            game_loop();
+    void            print_result();
+    void            print_status();
 
-    static bool             get_answer(const std::string& question, const std::string& yes="y", const std::string& no="n");
-    static int              get_board_size();
+    static bool     get_answer(const std::string& question, const std::string& yes="y", const std::string& no="n");
 
-    Board                   board_;
-    Player                  player_black_;
-    Player                  player_white_;
-    int                     rounds_played_ {0};
+    Board           board;
+    Player          player_black;
+    Player          player_white;
+    int             board_size;
+    int             rounds_played {0};
 };
 
 } // namespace othello
