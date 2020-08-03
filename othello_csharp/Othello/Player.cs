@@ -74,8 +74,7 @@ namespace Othello
                 var square = GetSquare();
                 // check if given square is one of the possible moves
                 if (moves.Exists(x => square.Equals(x.Square))) {
-                    var move = moves.Find(x => square.Equals(x.Square));
-                    return move;
+                    return moves.Find(x => square.Equals(x.Square));
                 }
                 ColorPrint.Error($"can't place a {_disk.Name()} disk in square {square}!\n");
             }

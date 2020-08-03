@@ -109,16 +109,14 @@ namespace Othello
             return color.ToString().ToLower();
         }
 
-        public static string GetBoardChar(this Disk color) {
+        public static string BoardChar(this Disk color) {
             switch (color) {
                 case Disk.White:
                     return "W";
                 case Disk.Black:
                     return "B";
-                case Disk.Empty:
-                    return "_";
                 default:
-                    throw new ArgumentException("Disk is invalid!");
+                    return "_";
             }
         }
     }

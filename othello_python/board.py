@@ -13,7 +13,7 @@ from utils import Disk, Move, Square
 
 class Board:
     """Handles game board state and logic."""
-    DIRECTIONS = ((0, -1), (0, 1), (1, 0), (-1, 0), (1, -1), (1, 1), (-1, 1), (-1, -1))
+    STEP_DIRECTIONS = ((0, -1), (0, 1), (1, 0), (-1, 0), (1, -1), (1, 1), (-1, 1), (-1, -1))
 
     def __init__(self, size=8):
         self._size = size
@@ -39,13 +39,13 @@ class Board:
     def place_disk(self, move: Move) -> None:
         """Update board for given disk placement."""
         x, y = move.square
-        assert self._square(x, y) == Disk.EMPTY, f"Trying to place disk to an occupied square {move.square}!"
+        assert self._get_square(x, y) == Disk.EMPTY, f"Trying to place disk to an occupied square {move.square}!"
         self._set_square(x, y, move.disk)
         self._empty_squares.remove((x, y))
         for i, j in move.directions:
             tx = x + i
             ty = y + j
-            while self._square(tx, ty) == move.disk.other_disk():
+            while self._get_square(tx, ty) == move.disk.other_disk():
                 self._set_square(tx, ty, move.disk)
                 tx += i
                 ty += j
@@ -57,21 +57,21 @@ class Board:
             value = 0
             directions = []
             # try stepping in all directions from this starting point
-            for i, j in self.DIRECTIONS:
+            for i, j in self.STEP_DIRECTIONS:
                 tx = x + i
                 ty = y + j
                 # not valid if next disk in line is own
-                if self._square(tx, ty) == disk:
+                if self._get_square(tx, ty) == disk:
                     continue
 
                 steps = 0
                 # keep stepping over opponents disks
-                while self._square(tx, ty) == disk.other_disk():
+                while self._get_square(tx, ty) == disk.other_disk():
                     tx += i
                     ty += j
                     steps += 1
                 # successful move if this direction ends in own disk
-                if self._square(tx, ty) == disk:
+                if self._get_square(tx, ty) == disk:
                     value += steps
                     directions.append((i, j))
 
@@ -140,7 +140,7 @@ class Board:
             raise ValueError(f"Invalid coordinates ({x},{y})!")
         self._board[y][x] = disk
 
-    def _square(self, x: int, y: int) -> Optional[Disk]:
+    def _get_square(self, x: int, y: int) -> Optional[Disk]:
         """Returns the state of the board (empty, white, black) at the given coordinates."""
         return self._board[y][x] if self._check_coordinates(x, y) else None
 

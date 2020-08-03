@@ -24,7 +24,7 @@ class Othello:
         self.size = board_size
 
     def init_game(self):
-        """Initialize game board and players."""
+        """Initialize game board and players for a new game."""
         self.board = Board(self.size)
         self.player_black = Player(Disk.BLACK)
         self.player_white = Player(Disk.WHITE)
@@ -70,7 +70,7 @@ class Othello:
             print_bold(f"The winner is {str(winner)}!")
 
     def print_status(self):
-        """Print current board and player statuses."""
+        """Print current board and player info."""
         print(self.player_black)
         print(self.player_white, end="\n\n")
         print(self.board)
@@ -86,7 +86,7 @@ class Othello:
         """Ask and return the desired board size."""
         while True:
             try:
-                ans = int(input("Choose board size (default is 8): "))
+                ans = int(input("Choose board board_size (default is 8): "))
                 return clamp(ans, 4, 8)
             except ValueError:
                 print_error("Give a number...")
@@ -94,12 +94,15 @@ class Othello:
 
 if __name__ == "__main__":
     print_bold("OTHELLO GAME - Python", Color.green)
+    # try to read board size from command line args
     try:
-        size = int(sys.argv[1])
-    except (ValueError, IndexError):
-        size = Othello.get_board_size()
-    try:
-        game = Othello(size)
+        try:
+            board_size = int(sys.argv[1])
+            print(f"Using board size: {board_size}")
+        except (ValueError, IndexError):
+            board_size = Othello.get_board_size()
+
+        game = Othello(board_size)
         game.play()
     except KeyboardInterrupt:
         sys.exit("\nGame stopped...")

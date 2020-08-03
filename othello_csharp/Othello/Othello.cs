@@ -9,19 +9,19 @@ namespace Othello
         private Player _playerBlack;
         private Player _playerWhite;
         private int _roundsPlayed;
-        private readonly int _size;
+        private readonly int _boardSize;
 
-        private Othello(int size) {
-            _size = size;
+        private Othello(int boardSize) {
+            _boardSize = boardSize;
             _board = null;
             _playerBlack = null;
             _playerWhite = null;
             _roundsPlayed = 0;
         }
 
-        /// Initialize game board and players.
+        /// Initialize game board and players for a new game.
         private void InitGame() {
-            _board = new Board(_size);
+            _board = new Board(_boardSize);
             _playerBlack = new Player(Disk.Black);
             _playerWhite = new Player(Disk.White);
             _roundsPlayed = 0;
@@ -29,8 +29,7 @@ namespace Othello
             if (GetAnswer("Would you like to play against the computer")) {
                 if (GetAnswer("Would you like to play as black or white", "b", "w")) {
                     _playerWhite.SetHuman(false);
-                }
-                else {
+                } else {
                     _playerBlack.SetHuman(false);
                 }
             }
@@ -68,6 +67,7 @@ namespace Othello
             ColorPrint.Write("The game is finished!\n", ConsoleColor.Green);
             Console.WriteLine("Result:");
             PrintStatus();
+            Console.WriteLine("");
 
             var winner = _board.Result();
             if (winner == Disk.Empty) {
@@ -77,7 +77,7 @@ namespace Othello
             }
         }
 
-        /// Print current board and player statuses.
+        /// Print current board and player info.
         private void PrintStatus() {
             _playerBlack.Print();
             _playerWhite.Print();
@@ -101,11 +101,14 @@ namespace Othello
 
         public static void Main(string[] args) {
             ColorPrint.Write("OTHELLO GAME - C#\n", ConsoleColor.Green);
-            if (args.Length == 0 || !int.TryParse(args[0], out var size)) {
-                size = GetBoardSize();
+            // try to read board size from command line args
+            if (args.Length == 0 || !int.TryParse(args[0], out var boardSize)) {
+                boardSize = GetBoardSize();
+            } else {
+               Console.WriteLine($"Using board size: {boardSize}");
             }
 
-            var game = new Othello(size);
+            var game = new Othello(boardSize);
             game.Play();
         }
     }
