@@ -1,7 +1,7 @@
 import pytest
 
 from othello import Othello
-from util import Disk
+from utils import Disk
 
 
 @pytest.fixture

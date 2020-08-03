@@ -6,41 +6,43 @@
 //==========================================================
 
 #pragma once
+#include <optional>   // std::optional
+#include <set>
 #include <vector>
 
-#include "util.hpp"
+#include "utils.hpp"
 
 namespace othello {
 
 class Board {
-
 public:
-    constexpr static int directions[8][2] = {{0,-1}, {1, 0}, {0, 1}, {-1, 0}, {1,-1}, {1, 1}, {-1, 1}, {-1,-1}};
+    constexpr static int step_directions[8][2] = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
 
-    Board() : size_(8) {};
+    Board() : size(8), indices(8) {};
     explicit Board(int size);
     ~Board() = default;
 
-    static void                         print_possible_moves(const std::vector<Move>& moves);
-
-    [[nodiscard]] bool                  can_place_to_square(int x, int y, Disk color) const;
     [[nodiscard]] bool                  can_play() const;
-    [[nodiscard]] bool                  check_coordinates(int x, int y) const;
     [[nodiscard]] std::vector<Move>     possible_moves(Disk color) const;
     [[nodiscard]] Disk                  result() const;
-    [[nodiscard]] int                   score() const;
-    [[nodiscard]] Disk                  square(int x, int y) const;
 
-    bool                                place_disc(int x, int y, Disk color);
-    void                                print_score() const;
+    void      place_disc(const Move& move);
+    void      print_score() const;
+    void      print_possible_moves(const std::vector<Move>& moves);
 
     friend std::ostream& operator<< (std::ostream& out, const Board& othello);
 
 private:
-    bool                set_square(int x, int y, Disk disk);
+    [[nodiscard]] bool                              check_coordinates(int x, int y) const;
+    [[nodiscard]] int                               score() const;
+    [[nodiscard]] std::tuple<int, int>              player_scores() const;
+    [[nodiscard]] std::optional<othello::Disk>      get_square(int x, int y) const;
+    void                                            set_square(int x, int y, Disk disk);
 
-    std::vector<Disk>   board_;
-    int                 size_;
+    int                    size;
+    std::set<Square>       empty_squares;
+    std::vector<Disk>      board;
+    std::vector<int>       indices;
 };
 
 } // namespace othello

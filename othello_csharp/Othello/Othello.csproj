@@ -9,4 +9,8 @@
     <Compile Remove="Program.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Pastel" Version="1.3.2" />
+  </ItemGroup>
+
 </Project>

@@ -11,7 +11,7 @@ namespace Othello
         }
         public static void Error(string text) {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(text);
+            Console.Write("Error: " + text);
             Console.ResetColor();
         }
     }

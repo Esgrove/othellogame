@@ -8,88 +8,107 @@
 #include <algorithm> // clamp, transform
 #include <iostream>
 
-#include <fmt/ostream.h>
 #include <fmt/color.h>
 
 #include "colorprint.hpp"
 #include "othello.hpp"
 
-/// Initialize board for a new game
-void othello::Othello::init_game() {
-    int board_size = get_board_size();
-    board_ = Board(board_size);
-    player_black_ = Player(Disk::BLACK);
-    player_white_ = Player(Disk::WHITE);
-
-    if (get_answer("Would you like to play against the computer")) {
-        if (get_answer("Would you like to play as black or white", "b", "w")) {
-            player_white_.set_human(false);
-        } else {
-            player_black_.set_human(false);
-        }
-    }
-    print_bold("\nPlayers:\n");
-    print(player_black_);
-    print(player_white_);
-    print("");
-    print(board_);
-}
-
 /// Read user input for yes/no question and return bool.
-bool othello::Othello::get_answer(const std::string& text, const std::string& yes, const std::string& no)
-{
+bool othello::Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no) {
+    // fmt lib enables nice (modern) string formatting instead of having to use the horrible stringstream stuff
+    // std::cout << question << " (" << yes << "/" << no << ")? ";
+    fmt::print("{} ({}/{})? ", question, yes, no);
     std::string input;
-    std::cout << text << " (" << yes << "/" << no << ")? ";
     std::cin >> input;
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);
     return input == yes;
 }
 
 /// Ask the desired board size from user.
-int othello::Othello::get_board_size()
-{
+int othello::Othello::get_board_size() {
+    print("Choose board size (default is 8): ", false);
     int size;
-    std::cout << "Choose board size (default is 8): ";
     std::cin >> size;
-    return std::clamp(size, 4, 8); // C++17, size = std::max(4, std::min(size, 8));
+    return std::clamp(size, 4, 8);  // C++17, size = std::max(4, std::min(size, 8));
 }
 
-/// Play one full game of Othello.
-void othello::Othello::play()
-{
-    while (true) {
-        init_game();
-        while (board_.can_play() && (player_black_.can_play() || player_white_.can_play())) {
-            fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played_ + 1);
-            player_black_.play_one_move(board_);
-            print("--------------------------------");
-            player_white_.play_one_move(board_);
-            ++rounds_played_;
-        }
-
-        print_color("\nThe game is finished!\n", fmt::color::green);
-        print("Result:");
-        print(board_);
-        print("");
-        print(player_black_);
-        print(player_white_);
-        print("");
-
-        Disk winner = board_.result();
-        if (winner == Disk::EMPTY) {
-            print("The game ended in a tie...");
-        } else {
-            fmt::print(fmt::fg(disk_color(winner)), "The {} player won!\n", disk_string(winner));
-        }
-
-        if (!get_answer("\nWould you like to play again")) {
-            break;
-        }
+/// Keep making moves until both players can't make a move anymore.
+void othello::Othello::game_loop() {
+    while (board.can_play() && (player_black.can_play() || player_white.can_play())) {
+        ++rounds_played;
+        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
+        player_black.play_one_move(board);
+        print("--------------------------------");
+        player_white.play_one_move(board);
     }
 }
 
-int main() {
-    print_bold("OTHELLO GAME: C++\n", fmt::color::green);
-    othello::Othello othello;
-    othello.play();
+/// Initialize game board and players for a new game.
+void othello::Othello::init_game() {
+    board = Board(board_size);
+    player_black = Player(Disk::Black);
+    player_white = Player(Disk::White);
+    rounds_played = 0;
+
+    if (get_answer("Would you like to play against the computer")) {
+        if (get_answer("Would you like to play as black or white", "b", "w")) {
+            player_white.set_human(false);
+        } else {
+            player_black.set_human(false);
+        }
+    }
+    print_bold("\nPlayers:\n");
+    print_status();
+}
+
+/// Play one full game of Othello.
+void othello::Othello::play() {
+    init_game();
+    game_loop();
+    print_result();
+    if (get_answer("\nWould you like to play again")) {
+        play();
+    }
+}
+
+/// Print ending status and winner info.
+void othello::Othello::print_result() {
+    print_bold("\n================================\n");
+    print_color("The game is finished!\n", fmt::color::green);
+    print("Result:");
+    print_status();
+    print("");
+
+    Disk winner = board.result();
+    if (winner == Disk::Empty) {
+        print("The game ended in a tie...");
+    } else {
+        print_color(fmt::format("The winner is {}!\n", disk_string(winner)), disk_color(winner));
+    }
+}
+
+/// Print current board and player info.
+void othello::Othello::print_status() {
+    print(player_black);
+    print(player_white);
+    print("");
+    print(board);
+}
+
+int main(int argc, const char* argv[]) {
+    print_bold("OTHELLO GAME - C++\n", fmt::color::green);
+    // try to read board size from command line args
+    int board_size;
+    try {
+        if (argc >= 2) {
+            board_size = std::stoi(argv[1]);
+            fmt::print("Using board size: {}\n", board_size);
+        } else {
+            throw std::invalid_argument("");
+        }
+    } catch (const std::invalid_argument&) {
+        board_size = othello::Othello::get_board_size();
+    }
+    othello::Othello game{board_size};
+    game.play();
 }

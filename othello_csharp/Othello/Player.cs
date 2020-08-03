@@ -6,99 +6,104 @@ namespace Othello
 {
     internal class Player
     {
-        public Player(Disk color) {
-            _color = color;
-            _human = true;
-            _random = new Random();
-            _canPlay = true;
-        }
-
-        public bool CanPlay()
-        {
-            return _canPlay;
-        }
-
-        public void PlayOneMove(Board game)
-        {
-            Console.Write("Turn: ");
-            ColorPrint.Write(DiskStringUpper() + "\n", _color.DiskColor());
-            var moves = game.GetPossibleGetMoves(_color);
-            if (moves.Count > 0) {
-                _canPlay = true;
-                if (_human) {
-                    // sort moves in descending order according to value
-                    moves.Sort((x, y) => y.Value.CompareTo(x.Value));
-                    PrintMoves(moves);
-                    while (true) {
-                        Console.Write("  Give disk position (x,y): ");
-                        var coords = Console.ReadLine();
-                        if (!string.IsNullOrEmpty(coords) && coords.Length == 3 && coords[1] == ',') {
-                            try {
-                                var x = Convert.ToInt32(coords[0].ToString());
-                                var y = Convert.ToInt32(coords[2].ToString());
-                                if (game.PlaceDisc(x, y, _color)) {
-                                    break;
-                                }
-                                ColorPrint.Error($"  Can't place a {_color.Name()} disk in square ({coords}).\n");
-                            }
-                            catch (FormatException) {
-                                ColorPrint.Error("  Coordinates have to be integer numbers!\n");
-                            }
-                        } else {
-                            ColorPrint.Error("  Give coordinates in the form 'x,y'!\n");
-                        }
-                    }
-                } else {
-                    // computer plays: pick a random move
-                    Console.WriteLine("  Computer plays...");
-                    Thread.Sleep(_random.Next(1000, 3000));
-                    var pos = moves[_random.Next(moves.Count)].Square;
-                    Console.WriteLine($"  -> {pos}");
-                    game.PlaceDisc(pos.X, pos.Y, _color);
-                }
-                ++_roundsPlayed;
-                Console.WriteLine("\nResult:");
-                game.Print();
-            } else {
-                Console.WriteLine("  No moves available...");
-                _canPlay = false;
-            }
-            Console.WriteLine("--------------------------------");
-        }
-        public void SetHuman(bool isHuman)
-        {
-            _human = isHuman;
-        }
-        public void Print()
-        {
-            ColorPrint.Write(_color.ToString().ToUpper(), _color.DiskColor());
-            Console.WriteLine($" | {TypeString()} | moves: {_roundsPlayed}");
-        }
-
-        public override string ToString()
-        {
-            return $"{_color.ToString().ToUpper()} | {TypeString()} | moves: {_roundsPlayed}";
-        }
-        private string DiskStringUpper()
-        {
-            return _color.ToString().ToUpper();
-        }
-        private string TypeString()
-        {
-            return _human ? "Human   " : "Computer";
-        }
-        private static void PrintMoves(IReadOnlyCollection<Move> moves)
-        {
-            ColorPrint.Write($"  Possible plays ({moves.Count}):\n", ConsoleColor.Yellow);
-            foreach (var move in moves) {
-                Console.WriteLine($"  {move}");
-            }
-        }
-
-        private readonly Disk _color;
-        private readonly Random _random;
         private bool _canPlay;
         private bool _human;
         private int _roundsPlayed;
+        private readonly Disk _disk;
+        private readonly Random _random;
+        private readonly bool _showHelpers;
+
+        public Player(Disk color) {
+            _disk = color;
+            _human = true;
+            _random = new Random();
+            _canPlay = true;
+            _showHelpers = true;
+        }
+
+        public bool CanPlay() {
+            return _canPlay;
+        }
+
+        /// Play one round as this player.
+        public void PlayOneMove(Board board) {
+            Console.Write("Turn: ");
+            ColorPrint.Write(DiskStringUpper() + "\n", _disk.Color());
+            var moves = board.PossibleMoves(_disk);
+            if (moves.Count > 0) {
+                _canPlay = true;
+                if (_human && _showHelpers) {
+                    board.PrintPossibleMoves(moves);
+                }
+                var chosenMove = _human ? GetHumanMove(moves) : GetComputerMove(moves);
+                board.PlaceDisc(chosenMove);
+                board.PrintScore();
+                ++_roundsPlayed;
+            } else {
+                _canPlay = false;
+                Console.WriteLine("  No moves available...");
+            }
+        }
+
+        public void Print() {
+            ColorPrint.Write(_disk.ToString().ToUpper(), _disk.Color());
+            Console.WriteLine($" | {TypeString()} | moves: {_roundsPlayed}");
+        }
+
+        public void SetHuman(bool isHuman) {
+            _human = isHuman;
+        }
+
+        public override string ToString() {
+            return $"{_disk.ToString().ToUpper()} | {TypeString()} | Moves: {_roundsPlayed}";
+        }
+
+        /// Return move chosen by computer.
+        private Move GetComputerMove(IReadOnlyList<Move> moves) {
+            Console.WriteLine("  Computer plays...");
+            // wait a bit and pick a random move
+            Thread.Sleep(_random.Next(1000, 2000));
+            var move = moves[_random.Next(moves.Count)];
+            Console.WriteLine($"  -> {move.Square}");
+            return move;
+        }
+
+        /// Return move chosen by a human player.
+        private Move GetHumanMove(List<Move> moves) {
+            while (true) {
+                var square = GetSquare();
+                // check if given square is one of the possible moves
+                if (moves.Exists(x => square.Equals(x.Square))) {
+                    return moves.Find(x => square.Equals(x.Square));
+                }
+                ColorPrint.Error($"can't place a {_disk.Name()} disk in square {square}!\n");
+            }
+        }
+
+        /// Ask human player for square coordinates.
+        private static Square GetSquare() {
+            while (true) {
+                try {
+                    Console.Write("  Give disk position (x,y): ");
+                    var coords = Console.ReadLine();
+                    if (string.IsNullOrEmpty(coords) || coords.Length != 3 || coords[1] != ',') {
+                        throw new FormatException();
+                    }
+                    var x = Convert.ToInt32(coords[0].ToString());
+                    var y = Convert.ToInt32(coords[2].ToString());
+                    return new Square(x, y);
+                } catch (FormatException) {
+                    ColorPrint.Error("give coordinates in the form (x,y)!\n");
+                }
+            }
+        }
+
+        private string DiskStringUpper() {
+            return _disk.ToString().ToUpper();
+        }
+
+        private string TypeString() {
+            return _human ? "Human   " : "Computer";
+        }
     }
 }

@@ -23,7 +23,7 @@ def get_color(text, color=Color.white, bold=False):
 
 
 def print_bold(text, color=Color.white):
-    print(get_color(text, color, True))
+    print(get_color(text, color, bold=True))
 
 
 def print_color(text, color=Color.white, bold=False):

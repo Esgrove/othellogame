@@ -9,87 +9,100 @@ import sys
 
 from board import Board
 from player import Player
-from util import Disk, clamp
+from utils import Disk, clamp
 
 from colorprint import Color, print_bold, print_error
 
 
 class Othello:
-    """Implements Othello CLI game."""
-    def __init__(self):
+    """Play Othello CLI game."""
+    def __init__(self, board_size: int):
         self.board = None
         self.player_black = None
         self.player_white = None
         self.rounds_played = 0
+        self.size = board_size
 
     def init_game(self):
-        """Initialize game board and players."""
-        board_size = self.get_board_size()
-        self.board = Board(board_size)
+        """Initialize game board and players for a new game."""
+        self.board = Board(self.size)
         self.player_black = Player(Disk.BLACK)
         self.player_white = Player(Disk.WHITE)
         self.rounds_played = 0
 
         if self.get_answer("Would you like to play against the computer"):
             if self.get_answer("Would you like to play as black or white", yes="b", no="w"):
-                self.player_white._human = False
+                self.player_white.set_human(False)
             else:
-                self.player_black._human = False
+                self.player_black.set_human(False)
 
         print_bold("\nPlayers:")
+        self.print_status()
+
+    def play(self):
+        """Play one full game of Othello."""
+        self.init_game()
+        self.game_loop()
+        self.print_result()
+        if self.get_answer("\nWould you like to play again"):
+            self.play()
+
+    def game_loop(self):
+        """Keep making moves until both players can't make a move anymore."""
+        while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
+            self.rounds_played += 1
+            print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")
+            self.player_black.play_one_move(self.board)
+            print("-------------------------------")
+            self.player_white.play_one_move(self.board)
+
+    def print_result(self):
+        """Print ending status and winner info."""
+        print_bold("===============================\n")
+        print_bold("The game is finished!\n", Color.green)
+        print_bold("Result:\n")
+        self.print_status()
+
+        winner = self.board.result()
+        if winner == Disk.EMPTY:
+            print_bold("The game ended in a tie...")
+        else:
+            print_bold(f"The winner is {str(winner)}!")
+
+    def print_status(self):
+        """Print current board and player info."""
         print(self.player_black)
         print(self.player_white, end="\n\n")
         print(self.board)
 
-    def play(self):
-        """Play one full game of Othello."""
-        while True:
-            self.init_game()
-            while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
-                self.rounds_played += 1
-                print(f"\n=========== ROUND: {self.rounds_played} ===========")
-                self.player_black.play_one_move(self.board)
-                print("-------------------------------")
-                self.player_white.play_one_move(self.board)
-
-            print_bold(" \nThe game is finished!", Color.green)
-            print(f"total rounds played: {self.rounds_played}")
-            print_bold("Result:")
-            print(self.board, end="\n\n")
-            print(self.player_black)
-            print(self.player_white, end="\n\n")
-
-            winner = self.board.result()
-            if winner == Disk.EMPTY:
-                print_bold("The game ended in a tie...")
-            else:
-                print_bold(f"The winner is {str(winner)}!")
-
-            if not self.get_answer("\nWould you like to play again"):
-                break
-
     @staticmethod
-    def get_answer(message: str, yes="y", no="n") -> bool:
+    def get_answer(question: str, yes="y", no="n") -> bool:
         """Ask a question with two options, and return bool from user answer."""
-        ans = input(f"{message} ({yes}/{no})? ")
-        return ans.lower() == yes
+        ans = input(f"{question} ({yes}/{no})? ")
+        return ans.lower() == yes.lower()
 
     @staticmethod
     def get_board_size() -> int:
         """Ask and return the desired board size."""
         while True:
             try:
-                size = int(input("Choose board size (default is 8): "))
-                return clamp(size, 4, 8)
+                ans = int(input("Choose board board_size (default is 8): "))
+                return clamp(ans, 4, 8)
             except ValueError:
                 print_error("Give a number...")
-                continue
 
 
 if __name__ == "__main__":
-    print_bold("OTHELLO GAME - Python\n", Color.green)
+    print_bold("OTHELLO GAME - Python", Color.green)
+    # try to read board size from command line args
     try:
-        game = Othello()
+        try:
+            board_size = int(sys.argv[1])
+            print(f"Using board size: {board_size}")
+        except (ValueError, IndexError):
+            board_size = Othello.get_board_size()
+
+        game = Othello(board_size)
         game.play()
     except KeyboardInterrupt:
-        sys.exit("\nGame aborted...")
+        sys.exit("\nGame stopped...")
