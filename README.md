@@ -2,22 +2,22 @@
 
 A simple [Othello / Reversi](https://en.wikipedia.org/wiki/Reversi) command line game implementation in different programming languages.
 
-I originally did this in Python many years ago for a programming course, and then a few years later redid it in C++ for fun (and learning purposes). Since then I figured that this could actually be an useful project to: 
+I originally did this in Python many years ago for a programming course, and then a few years later redid it in C++ for fun (and learning purposes). Since then I figured that this could actually be an useful project to:
 1. learn new languages by re-implenting it,
 2. compare different languages directly with each other, and
 3. be a practical code formatting and syntax reference.
 
-I have since cleaned up and improved both my old implementations in Python and C++, the two languages I have been using the most. For each language, I try to make the program structure and all the functions match as close as possible, while also trying to follow the best practices and guidelines for each language. This makes it very easy to compare the implementations to each other. While the project is quite simple, it also covers pretty well most of the basic functionality and tooling one would commonly use in a programming language. It's big enough to get a good feel for a language, yet small enough that it could be done even in a weekend when starting with a new language. It is also very easy to see that the code is working correctly, especially since it is possible to compare side-by-side with the older implementations. 
+I have since cleaned up and improved both my old implementations in Python and C++, the two languages I have been using the most. For each language, I try to make the program structure and all the functions match as close as possible, while also trying to follow the best practices and guidelines for each language. This makes it very easy to compare the implementations to each other. While the project is quite simple, it also covers pretty well most of the basic functionality and tooling one would commonly use in a programming language. It's big enough to get a good feel for a language, yet small enough that it could be done even in a weekend when starting with a new language. It is also very easy to see that the code is working correctly, especially since it is possible to compare side-by-side with the older implementations.
 
-Since then I have added a *C#* implementation, and started working on a *Rust* version as a learning exercise. I'll probably do a few other (modern) languages that interest me, such as *Swift*, *Go* and *Kotlin*. It would also be interesting to try to make a functional / non-OOP version at some point...
+Since then I have added a *C#* and *Swift* implementations, and started working on a *Rust* version as a learning exercise. I might do a few other (modern) languages that interest me, such as *Go* and *Kotlin*. It would also be interesting to try to make a functional / non-OOP version at some point. In the meantime, there's probably still room to improve in the current implementations, especially with the C# and Swift versions.
 
 ## Program structure
 
-_othello_: The main gameplay loop.  
-_board_: Game board state and logic.  
-_player_: Player object used for making moves and storing player information.  
-_utils_: Helper classes and methods.  
-_colorprint_: Helper methods for color and style formatting.
+_othello_: The main gameplay loop.
+_board_: Game board state and logic.
+_player_: Player object used for making moves and storing player information.
+_utils_: Helper classes and methods.
+_colorprint_: Helper methods for color and style formatting (if needed).
 
 ## Languages
 
@@ -45,6 +45,15 @@ Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the termin
 * Utils.cs
 * ColorPrint.cs
 
+### Swift
+
+Swift 5. Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
+* main.swift
+* othello.swift
+* board.swift
+* player.swift
+* utils.swift
+
 ### Rust
 
 *In progress...*
@@ -54,3 +63,5 @@ Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the termin
 
 * Add unit tests for each language
 * Make a NumPy version of Python implementation
+* Proper color handling for C#
+* Write some thoughs on the language differences
