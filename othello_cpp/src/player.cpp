@@ -83,6 +83,6 @@ othello::Square othello::Player::get_square() {
 std::ostream& othello::operator<<(std::ostream& out, othello::Player& p)
 {
     out << fmt::format(fmt::fg(disk_color(p.disk)), disk_string_upper(p.disk));
-    out << " | " << p.type_string() << " | " << "moves: " << p.rounds_played;
+    out << " | " << p.type_string() << " | " << "Moves: " << p.rounds_played;
     return out;
 }

@@ -65,9 +65,9 @@ void othello::Board::place_disc(const othello::Move& move) {
 }
 
 /// Returns a list of possible moves for given player.
-std::vector<othello::Move> othello::Board::possible_moves(Disk color) const {
+std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const {
     std::vector<Move> moves;
-    Disk other = other_disk(color);
+    Disk other = other_disk(disk);
     for (const Square& square : empty_squares) {
         int value {0};
         std::vector<Square> directions;
@@ -85,14 +85,14 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk color) const {
                 pos += step;
             }
             // valid move if a line of opponents disks ends in own disk
-            if (get_square(pos.x, pos.y) != color) {
+            if (get_square(pos.x, pos.y) != disk) {
                 continue;
             }
             value += steps;
             directions.emplace_back(step);
         }
         if (value > 0) {
-            moves.emplace_back(Move(square, value, color, directions));
+            moves.emplace_back(Move(square, value, disk, directions));
         }
     }
     if (!moves.empty()) {
@@ -172,16 +172,16 @@ int othello::Board::score() const {
 }
 
 /// Sets the given square to given value.
-void othello::Board::set_square(int x, int y, Disk disk) {
-    if (!check_coordinates(x, y)) {
+void othello::Board::set_square(const Square& square, Disk disk) {
+    if (!check_coordinates(square.x, square.y)) {
         throw std::invalid_argument(fmt::format("Invalid coordinates ({},{})!", x, y));
     }
-    board[y * size + x] = disk;
+    board[square.y * size + square.x] = disk;
 }
 
 /// Returns the state of the board (empty, white, black) at the given coordinates.
-std::optional<othello::Disk> othello::Board::get_square(const int x, const int y) const {
-    return check_coordinates(x, y) ? std::optional<Disk>{board[y * size + x]} : std::nullopt;
+std::optional<othello::Disk> othello::Board::get_square(const Square& square) const {
+    return check_coordinates(square.x, square.y) ? std::optional<Disk>{board[square.y * size + square.x]} : std::nullopt;
 }
 
 /// Format game board to string

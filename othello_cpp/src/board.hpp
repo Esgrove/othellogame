@@ -23,7 +23,7 @@ public:
     ~Board() = default;
 
     [[nodiscard]] bool                  can_play() const;
-    [[nodiscard]] std::vector<Move>     possible_moves(Disk color) const;
+    [[nodiscard]] std::vector<Move>     possible_moves(Disk disk) const;
     [[nodiscard]] Disk                  result() const;
 
     void      place_disc(const Move& move);
@@ -33,11 +33,11 @@ public:
     friend std::ostream& operator<< (std::ostream& out, const Board& othello);
 
 private:
-    [[nodiscard]] bool                              check_coordinates(int x, int y) const;
+    [[nodiscard]] bool                              check_coordinates(const int& x, const int& y) const;
     [[nodiscard]] int                               score() const;
     [[nodiscard]] std::tuple<int, int>              player_scores() const;
-    [[nodiscard]] std::optional<othello::Disk>      get_square(int x, int y) const;
-    void                                            set_square(int x, int y, Disk disk);
+    [[nodiscard]] std::optional<othello::Disk>      get_square(const Square& square) const;
+    void                                            set_square(const Square& square, Disk disk);
 
     int                    size;
     std::set<Square>       empty_squares;
