@@ -81,30 +81,50 @@ class Board {
         }
         return moves.sorted(by: { $0.value > $1.value })
     }
-    
+
+    /// Print available move coordinates and resulting points gained.
     func print_possible_moves(_ moves: [Move]) -> Void {
         print("  Possible plays (\(moves.count)):".yellow())
+        // convert board from Disk enums to strings
+        var board_str = self.board.map { $0.board_char() }
         for move in moves {
             print("  \(move)")
+            board_str[move.square.y * self.size + move.square.x] = "\(move.value)".yellow()
         }
+        // print board with move positions
+        print("   ", terminator: "")
+        for x in 0..<self.size {
+            print(" \(x)".dim(), terminator: "")
+        }
+        for y in 0..<self.size {
+            print("\n  \(y)".dim(), terminator: "")
+            for x in 0..<self.size {
+                print(" \(board_str[y * self.size + x])", terminator: "")
+            }
+        }
+        print("")
     }
     
-    /// Calculates the final score and returns the winner color.
+    /// Returns the winner color.
     func result() -> Disk {
         let sum: Int = score()
-        if (sum == 0) {
-            return Disk.empty
+        switch (sum) {
+            case ..<0:
+                return Disk.white
+            case 1...:
+                return Disk.black
+            default:
+                return Disk.empty
         }
-        return sum > 0 ? Disk.white : Disk.black
     }
     
     /// Print current score for both players.
     func print_score() -> Void {
         let score = self.player_scores()
         print("\n\(self)")
-        // TODO: add colors
-        print("Score: \(score.black) | \(score.white)")
+        print("Score: \(get_color(score.black, Disk.black.color())) | \(get_color(score.white, Disk.white.color()))")
     }
+
     /// Check that the given coordinates are inside the board.
     private func check_coordinates(_ x: Int, _ y: Int) -> Bool {
         0 <= x && x < self.size && 0 <= y && y < self.size
@@ -116,9 +136,9 @@ class Board {
         var white = 0
         for disk in self.board {
             switch (disk) {
-            case Disk.white:
+            case .white:
                 white += 1
-            case Disk.black:
+            case .black:
                 black += 1
             case .empty:
                 break

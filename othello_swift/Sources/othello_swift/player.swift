@@ -31,7 +31,7 @@ class Player {
             self.rounds_played += 1
         } else {
             self.can_play_ = false
-            print("  No moves available...")
+            print("  No moves available...".yellow())
         }
     }
     
@@ -46,6 +46,7 @@ class Player {
         // wait a bit and pick a random move
         let seconds = Double.random(in: 1...2)
         Thread.sleep(forTimeInterval: seconds)
+        // safe to force unwrap since moves will always contain elements
         let move = moves.randomElement()!
         print("  -> \(move.square)")
         return move
@@ -59,7 +60,7 @@ class Player {
             if let move = moves.first(where: {$0.square == square} ) {
                 return move
             }
-            print("Can't place a \(self.disk) disk in square \(square)!")
+            print_error("Can't place a \(self.disk) disk in square \(square)!", indent: 2)
         }
     }
     
@@ -73,7 +74,7 @@ class Player {
                     return Square(coordinates[0], coordinates[1])
                 }
             }
-            print("Give coordinates in the form 'x,y'!")
+            print_error("Give coordinates in the form 'x,y'!", indent: 2)
         }
     }
         

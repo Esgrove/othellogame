@@ -77,7 +77,7 @@ extension Square: CustomStringConvertible {
 
 extension Square: ExpressibleByArrayLiteral {
     init(arrayLiteral: Int...) {
-        assert(arrayLiteral.count == 2, "Must initialize Square with 2 values.")
+        assert(arrayLiteral.count == 2, "Square takes two int values!")
         self.x = arrayLiteral[0]
         self.y = arrayLiteral[1]
     }

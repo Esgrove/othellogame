@@ -43,7 +43,7 @@ class Othello {
     func game_loop() -> Void {
         while self.board.can_play() && (self.player_black.can_play() || self.player_white.can_play()) {
             self.rounds_played += 1
-            print("=========== ROUND: \(self.rounds_played) ===========".bold())
+            print("\n=========== ROUND: \(self.rounds_played) ===========".bold())
             self.player_black.play_one_move(board: &self.board)
             print("-------------------------------")
             self.player_white.play_one_move(board: &self.board)
@@ -90,7 +90,7 @@ class Othello {
                     return size
                 }
             }
-            print("Give a number...")
+            print_error("give a valid number...")
         }
     }
 }
