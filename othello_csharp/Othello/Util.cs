@@ -12,7 +12,7 @@ namespace Othello
     }
 
     /// Represents one square location on the board.
-    public struct Square
+    public readonly struct Square
     {
         public Square(int x, int y) {
             X = x;
@@ -31,11 +31,17 @@ namespace Othello
         }
 
         public bool Equals(Square other) {
-            return X.Equals(other.X) && Y.Equals(other.Y);
+            var (x, y) = other;
+            return X.Equals(x) && Y.Equals(y);
         }
 
         public override string ToString() {
             return $"({X},{Y})";
+        }
+
+        public void Deconstruct(out int x, out int y) {
+            x = X;
+            y = Y;
         }
 
         public static Square operator +(Square left, Square right) {
@@ -96,7 +102,7 @@ namespace Othello
             if (disk == Disk.Empty) {
                 return Color.White;
             }
-            return disk == Disk.White ? Color.Cyan : Color.DarkMagenta;
+            return disk == Disk.White ? Color.Cyan : Color.Magenta;
         }
 
         public static Disk OtherDisk(this Disk disk) {
@@ -107,14 +113,14 @@ namespace Othello
         }
 
         public static string Name(this Disk disk) {
-            return disk.ToString().ToUpper();
+            return ColorPrint.Get(disk.ToString().ToUpper(), disk.DiskColor());
         }
 
         public static string BoardChar(this Disk disk) {
             if (disk == Disk.Empty) {
                 return "_";
             }
-            return ColorPrint.Get(disk == Disk::White ? "W" : "B", disk_color(disk));
+            return ColorPrint.Get(disk == Disk.White ? "W" : "B", disk.DiskColor());
         }
     }
 }

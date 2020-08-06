@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Threading;
 
 namespace Othello
@@ -27,13 +29,12 @@ namespace Othello
 
         /// Play one round as this player.
         public void PlayOneMove(Board board) {
-            Console.Write("Turn: ");
-            ColorPrint.Write(DiskStringUpper() + "\n", _disk.Color());
+            Console.WriteLine($"Turn: {_disk.Name()}");
             var moves = board.PossibleMoves(_disk);
-            if (moves.Count > 0) {
+            if (moves.Any()) {
                 _canPlay = true;
                 if (_human && _showHelpers) {
-                    board.PrintPossibleMoves(moves);
+                    board.PrintMoves(moves);
                 }
                 var chosenMove = _human ? GetHumanMove(moves) : GetComputerMove(moves);
                 board.PlaceDisc(chosenMove);
@@ -41,13 +42,8 @@ namespace Othello
                 ++_roundsPlayed;
             } else {
                 _canPlay = false;
-                Console.WriteLine("  No moves available...");
+                ColorPrint.Write("  No moves available...", Color.Yellow);
             }
-        }
-
-        public void Print() {
-            ColorPrint.Write(_disk.ToString().ToUpper(), _disk.Color());
-            Console.WriteLine($" | {TypeString()} | moves: {_roundsPlayed}");
         }
 
         public void SetHuman(bool isHuman) {
@@ -55,7 +51,7 @@ namespace Othello
         }
 
         public override string ToString() {
-            return $"{_disk.ToString().ToUpper()} | {TypeString()} | Moves: {_roundsPlayed}";
+            return $"{_disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
         }
 
         /// Return move chosen by computer.
@@ -76,7 +72,7 @@ namespace Othello
                 if (moves.Exists(x => square.Equals(x.Square))) {
                     return moves.Find(x => square.Equals(x.Square));
                 }
-                ColorPrint.Error($"can't place a {_disk.Name()} disk in square {square}!\n");
+                ColorPrint.Error($"can't place a {_disk.Name()} disk in square {square}!", 2);
             }
         }
 
@@ -89,17 +85,13 @@ namespace Othello
                     if (string.IsNullOrEmpty(coords) || coords.Length != 3 || coords[1] != ',') {
                         throw new FormatException();
                     }
-                    var x = Convert.ToInt32(coords[0].ToString());
-                    var y = Convert.ToInt32(coords[2].ToString());
+                    var x = int.Parse(coords.Substring(0,1));
+                    var y = int.Parse(coords.Substring(2,1));
                     return new Square(x, y);
                 } catch (FormatException) {
-                    ColorPrint.Error("give coordinates in the form (x,y)!\n");
+                    ColorPrint.Error("give coordinates in the form (x,y)!", 2);
                 }
             }
-        }
-
-        private string DiskStringUpper() {
-            return _disk.ToString().ToUpper();
         }
 
         private string TypeString() {

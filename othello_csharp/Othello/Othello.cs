@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using Pastel;
 
 namespace Othello
 {
@@ -34,7 +36,7 @@ namespace Othello
                 }
             }
 
-            Console.WriteLine("\nPlayers:");
+            Console.WriteLine("\nPlayers:".Pastel(Color.Silver));
             PrintStatus();
         }
 
@@ -54,7 +56,7 @@ namespace Othello
         private void GameLoop() {
             while (_board.CanPlay() && (_playerBlack.CanPlay() || _playerWhite.CanPlay())) {
                 ++_roundsPlayed;
-                Console.WriteLine($"=========== ROUND: {_roundsPlayed} ===========");
+                Console.WriteLine($"\n=========== ROUND: {_roundsPlayed} ===========");
                 _playerBlack.PlayOneMove(_board);
                 Console.WriteLine("--------------------------------");
                 _playerWhite.PlayOneMove(_board);
@@ -64,8 +66,8 @@ namespace Othello
         /// Print ending status and winner info.
         private void PrintResult() {
             Console.WriteLine("\n================================");
-            ColorPrint.Write("The game is finished!\n", ConsoleColor.Green);
-            Console.WriteLine("Result:");
+            ColorPrint.Write("The game is finished!\n", Color.Green);
+            Console.WriteLine("Result:".Pastel(Color.Silver));
             PrintStatus();
             Console.WriteLine("");
 
@@ -73,16 +75,15 @@ namespace Othello
             if (winner == Disk.Empty) {
                 Console.WriteLine("The game ended in a tie...");
             } else {
-                ColorPrint.Write($"The winner is {winner}!", winner.Color());
+                Console.WriteLine($"The winner is {winner.Name()}!");
             }
         }
 
         /// Print current board and player info.
         private void PrintStatus() {
-            _playerBlack.Print();
-            _playerWhite.Print();
-            Console.WriteLine();
-            _board.Print();
+            Console.WriteLine(_playerBlack);
+            Console.WriteLine(_playerWhite);
+            Console.WriteLine($"\n{_board}");
         }
 
         /// Ask a question with two options, and return bool from user answer.
@@ -94,13 +95,17 @@ namespace Othello
 
         /// Ask and return the desired board size.
         private static int GetBoardSize() {
-            Console.Write("Choose board size (default is 8): ");
-            var size = Convert.ToInt32(Console.ReadLine());
-            return Math.Max(4, Math.Min(size, 8));
+            while (true) {
+                Console.Write("Choose board size (default is 8): ");
+                if (int.TryParse(Console.ReadLine(), out var boardSize)) {
+                    return Math.Max(4, Math.Min(boardSize, 8));
+                }
+                ColorPrint.Error("give a valid number...");
+            }
         }
 
         public static void Main(string[] args) {
-            ColorPrint.Write("OTHELLO GAME - C#\n", ConsoleColor.Green);
+            ColorPrint.Write("OTHELLO GAME - C#\n", Color.Green);
             // try to read board size from command line args
             if (args.Length == 0 || !int.TryParse(args[0], out var boardSize)) {
                 boardSize = GetBoardSize();
