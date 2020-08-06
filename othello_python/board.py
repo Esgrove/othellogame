@@ -5,7 +5,7 @@ https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
 2019
 """
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from colorprint import Color, get_color, print_color
 from utils import Disk, Move, Square
@@ -76,7 +76,7 @@ class Board:
 
         return sorted(moves)
 
-    def print_possible_moves(self, moves: List[Move]):
+    def print_moves(self, moves: List[Move]):
         """Print available move coordinates and resulting points gained."""
         print_color(f"  Possible moves ({len(moves)}):", Color.yellow)
         # convert board from Disk enums to strings
@@ -113,10 +113,10 @@ class Board:
         """Check that the given coordinates are inside the board."""
         return 0 <= x < self._size and 0 <= y < self._size
 
-    def _player_scores(self):
+    def _player_scores(self) -> Tuple[int, int]:
         """Count and return the number of black and white disks (white, black)."""
-        white = 0
-        black = 0
+        white = 0  # sum(1 for d in self._board if d == Disk.WHITE)
+        black = 0  # sum(1 for d in self._board if d == Disk.BLACK)
         for row in self._board:
             for disk in row:
                 if disk == Disk.WHITE:
@@ -132,15 +132,18 @@ class Board:
 
     def _set_square(self, square: Square, disk: Disk):
         """Sets the given square to given value."""
-        if not self._check_coordinates(square.x, square.y):
+        x, y = square
+        if not self._check_coordinates(x, y):
             raise ValueError(f"Invalid coordinates {square}!")
-        self._board[square.y][square.x] = disk
+        self._board[y][x] = disk
 
     def _get_square(self, square: Square) -> Optional[Disk]:
         """Returns the state of the board (empty, white, black) at the given square."""
-        return self._board[square.y][square.x] if self._check_coordinates(square.x, square.y) else None
+        x, y = square
+        return self._board[y][x] if self._check_coordinates(x, y) else None
 
     def __str__(self):
+        """Format game board to string."""
         text = f"  {' '.join(get_color(str(x), bold=True) for x in range(self._size))}"
         for index, row in enumerate(self._board):
             text += get_color(f"\n{index} ", bold=True)

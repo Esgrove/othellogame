@@ -33,7 +33,7 @@ class Player:
         if moves:
             self._can_play = True
             if self._human and self._show_helpers:
-                board.print_possible_moves(moves)
+                board.print_moves(moves)
 
             chosen_move = self._get_human_move(moves) if self._human else self._get_computer_move(moves)
             board.place_disk(chosen_move)
