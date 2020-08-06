@@ -181,3 +181,5 @@ dmypy.json
 othello_csharp/Othello/.vs/
 othello_csharp/Othello/bin/
 othello_csharp/Othello/obj/
+othello_cpp/cmake-build-release/
+othello_cpp/windows/
