@@ -83,7 +83,7 @@ void othello::Othello::print_result() {
     if (winner == Disk::Empty) {
         print("The game ended in a tie...");
     } else {
-        print_color(fmt::format("The winner is {}!\n", disk_string(winner)), disk_color(winner));
+        print(fmt::format("The winner is {}!", disk_string(winner)));
     }
 }
 

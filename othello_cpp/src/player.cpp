@@ -14,13 +14,12 @@
 
 /// Play one round as this player.
 void othello::Player::play_one_move(Board& board) {
-    std::cout << "Turn: ";
-    print_color(disk_string_upper(disk) + "\n", disk_color(disk));
+    print("Turn: " + disk_string(disk));
     auto moves = board.possible_moves(disk);
     if (!moves.empty()) {
         can_play_ = true;
         if(human && show_helpers) {
-            board.print_possible_moves(moves);
+            board.print_moves(moves);
         }
         auto chose_move = human ? get_human_move(moves) : get_computer_move(moves);
         board.place_disc(chose_move);
@@ -57,7 +56,7 @@ othello::Move othello::Player::get_human_move(const std::vector<Move>& moves) {
             // dereference iterator to get value
             return *move_iter;
         }
-        print_error(fmt::format("can't place a {} disk in square {}.\n", disk_string(disk), square));
+        print_error(fmt::format("can't place a {} disk in square {}!\n", disk_string(disk), square), 2);
     }
 }
 
@@ -75,14 +74,11 @@ othello::Square othello::Player::get_square() {
             int y = std::stoi(input.substr(2, 1));
             return Square(x, y);
         } catch (const std::invalid_argument&) {
-            print_error("give coordinates in the form 'x,y'!\n");
+            print_error("give coordinates in the form 'x,y'!\n", 2);
         }
     }
 }
 
-std::ostream& othello::operator<<(std::ostream& out, othello::Player& p)
-{
-    out << fmt::format(fmt::fg(disk_color(p.disk)), disk_string_upper(p.disk));
-    out << " | " << p.type_string() << " | " << "Moves: " << p.rounds_played;
-    return out;
+std::ostream& othello::operator<<(std::ostream& out, othello::Player& p) {
+    return out << fmt::format("{} | {} | {}", disk_string(p.disk), p.type_string(), p.rounds_played);
 }

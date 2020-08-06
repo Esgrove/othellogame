@@ -28,7 +28,7 @@ public:
 
     void      place_disc(const Move& move);
     void      print_score() const;
-    void      print_possible_moves(const std::vector<Move>& moves);
+    void      print_moves(const std::vector<Move>& moves);
 
     friend std::ostream& operator<< (std::ostream& out, const Board& othello);
 

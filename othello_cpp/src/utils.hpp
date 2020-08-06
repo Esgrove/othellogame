@@ -9,8 +9,7 @@
 #include <string>    // string
 #include <utility>
 
-#include <fmt/ostream.h>
-#include <fmt/color.h>
+#include "colorprint.hpp"
 
 namespace othello {
 
@@ -63,17 +62,6 @@ struct Move {
     std::vector<Square>     directions;
 };
 
-inline std::string board_char(const Disk& disk) {
-    switch (disk) {
-        case Disk::Black:
-            return "B";
-        case Disk::White:
-            return "W";
-        default:
-            return "_";
-    }
-}
-
 /// Returns print color for given Disk.
 inline fmt::color disk_color(const Disk& disk) {
     if (disk == Disk::Empty) {
@@ -82,31 +70,30 @@ inline fmt::color disk_color(const Disk& disk) {
     return disk == Disk::White ? fmt::color::cyan : fmt::color::magenta;
 }
 
-/// Returns disk color as a string.
-inline std::string disk_string(const Disk& disk) {
+inline std::string board_char(const Disk& disk) {
     if (disk == Disk::Empty) {
-        return "empty";
+        return "_";
     }
-    return disk == Disk::White ? "white" : "black";
+    return get_color(disk == Disk::White ? "W" : "B", disk_color(disk));
 }
 
-/// Returns disk color string in uppercase.
-inline std::string disk_string_upper(const Disk& disk) {
-    std::string text = disk_string(disk);
+/// Returns disk color as a string.
+inline std::string disk_string(const Disk& disk) {
+    std::string text = disk == Disk::Empty ? "empty" : (disk == Disk::White ? "white" : "black");
     std::transform(text.begin(), text.end(), text.begin(), ::toupper);
-    return text;
+    return get_color(text, disk_color(disk));
 }
 
 /// Returns the opponents disk color
-inline Disk other_disk(const Disk color) {
-    if (color == Disk::Empty) {
+inline Disk other_disk(const Disk& disk) {
+    if (disk == Disk::Empty) {
         return Disk::Empty;
     }
-    return color == Disk::White ? Disk::Black : Disk::White;
+    return disk == Disk::White ? Disk::Black : Disk::White;
 }
 
-inline std::ostream& operator<<(std::ostream &out, const Disk& color) {
-    return out << disk_string(color);
+inline std::ostream& operator<<(std::ostream &out, const Disk& disk) {
+    return out << disk_string(disk);
 }
 
 /// Print an object to stream (default is std::cout)
