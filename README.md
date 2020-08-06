@@ -42,7 +42,7 @@ Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the termin
 * Othello.cs
 * Board.cs
 * Player.cs
-* Utils.cs
+* Util.cs  (using *'Utils.cs'* does not work with syntax highlight :man_shrugging:)
 * ColorPrint.cs
 
 ### Swift
@@ -53,6 +53,7 @@ Swift 5. Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colo
 * board.swift
 * player.swift
 * utils.swift
+* colorprint.swift
 
 ### Rust
 
@@ -63,5 +64,4 @@ Swift 5. Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colo
 
 * Add unit tests for each language
 * Make a NumPy version of Python implementation
-* Proper color handling for C#
 * Write some thoughs on the language differences
