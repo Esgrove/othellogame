@@ -90,7 +90,7 @@ class Othello:
                 ans = int(input("Choose board board_size (default is 8): "))
                 return clamp(ans, 4, 8)
             except ValueError:
-                print_error("Give a number...")
+                print_error("give a number...")
 
 
 if __name__ == "__main__":
@@ -98,12 +98,12 @@ if __name__ == "__main__":
     try:
         try:
             # try to read board size from command line args
-            board_size = int(sys.argv[1])
-            print(f"Using board size: {board_size}")
+            size = int(sys.argv[1])
+            print(f"Using board size: {size}")
         except (ValueError, IndexError):
-            board_size = Othello.get_board_size()
+            size = Othello.get_board_size()
 
-        game = Othello(board_size)
+        game = Othello(size)
         game.play()
     except KeyboardInterrupt:
         sys.exit("\nGame stopped...")

@@ -60,7 +60,6 @@ class Board:
                 # not valid if next disk in line is own
                 if self._get_square(pos) == disk:
                     continue
-
                 steps = 0
                 # keep stepping over opponents disks
                 while self._get_square(pos) == disk.other_disk():
@@ -84,7 +83,7 @@ class Board:
         for move in moves:
             print(f"  {move}")
             x, y = move.square
-            # add value gained to matching position on board
+            # add move value to matching position on board
             board[y][x] = get_color(str(move.value), Color.yellow)
 
         # print board with move positions
@@ -130,17 +129,17 @@ class Board:
         """Returns the total score (positive means more white disks and negative means more black disks)."""
         return sum(sum(row) for row in self._board)
 
+    def _get_square(self, square: Square) -> Optional[Disk]:
+        """Returns the state of the board (empty, white, black) at the given square."""
+        x, y = square
+        return self._board[y][x] if self._check_coordinates(x, y) else None
+
     def _set_square(self, square: Square, disk: Disk):
         """Sets the given square to given value."""
         x, y = square
         if not self._check_coordinates(x, y):
             raise ValueError(f"Invalid coordinates {square}!")
         self._board[y][x] = disk
-
-    def _get_square(self, square: Square) -> Optional[Disk]:
-        """Returns the state of the board (empty, white, black) at the given square."""
-        x, y = square
-        return self._board[y][x] if self._check_coordinates(x, y) else None
 
     def __str__(self):
         """Format game board to string."""

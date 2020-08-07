@@ -66,7 +66,7 @@ class Player:
             if move:
                 return move
 
-            print_error(f"Can't place a {str(self._disk)} disk in square {square}!")
+            print_error(f"can't place a {str(self._disk)} disk in square {square}!", indent=2)
 
     @staticmethod
     def _get_square() -> Square:
@@ -79,7 +79,7 @@ class Player:
                     raise ValueError
                 return Square(coordinates[0], coordinates[1])
             except ValueError:
-                print_error("Give coordinates in the form 'x,y'!")
+                print_error("give coordinates in the form 'x,y'!", indent=2)
 
     def _type_string(self) -> str:
         return "Human   " if self._human else "Computer"

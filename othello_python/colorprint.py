@@ -30,5 +30,5 @@ def print_color(text, color=Color.white, bold=False):
     print(get_color(text, color, bold))
 
 
-def print_error(text):
-    print(f"{get_color('Error:', Color.red)} {text}")
+def print_error(text, indent: int = 0):
+    print(f"{' ' * indent}{get_color('Error:', Color.red)} {text}")
