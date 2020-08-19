@@ -21,8 +21,8 @@ void othello::Player::play_one_move(Board& board) {
         if(human && show_helpers) {
             board.print_moves(moves);
         }
-        auto chose_move = human ? get_human_move(moves) : get_computer_move(moves);
-        board.place_disc(chose_move);
+        auto chosen_move = human ? get_human_move(moves) : get_computer_move(moves);
+        board.place_disc(chosen_move);
         board.print_score();
         ++rounds_played;
     } else {
@@ -49,7 +49,7 @@ othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
 /// Return move chosen by a human player.
 othello::Move othello::Player::get_human_move(const std::vector<Move>& moves) {
     while (true) {
-        Square square = get_square();
+        auto square = get_square();
         // check if given square is one of the possible moves
         auto move_iter = std::find_if(moves.begin(), moves.end(), [&square](const Move& move){ return move.square == square; });
         if (move_iter != moves.end()) {

@@ -26,6 +26,7 @@ if (MSVC)
     add_compile_options(/W4)
 else()
     add_compile_options(-Wall -Wextra -pedantic)
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
 message("CMAKE_CXX_FLAGS_DEBUG is: ${CMAKE_CXX_FLAGS_DEBUG}")

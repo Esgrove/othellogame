@@ -55,11 +55,11 @@ void othello::Board::place_disc(const othello::Move& move) {
     }
     set_square(start, move.disk);
     empty_squares.erase(start);
-    for (auto& dir : move.directions) {
-        Square pos = start + dir;
+    for (auto& step : move.directions) {
+        Square pos = start + step;
         while (get_square(pos) == other_disk(move.disk)) {
             set_square(pos, move.disk);
-            pos += dir;
+            pos += step;
         }
     }
 }
