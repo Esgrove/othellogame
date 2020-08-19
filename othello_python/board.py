@@ -84,7 +84,7 @@ class Board:
             print(f"  {move}")
             x, y = move.square
             # add move value to matching position on board
-            board[y][x] = get_color(str(move.value), Color.yellow)
+            board[y][x] = get_color(move.value, Color.yellow)
 
         # print board with move positions
         print(f"    {' '.join(get_color(str(x), bold=True) for x in range(self._size))}")
@@ -95,10 +95,9 @@ class Board:
 
     def print_score(self):
         """Count and print the number of black and white disks."""
-        white, black = self._player_scores()
-        print("")
-        print(self)
-        print(f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}")
+        black, white = self._player_scores()
+        print(f"\n{self}")
+        print(f"Score: {get_color(black, Disk.BLACK.color())} | {get_color(white, Disk.WHITE.color())}")
 
     def result(self) -> Disk:
         """Calculates the final score and returns the winning player disk."""
@@ -123,7 +122,7 @@ class Board:
                 elif disk == Disk.BLACK:
                     black += 1
 
-        return white, black
+        return black, white
 
     def _score(self) -> int:
         """Returns the total score (positive means more white disks and negative means more black disks)."""
