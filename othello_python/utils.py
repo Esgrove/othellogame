@@ -59,7 +59,11 @@ class Square:
 
     def __add__(self, other):
         # enable addition for a pair of squares or a square and an iterable with two values (square + tuple etc...)
-        return Square(self.x + other[0], self.y + other[1])
+        if isinstance(other, Square):
+            return Square(self.x + other.x, self.y + other.y)
+        elif len(other) == 2:
+            return Square(self.x + other[0], self.y + other[1])
+        return NotImplemented
 
     def __iadd__(self, other):
         # += operator
