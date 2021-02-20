@@ -22,12 +22,8 @@ fn main() {
     if args.len() == 2 {
         let cmd = &args[1];
         board_size = match cmd.parse() {
-            Ok(n) => {
-                n
-            },
-            Err(_) => {
-                0
-            },
+            Ok(n) => { n },
+            Err(_) => { 0 },
         };
     }
     if board_size == 0 {
