@@ -5,11 +5,12 @@
 // Akseli Lukkarila
 //==========================================================
 
+#include "board.hpp"
+
+#include "colorprint.hpp"
+
 #include <algorithm>  // std::remove, std::transform
 #include <numeric>    // std::accumulate, std::iota
-
-#include "board.hpp"
-#include "colorprint.hpp"
 
 othello::Board::Board(int size) : size(size), indices(size) {
     // init game board with empty disks.
@@ -106,9 +107,7 @@ void othello::Board::print_moves(const std::vector<Move>& moves) {
     fmt::print(fmt::fg(fmt::color::yellow), "  Possible plays ({}):\n", std::to_string(moves.size()));
     // convert board from Disk enums to strings
     std::vector<std::string> board_str(board.size());
-    std::transform(board.begin(), board.end(), board_str.begin(), [&](Disk disk) -> std::string {
-        return board_char(disk);
-    });
+    std::transform(board.begin(), board.end(), board_str.begin(), [&](Disk disk) -> std::string { return board_char(disk); });
     for (const Move& move : moves) {
         fmt::print("  {}\n", move);
         board_str[move.square.y * size + move.square.x] = get_color(move.value, fmt::color::yellow);
@@ -132,10 +131,10 @@ void othello::Board::print_score() const {
     auto [black, white] = player_scores();
     print("");
     print(*this);
-    fmt::print("Score: {} | {}\n",
-               get_color(std::to_string(black), disk_color(Disk::Black)),
-               get_color(std::to_string(white), disk_color(Disk::White))
-               );
+    fmt::print(
+        "Score: {} | {}\n",
+        get_color(std::to_string(black), disk_color(Disk::Black)),
+        get_color(std::to_string(white), disk_color(Disk::White)));
 }
 
 /// Count and return the number of black and white disks.
@@ -168,9 +167,7 @@ othello::Disk othello::Board::result() const {
 /// Returns the total score (positive means more white disks and negative means more black disks).
 int othello::Board::score() const {
     // enum class prevents implicit conversion from Disk to int -> need to use lambda to cast Disk values to int
-    return std::accumulate(board.begin(), board.end(), 0, [](int s, Disk d) {
-            return s + static_cast<int>(d);
-    });
+    return std::accumulate(board.begin(), board.end(), 0, [](int s, Disk d) { return s + static_cast<int>(d); });
 }
 
 /// Sets the given square to given value.
@@ -183,7 +180,7 @@ void othello::Board::set_square(const Square& square, Disk disk) {
 
 /// Returns the state of the board (empty, white, black) at the given coordinates.
 std::optional<othello::Disk> othello::Board::get_square(const Square& square) const {
-    return check_coordinates(square.x, square.y) ? std::optional<Disk>{board[square.y * size + square.x]} : std::nullopt;
+    return check_coordinates(square.x, square.y) ? std::optional<Disk> {board[square.y * size + square.x]} : std::nullopt;
 }
 
 /// Format game board to string

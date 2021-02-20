@@ -5,33 +5,29 @@
 //==========================================================
 
 #pragma once
+#include "colorprint.hpp"
+
 #include <iostream>  // cout, cin
 #include <string>    // string
 #include <utility>
 
-#include "colorprint.hpp"
-
 namespace othello {
 
-enum class Disk {
-    Black = -1,
-    Empty = 0,
-    White = 1
-};
+enum class Disk { Black = -1, Empty = 0, White = 1 };
 
 /// Represents one square location on the board.
 struct Square {
     Square() : x(0), y(0) {}
     Square(int x, int y) : x(x), y(y) {}
 
-    friend std::ostream& operator<< (std::ostream& out, const Square& sqr) {
+    friend std::ostream& operator<<(std::ostream& out, const Square& sqr) {
         return out << fmt::format("({},{})", sqr.x, sqr.y);
     }
 
-    bool operator< (const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
-    bool operator== (const Square& other) const { return x == other.x && y == other.y; }
-    Square operator+ (const Square& other) const { return Square(x + other.x, y + other.y); }
-    Square& operator+= (const Square& other) {
+    bool operator<(const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
+    bool operator==(const Square& other) const { return x == other.x && y == other.y; }
+    Square operator+(const Square& other) const { return Square(x + other.x, y + other.y); }
+    Square& operator+=(const Square& other) {
         x += other.x;
         y += other.y;
         return *this;
@@ -43,23 +39,26 @@ struct Square {
 
 /// Represents one possible disk placement for given disk color.
 struct Move {
-    Move() : square(0,0), value(0), disk(Disk::Empty) {}
-    Move(Square square, int value, Disk disk, std::vector<Square> directions) :
-        square(square), value(value), disk(disk), directions(std::move(directions)) {}
+    Move() : square(0, 0), value(0), disk(Disk::Empty) {}
+    Move(Square square, int value, Disk disk, std::vector<Square> directions)
+        : square(square)
+        , value(value)
+        , disk(disk)
+        , directions(std::move(directions)) {}
 
-    friend std::ostream& operator<< (std::ostream& out, const Move& move) {
+    friend std::ostream& operator<<(std::ostream& out, const Move& move) {
         return out << fmt::format("Square: {} -> value: {}", move.square, move.value);
     }
 
-    bool operator< (const Move& other) const {
+    bool operator<(const Move& other) const {
         // biggest value with smallest coordinates first
         return value > other.value || (value == other.value && square < other.square);
     }
 
-    Disk                    disk;
-    Square                  square;
-    int                     value;
-    std::vector<Square>     directions;
+    Disk disk;
+    Square square;
+    int value;
+    std::vector<Square> directions;
 };
 
 /// Returns print color for given Disk.
@@ -92,17 +91,16 @@ inline Disk other_disk(const Disk& disk) {
     return disk == Disk::White ? Disk::Black : Disk::White;
 }
 
-inline std::ostream& operator<<(std::ostream &out, const Disk& disk) {
+inline std::ostream& operator<<(std::ostream& out, const Disk& disk) {
     return out << disk_string(disk);
 }
 
 /// Print an object to stream (default is std::cout)
-template<typename T>
-inline void print(T object, bool newline=true, std::ostream& out=std::cout) {
+template<typename T> inline void print(T object, bool newline = true, std::ostream& out = std::cout) {
     out << object;
     if (newline) {
         out << "\n";
     }
 }
 
-} // namespace othello
+}  // namespace othello

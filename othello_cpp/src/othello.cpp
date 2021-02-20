@@ -5,13 +5,13 @@
 // Akseli Lukkarila
 //==========================================================
 
-#include <algorithm> // clamp, transform
-#include <iostream>
-
-#include <fmt/color.h>
+#include "othello.hpp"
 
 #include "colorprint.hpp"
-#include "othello.hpp"
+
+#include <algorithm>  // clamp, transform
+#include <fmt/color.h>
+#include <iostream>
 
 /// Read user input for yes/no question and return bool.
 bool othello::Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no) {
@@ -109,6 +109,6 @@ int main(int argc, const char* argv[]) {
     } catch (const std::invalid_argument&) {
         board_size = othello::Othello::get_board_size();
     }
-    othello::Othello game{board_size};
+    othello::Othello game {board_size};
     game.play();
 }
