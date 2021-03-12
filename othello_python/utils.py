@@ -41,6 +41,7 @@ class Disk(IntEnum):
 
 class Square:
     """Represents one square location on the board."""
+
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
@@ -97,6 +98,7 @@ class Square:
 
 class Move:
     """Represents one possible disk placement for given disk color."""
+
     def __init__(self, square: Square, disk=Disk.EMPTY, value=0, directions=None):
         self.square = square
         self.disk = disk
@@ -110,13 +112,17 @@ class Move:
         return (self.square, self.value) != (other.square, other.value)
 
     def __lt__(self, other):
-        return self.value > other.value or (self.value == other.value and self.square < other.square)
+        return self.value > other.value or (
+            self.value == other.value and self.square < other.square
+        )
 
     def __le__(self, other):
         return self.value >= other.value and self.square <= other.square
 
     def __gt__(self, other):
-        return self.value < other.value or (self.value == other.value and self.square > other.square)
+        return self.value < other.value or (
+            self.value == other.value and self.square > other.square
+        )
 
     def __ge__(self, other):
         return self.value <= other.value and self.square >= other.square

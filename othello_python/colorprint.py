@@ -4,11 +4,13 @@ Akseli Lukkarila
 2019
 """
 import colorama
+
 colorama.init()
 
 
 class Color:
     """Nicer interface to Colorama colors."""
+
     blue = colorama.Fore.BLUE
     cyan = colorama.Fore.CYAN
     green = colorama.Fore.GREEN

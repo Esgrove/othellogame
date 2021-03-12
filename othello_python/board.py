@@ -13,15 +13,29 @@ from utils import Disk, Move, Square
 
 class Board:
     """Handles game board state and logic."""
-    STEP_DIRECTIONS = ((0, -1), (0, 1), (1, 0), (-1, 0), (1, -1), (1, 1), (-1, 1), (-1, -1))
+
+    STEP_DIRECTIONS = (
+        (0, -1),
+        (0, 1),
+        (1, 0),
+        (-1, 0),
+        (1, -1),
+        (1, 1),
+        (-1, 1),
+        (-1, -1),
+    )
 
     def __init__(self, size=8):
         self._size = size
         # init game board with empty disks
-        self._board = [[Disk.EMPTY for _ in range(self._size)] for _ in range(self._size)]
+        self._board = [
+            [Disk.EMPTY for _ in range(self._size)] for _ in range(self._size)
+        ]
 
         # set starting positions
-        row = (self._size - 1) // 2 if self._size % 2 == 0 else (self._size - 1) // 2 - 1
+        row = (
+            (self._size - 1) // 2 if self._size % 2 == 0 else (self._size - 1) // 2 - 1
+        )
         col = self._size // 2
         self._board[row][row] = Disk.BLACK
         self._board[row][col] = Disk.WHITE
@@ -29,8 +43,12 @@ class Board:
         self._board[col][col] = Disk.BLACK
 
         # keep track of empty squares on board to avoid checking already filled positions
-        self._empty_squares = set(Square(x, y) for x in range(self._size) for y in range(self._size) if
-                                  self._board[y][x] == Disk.EMPTY)
+        self._empty_squares = set(
+            Square(x, y)
+            for x in range(self._size)
+            for y in range(self._size)
+            if self._board[y][x] == Disk.EMPTY
+        )
 
     def can_play(self) -> bool:
         """Return true if board contains empty squares -> still possible to make a move."""
@@ -39,7 +57,9 @@ class Board:
     def place_disk(self, move: Move) -> None:
         """Update board for given disk placement."""
         start = move.square
-        assert self._get_square(start) == Disk.EMPTY, f"Trying to place disk to an occupied square {move.square}!"
+        assert (
+            self._get_square(start) == Disk.EMPTY
+        ), f"Trying to place disk to an occupied square {move.square}!"
         self._set_square(start, move.disk)
         self._empty_squares.remove(start)
         for step in move.directions:
@@ -87,17 +107,21 @@ class Board:
             board[y][x] = get_color(move.value, Color.yellow)
 
         # print board with move positions
-        print(f"    {' '.join(get_color(str(x), bold=True) for x in range(self._size))}")
+        print(
+            f"    {' '.join(get_color(str(x), bold=True) for x in range(self._size))}"
+        )
         for index, row in enumerate(board):
             text = get_color(f"  {index} ", bold=True)
-            text += ' '.join(disk for disk in row)
+            text += " ".join(disk for disk in row)
             print(text)
 
     def print_score(self):
         """Count and print the number of black and white disks."""
         black, white = self._player_scores()
         print(f"\n{self}")
-        print(f"Score: {get_color(black, Disk.BLACK.color())} | {get_color(white, Disk.WHITE.color())}")
+        print(
+            f"Score: {get_color(black, Disk.BLACK.color())} | {get_color(white, Disk.WHITE.color())}"
+        )
 
     def result(self) -> Disk:
         """Calculates the final score and returns the winning player disk."""
@@ -145,5 +169,5 @@ class Board:
         text = f"  {' '.join(get_color(str(x), bold=True) for x in range(self._size))}"
         for index, row in enumerate(self._board):
             text += get_color(f"\n{index} ", bold=True)
-            text += ' '.join(disk.board_char() for disk in row)
+            text += " ".join(disk.board_char() for disk in row)
         return text
