@@ -32,9 +32,7 @@ class Othello:
         self.rounds_played = 0
 
         if self.get_answer("Would you like to play against the computer"):
-            if self.get_answer(
-                "Would you like to play as black or white", yes="b", no="w"
-            ):
+            if self.get_answer("Would you like to play as black or white", yes="b", no="w"):
                 self.player_white.set_human(False)
             else:
                 self.player_black.set_human(False)
@@ -52,9 +50,7 @@ class Othello:
 
     def game_loop(self):
         """Keep making moves until both players can't make a move anymore."""
-        while self.board.can_play() and (
-            self.player_black.can_play() or self.player_white.can_play()
-        ):
+        while self.board.can_play() and (self.player_black.can_play() or self.player_white.can_play()):
             self.rounds_played += 1
             print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")
             self.player_black.play_one_move(self.board)

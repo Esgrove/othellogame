@@ -36,11 +36,7 @@ class Player:
             if self._human and self._show_helpers:
                 board.print_moves(moves)
 
-            chosen_move = (
-                self._get_human_move(moves)
-                if self._human
-                else self._get_computer_move(moves)
-            )
+            chosen_move = self._get_human_move(moves) if self._human else self._get_computer_move(moves)
             board.place_disk(chosen_move)
             board.print_score()
             self._rounds_played += 1
@@ -71,9 +67,7 @@ class Player:
             if move:
                 return move
 
-            print_error(
-                f"can't place a {str(self._disk)} disk in square {square}!", indent=2
-            )
+            print_error(f"can't place a {str(self._disk)} disk in square {square}!", indent=2)
 
     @staticmethod
     def _get_square() -> Square:
@@ -92,6 +86,4 @@ class Player:
         return "Human   " if self._human else "Computer"
 
     def __str__(self):
-        return (
-            f"{str(self._disk)} | {self._type_string()} | Moves: {self._rounds_played}"
-        )
+        return f"{str(self._disk)} | {self._type_string()} | Moves: {self._rounds_played}"

@@ -112,17 +112,13 @@ class Move:
         return (self.square, self.value) != (other.square, other.value)
 
     def __lt__(self, other):
-        return self.value > other.value or (
-            self.value == other.value and self.square < other.square
-        )
+        return self.value > other.value or (self.value == other.value and self.square < other.square)
 
     def __le__(self, other):
         return self.value >= other.value and self.square <= other.square
 
     def __gt__(self, other):
-        return self.value < other.value or (
-            self.value == other.value and self.square > other.square
-        )
+        return self.value < other.value or (self.value == other.value and self.square > other.square)
 
     def __ge__(self, other):
         return self.value <= other.value and self.square >= other.square
