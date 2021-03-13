@@ -13,19 +13,19 @@ namespace othello
 class Othello
 {
 public:
-    explicit Othello(int board_size) : board_size(board_size) {};
-    ~Othello() = default;
-
-    void play();
     static int get_board_size();
 
+    explicit Othello(int board_size) : board_size(board_size) {};
+
+    void play();
+
 private:
+    static bool get_answer(const std::string& question, const std::string& yes = "y", const std::string& no = "n");
+
     void init_game();
     void game_loop();
     void print_result();
     void print_status();
-
-    static bool get_answer(const std::string& question, const std::string& yes = "y", const std::string& no = "n");
 
     Board board;
     Player player_black;

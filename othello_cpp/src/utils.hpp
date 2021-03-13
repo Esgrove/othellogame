@@ -9,7 +9,7 @@
 
 #include <iostream>  // cout, cin
 #include <string>    // string
-#include <utility>
+#include <utility>   // move
 
 namespace othello
 {
