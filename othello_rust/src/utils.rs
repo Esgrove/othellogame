@@ -10,17 +10,17 @@ use std::fmt;
 pub(crate) enum Disk {
     BLACK = -1,
     EMPTY = 0,
-    WHITE = 1
+    WHITE = 1,
 }
 
 pub(crate) struct Square {
     x: u8,
-    y: u8
+    y: u8,
 }
 
 pub(crate) struct Move {
     square: Square,
-    value: u8
+    value: u8,
 }
 
 impl fmt::Display for Disk {

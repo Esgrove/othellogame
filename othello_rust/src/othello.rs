@@ -5,22 +5,22 @@
 // Akseli Lukkarila
 //==========================================================
 
-extern crate colored;  // print with color to terminal
+extern crate colored; // print with color to terminal
 
 use colored::*;
 
-use std::cmp;
-use std::io::{self, Write};
 use crate::board::Board;
 use crate::player::Player;
 use crate::utils::Disk;
+use std::cmp;
+use std::io::{self, Write};
 
 pub(crate) struct Othello {
     board: Board,
     player_black: Player,
     player_white: Player,
     rounds_played: u32,
-    board_size: u8
+    board_size: u8,
 }
 
 impl Othello {
@@ -30,7 +30,7 @@ impl Othello {
             board_size: size,
             player_black: Player::new(Disk::BLACK),
             player_white: Player::new(Disk::WHITE),
-            rounds_played: 0
+            rounds_played: 0,
         }
     }
 
@@ -57,9 +57,7 @@ impl Othello {
 
         println!(
             "{}\n{}\n{}",
-            self.board,
-            self.player_black,
-            self.player_white
+            self.board, self.player_black, self.player_white
         );
         self.rounds_played = 0;
     }

@@ -6,10 +6,10 @@
 
 extern crate colored;
 
-use crate::utils::Disk;
-use crate::board::Board;
-
 use std::fmt;
+
+use crate::board::Board;
+use crate::utils::Disk;
 
 #[derive(Debug)]
 pub(crate) struct Player {
@@ -17,7 +17,7 @@ pub(crate) struct Player {
     human: bool,
     can_play: bool,
     show_helpers: bool,
-    rounds_played: u32
+    rounds_played: u32,
 }
 
 impl Player {
@@ -27,12 +27,10 @@ impl Player {
             human: true,
             can_play: true,
             show_helpers: true,
-            rounds_played: 0
+            rounds_played: 0,
         }
     }
-    pub fn play_one_move(&mut self, board: &mut Board) {
-
-    }
+    pub fn play_one_move(&mut self, board: &mut Board) {}
 
     pub fn set_human(&mut self, is_human: bool) {
         self.human = is_human;
@@ -43,7 +41,12 @@ impl Player {
     }
 
     pub fn type_string(&self) -> String {
-        return match self.human {true => "human   ", false => "computer" }.parse().unwrap();
+        return match self.human {
+            true => "human   ",
+            false => "computer",
+        }
+        .parse()
+        .unwrap();
     }
 }
 
