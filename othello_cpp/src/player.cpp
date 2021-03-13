@@ -14,7 +14,8 @@
 #include <thread>     // sleep_for
 
 /// Play one round as this player.
-void othello::Player::play_one_move(Board& board) {
+void othello::Player::play_one_move(Board& board)
+{
     print("Turn: " + disk_string(disk));
     auto moves = board.possible_moves(disk);
     if (!moves.empty()) {
@@ -33,7 +34,8 @@ void othello::Player::play_one_move(Board& board) {
 }
 
 /// Return move chosen by computer.
-othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves) {
+othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
+{
     print("  Computer plays...");
     // wait a bit and pick a random move
     std::uniform_int_distribution<int> rand_time(1000, 2000);
@@ -48,7 +50,8 @@ othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
 }
 
 /// Return move chosen by a human player.
-othello::Move othello::Player::get_human_move(const std::vector<Move>& moves) {
+othello::Move othello::Player::get_human_move(const std::vector<Move>& moves)
+{
     while (true) {
         auto square = get_square();
         // check if given square is one of the possible moves
@@ -63,7 +66,8 @@ othello::Move othello::Player::get_human_move(const std::vector<Move>& moves) {
 }
 
 /// Ask human player for square coordinates.
-othello::Square othello::Player::get_square() {
+othello::Square othello::Player::get_square()
+{
     std::string input;
     while (true) {
         try {
@@ -81,6 +85,7 @@ othello::Square othello::Player::get_square() {
     }
 }
 
-std::ostream& othello::operator<<(std::ostream& out, othello::Player& p) {
+std::ostream& othello::operator<<(std::ostream& out, othello::Player& p)
+{
     return out << fmt::format("{} | {} | {}", disk_string(p.disk), p.type_string(), p.rounds_played);
 }

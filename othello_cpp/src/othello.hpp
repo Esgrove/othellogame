@@ -8,9 +8,10 @@
 #pragma once
 #include "player.hpp"
 
-namespace othello {
-
-class Othello {
+namespace othello
+{
+class Othello
+{
 public:
     explicit Othello(int board_size) : board_size(board_size) {};
     ~Othello() = default;

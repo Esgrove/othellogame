@@ -9,9 +9,10 @@
 
 #include <random>
 
-namespace othello {
-
-class Player {
+namespace othello
+{
+class Player
+{
 public:
     Player() : disk(Disk::Black), human(true) {};
     explicit Player(Disk disk) : disk(disk), human(true) {};

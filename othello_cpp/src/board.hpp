@@ -12,9 +12,10 @@
 #include <set>
 #include <vector>
 
-namespace othello {
-
-class Board {
+namespace othello
+{
+class Board
+{
 public:
     constexpr static int step_directions[8][2] = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
 
