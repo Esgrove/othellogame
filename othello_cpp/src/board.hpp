@@ -8,6 +8,7 @@
 #pragma once
 #include "utils.hpp"
 
+#include <array>
 #include <optional>  // std::optional
 #include <set>
 #include <vector>
@@ -17,8 +18,6 @@ namespace othello
 class Board
 {
 public:
-    static constexpr int step_directions[8][2] = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
-
     Board() : size(8), indices(8) {};
     explicit Board(int size);
 
@@ -38,6 +37,8 @@ private:
     [[nodiscard]] std::optional<othello::Disk> get_square(const Square& square) const;
     [[nodiscard]] std::tuple<int, int> player_scores() const;
     void set_square(const Square& square, Disk disk);
+
+    const std::array<std::pair<int, int>, 8> step_directions {{{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}}};
 
     int size;
     std::set<Square> empty_squares;
