@@ -27,7 +27,7 @@ fn main() {
             Err(_) => 0,
         };
     }
-    if board_size == 0 {
+    if board_size <= 0 {
         board_size = othello::Othello::get_board_size();
     }
     let mut game = othello::Othello::new(board_size);
