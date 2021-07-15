@@ -32,18 +32,18 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const Board& othello);
 
 private:
+    const std::array<std::pair<int, int>, 8> step_directions {{{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}}};
+
     [[nodiscard]] bool check_coordinates(const int& x, const int& y) const;
     [[nodiscard]] int score() const;
     [[nodiscard]] std::optional<othello::Disk> get_square(const Square& square) const;
     [[nodiscard]] std::tuple<int, int> player_scores() const;
     void set_square(const Square& square, Disk disk);
 
-    const std::array<std::pair<int, int>, 8> step_directions {{{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}}};
-
-    int size;
     std::set<Square> empty_squares;
     std::vector<Disk> board;
     std::vector<int> indices;
+    int size;
 };
 
 }  // namespace othello

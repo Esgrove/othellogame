@@ -63,8 +63,8 @@ struct Move {
 
     Disk disk;
     Square square;
-    int value;
     std::vector<Square> directions;
+    int value;
 };
 
 /// Returns print color for given Disk.
@@ -76,6 +76,7 @@ inline fmt::color disk_color(const Disk& disk)
     return disk == Disk::White ? fmt::color::cyan : fmt::color::magenta;
 }
 
+/// Returns string character representing board status (black, white, empty).
 inline std::string board_char(const Disk& disk)
 {
     if (disk == Disk::Empty) {
@@ -92,7 +93,7 @@ inline std::string disk_string(const Disk& disk)
     return get_color(text, disk_color(disk));
 }
 
-/// Returns the opponents disk color
+/// Returns the opponents disk color.
 inline Disk other_disk(const Disk& disk)
 {
     if (disk == Disk::Empty) {
@@ -106,7 +107,7 @@ inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
     return out << disk_string(disk);
 }
 
-/// Print an object to stream (default is std::cout)
+/// Print an object to stream (default is std::cout).
 template<typename T> inline void print(T object, bool newline = true, std::ostream& out = std::cout)
 {
     out << object;
