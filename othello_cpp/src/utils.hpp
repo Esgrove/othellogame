@@ -129,17 +129,21 @@ template<typename T> inline void print(T object, bool newline = true, std::ostre
 
 }  // namespace othello
 
-// Formatter specialization for
-template<> struct fmt::formatter<othello::Square> : fmt::formatter<std::string> {
-    auto format(othello::Square p, format_context& ctx)
-    {
-        return formatter<std::string>::format(fmt::format("({}, {})", p.x, p.y), ctx);
-    }
-};
+// Formatter specialization: simply use overridden ostream operator
+template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
+template<> struct fmt::formatter<othello::Move> : ostream_formatter {};
 
-template<> struct fmt::formatter<othello::Move> : fmt::formatter<std::string> {
-    auto format(othello::Move p, format_context& ctx)
-    {
-        return formatter<std::string>::format(fmt::format("Square: {} -> value: {}", p.square, p.value), ctx);
-    }
-};
+// Other option would be to customize based on std::string for example:
+// template<> struct fmt::formatter<othello::Square> : fmt::formatter<std::string> {
+//    auto format(othello::Square s, format_context& ctx)
+//    {
+//        return formatter<std::string>::format(fmt::format("({}, {})", s.x, s.y), ctx);
+//    }
+//};
+//
+// template<> struct fmt::formatter<othello::Move> : fmt::formatter<std::string> {
+//    auto format(othello::Move m, format_context& ctx)
+//    {
+//        return formatter<std::string>::format(fmt::format("Square: {} -> value: {}", m.square, m.value), ctx);
+//    }
+//};
