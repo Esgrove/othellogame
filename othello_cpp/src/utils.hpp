@@ -8,8 +8,7 @@
 #include "colorprint.hpp"
 
 #include <algorithm>  // transform
-#include <fmt/format.h>
-#include <iostream>  // cout, cin
+#include <iostream>   // cout, cin
 #include <sstream>
 #include <string>   // string
 #include <utility>  // move

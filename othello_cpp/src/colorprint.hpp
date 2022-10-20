@@ -6,6 +6,7 @@
 
 #pragma once
 #include <fmt/color.h>
+#include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <iostream>  // std::cout
 #include <string>    // std::string
