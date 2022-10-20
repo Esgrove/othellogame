@@ -10,8 +10,7 @@
 
 namespace othello
 {
-class Othello
-{
+class Othello {
 public:
     static int get_board_size();
 

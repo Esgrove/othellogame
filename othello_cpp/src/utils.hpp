@@ -7,6 +7,7 @@
 #pragma once
 #include "colorprint.hpp"
 
+#include <algorithm>  // transform
 #include <fmt/format.h>
 #include <iostream>  // cout, cin
 #include <sstream>
@@ -58,8 +59,7 @@ struct Move {
         , square(square)
         , directions(std::move(directions))
         , value(value)
-    {
-    }
+    {}
 
     friend std::ostream& operator<<(std::ostream& out, const Move& move)
     {

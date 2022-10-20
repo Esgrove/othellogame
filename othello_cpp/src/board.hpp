@@ -15,8 +15,7 @@
 
 namespace othello
 {
-class Board
-{
+class Board {
 public:
     Board() : indices(8), size(8) {};
     explicit Board(int size);

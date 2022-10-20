@@ -11,8 +11,7 @@
 
 namespace othello
 {
-class Player
-{
+class Player {
 public:
     Player() : disk(Disk::Black), human(true) {};
     explicit Player(Disk disk) : disk(disk), human(true) {};

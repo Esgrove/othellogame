@@ -11,7 +11,6 @@
 #include "version.hpp"
 
 #include <algorithm>  // clamp, transform
-#include <fmt/color.h>
 #include <iostream>
 
 /// Read user input for yes/no question and return bool.
