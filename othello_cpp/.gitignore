@@ -44,3 +44,6 @@ othello_cpp/x86/
 
 # Build dirs
 cmake-build-*/
+
+# Version header
+src/version.hpp
