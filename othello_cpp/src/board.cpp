@@ -80,7 +80,7 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
         for (auto& dir : step_directions) {
             Square step {Square(dir.first, dir.second)};
             Square pos {square + step};
-            // next square in this directions needs to be opponents disk
+            // next square in this direction needs to be opponents disk
             if (get_square(pos) != other) {
                 continue;
             }
@@ -98,7 +98,7 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
             directions.emplace_back(step);
         }
         if (value > 0) {
-            moves.emplace_back(Move(square, value, disk, directions));
+            moves.emplace_back(square, value, disk, directions);
         }
     }
     if (!moves.empty()) {
@@ -148,7 +148,8 @@ void othello::Board::print_score() const
 /// Count and return the number of black and white disks.
 std::tuple<int, int> othello::Board::player_scores() const
 {
-    int black = 0, white = 0;
+    int black = 0;
+    int white = 0;
     for (auto& disk : board) {
         switch (disk) {
             case Disk::White:

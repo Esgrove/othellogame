@@ -55,9 +55,9 @@ othello::Move othello::Player::get_human_move(const std::vector<Move>& moves)
     while (true) {
         auto square = get_square();
         // check if given square is one of the possible moves
-        auto move_iter
+        if (auto move_iter
             = std::find_if(moves.begin(), moves.end(), [&square](const Move& move) { return move.square == square; });
-        if (move_iter != moves.end()) {
+            move_iter != moves.end()) {
             // dereference iterator to get value
             return *move_iter;
         }

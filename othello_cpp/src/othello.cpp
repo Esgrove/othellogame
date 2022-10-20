@@ -16,11 +16,12 @@
 /// Read user input for yes/no question and return bool.
 bool othello::Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no)
 {
-    // fmt lib enables nice (modern) string formatting instead of having to use the horrible stringstream stuff
+    // fmt lib enables nice (modern) string formatting instead of having to use the horrible stringstream
     // std::cout << question << " (" << yes << "/" << no << ")? ";
     fmt::print("{} ({}/{})? ", question, yes, no);
     std::string input;
     std::cin >> input;
+    // TODO: replace with std::ranges:transform
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);
     return input == yes;
 }
@@ -31,7 +32,7 @@ int othello::Othello::get_board_size()
     print("Choose board size (default is 8): ", false);
     int size;
     std::cin >> size;
-    return std::clamp(size, 4, 8);  // C++17, size = std::max(4, std::min(size, 8));
+    return std::clamp(size, 4, 8);
 }
 
 /// Keep making moves until both players can't make a move anymore.
@@ -107,11 +108,14 @@ int main(int argc, const char* argv[])
     print_bold("OTHELLO GAME - C++\n", fmt::color::green);
 
     // Handle 'help' and 'version' arguments
-    std::vector<std::string> arguments(argv, argv + argc);
-    for (const auto& arg : arguments) {
+    for (std::vector<std::string> arguments(argv, argv + argc); const auto& arg : arguments) {
         if (arg == "--help" || arg == "-h") {
-            std::string usage = fmt::format("{} {}", version::APP_NAME, version::VERSION_NUMBER);
-            std::cout << usage << "\n";
+            std::string usage = fmt::format("{} {} {}\n\n", version::APP_NAME, version::VERSION_NUMBER, version::DATE);
+            usage += "USAGE: othello_cpp [board size]\n\n";
+            usage += "Optional arguments:\n";
+            usage += "    --help | -h:           Print usage and exit\n";
+            usage += "    --version | -v:        Print version info and exit\n";
+            fmt::print(usage);
             return 1;
         } else if (arg == "--version" || arg == "-v") {
             fmt::print(

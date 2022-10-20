@@ -81,10 +81,11 @@ struct Move {
 /// Returns print color for given Disk.
 inline fmt::color disk_color(const Disk& disk)
 {
+    using enum fmt::color;
     if (disk == Disk::Empty) {
-        return fmt::color::white;
+        return white;
     }
-    return disk == Disk::White ? fmt::color::cyan : fmt::color::magenta;
+    return disk == Disk::White ? cyan : magenta;
 }
 
 /// Returns string character representing board status (black, white, empty).
