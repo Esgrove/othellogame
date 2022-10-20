@@ -72,3 +72,8 @@ else
     time ninja -C "$CMAKE_BUILD_DIR" "othello_cpp"
     ccache_show_stats
 fi
+
+# Move executable from build dir to project root
+mv "$CMAKE_BUILD_DIR/othello_cpp" "othello_cpp"
+
+./othello_cpp --version

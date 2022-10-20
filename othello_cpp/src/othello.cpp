@@ -114,7 +114,13 @@ int main(int argc, const char* argv[])
             std::cout << usage << "\n";
             return 1;
         } else if (arg == "--version" || arg == "-v") {
-            fmt::print("{} {}\n", version::APP_NAME, version::VERSION_NUMBER);
+            fmt::print(
+                "{} {} {}. Build from {} / {}\n",
+                version::APP_NAME,
+                version::VERSION_NUMBER,
+                version::DATE,
+                version::BRANCH,
+                version::COMMIT);
             return 0;
         }
     }
@@ -128,8 +134,8 @@ int main(int argc, const char* argv[])
         } else {
             throw std::invalid_argument("");
         }
-        // Otherwise ask user for size
     } catch (const std::invalid_argument&) {
+        // Otherwise ask user for size
         board_size = othello::Othello::get_board_size();
     }
 
