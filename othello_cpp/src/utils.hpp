@@ -7,13 +7,24 @@
 #pragma once
 #include "colorprint.hpp"
 
+#include <fmt/format.h>
 #include <iostream>  // cout, cin
-#include <string>    // string
-#include <utility>   // move
+#include <sstream>
+#include <string>   // string
+#include <utility>  // move
+#include <vector>
 
 namespace othello
 {
 enum class Disk { Black = -1, Empty = 0, White = 1 };
+
+// Workaround for custom types without formatter specialization for fmt
+template<typename T> inline std::string to_string(const T& object)
+{
+    std::ostringstream ss;
+    ss << object;
+    return ss.str();
+}
 
 /// Represents one square location on the board.
 struct Square {
@@ -27,7 +38,7 @@ struct Square {
 
     bool operator<(const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
     bool operator==(const Square& other) const { return x == other.x && y == other.y; }
-    Square operator+(const Square& other) const { return Square(x + other.x, y + other.y); }
+    Square operator+(const Square& other) const { return {x + other.x, y + other.y}; }
     Square& operator+=(const Square& other)
     {
         x += other.x;
@@ -41,12 +52,12 @@ struct Square {
 
 /// Represents one possible disk placement for given disk color.
 struct Move {
-    Move() : square(0, 0), value(0), disk(Disk::Empty) {}
+    Move() : disk(Disk::Empty), square(0, 0), value(0) {}
     Move(Square square, int value, Disk disk, std::vector<Square> directions)
-        : square(square)
-        , value(value)
-        , disk(disk)
+        : disk(disk)
+        , square(square)
         , directions(std::move(directions))
+        , value(value)
     {
     }
 
@@ -57,7 +68,7 @@ struct Move {
 
     bool operator<(const Move& other) const
     {
-        // biggest value with smallest coordinates first
+        // biggest value with the smallest coordinates first
         return value > other.value || (value == other.value && square < other.square);
     }
 
@@ -117,3 +128,18 @@ template<typename T> inline void print(T object, bool newline = true, std::ostre
 }
 
 }  // namespace othello
+
+// Formatter specialization for
+template<> struct fmt::formatter<othello::Square> : fmt::formatter<std::string> {
+    auto format(othello::Square p, format_context& ctx)
+    {
+        return formatter<std::string>::format(fmt::format("({}, {})", p.x, p.y), ctx);
+    }
+};
+
+template<> struct fmt::formatter<othello::Move> : fmt::formatter<std::string> {
+    auto format(othello::Move p, format_context& ctx)
+    {
+        return formatter<std::string>::format(fmt::format("Square: {} -> value: {}", p.square, p.value), ctx);
+    }
+};

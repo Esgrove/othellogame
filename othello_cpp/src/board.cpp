@@ -12,7 +12,7 @@
 #include <algorithm>  // std::remove, std::transform
 #include <numeric>    // std::accumulate, std::iota
 
-othello::Board::Board(int size) : size(size), indices(size)
+othello::Board::Board(int size) : indices(size), size(size)
 {
     // init game board with empty disks.
     board.resize(size * size, Disk::Empty);
@@ -161,7 +161,7 @@ std::tuple<int, int> othello::Board::player_scores() const
                 break;
         }
     }
-    return std::tuple<int, int>(black, white);
+    return {black, white};
 }
 
 /// Returns the winner color.

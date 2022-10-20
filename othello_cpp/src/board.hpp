@@ -18,7 +18,7 @@ namespace othello
 class Board
 {
 public:
-    Board() : size(8), indices(8) {};
+    Board() : indices(8), size(8) {};
     explicit Board(int size);
 
     void place_disc(const Move& move);
@@ -32,7 +32,8 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const Board& othello);
 
 private:
-    const std::array<std::pair<int, int>, 8> step_directions {{{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}}};
+    std::array<std::pair<int, int>, 8> step_directions {
+        {{0, -1}, {1, 0}, {0, 1}, {-1, 0}, {1, -1}, {1, 1}, {-1, 1}, {-1, -1}}};
 
     [[nodiscard]] bool check_coordinates(const int& x, const int& y) const;
     [[nodiscard]] int score() const;

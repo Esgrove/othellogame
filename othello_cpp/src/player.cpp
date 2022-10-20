@@ -78,7 +78,7 @@ othello::Square othello::Player::get_square()
             }
             int x = std::stoi(input.substr(0, 1));
             int y = std::stoi(input.substr(2, 1));
-            return Square(x, y);
+            return {x, y};
         } catch (const std::invalid_argument&) {
             print_error("give coordinates in the form 'x,y'!\n", 2);
         }

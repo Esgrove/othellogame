@@ -8,6 +8,7 @@
 #include "othello.hpp"
 
 #include "colorprint.hpp"
+#include "version.hpp"
 
 #include <algorithm>  // clamp, transform
 #include <fmt/color.h>
@@ -105,7 +106,21 @@ void othello::Othello::print_status()
 int main(int argc, const char* argv[])
 {
     print_bold("OTHELLO GAME - C++\n", fmt::color::green);
-    // try to read board size from command line args
+
+    // Handle 'help' and 'version' arguments
+    std::vector<std::string> arguments(argv, argv + argc);
+    for (const auto& arg : arguments) {
+        if (arg == "--help" || arg == "-h") {
+            std::string usage = fmt::format("{} {}", version::APP_NAME, version::VERSION_NUMBER);
+            std::cout << usage << "\n";
+            return 1;
+        } else if (arg == "--version" || arg == "-v") {
+            fmt::print("{} {}\n", version::APP_NAME, version::VERSION_NUMBER);
+            return 0;
+        }
+    }
+
+    // Try to read board size from command line args
     int board_size;
     try {
         if (argc >= 2) {
@@ -114,9 +129,12 @@ int main(int argc, const char* argv[])
         } else {
             throw std::invalid_argument("");
         }
+        // Otherwise ask user for size
     } catch (const std::invalid_argument&) {
         board_size = othello::Othello::get_board_size();
     }
+
     othello::Othello game {board_size};
     game.play();
+    return 0;
 }

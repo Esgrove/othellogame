@@ -13,10 +13,10 @@ Since then I have added a *C#* and *Swift* implementations, and started working 
 
 ## Program structure
 
-_othello_: The main gameplay loop.  
-_board_: Game board state and logic.  
-_player_: Player object used for making moves and storing player information.  
-_utils_: Helper classes and methods.  
+_othello_: The main gameplay loop.
+_board_: Game board state and logic.
+_player_: Player object used for making moves and storing player information.
+_utils_: Helper classes and methods.
 _colorprint_: Helper methods for color and style formatting (if needed).
 
 ## Languages
