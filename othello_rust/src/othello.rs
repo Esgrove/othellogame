@@ -5,7 +5,7 @@
 // Akseli Lukkarila
 //==========================================================
 
-extern crate colored; // print with color to terminal
+extern crate colored;
 
 use colored::*;
 
