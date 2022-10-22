@@ -2,7 +2,7 @@
 name = "othello_rust"
 version = "0.5.0"
 authors = ["Esgrove <esgrove@outlook.com>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 colored = "2"
