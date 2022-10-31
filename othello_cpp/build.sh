@@ -41,39 +41,47 @@ ccache_show_stats() {
 generate_windows_project() {
     cmake -B "$CMAKE_BUILD_DIR" \
         -G "Visual Studio 17 2022" \
-        -A "x64" \
+        -A x64 \
         -S "$PROJECT_PATH" \
         -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
 }
 
 generate_project() {
     cmake -B "$CMAKE_BUILD_DIR" \
-        -G "Ninja" \
+        -G Ninja \
         -S "$PROJECT_PATH" \
         -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
 }
 
-mkdir -p "$CMAKE_BUILD_DIR"
+build_project() {
+    mkdir -p "$CMAKE_BUILD_DIR"
+    ccache_zero_stats
+    if [ "$PLATFORM" = windows ]; then
+        if ! generate_windows_project; then
+            print_yellow "CMake failed, removing existing cache and trying again..."
+            rm -rf "$CMAKE_BUILD_DIR"
+            generate_windows_project
+        fi
+        time cmake --build "$CMAKE_BUILD_DIR" --target othello_cpp --config "$BUILD_TYPE"
+    else
+        if ! generate_project; then
+            print_yellow "CMake failed, removing existing cache and trying again..."
+            rm -rf "$CMAKE_BUILD_DIR"
+            generate_project
+        fi
+        time ninja -C "$CMAKE_BUILD_DIR" othello_cpp
+    fi
+    ccache_show_stats
+}
+
+build_project
 
 if [ "$PLATFORM" = windows ]; then
-    if ! generate_windows_project; then
-        print_yellow "CMake failed, removing existing cache and trying again..."
-        rm -rf "$CMAKE_BUILD_DIR"
-        generate_windows_project
-    fi
-    time cmake --build "$CMAKE_BUILD_DIR" --target "othello_cpp" --config "$BUILD_TYPE"
+    # Move executable from build dir to project root
+    mv "$CMAKE_BUILD_DIR/othello_cpp_artefacts/Release/othello_cpp.exe" othello_cpp.exe
+    # Run executable to check it works and print the version info
+    othello_cpp.exe --version
 else
-    ccache_zero_stats
-    if ! generate_project; then
-        print_yellow "CMake failed, removing existing cache and trying again..."
-        rm -rf "$CMAKE_BUILD_DIR"
-        generate_project
-    fi
-    time ninja -C "$CMAKE_BUILD_DIR" "othello_cpp"
-    ccache_show_stats
+    mv "$CMAKE_BUILD_DIR/othello_cpp" othello_cpp
+    ./othello_cpp --version
 fi
-
-# Move executable from build dir to project root
-mv "$CMAKE_BUILD_DIR/othello_cpp" "othello_cpp"
-
-./othello_cpp --version
