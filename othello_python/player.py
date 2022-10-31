@@ -6,7 +6,6 @@ Akseli Lukkarila
 """
 import random
 import time
-
 from typing import List
 
 from board import Board

@@ -8,10 +8,9 @@ Akseli Lukkarila
 import sys
 
 from board import Board
+from colorprint import Color, print_bold, print_error
 from player import Player
 from utils import Disk, clamp
-
-from colorprint import Color, print_bold, print_error
 
 
 class Othello:
