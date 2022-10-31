@@ -54,7 +54,9 @@ generate_project() {
 }
 
 build_project() {
+    cd "$PROJECT_PATH"
     mkdir -p "$CMAKE_BUILD_DIR"
+    # TODO: fix ccache invocation on Windows
     ccache_zero_stats
     if [ "$PLATFORM" = windows ]; then
         if ! generate_windows_project; then
@@ -72,15 +74,16 @@ build_project() {
         time ninja -C "$CMAKE_BUILD_DIR" othello_cpp
     fi
     ccache_show_stats
+    echo "Build succeeded"
 }
 
 build_project
 
 if [ "$PLATFORM" = windows ]; then
     # Move executable from build dir to project root
-    mv "$CMAKE_BUILD_DIR/othello_cpp_artefacts/Release/othello_cpp.exe" othello_cpp.exe
+    mv "$CMAKE_BUILD_DIR/Release/othello_cpp.exe" othello_cpp.exe
     # Run executable to check it works and print the version info
-    othello_cpp.exe --version
+    ./othello_cpp.exe --version
 else
     mv "$CMAKE_BUILD_DIR/othello_cpp" othello_cpp
     ./othello_cpp --version
