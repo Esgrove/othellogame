@@ -69,11 +69,14 @@ void othello::Othello::init_game()
 /// Play one full game of Othello.
 void othello::Othello::play()
 {
-    init_game();
-    game_loop();
-    print_result();
-    if (get_answer("\nWould you like to play again")) {
-        play();
+    // Recursion could be used here but sticking to a loop to match other language implementations more closely.
+    while (true) {
+        init_game();
+        game_loop();
+        print_result();
+        if (!get_answer("\nWould you like to play again")) {
+            break;
+        }
     }
 }
 
@@ -113,13 +116,13 @@ int main(int argc, const char* argv[])
             std::string usage = fmt::format("{} {} {}\n\n", version::APP_NAME, version::VERSION_NUMBER, version::DATE);
             usage += "USAGE: othello_cpp [board size]\n\n";
             usage += "Optional arguments:\n";
-            usage += "    --help | -h:           Print usage and exit\n";
-            usage += "    --version | -v:        Print version info and exit\n";
+            usage += "    -h | --help          Print usage and exit\n";
+            usage += "    -v | --version       Print version info and exit\n";
             fmt::print(usage);
             return 1;
         } else if (arg == "--version" || arg == "-v") {
             fmt::print(
-                "{} {} {}. Build from {} / {}\n",
+                "{} {} {} {} {}\n",
                 version::APP_NAME,
                 version::VERSION_NUMBER,
                 version::DATE,
@@ -136,7 +139,7 @@ int main(int argc, const char* argv[])
             board_size = std::stoi(argv[1]);
             fmt::print("Using board size: {}\n", board_size);
         } else {
-            throw std::invalid_argument("");
+            throw std::invalid_argument("Invalid board size");
         }
     } catch (const std::invalid_argument&) {
         // Otherwise ask user for size
