@@ -113,12 +113,16 @@ int main(int argc, const char* argv[])
     // Handle 'help' and 'version' arguments
     for (std::vector<std::string> arguments(argv, argv + argc); const auto& arg : arguments) {
         if (arg == "--help" || arg == "-h") {
-            std::string usage = fmt::format("{} {} {}\n\n", version::APP_NAME, version::VERSION_NUMBER, version::DATE);
-            usage += "USAGE: othello_cpp [board size]\n\n";
-            usage += "Optional arguments:\n";
-            usage += "    -h | --help          Print usage and exit\n";
-            usage += "    -v | --version       Print version info and exit\n";
-            fmt::print(usage);
+            auto usage = fmt::format(
+                "{} {} {}\n\n"
+                "USAGE: othello_cpp [board size]\n\n"
+                "Optional arguments:\n"
+                "    -h | --help          Print usage and exit\n"
+                "    -v | --version       Print version info and exit\n",
+                version::APP_NAME,
+                version::VERSION_NUMBER,
+                version::DATE);
+            std::cout << usage;
             return 1;
         } else if (arg == "--version" || arg == "-v") {
             fmt::print(
