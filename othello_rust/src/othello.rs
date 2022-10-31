@@ -37,7 +37,8 @@ impl Othello {
     pub fn play(&mut self) {
         loop {
             self.init_game();
-
+            self.game_loop();
+            self.print_result();
             if !Othello::get_answer("\nWould you like to play again", "y", "n") {
                 break;
             }
@@ -60,6 +61,43 @@ impl Othello {
             self.board, self.player_black, self.player_white
         );
         self.rounds_played = 0;
+    }
+
+    fn game_loop(&mut self) {
+        while self.board.can_play()
+            && (self.player_black.can_play() || self.player_white.can_play())
+        {
+            self.rounds_played += 1;
+            println!(
+                "{}",
+                format!("\n=========== ROUND: {} ===========\n", self.rounds_played).bold()
+            );
+            self.player_black.play_one_move(&mut self.board);
+            println!("--------------------------------");
+            self.player_white.play_one_move(&mut self.board);
+        }
+    }
+
+    fn print_result(&mut self) {
+        println!("{}", "\n================================\n".bold());
+        println!("{}", "The game is finished!\n".green());
+        println!("Result:");
+        self.print_status();
+        println!();
+
+        let winner = self.board.result();
+        if winner == Disk::EMPTY {
+            println!("The game ended in a tie...");
+        } else {
+            println!("The winner is {}!", winner);
+        }
+    }
+
+    /// Print current board and player info.
+    fn print_status(&mut self) {
+        println!("{}", self.player_black);
+        println!("{}\n", self.player_white);
+        println!("{}", self.board);
     }
 
     // Associated (aka static) functions

@@ -15,6 +15,12 @@ Run
 cargo run
 ```
 
+Update dependencies
+
+```shell
+cargo update
+```
+
 ## Format code
 
 ```shell
