@@ -50,33 +50,6 @@ struct Square {
     int y;
 };
 
-/// Represents one possible disk placement for given disk color.
-struct Move {
-    Move() : disk(Disk::Empty), square(0, 0), value(0) {}
-    Move(Square square, int value, Disk disk, std::vector<Square> directions)
-        : disk(disk)
-        , square(square)
-        , directions(std::move(directions))
-        , value(value)
-    {}
-
-    friend std::ostream& operator<<(std::ostream& out, const Move& move)
-    {
-        return out << fmt::format("Square: {} -> value: {}", move.square, move.value);
-    }
-
-    bool operator<(const Move& other) const
-    {
-        // biggest value with the smallest coordinates first
-        return value > other.value || (value == other.value && square < other.square);
-    }
-
-    Disk disk;
-    Square square;
-    std::vector<Square> directions;
-    int value;
-};
-
 /// Returns print color for given Disk.
 inline fmt::color disk_color(const Disk& disk)
 {
@@ -126,11 +99,44 @@ template<typename T> inline void print(T object, bool newline = true, std::ostre
         out << "\n";
     }
 }
+}
 
+// Formatter specialization:
+// For some reason MSVC needs to have this here before fmt::format is called below in Move.
+// Having it at the end of the file works fine on Clang like it should. Bug in fmt lib? ¯\_(ツ)_/¯
+template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
+
+namespace othello
+{
+/// Represents one possible disk placement for given disk color.
+struct Move {
+    Move() : disk(Disk::Empty), square(0, 0), value(0) {}
+    Move(Square square, int value, Disk disk, std::vector<Square> directions)
+        : disk(disk)
+        , square(square)
+        , directions(std::move(directions))
+        , value(value)
+    {}
+
+    friend std::ostream& operator<<(std::ostream& out, const Move& move)
+    {
+        return out << fmt::format("Square: {} -> value: {}", move.square, move.value);
+    }
+
+    bool operator<(const Move& other) const
+    {
+        // biggest value with the smallest coordinates first
+        return value > other.value || (value == other.value && square < other.square);
+    }
+
+    Disk disk;
+    Square square;
+    std::vector<Square> directions;
+    int value;
+};
 }  // namespace othello
 
 // Formatter specialization: simply use overridden ostream operator
-template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
 template<> struct fmt::formatter<othello::Move> : ostream_formatter {};
 
 // Other option would be to customize based on std::string for example:
