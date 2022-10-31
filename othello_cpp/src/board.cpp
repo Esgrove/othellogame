@@ -12,6 +12,8 @@
 #include <algorithm>  // std::remove, std::transform
 #include <numeric>    // std::accumulate, std::iota
 
+namespace othello
+{
 othello::Board::Board(int size) : indices(size), size(size)
 {
     // init game board with empty disks.
@@ -168,17 +170,18 @@ std::tuple<int, int> othello::Board::player_scores() const
 /// Returns the winner color.
 othello::Disk othello::Board::result() const
 {
+    using enum othello::Disk;
     int sum = score();
     if (sum == 0) {
-        return Disk::Empty;
+        return Empty;
     }
-    return sum > 0 ? Disk::White : Disk::Black;
+    return sum > 0 ? White : Black;
 }
 
 /// Returns the total score (positive means more white disks and negative means more black disks).
 int othello::Board::score() const
 {
-    // enum class prevents implicit conversion from Disk to int -> need to use lambda to cast Disk values to int
+    // enum class prevents implicit conversion from Disk to int, need to use lambda to cast Disk values to int
     return std::accumulate(board.begin(), board.end(), 0, [](int s, Disk d) { return s + static_cast<int>(d); });
 }
 
@@ -198,7 +201,7 @@ std::optional<othello::Disk> othello::Board::get_square(const Square& square) co
 }
 
 /// Format game board to string
-std::ostream& othello::operator<<(std::ostream& out, const othello::Board& board)
+std::ostream& operator<<(std::ostream& out, const Board& board)
 {
     out << " ";
     for (int i : board.indices) {
@@ -213,3 +216,4 @@ std::ostream& othello::operator<<(std::ostream& out, const othello::Board& board
     }
     return out;
 }
+}  // namespace othello

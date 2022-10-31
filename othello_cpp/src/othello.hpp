@@ -23,8 +23,8 @@ private:
 
     void init_game();
     void game_loop();
-    void print_result();
-    void print_status();
+    void print_result() const;
+    void print_status() const;
 
     Board board;
     Player player_black;

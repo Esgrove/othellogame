@@ -31,9 +31,9 @@ struct Square {
     Square() : x(0), y(0) {}
     Square(int x, int y) : x(x), y(y) {}
 
-    friend std::ostream& operator<<(std::ostream& out, const Square& sqr)
+    friend std::ostream& operator<<(std::ostream& out, const Square& square)
     {
-        return out << fmt::format("({},{})", sqr.x, sqr.y);
+        return out << fmt::format("({},{})", square.x, square.y);
     }
 
     bool operator<(const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
@@ -99,7 +99,7 @@ template<typename T> inline void print(T object, bool newline = true, std::ostre
         out << "\n";
     }
 }
-}
+}  // namespace othello
 
 // Formatter specialization:
 // For some reason MSVC needs to have this here before fmt::format is called below in Move.

@@ -23,7 +23,7 @@ public:
     void play_one_move(Board& board);
     void set_human(bool is_human) { this->human = is_human; }
 
-    friend std::ostream& operator<<(std::ostream& out, Player& p);
+    friend std::ostream& operator<<(std::ostream& out, Player& player);
 
 private:
     static Square get_square();

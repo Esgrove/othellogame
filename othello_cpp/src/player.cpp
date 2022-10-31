@@ -13,6 +13,8 @@
 #include <stdexcept>  // exceptions
 #include <thread>     // sleep_for
 
+namespace othello
+{
 /// Play one round as this player.
 void othello::Player::play_one_move(Board& board)
 {
@@ -85,7 +87,8 @@ othello::Square othello::Player::get_square()
     }
 }
 
-std::ostream& othello::operator<<(std::ostream& out, othello::Player& p)
+std::ostream& operator<<(std::ostream& out, Player& player)
 {
-    return out << fmt::format("{} | {} | {}", disk_string(p.disk), p.type_string(), p.rounds_played);
+    return out << fmt::format("{} | {} | {}", disk_string(player.disk), player.type_string(), player.rounds_played);
 }
+}  // namespace othello

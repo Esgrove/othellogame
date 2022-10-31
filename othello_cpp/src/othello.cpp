@@ -81,7 +81,7 @@ void othello::Othello::play()
 }
 
 /// Print ending status and winner info.
-void othello::Othello::print_result()
+void othello::Othello::print_result() const
 {
     print_bold("\n================================\n");
     print_color("The game is finished!\n", fmt::color::green);
@@ -98,7 +98,7 @@ void othello::Othello::print_result()
 }
 
 /// Print current board and player info.
-void othello::Othello::print_status()
+void othello::Othello::print_status() const
 {
     print(player_black);
     print(player_white);
