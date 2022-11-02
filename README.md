@@ -22,8 +22,8 @@ yet small enough that it could be done in a weekend even when starting with a ne
 It is also very easy to see that the code is working correctly,
 especially since it is possible to compare side-by-side with the older implementations.
 
-Since then, I have added a *C#* and *Swift* implementations, and started working on a *Rust* version as a learning exercise.
-I might do a few other (modern) languages that interest me, such as *Go* and *Kotlin*.
+Since then, I have added *C#* and *Swift* implementations, and started working on a *Rust* version as a learning exercise.
+I might do a few other (modern) languages that interest me and/or have some hype around them, such as *Zig*, *Go* and *Kotlin*.
 It would also be interesting to try to make a functional / non-OOP version at some point.
 In the meantime, there's probably still room to improve in the current implementations,
 especially with the C# and Swift versions since I haven't been actively using those languages.
@@ -44,7 +44,10 @@ All implementations follow this overall architecture:
 
 Python 3.6+. Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
 Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 80. 
-Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
+Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily. 
+Dependencies are handled by pip (Poetry or pip-compile are a bit overkill with only a few dependencies).
+Formatting with [Black](https://github.com/psf/black) and [isort](https://github.com/PyCQA/isort), 
+linting with [Flake8](https://github.com/PyCQA/flake8).
 
 * othello.py
 * board.py
@@ -54,10 +57,11 @@ Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) h
 
 ### C++
 
-C++20. Uses [Cmake](https://cmake.org/) as the build system. 
-Uses the [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text (stringstreams :unamused:).
+C++20. Uses [Cmake](https://cmake.org/) as the build system,
+and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text (stringstreams :unamused:).
 Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-naming) recommended naming style (snake_case), 
 which sadly very few C++ codebases seem to be using (in my experience).
+Formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html)
 
 * othello.hpp & othello.cpp
 * board.hpp & board.cpp
@@ -68,9 +72,8 @@ which sadly very few C++ codebases seem to be using (in my experience).
 
 ### C#
 
-Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal. 
-Follows the C# style guide (PascalCase) otherwise, 
-except for always putting opening brackets on their own line (all that wasted whitespace :grimacing:).
+.NET 6 and C# 8. Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal. 
+Follows the C# style guide (PascalCase).
 
 * Othello.cs
 * Board.cs
