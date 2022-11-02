@@ -13,7 +13,8 @@ namespace Othello
         private int _roundsPlayed;
         private readonly int _boardSize;
 
-        private Othello(int boardSize) {
+        private Othello(int boardSize)
+        {
             _boardSize = boardSize;
             _board = null;
             _playerBlack = null;
@@ -22,16 +23,21 @@ namespace Othello
         }
 
         /// Initialize game board and players for a new game.
-        private void InitGame() {
+        private void InitGame()
+        {
             _board = new Board(_boardSize);
             _playerBlack = new Player(Disk.Black);
             _playerWhite = new Player(Disk.White);
             _roundsPlayed = 0;
 
-            if (GetAnswer("Would you like to play against the computer")) {
-                if (GetAnswer("Would you like to play as black or white", "b", "w")) {
+            if (GetAnswer("Would you like to play against the computer"))
+            {
+                if (GetAnswer("Would you like to play as black or white", "b", "w"))
+                {
                     _playerWhite.SetHuman(false);
-                } else {
+                }
+                else
+                {
                     _playerBlack.SetHuman(false);
                 }
             }
@@ -41,20 +47,25 @@ namespace Othello
         }
 
         ///  Play one full game of Othello.
-        private void Play() {
-            while (true) {
+        private void Play()
+        {
+            while (true)
+            {
                 InitGame();
                 GameLoop();
                 PrintResult();
-                if (!GetAnswer("\nWould you like to play again")) {
+                if (!GetAnswer("\nWould you like to play again"))
+                {
                     break;
                 }
             }
         }
 
         /// Keep making moves until both players can't make a move anymore.
-        private void GameLoop() {
-            while (_board.CanPlay() && (_playerBlack.CanPlay() || _playerWhite.CanPlay())) {
+        private void GameLoop()
+        {
+            while (_board.CanPlay() && (_playerBlack.CanPlay() || _playerWhite.CanPlay()))
+            {
                 ++_roundsPlayed;
                 Console.WriteLine($"\n=========== ROUND: {_roundsPlayed} ===========");
                 _playerBlack.PlayOneMove(_board);
@@ -64,7 +75,8 @@ namespace Othello
         }
 
         /// Print ending status and winner info.
-        private void PrintResult() {
+        private void PrintResult()
+        {
             Console.WriteLine("\n================================");
             ColorPrint.Write("The game is finished!\n", Color.Green);
             Console.WriteLine("Result:".Pastel(Color.Silver));
@@ -72,45 +84,57 @@ namespace Othello
             Console.WriteLine("");
 
             var winner = _board.Result();
-            if (winner == Disk.Empty) {
+            if (winner == Disk.Empty)
+            {
                 Console.WriteLine("The game ended in a tie...");
-            } else {
+            }
+            else
+            {
                 Console.WriteLine($"The winner is {winner.Name()}!");
             }
         }
 
         /// Print current board and player info.
-        private void PrintStatus() {
+        private void PrintStatus()
+        {
             Console.WriteLine(_playerBlack);
             Console.WriteLine(_playerWhite);
             Console.WriteLine($"\n{_board}");
         }
 
         /// Ask a question with two options, and return bool from user answer.
-        private static bool GetAnswer(string question, string yes = "y", string no = "n") {
+        private static bool GetAnswer(string question, string yes = "y", string no = "n")
+        {
             Console.Write($"{question} ({yes}/{no})? ");
             var ans = Console.ReadLine();
             return !string.IsNullOrEmpty(ans) && string.Equals(ans, yes, StringComparison.CurrentCultureIgnoreCase);
         }
 
         /// Ask and return the desired board size.
-        private static int GetBoardSize() {
-            while (true) {
+        private static int GetBoardSize()
+        {
+            while (true)
+            {
                 Console.Write("Choose board size (default is 8): ");
-                if (int.TryParse(Console.ReadLine(), out var boardSize)) {
+                if (int.TryParse(Console.ReadLine(), out var boardSize))
+                {
                     return Math.Max(4, Math.Min(boardSize, 8));
                 }
                 ColorPrint.Error("give a valid number...");
             }
         }
 
-        public static void Main(string[] args) {
+        public static void Main(string[] args)
+        {
             ColorPrint.Write("OTHELLO GAME - C#\n", Color.Green);
             // try to read board size from command line args
-            if (args.Length == 0 || !int.TryParse(args[0], out var boardSize)) {
+            if (args.Length == 0 || !int.TryParse(args[0], out var boardSize))
+            {
                 boardSize = GetBoardSize();
-            } else {
-               Console.WriteLine($"Using board size: {boardSize}");
+            }
+            else
+            {
+                Console.WriteLine($"Using board size: {boardSize}");
             }
 
             var game = new Othello(boardSize);

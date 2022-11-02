@@ -25,7 +25,8 @@ namespace Othello
             new [] { 1, 1}
         };
 
-        public Board(int size) {
+        public Board(int size)
+        {
             _size = size;
             var numSquares = _size * _size;
             // init game board with empty disks
@@ -46,27 +47,33 @@ namespace Othello
             _emptySquares = new List<Square>(numSquares);
             foreach (var square in _indices
                 .SelectMany(y => _indices, (y, x) => new Square(x, y))
-                .Where(square => GetSquare(square) == Disk.Empty)) {
+                .Where(square => GetSquare(square) == Disk.Empty))
+            {
                 _emptySquares.Add(square);
             }
         }
 
         /// Return true if board contains empty squares
-        public bool CanPlay() {
+        public bool CanPlay()
+        {
             return _emptySquares.Any();
         }
 
         /// Update board for given disk placement.
-        public void PlaceDisc(Move move) {
+        public void PlaceDisc(Move move)
+        {
             var start = move.Square;
-            if (GetSquare(start) != Disk.Empty) {
+            if (GetSquare(start) != Disk.Empty)
+            {
                 throw new ArgumentException($"Trying to place disk to an occupied square {start}!");
             }
             SetSquare(start, move.Disk);
             _emptySquares.Remove(start);
-            foreach (var dir in move.Directions) {
+            foreach (var dir in move.Directions)
+            {
                 var pos = start + dir;
-                while (GetSquare(pos) == move.Disk.OtherDisk()) {
+                while (GetSquare(pos) == move.Disk.OtherDisk())
+                {
                     SetSquare(pos, move.Disk);
                     pos += dir;
                 }
@@ -74,38 +81,47 @@ namespace Othello
         }
 
         /// Returns a list of possible moves for given player.
-        public List<Move> PossibleMoves(Disk color) {
+        public List<Move> PossibleMoves(Disk color)
+        {
             var moves = new List<Move>();
             var other = color.OtherDisk();
-            foreach (var square in _emptySquares) {
+            foreach (var square in _emptySquares)
+            {
                 var value = 0;
                 var directions = new List<Square>();
-                foreach (var dir in StepDirections) {
+                foreach (var dir in StepDirections)
+                {
                     var step = new Square(dir[0], dir[1]);
                     var pos = square + step;
                     // next square in this directions needs to be opponents disk
-                    if (GetSquare(pos) != other) {
+                    if (GetSquare(pos) != other)
+                    {
                         continue;
                     }
                     var steps = 0;
                     // keep stepping forward while opponents disks are found
-                    while (GetSquare(pos) == other) {
+                    while (GetSquare(pos) == other)
+                    {
                         ++steps;
                         pos += step;
                     }
                     // valid move if a line of opponents disks ends in own disk
-                    if (GetSquare(pos) != color) {
+                    if (GetSquare(pos) != color)
+                    {
                         continue;
                     }
                     value += steps;
                     directions.Add(step);
                 }
-                if (value > 0) {
+                if (value > 0)
+                {
                     moves.Add(new Move(square, value, color, directions));
                 }
             }
-            if (moves.Any()) {
-                moves.Sort(delegate(Move left, Move right) {
+            if (moves.Any())
+            {
+                moves.Sort(delegate (Move left, Move right)
+                {
                     var value = right.Value.CompareTo(left.Value);
                     return value == 0 ? left.Square.X.CompareTo(right.Square.X) : value;
                 });
@@ -114,24 +130,29 @@ namespace Othello
         }
 
         /// Print available move coordinates and resulting points gained.
-        public void PrintMoves(IReadOnlyCollection<Move> moves) {
+        public void PrintMoves(IReadOnlyCollection<Move> moves)
+        {
             ColorPrint.Write($"  Possible moves ({moves.Count}):\n", Color.Yellow);
             // convert board from Disk enums to strings
             var boardStr = new List<string>(_board.Count);
             boardStr.AddRange(_board.Select(disk => disk.BoardChar()));
-            foreach (var move in moves) {
+            foreach (var move in moves)
+            {
                 Console.WriteLine($"  {move}");
                 var (x, y) = move.Square;
                 boardStr[y * _size + x] = ColorPrint.Get(move.Value, Color.Yellow);
             }
             // print board with move positions
             Console.Write("   ");
-            foreach (var i in _indices) {
+            foreach (var i in _indices)
+            {
                 Console.Write($" {i}");
             }
-            foreach (var y in _indices) {
+            foreach (var y in _indices)
+            {
                 Console.Write($"\n  {y}");
-                foreach (var x in _indices) {
+                foreach (var x in _indices)
+                {
                     Console.Write($" {boardStr[y * _size + x]}");
                 }
             }
@@ -139,7 +160,8 @@ namespace Othello
         }
 
         /// Print current score for both players.
-        public void PrintScore() {
+        public void PrintScore()
+        {
             var (black, white) = PlayerScores();
             Console.WriteLine("\n" + this);
             Console.Write($"Score: {ColorPrint.Get(black, Disk.Black.DiskColor())} | " +
@@ -147,18 +169,22 @@ namespace Othello
         }
 
         /// Calculates the final score and returns the winning player.
-        public Disk Result() {
+        public Disk Result()
+        {
             var sum = Score();
-            if (sum == 0) {
+            if (sum == 0)
+            {
                 return Disk.Empty;
             }
             return sum > 0 ? Disk.White : Disk.Black;
         }
 
         /// Format game board to string
-        public override string ToString() {
+        public override string ToString()
+        {
             var text = _indices.Aggregate(" ", (current, i) => current + $" {i}");
-            foreach (var y in _indices) {
+            foreach (var y in _indices)
+            {
                 text += $"\n{y}";
                 text = _indices
                     .Select(x => _board[y * _size + x])
@@ -168,16 +194,20 @@ namespace Othello
         }
 
         /// Check that the given coordinates are inside the board
-        private bool CheckCoordinates(int x, int y) {
+        private bool CheckCoordinates(int x, int y)
+        {
             return 0 <= x && x < _size && 0 <= y && y < _size;
         }
 
         /// Count and return the number of black and white disks.
-        private (int, int) PlayerScores() {
+        private (int, int) PlayerScores()
+        {
             var black = 0;
             var white = 0;
-            foreach (var disk in _board) {
-                switch (disk) {
+            foreach (var disk in _board)
+            {
+                switch (disk)
+                {
                     case Disk.White:
                         ++white;
                         break;
@@ -194,23 +224,28 @@ namespace Othello
         }
 
         /// Returns the total score (positive means more white disks and negative means more black disks).
-        private int Score() {
+        private int Score()
+        {
             return _board.Sum(x => Convert.ToInt32(x));
         }
 
         /// Sets the given square to given value.
-        private void SetSquare(Square square, Disk disk) {
+        private void SetSquare(Square square, Disk disk)
+        {
             var (x, y) = square;
-            if (!CheckCoordinates(x, y)) {
+            if (!CheckCoordinates(x, y))
+            {
                 throw new ArgumentException($"Invalid coordinates ({x},{y})!");
             }
             _board[y * _size + x] = disk;
         }
 
         /// Returns the state of the board (empty, white, black) at the given coordinates.
-        private Disk? GetSquare(Square square) {
+        private Disk? GetSquare(Square square)
+        {
             var (x, y) = square;
-            if (!CheckCoordinates(x, y)) {
+            if (!CheckCoordinates(x, y))
+            {
                 return null;
             }
             return _board[y * _size + x];
