@@ -29,6 +29,7 @@ void othello::Player::play_one_move(Board& board)
         board.place_disc(chosen_move);
         board.print_score();
         ++rounds_played;
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     } else {
         can_play_ = false;
         print_color("  No moves available...\n", fmt::color::yellow);
@@ -47,7 +48,8 @@ othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
     std::uniform_int_distribution<int> rand_item(0, static_cast<int>(moves.size() - 1));
     // C++17 std::sample is even more convoluted here :(
     auto move = moves[rand_item(this->rand_gen)];
-    std::cout << "  -> " << move.square << "\n";
+    // std::cout << "  -> " << move.square << "\n";
+    fmt::print("  -> {}\n", move.square);
     return move;
 }
 
@@ -73,16 +75,16 @@ othello::Square othello::Player::get_square()
     std::string input;
     while (true) {
         try {
-            std::cout << "  Give disk position (x,y): ";
+            print("  Give disk position (x,y): ", false);
             std::cin >> input;
             if (input.size() != 3 || input[1] != ',') {
-                throw std::invalid_argument("");
+                throw std::invalid_argument("Invalid coordinates");
             }
             int x = std::stoi(input.substr(0, 1));
             int y = std::stoi(input.substr(2, 1));
             return {x, y};
         } catch (const std::invalid_argument&) {
-            print_error("give coordinates in the form 'x,y'!\n", 2);
+            print_error("Give coordinates in the form 'x,y'\n", 2);
         }
     }
 }
