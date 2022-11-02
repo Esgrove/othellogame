@@ -152,13 +152,13 @@ std::tuple<int, int> othello::Board::player_scores() const
 {
     int black = 0;
     int white = 0;
-    for (auto& disk : board) {
+    for (const auto& disk : board) {
         switch (disk) {
-            case Disk::White:
-                ++white;
-                break;
             case Disk::Black:
                 ++black;
+                break;
+            case Disk::White:
+                ++white;
                 break;
             default:
                 break;
@@ -204,11 +204,14 @@ std::optional<othello::Disk> othello::Board::get_square(const Square& square) co
 std::ostream& operator<<(std::ostream& out, const Board& board)
 {
     out << " ";
+    // Horizontal header indices
     for (int i : board.indices) {
         out << " " << i;
     }
     for (int y : board.indices) {
+        // Vertical header index
         out << "\n" << y;
+        // Output row
         for (int x : board.indices) {
             auto disk = board.board[y * board.size + x];
             out << " " << board_char(disk);

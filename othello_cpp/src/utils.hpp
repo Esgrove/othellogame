@@ -103,7 +103,7 @@ template<typename T> inline void print(T object, bool newline = true, std::ostre
 
 // Formatter specialization:
 // For some reason MSVC needs to have this here before fmt::format is called below in Move.
-// Having it at the end of the file works fine on Clang like it should. Bug in fmt lib? ¯\_(ツ)_/¯
+// Having it at the end of the file works fine on Clang like it should. Bug in fmt lib with C++20? ¯\_(ツ)_/¯
 template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
 
 namespace othello

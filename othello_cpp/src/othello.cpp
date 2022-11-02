@@ -109,9 +109,10 @@ void othello::Othello::print_status() const
 int main(int argc, const char* argv[])
 {
     print_bold("OTHELLO GAME - C++\n", fmt::color::green);
+    std::vector<std::string> arguments(argv, argv + argc);
 
     // Handle 'help' and 'version' arguments
-    for (std::vector<std::string> arguments(argv, argv + argc); const auto& arg : arguments) {
+    for (const auto& arg : arguments) {
         if (arg == "--help" || arg == "-h") {
             auto usage = fmt::format(
                 "{} {} {}\n\n"
@@ -139,8 +140,8 @@ int main(int argc, const char* argv[])
     // Try to read board size from command line args
     int board_size;
     try {
-        if (argc >= 2) {
-            board_size = std::stoi(argv[1]);
+        if (arguments.size() >= 2) {
+            board_size = std::stoi(arguments[1]);
             fmt::print("Using board size: {}\n", board_size);
         } else {
             throw std::invalid_argument("Invalid board size");
