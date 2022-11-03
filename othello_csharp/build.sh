@@ -105,10 +105,10 @@ build_project() {
 
     # Move executable from build dir to project root
     if [ "$PLATFORM" = windows ]; then
-        mv "$(find "$BUILD_DIR" -name Othello.exe)" othello_csharp.exe
+        mv "$(find "$BUILD_DIR" -type f -name Othello.exe)" othello_csharp.exe
         file othello_csharp.exe
     else
-        mv "$(find "$BUILD_DIR" -name Othello)" othello_csharp
+        mv "$(find "$BUILD_DIR" -type f -name Othello)" othello_csharp
         file othello_csharp
     fi
 }
