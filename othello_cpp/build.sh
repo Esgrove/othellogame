@@ -151,10 +151,12 @@ build_project
 
 if [ "$PLATFORM" = windows ]; then
     # Move executable from build dir to project root
-    mv "$(find "$CMAKE_BUILD_DIR" -name othello_cpp.exe)" othello_cpp.exe
+    mv "$(find " $CMAKE_BUILD_DIR" -name othello_cpp.exe)" othello_cpp.exe
+    file othello_cpp.exe
     # Run executable to check it works and print the version info
     ./othello_cpp.exe --version
 else
     mv "$CMAKE_BUILD_DIR/othello_cpp" othello_cpp
+    file othello_cpp
     ./othello_cpp --version
 fi
