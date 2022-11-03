@@ -96,7 +96,7 @@ build_project() {
     dotnet publish --configuration "$BUILD_TYPE" --self-contained true --runtime "$RUNTIME" --output "$BUILD_DIR"
 
     # Move executable from build dir to project root
-    if [ "$PLATFORM" = windows ] && [ "$USE_NINJA_ON_WINDOWS" != true ]; then
+    if [ "$PLATFORM" = windows ]; then
         mv "$(find "$BUILD_DIR" -name Othello.exe)" othello_csharp.exe
         file othello_csharp.exe
     else
