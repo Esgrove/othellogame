@@ -65,7 +65,7 @@ othello::Move othello::Player::get_human_move(const std::vector<Move>& moves)
             // dereference iterator to get value
             return *move_iter;
         }
-        print_error(fmt::format("can't place a {} disk in square {}!\n", disk_string(disk), square), 2);
+        print_error(fmt::format("Can't place a {} disk in square {}!\n", disk_string(disk), square), 2);
     }
 }
 
