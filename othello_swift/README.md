@@ -1,3 +1,3 @@
-# othello_swift
+# Othello Swift
 
 A description of this package.

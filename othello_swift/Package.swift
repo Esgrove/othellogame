@@ -14,9 +14,11 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "othello_swift",
-            dependencies: ["ColorizeSwift"]),
+            dependencies: ["ColorizeSwift"]
+        ),
         .testTarget(
             name: "othello_swiftTests",
-            dependencies: ["othello_swift"]),
+            dependencies: ["othello_swift"]
+        ),
     ]
 )

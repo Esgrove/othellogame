@@ -1,0 +1,12 @@
+# Swift
+--swiftversion 5
+
+# format options
+--allman false
+--elseposition same-line
+--indent 4
+--indentcase true
+--self remove
+
+# rules
+--disable andOperator
