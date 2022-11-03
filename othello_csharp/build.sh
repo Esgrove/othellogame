@@ -38,8 +38,11 @@ init_options() {
     case "$(uname -s)" in
         "Darwin")
             PLATFORM="mac"
-            RUNTIME="osx.10.13-x64"
-            # TODO: osx.11.0-arm64
+            if [ "$(uname -m)" = arm64 ]; then
+                RUNTIME="osx.11.0-arm64"
+            else
+                RUNTIME="osx.10.15-x64"
+            fi
             ;;
         "MINGW"*)
             PLATFORM="windows"
@@ -92,8 +95,13 @@ build_project() {
         print_error_and_exit "dotnet not found in path"
     fi
 
-    print_magenta "Building $BUILD_TYPE"
-    dotnet publish --configuration "$BUILD_TYPE" --self-contained true --runtime "$RUNTIME" --output "$BUILD_DIR"
+    print_magenta "Building $BUILD_TYPE for $RUNTIME"
+    time dotnet publish \
+        --configuration "$BUILD_TYPE" \
+        --output "$BUILD_DIR" \
+        --runtime "$RUNTIME" \
+        --self-contained true \
+        --verbosity minimal
 
     # Move executable from build dir to project root
     if [ "$PLATFORM" = windows ]; then
