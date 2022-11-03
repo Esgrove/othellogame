@@ -54,7 +54,7 @@ init_options() {
     # Get absolute path to repo root
     REPO_PATH=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
     PROJECT_PATH="$REPO_PATH/othello_csharp"
-    BUILD_DIR="$PROJECT_PATH/build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
+    BUILD_DIR="$PROJECT_PATH/dotnet-build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
 }
 
 # Print a message with green color

@@ -1,0 +1,9 @@
+# Build dirs
+/Othello/.vs/
+/Othello/bin/
+/Othello/obj/
+/dotnet-build-*
+
+# Executable
+/othello_csharp
+/othello_csharp.exe
