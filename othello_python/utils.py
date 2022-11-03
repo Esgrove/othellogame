@@ -28,7 +28,7 @@ class Disk(IntEnum):
         return Color.magenta if self.value == self.BLACK else Color.cyan
 
     def other_disk(self):
-        """Returns the opposing disk."""
+        """Return the opposing disk color for this disk."""
         if self.value == self.EMPTY:
             return self.EMPTY
 

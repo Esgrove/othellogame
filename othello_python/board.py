@@ -14,6 +14,7 @@ from utils import Disk, Move, Square
 class Board:
     """Handles game board state and logic."""
 
+    # Store all possible step directions on board
     STEP_DIRECTIONS = (
         (0, -1),
         (0, 1),
