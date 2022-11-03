@@ -37,21 +37,21 @@ impl Player {
     }
 
     pub fn can_play(&self) -> bool {
-        return self.can_play;
+        self.can_play
     }
 
     pub fn type_string(&self) -> String {
-        return match self.human {
+        match self.human {
             true => "human   ",
             false => "computer",
         }
         .parse()
-        .unwrap();
+        .unwrap()
     }
 }
 
 impl fmt::Display for Player {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.color.to_string())
+        write!(f, "{}", self.color)
     }
 }

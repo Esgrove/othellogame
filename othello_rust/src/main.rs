@@ -23,10 +23,7 @@ fn main() {
     let mut board_size: u8 = 0;
     if args.len() == 2 {
         let cmd = &args[1];
-        board_size = match cmd.parse() {
-            Ok(n) => n,
-            Err(_) => 0,
-        };
+        board_size = cmd.parse().unwrap_or(0);
     }
     if board_size <= 0 {
         board_size = othello::Othello::get_board_size();

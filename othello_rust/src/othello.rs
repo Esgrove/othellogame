@@ -106,7 +106,7 @@ impl Othello {
         let mut input = String::new();
         io::stdout().flush().unwrap();
         io::stdin().read_line(&mut input).expect("Input failed");
-        return input.trim().to_lowercase() == yes.to_string();
+        return input.trim().to_lowercase() == *yes;
     }
 
     pub(crate) fn get_board_size() -> u8 {
@@ -116,6 +116,6 @@ impl Othello {
         io::stdin().read_line(&mut input).expect("Input failed");
 
         let board_size: i32 = input.trim().parse().unwrap();
-        return cmp::max(4, cmp::min(board_size, 8)) as u8;
+        cmp::max(4, cmp::min(board_size, 8)) as u8
     }
 }

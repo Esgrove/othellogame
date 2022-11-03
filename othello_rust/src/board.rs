@@ -39,7 +39,7 @@ impl Board {
     }
 
     pub(crate) fn can_play(&mut self) -> bool {
-        return !self.empty_squares.is_empty();
+        !self.empty_squares.is_empty()
     }
 
     // TODO
@@ -54,13 +54,13 @@ impl Board {
         if sum == 0 {
             return Disk::EMPTY;
         }
-        return if sum > 0 { Disk::WHITE } else { Disk::BLACK };
+        if sum > 0 { Disk::WHITE } else { Disk::BLACK }
     }
 
     // TODO
     /// Returns the total score (positive means more white disks and negative means more black disks).
     fn score(&mut self) -> u8 {
-        return 0;
+        0
     }
 }
 
