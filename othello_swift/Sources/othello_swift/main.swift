@@ -1,3 +1,5 @@
+#!/usr/bin/env swift
+
 import ColorizeSwift
 
 print("OTHELLO GAME - SWIFT".bold().green())
