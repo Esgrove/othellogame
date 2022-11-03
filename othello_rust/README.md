@@ -4,26 +4,33 @@
 
 Rust and Cargo make things really easy:
 
-```shell
+```console
 cargo build
 cargo build --release
-```
-
-Run
-
-```shell
 cargo run
-```
-
-Update dependencies
-
-```shell
-cargo update
 ```
 
 ## Format code
 
-```shell
+Using [rustfmt](https://github.com/rust-lang/rustfmt)
+
+```console
 rustup component add rustfmt
 cargo fmt
+```
+
+## Lint
+
+Using [Clippy](https://github.com/rust-lang/rust-clippy)
+
+```console
+rustup component add clippy
+cargo clippy
+cargo clippy --fix
+```
+
+## Update dependencies
+
+```console
+cargo update
 ```
