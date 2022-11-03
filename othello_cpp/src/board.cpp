@@ -17,15 +17,15 @@ namespace othello
 othello::Board::Board(int size) : indices(size), size(size)
 {
     // init game board with empty disks.
-    board.resize(size * size, Disk::Empty);
+    board.resize(size * size, Disk::empty);
 
     // set starting positions
     auto row = size % 2 == 0 ? (size - 1) / 2 : (size - 1) / 2 - 1;
     auto col = size / 2;
-    board[row * size + row] = Disk::Black;
-    board[row * size + col] = Disk::White;
-    board[col * size + row] = Disk::White;
-    board[col * size + col] = Disk::Black;
+    board[row * size + row] = Disk::black;
+    board[row * size + col] = Disk::white;
+    board[col * size + row] = Disk::white;
+    board[col * size + col] = Disk::black;
 
     // index list (0...size) to avoid repeating same range in for loops
     std::iota(indices.begin(), indices.end(), 0);
@@ -33,7 +33,7 @@ othello::Board::Board(int size) : indices(size), size(size)
     // keep track of empty squares on board to avoid checking already filled positions
     for (int y : indices) {
         for (int x : indices) {
-            if (board[y * size + x] == Disk::Empty) {
+            if (board[y * size + x] == Disk::empty) {
                 empty_squares.emplace(Square(x, y));
             }
         }
@@ -43,7 +43,7 @@ othello::Board::Board(int size) : indices(size), size(size)
 /// Return true if board contains empty squares.
 bool othello::Board::can_play() const
 {
-    // std::find(board.begin(), board.end(), Disk::EMPTY) != board.end();
+    // std::find(board.begin(), board.end(), Disk::empty) != board.end();
     return !empty_squares.empty();
 }
 
@@ -54,10 +54,10 @@ bool othello::Board::check_coordinates(const int& x, const int& y) const
 }
 
 /// Update board for given disk placement.
-void othello::Board::place_disc(const othello::Move& move)
+void othello::Board::place_disk(const othello::Move& move)
 {
     auto start = move.square;
-    if (get_square(start) != Disk::Empty) {
+    if (get_square(start) != Disk::empty) {
         throw std::invalid_argument(fmt::format("Trying to place disk to an occupied square {}!", start));
     }
     set_square(start, move.disk);
@@ -143,8 +143,8 @@ void othello::Board::print_score() const
     print(*this);
     fmt::print(
         "Score: {} | {}\n",
-        get_color(std::to_string(black), disk_color(Disk::Black)),
-        get_color(std::to_string(white), disk_color(Disk::White)));
+        get_color(std::to_string(black), disk_color(Disk::black)),
+        get_color(std::to_string(white), disk_color(Disk::white)));
 }
 
 /// Count and return the number of black and white disks.
@@ -154,10 +154,10 @@ std::tuple<int, int> othello::Board::player_scores() const
     int white = 0;
     for (const auto& disk : board) {
         switch (disk) {
-            case Disk::Black:
+            case Disk::black:
                 ++black;
                 break;
-            case Disk::White:
+            case Disk::white:
                 ++white;
                 break;
             default:
@@ -173,9 +173,9 @@ othello::Disk othello::Board::result() const
     using enum othello::Disk;
     int sum = score();
     if (sum == 0) {
-        return Empty;
+        return empty;
     }
-    return sum > 0 ? White : Black;
+    return sum > 0 ? white : black;
 }
 
 /// Returns the total score (positive means more white disks and negative means more black disks).
@@ -185,6 +185,12 @@ int othello::Board::score() const
     return std::accumulate(board.begin(), board.end(), 0, [](int s, Disk d) { return s + static_cast<int>(d); });
 }
 
+/// Returns the state of the board (empty, white, black) at the given coordinates.
+std::optional<othello::Disk> othello::Board::get_square(const Square& square) const
+{
+    return check_coordinates(square.x, square.y) ? std::optional<Disk> {board[square.y * size + square.x]} : std::nullopt;
+}
+
 /// Sets the given square to given value.
 void othello::Board::set_square(const Square& square, Disk disk)
 {
@@ -192,12 +198,6 @@ void othello::Board::set_square(const Square& square, Disk disk)
         throw std::invalid_argument(fmt::format("Invalid coordinates {}!", square));
     }
     board[square.y * size + square.x] = disk;
-}
-
-/// Returns the state of the board (empty, white, black) at the given coordinates.
-std::optional<othello::Disk> othello::Board::get_square(const Square& square) const
-{
-    return check_coordinates(square.x, square.y) ? std::optional<Disk> {board[square.y * size + square.x]} : std::nullopt;
 }
 
 /// Format game board to string

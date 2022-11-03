@@ -51,8 +51,8 @@ void othello::Othello::game_loop()
 void othello::Othello::init_game()
 {
     board = Board(board_size);
-    player_black = Player(Disk::Black);
-    player_white = Player(Disk::White);
+    player_black = Player(Disk::black);
+    player_white = Player(Disk::white);
     rounds_played = 0;
 
     if (get_answer("Would you like to play against the computer")) {
@@ -90,7 +90,7 @@ void othello::Othello::print_result() const
     print("");
 
     Disk winner = board.result();
-    if (winner == Disk::Empty) {
+    if (winner == Disk::empty) {
         print("The game ended in a tie...");
     } else {
         print(fmt::format("The winner is {}!", disk_string(winner)));

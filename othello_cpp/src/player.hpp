@@ -13,7 +13,7 @@ namespace othello
 {
 class Player {
 public:
-    Player() : disk(Disk::Black), human(true) {};
+    Player() : disk(Disk::black), human(true) {};
     explicit Player(Disk disk) : disk(disk), human(true) {};
 
     // nodiscard -> compiler should warn if value returned by function call is not used

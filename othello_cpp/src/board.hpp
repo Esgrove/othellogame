@@ -20,7 +20,7 @@ public:
     Board() : indices(8), size(8) {};
     explicit Board(int size);
 
-    void place_disc(const Move& move);
+    void place_disk(const Move& move);
     void print_score() const;
     void print_moves(const std::vector<Move>& moves);
 

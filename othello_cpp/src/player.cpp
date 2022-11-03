@@ -26,7 +26,7 @@ void othello::Player::play_one_move(Board& board)
             board.print_moves(moves);
         }
         auto chosen_move = human ? get_human_move(moves) : get_computer_move(moves);
-        board.place_disc(chosen_move);
+        board.place_disk(chosen_move);
         board.print_score();
         ++rounds_played;
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));

@@ -16,7 +16,7 @@
 
 namespace othello
 {
-enum class Disk { Black = -1, Empty = 0, White = 1 };
+enum class Disk { black = -1, empty = 0, white = 1 };
 
 // Workaround for custom types without formatter specialization for fmt
 template<typename T> inline std::string to_string(const T& object)
@@ -54,36 +54,38 @@ struct Square {
 inline fmt::color disk_color(const Disk& disk)
 {
     using enum fmt::color;
-    if (disk == Disk::Empty) {
+    if (disk == Disk::empty) {
         return white;
     }
-    return disk == Disk::White ? cyan : magenta;
+    return disk == Disk::white ? cyan : magenta;
 }
 
 /// Returns string character representing board status (black, white, empty).
 inline std::string board_char(const Disk& disk)
 {
-    if (disk == Disk::Empty) {
+    if (disk == Disk::empty) {
         return "_";
     }
-    return get_color(disk == Disk::White ? "W" : "B", disk_color(disk));
+    return get_color(disk == Disk::white ? "W" : "B", disk_color(disk));
 }
 
-/// Returns disk color as a string.
+/// Returns the disk formatted as a colored string.
 inline std::string disk_string(const Disk& disk)
 {
-    std::string text = disk == Disk::Empty ? "empty" : (disk == Disk::White ? "white" : "black");
-    std::transform(text.begin(), text.end(), text.begin(), ::toupper);
-    return get_color(text, disk_color(disk));
+    auto color = disk_color(disk);
+    if (disk == Disk::empty) {
+        return get_color("EMPTY", color);
+    }
+    return get_color(disk == Disk::black ? "BLACK" : "WHITE", color);
 }
 
 /// Returns the opponents disk color.
 inline Disk other_disk(const Disk& disk)
 {
-    if (disk == Disk::Empty) {
-        return Disk::Empty;
+    if (disk == Disk::empty) {
+        return Disk::empty;
     }
-    return disk == Disk::White ? Disk::Black : Disk::White;
+    return disk == Disk::white ? Disk::black : Disk::white;
 }
 
 inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
@@ -110,7 +112,7 @@ namespace othello
 {
 /// Represents one possible disk placement for given disk color.
 struct Move {
-    Move() : disk(Disk::Empty), square(0, 0), value(0) {}
+    Move() : disk(Disk::empty), square(0, 0), value(0) {}
     Move(Square square, int value, Disk disk, std::vector<Square> directions)
         : disk(disk)
         , square(square)
