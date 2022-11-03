@@ -20,11 +20,11 @@ pub(crate) struct Othello {
     player_black: Player,
     player_white: Player,
     rounds_played: u32,
-    board_size: u8,
+    board_size: usize,
 }
 
 impl Othello {
-    pub fn new(size: u8) -> Othello {
+    pub fn new(size: usize) -> Othello {
         Othello {
             board: Board::new(size),
             board_size: size,
@@ -45,6 +45,7 @@ impl Othello {
         }
     }
 
+    // TODO
     fn init_game(&mut self) {
         println!("Board size: {}", self.board_size);
 
@@ -78,7 +79,7 @@ impl Othello {
         }
     }
 
-    fn print_result(&mut self) {
+    fn print_result(&self) {
         println!("{}", "\n================================\n".bold());
         println!("{}", "The game is finished!\n".green());
         println!("Result:");
@@ -94,13 +95,13 @@ impl Othello {
     }
 
     /// Print current board and player info.
-    fn print_status(&mut self) {
+    fn print_status(&self) {
         println!("{}", self.player_black);
         println!("{}\n", self.player_white);
         println!("{}", self.board);
     }
 
-    // Associated (aka static) functions
+    // Associated aka static functions (no self parameter)
     fn get_answer(text: &str, yes: &str, no: &str) -> bool {
         print!("{} ({}/{})? ", text, yes, no);
         let mut input = String::new();
@@ -109,13 +110,12 @@ impl Othello {
         return input.trim().to_lowercase() == *yes;
     }
 
-    pub(crate) fn get_board_size() -> u8 {
+    pub(crate) fn get_board_size() -> usize {
         print!("Choose board size (default is 8): ");
         let mut input = String::new();
         io::stdout().flush().unwrap();
         io::stdin().read_line(&mut input).expect("Input failed");
-
-        let board_size: i32 = input.trim().parse().unwrap();
-        cmp::max(4, cmp::min(board_size, 8)) as u8
+        let board_size: usize = input.trim().parse().unwrap_or(8);
+        cmp::max(4, cmp::min(board_size, 8))
     }
 }

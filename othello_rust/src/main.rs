@@ -20,7 +20,7 @@ mod utils;
 fn main() {
     println!("{}", "OTHELLO GAME - RUST".green());
     let args: Vec<String> = env::args().collect();
-    let mut board_size: u8 = 0;
+    let mut board_size: usize = 0;
     if args.len() == 2 {
         let cmd = &args[1];
         board_size = cmd.parse().unwrap_or(0);

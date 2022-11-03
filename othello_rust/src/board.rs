@@ -7,6 +7,7 @@
 
 extern crate colored;
 
+use colored::Colorize;
 use std::collections::HashSet;
 use std::fmt;
 
@@ -14,53 +15,139 @@ use crate::utils::{Disk, Move, Square};
 
 pub(crate) struct Board {
     board: Vec<Disk>,
-    size: u8,
+    size: usize,
     empty_squares: HashSet<Square>,
-    indices: Vec<u8>,
+    indices: Vec<usize>,
 }
 
 impl Board {
     pub(crate) fn default() -> Board {
-        Board {
-            board: vec![Disk::EMPTY; 64usize],
-            size: 8,
-            empty_squares: HashSet::new(),
-            indices: Vec::from_iter(0..8),
-        }
+        Board::new(8)
     }
 
-    pub(crate) fn new(size: u8) -> Board {
+    pub(crate) fn new(size: usize) -> Board {
+        let board = Self::init_board(size as usize);
+        // index list (0...size) to avoid repeating same range in for loops
+        let indices = Vec::from_iter(0..size);
+        // keep track of empty squares on board to avoid checking already filled positions
+        let mut empty_squares = HashSet::<Square>::new();
+        for y in 0..size {
+            for x in 0..size {
+                if board[y * size + x] == Disk::EMPTY {
+                    empty_squares.insert(Square { x, y });
+                }
+            }
+        }
         Board {
-            board: vec![Disk::EMPTY; (size * size) as usize],
+            board,
             size,
-            empty_squares: HashSet::new(),
-            indices: Vec::from_iter(0..size),
+            empty_squares,
+            indices,
         }
     }
 
-    pub(crate) fn can_play(&mut self) -> bool {
+    pub(crate) fn can_play(&self) -> bool {
         !self.empty_squares.is_empty()
     }
 
+    fn check_coordinates(&self, x: usize, y: usize) -> bool {
+        x >= 0 && x <= self.size && y >= 0 && y <= self.size
+    }
+
     // TODO
-    pub(crate) fn possible_moves(disk: Disk) -> Vec<Move> {
+    pub(crate) fn place_disk(&mut self, player_move: &Move) {
+        let start = &player_move.square;
+        if self.get_square(start) != Disk::EMPTY {
+            panic!("Trying to place disk to an occupied square {}!", start);
+        }
+    }
+
+    // TODO
+    pub(crate) fn possible_moves(&self, disk: Disk) -> Vec<Move> {
         let mut moves = Vec::<Move>::new();
         return moves;
     }
 
-    /// Returns the winner color.
-    pub(crate) fn result(&mut self) -> Disk {
-        let sum = self.score();
-        if sum == 0 {
-            return Disk::EMPTY;
-        }
-        if sum > 0 { Disk::WHITE } else { Disk::BLACK }
+    // TODO
+    pub(crate) fn print_moves(&self, moves: &Vec<Move>) {
+        println!("  Possible plays ({}):\n", moves.len());
+        println!("    ")
     }
 
-    // TODO
+    /// Print current score for both players.
+    pub(crate) fn print_score(&self) {
+        let (black, white) = self.player_scores();
+        println!("\n{}", self);
+        println!(
+            "Score: {} | {}\n",
+            black.to_string().magenta(),
+            white.to_string().cyan()
+        )
+    }
+
+    /// Count and return the number of black and white disks.
+    fn player_scores(&self) -> (u32, u32) {
+        let mut black: u32 = 0;
+        let mut white: u32 = 0;
+        for disk in self.board.iter() {
+            match disk {
+                Disk::BLACK => black += 1,
+                Disk::WHITE => white += 1,
+                _ => {}
+            }
+        }
+        (black, white)
+    }
+
+    /// Returns the winner color.
+    pub(crate) fn result(&self) -> Disk {
+        let sum = self.score();
+        if sum > 0 {
+            Disk::WHITE
+        } else if sum < 0 {
+            Disk::BLACK
+        } else {
+            Disk::EMPTY
+        }
+    }
+
     /// Returns the total score (positive means more white disks and negative means more black disks).
-    fn score(&mut self) -> u8 {
-        0
+    fn score(&self) -> i32 {
+        self.board.iter().map(|d| *d as i32).sum()
+    }
+
+    /// Returns the state of the board (empty, white, black) at the given coordinates.
+    fn get_square(&self, square: &Square) -> Disk {
+        if self.check_coordinates(square.x, square.y) {
+            let disk = self.board[square.y * self.size + square.x];
+            return disk;
+        }
+        panic!("Invalid coordinates");
+    }
+
+    /// Sets the given square to given value.
+    fn set_square(&mut self, square: &Square, disk: &Disk) {
+        if self.check_coordinates(square.x, square.y) {
+            self.board[square.y * self.size + square.x] = *disk;
+        }
+        panic!("Invalid coordinates");
+    }
+
+    fn init_board(size: usize) -> Vec<Disk> {
+        // init game board with empty disks.
+        let mut board = vec![Disk::EMPTY; (size * size) as usize];
+        // set starting positions
+        let row = if size % 2 == 0 {
+            (size - 1) / 2
+        } else {
+            (size - 1) / 2 - 1
+        };
+        let col = size / 2;
+        board[row * size + row] = Disk::BLACK;
+        board[row * size + col] = Disk::WHITE;
+        board[col * size + row] = Disk::WHITE;
+        board[col * size + col] = Disk::BLACK;
+        board
     }
 }
 
