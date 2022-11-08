@@ -11,13 +11,14 @@ use colored::Colorize;
 use std::collections::HashSet;
 use std::fmt;
 
-use crate::utils::{Disk, Move, Square};
+use crate::utils::{Disk, Move, Square, Step};
 
 pub(crate) struct Board {
     board: Vec<Disk>,
     size: usize,
     empty_squares: HashSet<Square>,
     indices: Vec<usize>,
+    step_directions: Vec<Step>,
 }
 
 impl Board {
@@ -43,6 +44,16 @@ impl Board {
             size,
             empty_squares,
             indices,
+            step_directions: vec![
+                Step { x: -1, y: -1 },
+                Step { x: -1, y: 0 },
+                Step { x: -1, y: 1 },
+                Step { x: 0, y: -1 },
+                Step { x: 0, y: 1 },
+                Step { x: 1, y: -1 },
+                Step { x: 1, y: 0 },
+                Step { x: 1, y: 1 },
+            ],
         }
     }
 
@@ -54,21 +65,62 @@ impl Board {
         x >= 0 && x <= self.size && y >= 0 && y <= self.size
     }
 
-    // TODO
+    /// Update board for given disk placement.
     pub(crate) fn place_disk(&mut self, player_move: &Move) {
-        let start = &player_move.square;
-        if self.get_square(start) != Disk::EMPTY {
+        let start = player_move.square;
+        if self.get_square(&start) != Disk::EMPTY {
             panic!("Trying to place disk to an occupied square {}!", start);
+        }
+        self.set_square(&start, &player_move.disk);
+        for step in &player_move.directions {
+            let mut pos = start + *step;
+            while self.get_square(&pos) == player_move.disk.opponent() {
+                self.set_square(&pos, &player_move.disk);
+                pos += *step;
+            }
         }
     }
 
-    // TODO
+    /// Returns a list of possible moves for given player.
     pub(crate) fn possible_moves(&self, disk: Disk) -> Vec<Move> {
         let mut moves = Vec::<Move>::new();
+        let opposing_disk = disk.opponent();
+        for square in &self.empty_squares {
+            let mut value: u32 = 0;
+            let mut directions = Vec::<Step>::new();
+            for step in self.step_directions.iter() {
+                let mut pos = *square + *step;
+                // next square in this direction needs to be opponents disk
+                if self.get_square(&pos) != opposing_disk {
+                    continue;
+                }
+                let mut num_steps: u32 = 0;
+                while self.get_square(&pos) == opposing_disk {
+                    num_steps += 1;
+                    pos += *step;
+                }
+                // valid move if a line of opponents disks ends in own disk
+                if self.get_square(&pos) != opposing_disk {
+                    continue;
+                }
+                value += num_steps;
+                directions.push(*step);
+            }
+            if value > 0 {
+                moves.push(Move {
+                    square: *square,
+                    value,
+                    disk,
+                    directions,
+                });
+            }
+        }
+        if !moves.is_empty() {
+            moves.sort();
+        }
         return moves;
     }
 
-    // TODO
     pub(crate) fn print_moves(&self, moves: &Vec<Move>) {
         println!("  Possible plays ({}):\n", moves.len());
         println!("    ")
@@ -119,7 +171,7 @@ impl Board {
     /// Returns the state of the board (empty, white, black) at the given coordinates.
     fn get_square(&self, square: &Square) -> Disk {
         if self.check_coordinates(square.x, square.y) {
-            let disk = self.board[square.y * self.size + square.x];
+            let disk = self.board[square.y as usize * self.size + square.x as usize];
             return disk;
         }
         panic!("Invalid coordinates");

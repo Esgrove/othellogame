@@ -45,7 +45,6 @@ impl Othello {
         }
     }
 
-    // TODO
     fn init_game(&mut self) {
         println!("Board size: {}", self.board_size);
 

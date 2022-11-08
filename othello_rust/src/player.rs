@@ -41,7 +41,7 @@ impl Player {
         let moves = board.possible_moves(self.color);
         if !moves.is_empty() {
             self.can_play = true;
-            if self.human {
+            if self.human && self.show_helpers {
                 board.print_moves(&moves)
             }
             let chosen_move = if self.human {
@@ -66,7 +66,7 @@ impl Player {
         thread::sleep(Duration::from_millis(
             rand::thread_rng().gen_range(1000..2000),
         ));
-        let chosen_move = moves[rand::thread_rng().gen_range(0..moves.len())];
+        let chosen_move = moves[rand::thread_rng().gen_range(0..moves.len())].clone();
         println!("  -> {}\n", chosen_move);
         chosen_move
     }
@@ -77,7 +77,7 @@ impl Player {
             let square = Self::get_square();
             // check if given square is one of the possible moves
             if let Some(valid_move) = moves.iter().find(|m| m.square == square) {
-                return *valid_move;
+                return valid_move.clone();
             }
             println!(
                 "  Can't place a {} disk in square {}!\n",
