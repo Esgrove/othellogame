@@ -12,11 +12,10 @@ namespace othello
 {
 class Othello {
 public:
-    static int get_board_size();
-
-    explicit Othello(int board_size) : board_size(board_size) {};
-
+    explicit Othello(size_t board_size) : board_size(board_size) {};
     void play();
+
+    static size_t get_board_size();
 
 private:
     static bool get_answer(const std::string& question, const std::string& yes = "y", const std::string& no = "n");
@@ -29,7 +28,7 @@ private:
     Board board;
     Player player_black;
     Player player_white;
-    int board_size;
+    size_t board_size;
     int rounds_played {0};
 };
 

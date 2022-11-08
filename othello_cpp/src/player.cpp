@@ -45,7 +45,7 @@ othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
     auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen));
     std::this_thread::sleep_for(sleep_duration);
 
-    std::uniform_int_distribution<int> rand_item(0, static_cast<int>(moves.size() - 1));
+    std::uniform_int_distribution<size_t> rand_item(0, moves.size() - 1);
     // C++17 std::sample is even more convoluted here :(
     auto move = moves[rand_item(this->rand_gen)];
     // std::cout << "  -> " << move.square << "\n";

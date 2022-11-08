@@ -26,6 +26,29 @@ template<typename T> inline std::string to_string(const T& object)
     return ss.str();
 }
 
+/// Represents one step direction on the board.
+struct Step {
+    Step(int x, int y) : x(x), y(y) {}
+
+    friend std::ostream& operator<<(std::ostream& out, const Step& step)
+    {
+        return out << fmt::format("({},{})", step.x, step.y);
+    }
+
+    bool operator<(const Step& other) const { return x < other.x || (x <= other.x && y < other.y); }
+    bool operator==(const Step& other) const { return x == other.x && y == other.y; }
+    Step operator+(const Step& other) const { return {x + other.x, y + other.y}; }
+    Step& operator+=(const Step& other)
+    {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
+
+    int x;
+    int y;
+};
+
 /// Represents one square location on the board.
 struct Square {
     Square() : x(0), y(0) {}
@@ -40,6 +63,18 @@ struct Square {
     bool operator==(const Square& other) const { return x == other.x && y == other.y; }
     Square operator+(const Square& other) const { return {x + other.x, y + other.y}; }
     Square& operator+=(const Square& other)
+    {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
+
+    Square operator+(const Step& other) const
+    {
+        return {x + other.x, y + other.y};
+    }
+
+    Square& operator+=(const Step& other)
     {
         x += other.x;
         y += other.y;
@@ -80,12 +115,18 @@ inline std::string disk_string(const Disk& disk)
 }
 
 /// Returns the opponents disk color.
-inline Disk other_disk(const Disk& disk)
+inline Disk opposing_disk(const Disk& disk)
 {
-    if (disk == Disk::empty) {
-        return Disk::empty;
+    switch (disk) {
+        case Disk::white:
+            return Disk::black;
+        case Disk::black:
+            return Disk::white;
+        case Disk::empty:
+            [[fallthrough]];
+        default:
+            return Disk::empty;
     }
-    return disk == Disk::white ? Disk::black : Disk::white;
 }
 
 inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
@@ -113,7 +154,7 @@ namespace othello
 /// Represents one possible disk placement for given disk color.
 struct Move {
     Move() : disk(Disk::empty), square(0, 0), value(0) {}
-    Move(Square square, int value, Disk disk, std::vector<Square> directions)
+    Move(Square square, Disk disk, unsigned int value, std::vector<Step> directions)
         : disk(disk)
         , square(square)
         , directions(std::move(directions))
@@ -133,8 +174,8 @@ struct Move {
 
     Disk disk;
     Square square;
-    std::vector<Square> directions;
-    int value;
+    std::vector<Step> directions;
+    unsigned int value;
 };
 }  // namespace othello
 

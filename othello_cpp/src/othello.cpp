@@ -27,12 +27,12 @@ bool othello::Othello::get_answer(const std::string& question, const std::string
 }
 
 /// Ask the desired board size from user.
-int othello::Othello::get_board_size()
+size_t othello::Othello::get_board_size()
 {
     print("Choose board size (default is 8): ", false);
     int size;
     std::cin >> size;
-    return std::clamp(size, 4, 8);
+    return static_cast<size_t>(std::clamp(size, 4, 8));
 }
 
 /// Keep making moves until both players can't make a move anymore.
@@ -138,7 +138,7 @@ int main(int argc, const char* argv[])
     }
 
     // Try to read board size from command line args
-    int board_size;
+    size_t board_size;
     try {
         if (arguments.size() >= 2) {
             board_size = std::stoi(arguments[1]);

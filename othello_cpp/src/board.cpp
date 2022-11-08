@@ -14,7 +14,7 @@
 
 namespace othello
 {
-othello::Board::Board(int size) : indices(size), size(size)
+othello::Board::Board(size_t size) : indices(size), size(size)
 {
     // init game board with empty disks.
     board.resize(size * size, Disk::empty);
@@ -31,8 +31,8 @@ othello::Board::Board(int size) : indices(size), size(size)
     std::iota(indices.begin(), indices.end(), 0);
 
     // keep track of empty squares on board to avoid checking already filled positions
-    for (int y : indices) {
-        for (int x : indices) {
+    for (auto y : indices) {
+        for (auto x : indices) {
             if (board[y * size + x] == Disk::empty) {
                 empty_squares.emplace(Square(x, y));
             }
@@ -50,7 +50,7 @@ bool othello::Board::can_play() const
 /// Check that the given coordinates are inside the board.
 bool othello::Board::check_coordinates(const int& x, const int& y) const
 {
-    return 0 <= x && x < size && 0 <= y && y < size;
+    return 0 <= x && x < static_cast<int>(size) && 0 <= y && y < static_cast<int>(size);
 }
 
 /// Update board for given disk placement.
@@ -62,9 +62,9 @@ void othello::Board::place_disk(const othello::Move& move)
     }
     set_square(start, move.disk);
     empty_squares.erase(start);
-    for (auto& step : move.directions) {
+    for (const auto& step : move.directions) {
         Square pos = start + step;
-        while (get_square(pos) == other_disk(move.disk)) {
+        while (get_square(pos) == opposing_disk(move.disk)) {
             set_square(pos, move.disk);
             pos += step;
         }
@@ -75,32 +75,31 @@ void othello::Board::place_disk(const othello::Move& move)
 std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
 {
     std::vector<Move> moves;
-    Disk other = other_disk(disk);
+    Disk other = opposing_disk(disk);
     for (const Square& square : empty_squares) {
         int value {0};
-        std::vector<Square> directions;
-        for (auto& dir : step_directions) {
-            Square step {Square(dir.first, dir.second)};
+        std::vector<Step> directions;
+        for (const auto& step : step_directions) {
             Square pos {square + step};
             // next square in this direction needs to be opponents disk
             if (get_square(pos) != other) {
                 continue;
             }
-            int steps {0};
+            int num_steps {0};
             // keep stepping forward while opponents disks are found
             while (get_square(pos) == other) {
-                ++steps;
+                ++num_steps;
                 pos += step;
             }
             // valid move if a line of opponents disks ends in own disk
             if (get_square(pos) != disk) {
                 continue;
             }
-            value += steps;
+            value += num_steps;
             directions.emplace_back(step);
         }
         if (value > 0) {
-            moves.emplace_back(square, value, disk, directions);
+            moves.emplace_back(square, disk, value, directions);
         }
     }
     if (!moves.empty()) {
@@ -123,12 +122,12 @@ void othello::Board::print_moves(const std::vector<Move>& moves)
     }
     // print board with move positions
     print("   ", false);
-    for (int i : indices) {
+    for (const auto i : indices) {
         fmt::print(" {}", i);
     }
-    for (int y : indices) {
+    for (const auto y : indices) {
         fmt::print("\n  {}", y);
-        for (int x : indices) {
+        for (const auto x : indices) {
             fmt::print(" {}", board_str[y * size + x]);
         }
     }
@@ -205,14 +204,14 @@ std::ostream& operator<<(std::ostream& out, const Board& board)
 {
     out << " ";
     // Horizontal header indices
-    for (int i : board.indices) {
+    for (const auto i : board.indices) {
         out << " " << i;
     }
-    for (int y : board.indices) {
+    for (const auto y : board.indices) {
         // Vertical header index
         out << "\n" << y;
         // Output row
-        for (int x : board.indices) {
+        for (const auto x : board.indices) {
             auto disk = board.board[y * board.size + x];
             out << " " << board_char(disk);
         }
