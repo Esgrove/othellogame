@@ -124,9 +124,10 @@ impl Board {
         return moves;
     }
 
+    // TODO
     pub(crate) fn print_moves(&self, moves: &Vec<Move>) {
         println!("  Possible plays ({}):\n", moves.len());
-        println!("    ")
+        println!("    ");
     }
 
     /// Print current score for both players.
