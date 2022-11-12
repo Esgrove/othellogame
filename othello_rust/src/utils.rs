@@ -18,8 +18,8 @@ pub(crate) enum Disk {
 
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
 pub(crate) struct Square {
-    pub(crate) x: usize,
-    pub(crate) y: usize,
+    pub(crate) x: isize,
+    pub(crate) y: isize,
 }
 
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
@@ -108,8 +108,8 @@ impl Add<Step> for Square {
 
     fn add(self, other: Step) -> Self {
         Self {
-            x: self.x + other.x as usize,
-            y: self.y + other.y as usize,
+            x: self.x + other.x,
+            y: self.y + other.y,
         }
     }
 }
@@ -125,11 +125,9 @@ impl AddAssign for Square {
 
 impl AddAssign<Step> for Square {
     fn add_assign(&mut self, other: Step) {
-        let x = self.x as isize + other.x;
-        let y = self.y as isize + other.y;
         *self = Self {
-            x: x as usize,
-            y: y as usize,
+            x: self.x + other.x,
+            y: self.y + other.y,
         }
     }
 }

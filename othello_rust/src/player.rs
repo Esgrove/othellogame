@@ -95,13 +95,10 @@ impl Player {
             let values: Vec<&str> = input.trim().split(',').collect();
             // TODO: nicer error handling
             if values.len() == 2 {
-                let x: i32 = values[0].parse().unwrap_or(-1);
-                let y: i32 = values[1].parse().unwrap_or(-1);
+                let x: isize = values[0].parse().unwrap_or(-1);
+                let y: isize = values[1].parse().unwrap_or(-1);
                 if x >= 0 && y >= 0 {
-                    return Square {
-                        x: x as usize,
-                        y: y as usize,
-                    };
+                    return Square { x, y };
                 }
             }
             println!("{}", "  Give coordinates in the form 'x,y'\n".red())

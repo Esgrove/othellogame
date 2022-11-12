@@ -47,20 +47,17 @@ impl Othello {
 
     fn init_game(&mut self) {
         println!("Board size: {}", self.board_size);
+        self.rounds_played = 0;
 
         if Othello::get_answer("Would you like to play against the computer", "y", "n") {
             if Othello::get_answer("Would you like to play as black or white", "b", "w") {
-                println!("{}", "black".cyan());
+                self.player_white.set_human(false);
             } else {
-                println!("{}", "white".magenta());
+                self.player_black.set_human(false);
             }
         }
-
-        println!(
-            "{}\n{}\n{}",
-            self.board, self.player_black, self.player_white
-        );
-        self.rounds_played = 0;
+        println!("{}", "\nPlayers:".bold());
+        self.print_status();
     }
 
     fn game_loop(&mut self) {

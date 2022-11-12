@@ -27,7 +27,7 @@ impl Board {
     }
 
     pub(crate) fn new(size: usize) -> Board {
-        let board = Self::init_board(size as usize);
+        let board = Self::init_board(size);
         // index list (0...size) to avoid repeating same range in for loops
         let indices = Vec::from_iter(0..size);
         // keep track of empty squares on board to avoid checking already filled positions
@@ -35,7 +35,10 @@ impl Board {
         for y in 0..size {
             for x in 0..size {
                 if board[y * size + x] == Disk::EMPTY {
-                    empty_squares.insert(Square { x, y });
+                    empty_squares.insert(Square {
+                        x: x as isize,
+                        y: y as isize,
+                    });
                 }
             }
         }
@@ -61,8 +64,8 @@ impl Board {
         !self.empty_squares.is_empty()
     }
 
-    fn check_coordinates(&self, x: usize, y: usize) -> bool {
-        x >= 0 && x <= self.size && y >= 0 && y <= self.size
+    fn check_coordinates(&self, x: isize, y: isize) -> bool {
+        x >= 0 && x <= self.size as isize && y >= 0 && y <= self.size as isize
     }
 
     /// Update board for given disk placement.
@@ -180,7 +183,7 @@ impl Board {
     /// Sets the given square to given value.
     fn set_square(&mut self, square: &Square, disk: &Disk) {
         if self.check_coordinates(square.x, square.y) {
-            self.board[square.y * self.size + square.x] = *disk;
+            self.board[square.y as usize * self.size + square.x as usize] = *disk;
         }
         panic!("Invalid coordinates");
     }
