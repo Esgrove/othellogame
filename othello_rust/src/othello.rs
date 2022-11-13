@@ -73,7 +73,7 @@ impl Othello {
     }
 
     fn print_result(&self) {
-        println!("{}", "\n================================\n".bold());
+        println!("{}", "\n================================".bold());
         println!("{}", "The game is finished!\n".green());
         println!("Result:");
         self.print_status();
