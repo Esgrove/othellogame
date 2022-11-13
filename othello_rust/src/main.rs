@@ -18,6 +18,8 @@ mod player;
 mod utils;
 
 fn main() {
+    // Uncomment to display backtrace in case of a panic
+    env::set_var("RUST_BACKTRACE", "1");
     println!("{}", "OTHELLO GAME - RUST".green());
     let args: Vec<String> = env::args().collect();
     let mut board_size: usize = 0;
