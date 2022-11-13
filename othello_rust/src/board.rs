@@ -7,7 +7,7 @@
 
 extern crate colored;
 
-use colored::Colorize;
+use colored::{ColoredString, Colorize};
 use std::collections::HashSet;
 use std::fmt;
 
@@ -22,10 +22,6 @@ pub(crate) struct Board {
 }
 
 impl Board {
-    pub(crate) fn default() -> Board {
-        Board::new(8)
-    }
-
     pub(crate) fn new(size: usize) -> Board {
         let board = Self::init_board(size);
         // index list (0...size) to avoid repeating same range in for loops
@@ -60,10 +56,12 @@ impl Board {
         }
     }
 
+    /// Return true if board contains empty squares.
     pub(crate) fn can_play(&self) -> bool {
         !self.empty_squares.is_empty()
     }
 
+    /// Check that the given coordinates are valid (inside the board).
     fn check_coordinates(&self, x: isize, y: isize) -> bool {
         x >= 0 && x <= self.size as isize && y >= 0 && y <= self.size as isize
     }
@@ -71,13 +69,17 @@ impl Board {
     /// Update board for given disk placement.
     pub(crate) fn place_disk(&mut self, player_move: &Move) {
         let start = player_move.square;
-        if self.get_square(&start) != Disk::EMPTY {
+        if self
+            .get_square(&start)
+            .expect(&*format!("Invalid coordinates: {}", start))
+            != Disk::EMPTY
+        {
             panic!("Trying to place disk to an occupied square {}!", start);
         }
         self.set_square(&start, &player_move.disk);
         for step in &player_move.directions {
             let mut pos = start + *step;
-            while self.get_square(&pos) == player_move.disk.opponent() {
+            while self.get_square(&pos).unwrap_or(Disk::EMPTY) == player_move.disk.opponent() {
                 self.set_square(&pos, &player_move.disk);
                 pos += *step;
             }
@@ -94,20 +96,19 @@ impl Board {
             for step in self.step_directions.iter() {
                 let mut pos = *square + *step;
                 // next square in this direction needs to be opponents disk
-                if self.get_square(&pos) != opposing_disk {
+                if self.get_square(&pos).unwrap_or(Disk::EMPTY) != opposing_disk {
                     continue;
                 }
                 let mut num_steps: u32 = 0;
-                while self.get_square(&pos) == opposing_disk {
+                while self.get_square(&pos).unwrap_or(Disk::EMPTY) == opposing_disk {
                     num_steps += 1;
                     pos += *step;
                 }
-                // valid move if a line of opponents disks ends in own disk
-                if self.get_square(&pos) != opposing_disk {
-                    continue;
+                // valid move only if a line of opponents disks ends in own disk
+                if self.get_square(&pos).unwrap_or(Disk::EMPTY) == disk {
+                    value += num_steps;
+                    directions.push(*step);
                 }
-                value += num_steps;
-                directions.push(*step);
             }
             if value > 0 {
                 moves.push(Move {
@@ -124,10 +125,27 @@ impl Board {
         return moves;
     }
 
-    // TODO
+    /// Print board with available move coordinates and the resulting points gained.
     pub(crate) fn print_moves(&self, moves: &Vec<Move>) {
-        println!("  Possible plays ({}):\n", moves.len());
-        println!("    ");
+        println!("{}", format!("  Possible plays ({}):\n", moves.len()).yellow());
+        // Convert board from Disk enums to strings
+        let mut formatted_board: Vec<ColoredString> = self.board.iter().map(|&d| d.board_char()).collect();
+        // Add possible moves to board
+        for possible_move in moves {
+            let index = possible_move.square.y as usize * self.size + possible_move.square.x as usize;
+            formatted_board[index] = possible_move.value.to_string().yellow();
+        }
+        // Print board with move positions
+        print!("   ");
+        for i in 0..self.size {
+            print!(" {}", i.to_string().bold());
+        }
+        for y in 0..self.size {
+            print!("\n  {}", y.to_string().bold());
+            for x in 0..self.size {
+                print!(" {}", formatted_board[y * self.size + x]);
+            }
+        }
     }
 
     /// Print current score for both players.
@@ -173,12 +191,12 @@ impl Board {
     }
 
     /// Returns the state of the board (empty, white, black) at the given coordinates.
-    fn get_square(&self, square: &Square) -> Disk {
+    fn get_square(&self, square: &Square) -> Option<Disk> {
         if self.check_coordinates(square.x, square.y) {
             let disk = self.board[square.y as usize * self.size + square.x as usize];
-            return disk;
+            return Some(disk);
         }
-        panic!("Invalid coordinates");
+        None
     }
 
     /// Sets the given square to given value.
@@ -209,6 +227,18 @@ impl Board {
 
 impl fmt::Display for Board {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Board: {}", self.size)
+        // Horizontal header indices
+        let column_indices: Vec<String> = self.indices.iter().map(|&i| i.to_string()).collect();
+        let mut text: String = format!("  {}", column_indices.join(" ").bold());
+        for y in 0..self.size {
+            // Vertical header index
+            text += &*format!("\n{}", y.to_string().bold());
+            // Output row values
+            let row = &self.board[(y * self.size)..(y * self.size + self.size)];
+            for disk in row {
+                text += &*format!(" {}", disk.board_char());
+            }
+        }
+        write!(f, "{}", text)
     }
 }

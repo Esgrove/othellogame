@@ -46,7 +46,6 @@ impl Othello {
     }
 
     fn init_game(&mut self) {
-        println!("Board size: {}", self.board_size);
         self.rounds_played = 0;
 
         if Othello::get_answer("Would you like to play against the computer", "y", "n") {
@@ -61,9 +60,7 @@ impl Othello {
     }
 
     fn game_loop(&mut self) {
-        while self.board.can_play()
-            && (self.player_black.can_play() || self.player_white.can_play())
-        {
+        while self.board.can_play() && (self.player_black.can_play() || self.player_white.can_play()) {
             self.rounds_played += 1;
             println!(
                 "{}",

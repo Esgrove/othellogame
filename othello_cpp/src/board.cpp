@@ -91,12 +91,11 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
                 ++num_steps;
                 pos += step;
             }
-            // valid move if a line of opponents disks ends in own disk
-            if (get_square(pos) != disk) {
-                continue;
+            // valid move only if a line of opponents disks ends in own disk
+            if (get_square(pos) == disk) {
+                value += num_steps;
+                directions.emplace_back(step);
             }
-            value += num_steps;
-            directions.emplace_back(step);
         }
         if (value > 0) {
             moves.emplace_back(square, disk, value, directions);
@@ -108,19 +107,20 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
     return moves;
 }
 
-/// Print available move coordinates and resulting points gained.
+/// Print board with available move coordinates and the resulting points gained.
 void othello::Board::print_moves(const std::vector<Move>& moves)
 {
     fmt::print(fmt::fg(fmt::color::yellow), "  Possible plays ({}):\n", std::to_string(moves.size()));
-    // convert board from Disk enums to strings
+    // Convert board from Disk enums to strings
     std::vector<std::string> board_str(board.size());
     std::transform(
         board.begin(), board.end(), board_str.begin(), [&](Disk disk) -> std::string { return board_char(disk); });
+    // Add possible moves
     for (const Move& move : moves) {
         fmt::print("  {}\n", move);
         board_str[move.square.y * size + move.square.x] = get_color(move.value, fmt::color::yellow);
     }
-    // print board with move positions
+    // Print board with move positions
     print("   ", false);
     for (const auto i : indices) {
         fmt::print(" {}", i);
@@ -204,6 +204,7 @@ std::ostream& operator<<(std::ostream& out, const Board& board)
 {
     out << " ";
     // Horizontal header indices
+    // TODO: use fmt::join here
     for (const auto i : board.indices) {
         out << " " << i;
     }
