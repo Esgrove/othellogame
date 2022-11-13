@@ -41,7 +41,7 @@ impl Disk {
     pub(crate) fn board_char(&self) -> ColoredString {
         match self {
             Disk::BLACK => "B".magenta(),
-            Disk::EMPTY => "_".normal(),
+            Disk::EMPTY => "_".white(),
             Disk::WHITE => "W".cyan(),
         }
     }
@@ -59,8 +59,8 @@ impl Disk {
     pub(crate) fn disk_string(&self) -> ColoredString {
         match self {
             Disk::BLACK => "BLACK".magenta(),
-            Disk::EMPTY => "EMPTY".normal(),
-            Disk::WHITE => "NORMAL".cyan(),
+            Disk::EMPTY => "EMPTY".white(),
+            Disk::WHITE => "WHITE".cyan(),
         }
     }
 
@@ -157,8 +157,6 @@ impl PartialOrd for Move {
 
 impl Ord for Move {
     fn cmp(&self, other: &Self) -> Ordering {
-        self.square
-            .cmp(&other.square)
-            .then(self.value.cmp(&other.value))
+        self.square.cmp(&other.square).then(self.value.cmp(&other.value))
     }
 }
