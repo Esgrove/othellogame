@@ -17,18 +17,20 @@ class Othello:
     """Play Othello CLI game."""
 
     def __init__(self, board_size: int):
-        self.board = None
-        self.player_black = None
-        self.player_white = None
+        self.board = Board(board_size)
+        self.player_black = Player(Disk.BLACK)
+        self.player_white = Player(Disk.WHITE)
         self.rounds_played = 0
+        self.games_played = 0
         self.size = board_size
 
     def init_game(self):
         """Initialize game board and players for a new game."""
-        self.board = Board(self.size)
-        self.player_black = Player(Disk.BLACK)
-        self.player_white = Player(Disk.WHITE)
-        self.rounds_played = 0
+        if self.games_played > 0:
+            self.board = Board(self.size)
+            self.player_black.reset()
+            self.player_white.reset()
+            self.rounds_played = 0
 
         if self.get_answer("Would you like to play against the computer"):
             if self.get_answer("Would you like to play as black or white", yes="b", no="w"):
@@ -55,6 +57,8 @@ class Othello:
             self.player_black.play_one_move(self.board)
             print("-------------------------------")
             self.player_white.play_one_move(self.board)
+
+        self.games_played += 1
 
     def print_result(self):
         """Print ending status and winner info."""
@@ -88,22 +92,26 @@ class Othello:
         while True:
             try:
                 ans = int(input("Choose board board_size (default is 8): "))
-                return clamp(ans, 4, 8)
+                return clamp(ans, 4, 16)
             except ValueError:
                 print_error("give a number...")
 
 
 if __name__ == "__main__":
     print_bold("OTHELLO GAME - Python", Color.green)
+    args = sys.argv[1:]
     try:
-        try:
-            # try to read board size from command line args
-            size = int(sys.argv[1])
-            print(f"Using board size: {size}")
-        except (ValueError, IndexError):
-            size = Othello.get_board_size()
+        # try to read board size from command line args
+        board_size = int(args[0])
+        if board_size < 4 or board_size > 16:
+            print_error("Unsupported board size: {}", board_size)
+            sys.exit(1)
+        print(f"Using board size: {board_size}")
+    except (ValueError, IndexError):
+        board_size = Othello.get_board_size()
 
-        game = Othello(size)
+    try:
+        game = Othello(board_size)
         game.play()
     except KeyboardInterrupt:
-        sys.exit("\nGame stopped...")
+        sys.exit("\nGame aborted...")

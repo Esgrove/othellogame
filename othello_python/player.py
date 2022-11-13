@@ -14,7 +14,7 @@ from utils import Disk, Move, Square
 
 
 class Player:
-    """Defines one player."""
+    """Defines one player (human or computer)."""
 
     def __init__(self, disk: Disk, human=True, show_helpers=True):
         self._can_play = True
@@ -39,6 +39,7 @@ class Player:
             board.place_disk(chosen_move)
             board.print_score()
             self._rounds_played += 1
+            time.sleep(1)
         else:
             self._can_play = False
             print_color("  No moves available...", Color.yellow)
@@ -46,6 +47,11 @@ class Player:
     def set_human(self, is_human: bool):
         """Set player to be controlled by human or computer."""
         self._human = is_human
+
+    def reset(self):
+        """Reset player status for a new game."""
+        self._can_play = True
+        self._rounds_played = 0
 
     @staticmethod
     def _get_computer_move(moves: List[Move]) -> Move:
@@ -66,7 +72,7 @@ class Player:
             if move:
                 return move
 
-            print_error(f"can't place a {str(self._disk)} disk in square {square}!", indent=2)
+            print_error(f"can't place a {self._disk} disk in square {square}!", indent=2)
 
     @staticmethod
     def _get_square() -> Square:
@@ -74,12 +80,10 @@ class Player:
         while True:
             try:
                 pos = input("  Give disk position (x,y): ")
-                coordinates = [int(x.strip()) for x in pos.split(",") if x.strip()]
-                if len(coordinates) != 2:
-                    raise ValueError
-                return Square(coordinates[0], coordinates[1])
+                x, y = [int(x) for x in pos.split(",") if x.strip()]
+                return Square(x, y)
             except ValueError:
-                print_error("give coordinates in the form 'x,y'!", indent=2)
+                print_error("Give coordinates in the form 'x,y'!", indent=2)
 
     def _type_string(self) -> str:
         return "Human   " if self._human else "Computer"

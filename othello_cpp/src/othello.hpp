@@ -12,7 +12,7 @@ namespace othello
 {
 class Othello {
 public:
-    explicit Othello(size_t board_size) : board_size(board_size) {};
+    explicit Othello(size_t board_size);
     void play();
 
     static size_t get_board_size();
@@ -26,10 +26,11 @@ private:
     void print_status() const;
 
     Board board;
-    Player player_black;
-    Player player_white;
+    Player player_black {Player(Disk::black)};
+    Player player_white {Player(Disk::white)};
     size_t board_size;
     int rounds_played {0};
+    int games_played {0};
 };
 
 }  // namespace othello

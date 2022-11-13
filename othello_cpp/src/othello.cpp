@@ -13,47 +13,17 @@
 #include <algorithm>  // clamp, transform
 #include <iostream>
 
-/// Read user input for yes/no question and return bool.
-bool othello::Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no)
-{
-    // fmt lib enables nice (modern) string formatting instead of having to use the horrible stringstream
-    // std::cout << question << " (" << yes << "/" << no << ")? ";
-    fmt::print("{} ({}/{})? ", question, yes, no);
-    std::string input;
-    std::cin >> input;
-    // TODO: replace with std::ranges:transform
-    std::transform(input.begin(), input.end(), input.begin(), ::tolower);
-    return input == yes;
-}
-
-/// Ask the desired board size from user.
-size_t othello::Othello::get_board_size()
-{
-    print("Choose board size (default is 8): ", false);
-    int size;
-    std::cin >> size;
-    return static_cast<size_t>(std::clamp(size, 4, 8));
-}
-
-/// Keep making moves until both players can't make a move anymore.
-void othello::Othello::game_loop()
-{
-    while (board.can_play() && (player_black.can_play() || player_white.can_play())) {
-        ++rounds_played;
-        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
-        player_black.play_one_move(board);
-        print("--------------------------------");
-        player_white.play_one_move(board);
-    }
-}
+othello::Othello::Othello(size_t board_size) : board(Board(board_size)), board_size(board_size) {}
 
 /// Initialize game board and players for a new game.
 void othello::Othello::init_game()
 {
-    board = Board(board_size);
-    player_black = Player(Disk::black);
-    player_white = Player(Disk::white);
-    rounds_played = 0;
+    if (games_played > 0) {
+        board = Board(this->board_size);
+        player_black.reset();
+        player_white.reset();
+        rounds_played = 0;
+    }
 
     if (get_answer("Would you like to play against the computer")) {
         if (get_answer("Would you like to play as black or white", "b", "w")) {
@@ -80,6 +50,19 @@ void othello::Othello::play()
     }
 }
 
+/// Keep making moves until both players can't make a move anymore.
+void othello::Othello::game_loop()
+{
+    while (board.can_play() && (player_black.can_play() || player_white.can_play())) {
+        ++rounds_played;
+        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
+        player_black.play_one_move(board);
+        print("--------------------------------");
+        player_white.play_one_move(board);
+    }
+    ++games_played;
+}
+
 /// Print ending status and winner info.
 void othello::Othello::print_result() const
 {
@@ -104,6 +87,28 @@ void othello::Othello::print_status() const
     print(player_white);
     print("");
     print(board);
+}
+
+/// Read user input for yes/no question and return bool.
+bool othello::Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no)
+{
+    // fmt lib enables nice (modern) string formatting instead of having to use the horrible stringstream
+    // std::cout << question << " (" << yes << "/" << no << ")? ";
+    fmt::print("{} ({}/{})? ", question, yes, no);
+    std::string input;
+    std::cin >> input;
+    // TODO: replace with std::ranges:transform
+    std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+    return input == yes;
+}
+
+/// Ask the desired board size from user.
+size_t othello::Othello::get_board_size()
+{
+    print("Choose board size (default is 8): ", false);
+    int size;
+    std::cin >> size;
+    return static_cast<size_t>(std::clamp(size, 4, 16));
 }
 
 int main(int argc, const char* argv[])
@@ -142,6 +147,10 @@ int main(int argc, const char* argv[])
     try {
         if (arguments.size() >= 2) {
             board_size = std::stoi(arguments[1]);
+            if (board_size < 4 || board_size > 16) {
+                print_error(fmt::format("Unsupported board size: {}", board_size));
+                return 1;
+            }
             fmt::print("Using board size: {}\n", board_size);
         } else {
             throw std::invalid_argument("Invalid board size");

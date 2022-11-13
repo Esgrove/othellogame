@@ -17,7 +17,6 @@ namespace othello
 {
 class Board {
 public:
-    Board() : indices(8), size(8) {};
     explicit Board(size_t size);
 
     void place_disk(const Move& move);
