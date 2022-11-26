@@ -22,12 +22,12 @@ class Othello:
         self.player_white = Player(Disk.WHITE)
         self.rounds_played = 0
         self.games_played = 0
-        self.size = board_size
+        self.board_size = board_size
 
     def init_game(self):
         """Initialize game board and players for a new game."""
         if self.games_played > 0:
-            self.board = Board(self.size)
+            self.board = Board(self.board_size)
             self.player_black.reset()
             self.player_white.reset()
             self.rounds_played = 0
@@ -72,7 +72,7 @@ class Othello:
         if winner == Disk.EMPTY:
             print_bold("The game ended in a tie...")
         else:
-            print_bold(f"The winner is {str(winner)}!")
+            print_bold(f"The winner is {winner}!")
 
     def print_status(self):
         """Print current board and player info."""

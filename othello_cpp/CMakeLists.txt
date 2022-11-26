@@ -71,9 +71,7 @@ if(APPLE)
     set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
 endif()
 
-include_directories(
-    src
-)
+include_directories(src)
 
 add_executable(othello_cpp
     src/board.cpp
