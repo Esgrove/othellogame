@@ -72,7 +72,7 @@ class Square:
 
     def __radd__(self, other):
         # other + self
-        return self + other
+        return other + self
 
     def __eq__(self, other):
         return (self.x, self.y) == (other.x, other.y)
