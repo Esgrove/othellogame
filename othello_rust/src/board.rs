@@ -63,7 +63,7 @@ impl Board {
 
     /// Check that the given coordinates are valid (inside the board).
     fn check_coordinates(&self, x: isize, y: isize) -> bool {
-        x >= 0 && x <= self.size as isize && y >= 0 && y <= self.size as isize
+        x >= 0 && x < self.size as isize && y >= 0 && y < self.size as isize
     }
 
     /// Update board for given disk placement.
