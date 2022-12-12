@@ -2,6 +2,6 @@ colorama==0.4.6
 pytest==7.2.0
 
 # Dev dependencies
-black==22.10.0
+black==22.12.0
 flake8==6.0.0
 isort==5.10.1
