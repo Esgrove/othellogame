@@ -112,13 +112,13 @@ void othello::Board::print_moves(const std::vector<Move>& moves)
 {
     fmt::print(fmt::fg(fmt::color::yellow), "  Possible plays ({}):\n", std::to_string(moves.size()));
     // Convert board from Disk enums to strings
-    std::vector<std::string> board_str(board.size());
+    std::vector<std::string> formatted_board(board.size());
     std::transform(
-        board.begin(), board.end(), board_str.begin(), [&](Disk disk) -> std::string { return board_char(disk); });
+        board.begin(), board.end(), formatted_board.begin(), [&](Disk disk) -> std::string { return board_char(disk); });
     // Add possible moves
     for (const Move& move : moves) {
+        formatted_board[move.square.y * size + move.square.x] = get_color(move.value, fmt::color::yellow);
         fmt::print("  {}\n", move);
-        board_str[move.square.y * size + move.square.x] = get_color(move.value, fmt::color::yellow);
     }
     // Print board with move positions
     print("   ", false);
@@ -128,7 +128,7 @@ void othello::Board::print_moves(const std::vector<Move>& moves)
     for (const auto y : indices) {
         fmt::print("\n  {}", y);
         for (const auto x : indices) {
-            fmt::print(" {}", board_str[y * size + x]);
+            fmt::print(" {}", formatted_board[y * size + x]);
         }
     }
     print("");
