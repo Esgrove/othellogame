@@ -70,7 +70,7 @@ impl Player {
     }
 
     /// Return move chosen by a human player.
-    fn get_human_move(&self, moves: &Vec<Move>) -> Move {
+    fn get_human_move(&self, moves: &[Move]) -> Move {
         loop {
             let square = Self::get_square();
             // check if given square is one of the possible moves
@@ -84,6 +84,7 @@ impl Player {
     /// Ask human player for square coordinates.
     fn get_square() -> Square {
         loop {
+            print!("  Give disk position (x,y): ");
             let mut input = String::new();
             io::stdout().flush().unwrap();
             io::stdin().read_line(&mut input).expect("Input failed");

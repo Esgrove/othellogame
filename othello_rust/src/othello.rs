@@ -7,12 +7,13 @@
 
 extern crate colored;
 
+use log::{debug, error, info, Level};
+
 use colored::*;
 
 use crate::board::Board;
 use crate::player::Player;
 use crate::utils::Disk;
-use std::cmp;
 use std::io::{self, Write};
 
 pub(crate) struct Othello {
@@ -28,8 +29,8 @@ impl Othello {
         Othello {
             board: Board::new(size),
             board_size: size,
-            player_black: Player::new(Disk::BLACK),
-            player_white: Player::new(Disk::WHITE),
+            player_black: Player::new(Disk::Black),
+            player_white: Player::new(Disk::White),
             rounds_played: 0,
         }
     }
@@ -60,6 +61,7 @@ impl Othello {
     }
 
     fn game_loop(&mut self) {
+        debug!("Running game loop");
         while self.board.can_play() && (self.player_black.can_play() || self.player_white.can_play()) {
             self.rounds_played += 1;
             println!(
@@ -80,7 +82,7 @@ impl Othello {
         println!();
 
         let winner = self.board.result();
-        if winner == Disk::EMPTY {
+        if winner == Disk::Empty {
             println!("The game ended in a tie...");
         } else {
             println!("The winner is {}!", winner);
@@ -109,6 +111,6 @@ impl Othello {
         io::stdout().flush().unwrap();
         io::stdin().read_line(&mut input).expect("Input failed");
         let board_size: usize = input.trim().parse().unwrap_or(8);
-        cmp::max(4, cmp::min(board_size, 8))
+        board_size.clamp(4, 16)
     }
 }

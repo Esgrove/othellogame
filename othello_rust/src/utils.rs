@@ -8,12 +8,13 @@ use colored::{Color, ColoredString, Colorize};
 use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Add, AddAssign};
+use std::hash::{Hash, Hasher};
 
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq)]
 pub(crate) enum Disk {
-    BLACK = -1,
-    EMPTY = 0,
-    WHITE = 1,
+    Black = -1,
+    Empty = 0,
+    White = 1,
 }
 
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
@@ -28,7 +29,7 @@ pub(crate) struct Step {
     pub(crate) y: isize,
 }
 
-#[derive(Clone, Hash)]
+#[derive(Clone)]
 pub(crate) struct Move {
     pub(crate) square: Square,
     pub(crate) value: u32,
@@ -40,36 +41,36 @@ impl Disk {
     /// Returns a single character identifier string for the given disk.
     pub(crate) fn board_char(&self) -> ColoredString {
         match self {
-            Disk::BLACK => "B".magenta(),
-            Disk::EMPTY => "_".white(),
-            Disk::WHITE => "W".cyan(),
+            Disk::Black => "B".magenta(),
+            Disk::Empty => "_".white(),
+            Disk::White => "W".cyan(),
         }
     }
 
     /// Return the associated color for this disk.
     pub(crate) fn color(&self) -> Color {
         match self {
-            Disk::BLACK => Color::Magenta,
-            Disk::EMPTY => Color::White,
-            Disk::WHITE => Color::Cyan,
+            Disk::Black => Color::Magenta,
+            Disk::Empty => Color::White,
+            Disk::White => Color::Cyan,
         }
     }
 
     /// Returns the disk formatted as a colored string.
     pub(crate) fn disk_string(&self) -> ColoredString {
         match self {
-            Disk::BLACK => "BLACK".magenta(),
-            Disk::EMPTY => "EMPTY".white(),
-            Disk::WHITE => "WHITE".cyan(),
+            Disk::Black => "BLACK".magenta(),
+            Disk::Empty => "EMPTY".white(),
+            Disk::White => "WHITE".cyan(),
         }
     }
 
     /// Return the opposing disk color for this disk.
     pub(crate) fn opponent(&self) -> Disk {
         match self {
-            Disk::BLACK => Disk::WHITE,
-            Disk::EMPTY => Disk::EMPTY,
-            Disk::WHITE => Disk::BLACK,
+            Disk::Black => Disk::White,
+            Disk::Empty => Disk::Empty,
+            Disk::White => Disk::Black,
         }
     }
 }
@@ -136,10 +137,6 @@ impl PartialEq for Move {
     fn eq(&self, other: &Self) -> bool {
         self.square == other.square && self.value == other.value
     }
-
-    fn ne(&self, other: &Self) -> bool {
-        self.square != other.square || self.value != other.value
-    }
 }
 
 impl Eq for Move {}
@@ -158,5 +155,14 @@ impl PartialOrd for Move {
 impl Ord for Move {
     fn cmp(&self, other: &Self) -> Ordering {
         self.square.cmp(&other.square).then(self.value.cmp(&other.value))
+    }
+}
+
+impl Hash for Move {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.square.hash(state);
+        self.value.hash(state);
+        self.disk.hash(state);
+        self.directions.hash(state);
     }
 }
