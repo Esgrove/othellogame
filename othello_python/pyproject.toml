@@ -1,7 +1,7 @@
 [tool.black]
 # https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
 line-length = 120
-target-version = ['py39','py310']
+target-version = ['py39','py310','py311']
 include = '\.pyi?$'
 extend-exclude = 'venv'
 
