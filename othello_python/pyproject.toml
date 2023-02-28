@@ -3,7 +3,7 @@
 line-length = 120
 target-version = ['py39','py310','py311']
 include = '\.pyi?$'
-extend-exclude = 'venv'
+extend-exclude = ['.venv', 'venv*']
 
 [tool.isort]
 # https://pycqa.github.io/isort/docs/configuration/options.html
@@ -18,7 +18,7 @@ ensure_newline_before_comments = true
 line_length = 120
 py_version = 39
 sections=['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
-extend_skip = ['.idea', '.vscode', 'venv']
+extend_skip = ['.idea', '.vscode', '.venv', 'venv*']
 
 [tool.ruff]
 # https://github.com/charliermarsh/ruff#configuration
@@ -51,7 +51,7 @@ exclude = [
     "build",
     "dist",
     "node_modules",
-    "venv",
+    "venv*",
 ]
 per-file-ignores = {}
 
