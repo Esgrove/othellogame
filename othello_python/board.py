@@ -40,9 +40,9 @@ class Board:
         self._board[col][col] = Disk.BLACK
 
         # keep track of empty squares on board to avoid checking already filled positions
-        self._empty_squares = set(
+        self._empty_squares = {
             Square(x, y) for x in range(self._size) for y in range(self._size) if self._board[y][x] == Disk.EMPTY
-        )
+        }
 
     def can_play(self) -> bool:
         """Return true if board contains empty squares -> still possible to make a move."""
