@@ -32,11 +32,11 @@ especially with the C# and Swift versions since I haven't been actively using th
 
 All implementations follow this overall architecture:
 
-* _othello_: The main gameplay loop.
-* _board_: Game board state and logic.
-* _player_: Player object used for making moves and storing player information.
-* _utils_: Helper classes, enums and functions.
-* _colorprint_: Helper methods for color printing and string formatting (if needed).
+* *othello*: The main gameplay loop.
+* *board*: Game board state and logic.
+* *player*: Player object used for making moves and storing player information.
+* *utils*: Helper classes, enums and functions.
+* *colorprint*: Helper methods for color printing and string formatting (if needed).
 
 ## Languages
 
@@ -84,6 +84,7 @@ Follows the C# style guide (PascalCase).
 ### Swift
 
 Swift 5. Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
+Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 
 * main.swift
 * othello.swift

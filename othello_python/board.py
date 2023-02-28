@@ -16,14 +16,14 @@ class Board:
 
     # Store all possible step directions on board
     STEP_DIRECTIONS = (
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
         (0, -1),
         (0, 1),
-        (1, 0),
-        (-1, 0),
         (1, -1),
+        (1, 0),
         (1, 1),
-        (-1, 1),
-        (-1, -1),
     )
 
     def __init__(self, size=8):
