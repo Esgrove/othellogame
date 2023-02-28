@@ -47,3 +47,6 @@ cmake-build-*/
 
 # Version header
 src/version.hpp
+
+# CMake
+CMakeSettings.json
