@@ -31,4 +31,5 @@ jobs:
       - name: isort
         uses: isort/isort-action@v1.1.0
         with:
-            requirementsFiles: "requirements.txt"
+          requirementsFiles: "requirements.txt"
+          path: othello_python
