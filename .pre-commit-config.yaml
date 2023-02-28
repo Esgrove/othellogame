@@ -33,4 +33,9 @@ repos:
     hooks:
       - id: isort
         files: ^othello_python/
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: 'v15.0.7'
+    hooks:
+      - id: clang-format
+        files: ^othello_cpp/
 exclude: ^(.idea|.vscode)/

@@ -69,10 +69,7 @@ struct Square {
         return *this;
     }
 
-    Square operator+(const Step& other) const
-    {
-        return {x + other.x, y + other.y};
-    }
+    Square operator+(const Step& other) const { return {x + other.x, y + other.y}; }
 
     Square& operator+=(const Step& other)
     {
