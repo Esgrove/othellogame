@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Class Othello + main
 Play Othello (Reversi) on the command line
