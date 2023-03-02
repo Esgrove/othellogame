@@ -28,7 +28,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      # https://github.com/py-actions/flake8
       - name: flake8 lint
         uses: py-actions/flake8@v2
         with:
           path: othello_python
+          args: "--config othello_python/setup.cfg"
