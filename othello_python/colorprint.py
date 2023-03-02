@@ -1,7 +1,7 @@
 """
 Color print helper
 Akseli Lukkarila
-2019
+2019-2023
 """
 import sys
 

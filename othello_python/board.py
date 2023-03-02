@@ -3,7 +3,7 @@ Class Board
 Othello (Reversi) game implementation
 https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
-2019
+2019-2023
 """
 from typing import Optional
 
