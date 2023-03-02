@@ -42,10 +42,12 @@ All implementations follow this overall architecture:
 
 ### Python
 
-Python 3.6+. Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
-Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 80.
+Python 3.9+. Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
+Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 79.
 Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
-Dependencies are handled by pip (Poetry or pip-compile are a bit overkill with only a few dependencies).
+Dependencies are handled by pip
+([Poetry](https://github.com/python-poetry/poetry) or
+[pip-compile](https://github.com/jazzband/pip-tools) are a bit overkill with only a few dependencies).
 Formatting with [Black](https://github.com/psf/black) and [isort](https://github.com/PyCQA/isort),
 linting with [Flake8](https://github.com/PyCQA/flake8).
 
@@ -78,7 +80,7 @@ Follows the C# style guide (PascalCase).
 * Othello.cs
 * Board.cs
 * Player.cs
-* Util.cs  (using *'Utils.cs'* does not work with VS syntax highlight :man_shrugging:)
+* Util.cs (using *'Utils.cs'* does not work with VS syntax highlight :man_shrugging:)
 * ColorPrint.cs
 
 ### Swift
