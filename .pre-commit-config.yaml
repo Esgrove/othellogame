@@ -1,3 +1,4 @@
+exclude: ^(.idea|.vscode)/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
@@ -11,37 +12,40 @@ repos:
       - id: check-merge-conflict
       - id: check-toml
       - id: check-yaml
-        args: [--unsafe]
       - id: debug-statements
       - id: end-of-file-fixer
       - id: mixed-line-ending
       - id: trailing-whitespace
-  - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: master
     hooks:
-      - id: flake8
-        files: ^othello_python/
-        args: [--config, othello_python/setup.cfg]
+      - id: git-check
+      - id: shfmt
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
       - id: black
         language_version: python3.11
         files: ^othello_python/
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        files: ^othello_python/
+        args: [--config, othello_python/setup.cfg]
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
       - id: isort
         files: ^othello_python/
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v15.0.7
-    hooks:
-      - id: clang-format
-        files: ^othello_cpp/
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.3.1
     hooks:
       - id: pyupgrade
         files: ^othello_python/
         args: [--py39-plus]
-exclude: ^(.idea|.vscode)/
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v15.0.7
+    hooks:
+      - id: clang-format
+        files: ^othello_cpp/
