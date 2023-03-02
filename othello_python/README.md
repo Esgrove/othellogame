@@ -28,7 +28,7 @@ In a unix shell (bash etc.), executing directly also works:
 ./othello.py
 ```
 
-**Note:** Windows uses `python` by default for Python 3, 
+**Note:** Windows uses `python` by default for Python 3,
 whereas Mac will only have `python3` in path unless you are using pyenv for example.
 
 There is a Batch script [othello.bat](./othello.bat) for easily running it on Windows.
