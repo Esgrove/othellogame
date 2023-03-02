@@ -8,9 +8,15 @@ Install dependencies with pip:
 pip install -r requirements.txt
 ```
 
+If `pip` is not in path for some reason, you can always do:
+
+```shell
+python3 -m pip install -r requirements.txt
+```
+
 ## Run
 
-```console
+```shell
 python3 othello.py
 ```
 
@@ -21,4 +27,6 @@ In a unix shell (bash etc.), executing directly also works:
 ```
 
 **Note:** Windows uses `python` by default for Python 3, 
-whereas Mac will only have `python3` in path unless you are using pyenv for example. 
+whereas Mac will only have `python3` in path unless you are using pyenv for example.
+
+There is a Batch script [othello.bat](./othello.bat) for easily running it on Windows.
