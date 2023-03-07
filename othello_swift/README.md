@@ -4,7 +4,7 @@ Note: Swift works reasonable well on Windows too nowadays (at least well enough 
 
 ## Build
 
-```console
+```shell
 swift build
 swift build --configuration release
 swift run
@@ -13,13 +13,13 @@ swift run --configuration release
 
 ## Format
 
-```console
+```shell
 brew install swiftformat
 swiftformat .
 ```
 
 ## Update dependencies
 
-```console
+```shell
 swift package update
 ```
