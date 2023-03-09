@@ -47,7 +47,7 @@ Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for 
 Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
 Dependencies are handled by pip
 ([Poetry](https://github.com/python-poetry/poetry) or
-[pip-compile](https://github.com/jazzband/pip-tools) are a bit overkill with only a few dependencies).
+[pip-compile](https://github.com/jazzband/pip-tools) would be a bit overkill with only a few dependencies).
 Formatting with [Black](https://github.com/psf/black) and [isort](https://github.com/PyCQA/isort),
 linting with [Flake8](https://github.com/PyCQA/flake8).
 
@@ -59,7 +59,7 @@ linting with [Flake8](https://github.com/PyCQA/flake8).
 
 ### C++
 
-C++20. Uses [Cmake](https://cmake.org/) as the build system,
+C++20. Uses [CMake](https://cmake.org/) as the build system,
 and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text (stringstreams :unamused:).
 Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-naming) recommended naming style (snake_case),
 which sadly very few C++ codebases seem to be using (in my experience).
@@ -80,7 +80,7 @@ Follows the C# style guide (PascalCase).
 * Othello.cs
 * Board.cs
 * Player.cs
-* Util.cs (using *'Utils.cs'* does not work with VS syntax highlight :man_shrugging:)
+* Util.cs (*'Utils.cs'* does not work with VS syntax highlight for me :man_shrugging:)
 * ColorPrint.cs
 
 ### Swift

@@ -1,5 +1,8 @@
 [package]
 name = "othello_rust"
+description = "A simple Othello CLI game implementation."
+readme = "README.md"
+license = "MIT"
 version = "1.0.0"
 authors = ["Esgrove <esgrove@outlook.com>"]
 edition = "2021"
