@@ -7,7 +7,7 @@
 
 extern crate colored;
 
-use log::{debug, error, info, Level};
+use log::debug;
 
 use colored::*;
 
