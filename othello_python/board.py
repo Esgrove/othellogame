@@ -3,9 +3,9 @@ Class Board
 Othello (Reversi) game implementation
 https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
-2019
+2019-2023
 """
-from typing import List, Optional, Tuple
+from typing import Optional
 
 from colorprint import Color, get_color, print_color
 from utils import Disk, Move, Square
@@ -16,14 +16,14 @@ class Board:
 
     # Store all possible step directions on board
     STEP_DIRECTIONS = (
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
         (0, -1),
         (0, 1),
-        (1, 0),
-        (-1, 0),
         (1, -1),
+        (1, 0),
         (1, 1),
-        (-1, 1),
-        (-1, -1),
     )
 
     def __init__(self, size=8):
@@ -40,9 +40,9 @@ class Board:
         self._board[col][col] = Disk.BLACK
 
         # keep track of empty squares on board to avoid checking already filled positions
-        self._empty_squares = set(
+        self._empty_squares = {
             Square(x, y) for x in range(self._size) for y in range(self._size) if self._board[y][x] == Disk.EMPTY
-        )
+        }
 
     def can_play(self) -> bool:
         """Return true if board contains empty squares -> still possible to make a move."""
@@ -60,7 +60,7 @@ class Board:
                 self._set_square(pos, move.disk)
                 pos += step
 
-    def possible_moves(self, disk: Disk) -> List[Move]:
+    def possible_moves(self, disk: Disk) -> list[Move]:
         """Returns a list of all possible moves for the given disk color."""
         moves = []
         for square in self._empty_squares:
@@ -87,7 +87,7 @@ class Board:
 
         return sorted(moves)
 
-    def print_moves(self, moves: List[Move]):
+    def print_moves(self, moves: list[Move]):
         """Print available move coordinates and resulting points gained."""
         print_color(f"  Possible moves ({len(moves)}):", Color.yellow)
         # convert board from Disk enums to strings
@@ -123,7 +123,7 @@ class Board:
         """Check that the given coordinates are inside the board."""
         return 0 <= x < self._size and 0 <= y < self._size
 
-    def _player_scores(self) -> Tuple[int, int]:
+    def _player_scores(self) -> tuple[int, int]:
         """Count and return the number of black and white disks (white, black)."""
         white = 0  # sum(1 for d in self._board if d == Disk.WHITE)
         black = 0  # sum(1 for d in self._board if d == Disk.BLACK)

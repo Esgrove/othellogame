@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
 """
 Class Othello + main
 Play Othello (Reversi) on the command line
 https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
-2019
+2019-2023
 """
 import sys
 
@@ -106,6 +107,7 @@ if __name__ == "__main__":
         if board_size < 4 or board_size > 16:
             print_error("Unsupported board size: {}", board_size)
             sys.exit(1)
+
         print(f"Using board size: {board_size}")
     except (ValueError, IndexError):
         board_size = Othello.get_board_size()
@@ -114,4 +116,5 @@ if __name__ == "__main__":
         game = Othello(board_size)
         game.play()
     except KeyboardInterrupt:
+        # Catches CTRL-C
         sys.exit("\nGame aborted...")

@@ -1,7 +1,6 @@
 import pytest
 
 from board import Board
-from utils import Disk
 
 
 @pytest.fixture

@@ -7,6 +7,7 @@
 use colored::{Color, ColoredString, Colorize};
 use std::cmp::Ordering;
 use std::fmt;
+use std::hash::{Hash, Hasher};
 use std::ops::{Add, AddAssign};
 use std::hash::{Hash, Hasher};
 

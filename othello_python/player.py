@@ -2,11 +2,10 @@
 Class Player
 Defines one player for Othello
 Akseli Lukkarila
-2019
+2019-2023
 """
 import random
 import time
-from typing import List
 
 from board import Board
 from colorprint import Color, print_color, print_error
@@ -54,7 +53,7 @@ class Player:
         self._rounds_played = 0
 
     @staticmethod
-    def _get_computer_move(moves: List[Move]) -> Move:
+    def _get_computer_move(moves: list[Move]) -> Move:
         """Return move chosen by computer."""
         print("  Computer plays...")
         # wait a bit and pick a random move
@@ -63,7 +62,7 @@ class Player:
         print(f"  -> {move.square}")
         return move
 
-    def _get_human_move(self, moves: List[Move]) -> Move:
+    def _get_human_move(self, moves: list[Move]) -> Move:
         """Return move chosen by a human player."""
         while True:
             square = self._get_square()
@@ -80,7 +79,7 @@ class Player:
         while True:
             try:
                 pos = input("  Give disk position (x,y): ")
-                x, y = [int(x) for x in pos.split(",") if x.strip()]
+                x, y = (int(x) for x in pos.split(",") if x.strip())
                 return Square(x, y)
             except ValueError:
                 print_error("Give coordinates in the form 'x,y'!", indent=2)

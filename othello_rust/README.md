@@ -4,17 +4,18 @@
 
 Rust and Cargo make things really easy:
 
-```console
+```shell
 cargo build
 cargo build --release
 cargo run
+cargo run --release
 ```
 
 ## Format code
 
 Using [rustfmt](https://github.com/rust-lang/rustfmt)
 
-```console
+```shell
 rustup component add rustfmt
 cargo fmt
 ```
@@ -23,7 +24,7 @@ cargo fmt
 
 Using [Clippy](https://github.com/rust-lang/rust-clippy)
 
-```console
+```shell
 rustup component add clippy
 cargo clippy
 cargo clippy --fix
@@ -31,6 +32,6 @@ cargo clippy --fix
 
 ## Update dependencies
 
-```console
+```shell
 cargo update
 ```
