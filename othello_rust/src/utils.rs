@@ -9,7 +9,6 @@ use std::cmp::Ordering;
 use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::ops::{Add, AddAssign};
-use std::hash::{Hash, Hasher};
 
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq)]
 pub(crate) enum Disk {
