@@ -1,14 +1,20 @@
 [package]
-name = "othello_rust"
-description = "A simple Othello CLI game implementation."
-readme = "README.md"
-license = "MIT"
-version = "1.0.0"
 authors = ["Esgrove <esgrove@outlook.com>"]
+description = "A simple Othello CLI game implementation."
 edition = "2021"
+license = "MIT"
+name = "othello_rust"
+readme = "README.md"
+repository = "https://github.com/Esgrove/othellogame"
+version = "1.0.0"
 
 [dependencies]
+anyhow = "1.0.70"
 colored = "2"
 env_logger = "0.10.0"
 log = "0.4.17"
 rand = "0.8.5"
+
+[[bin]]
+name = "othello_rust"
+path = "src/main.rs"
