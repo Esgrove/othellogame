@@ -26,7 +26,7 @@ execute_process(
 )
 
 # Date and time
-string(TIMESTAMP DATE "%Y.%m.%d" UTC)
+string(TIMESTAMP DATE "%Y-%m-%d" UTC)
 string(TIMESTAMP TIMESTAMP "%Y-%m-%d_%H%M" UTC)
 
 set(BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_HASH}_${TIMESTAMP}")
