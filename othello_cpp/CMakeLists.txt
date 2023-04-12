@@ -34,20 +34,14 @@ set(BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_HASH}_${TIMESTAMP}")
 message(STATUS "Build name: ${BUILD_NAME}")
 
 # Create version info
-set(VERSION_HEADER
-"#pragma once
-namespace version
-{
-constexpr auto APP_NAME = \"${CMAKE_PROJECT_NAME}\";
-constexpr auto BRANCH = \"${GIT_BRANCH}\";
-constexpr auto BUILD_NAME = \"${BUILD_NAME}\";
-constexpr auto COMMIT = \"${GIT_HASH}\";
-constexpr auto DATE = \"${DATE}\";
-constexpr auto VERSION_NUMBER = \"${CMAKE_PROJECT_VERSION}\";
-}  // namespace version
-"
+add_compile_definitions(
+    BUILDTIME_APP_NAME="${CMAKE_PROJECT_NAME}"
+    BUILDTIME_BRANCH="${GIT_BRANCH}"
+    BUILDTIME_BUILD_NAME="${BUILD_NAME}"
+    BUILDTIME_COMMIT="${GIT_HASH}"
+    BUILDTIME_DATE="${DATE}"
+    BUILDTIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
 )
-file(WRITE ${CMAKE_SOURCE_DIR}/src/version.hpp "${VERSION_HEADER}")
 
 # ccache
 # https://ccache.dev/
