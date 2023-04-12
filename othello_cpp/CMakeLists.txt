@@ -33,16 +33,6 @@ set(BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_HASH}_${TIMESTAMP}")
 
 message(STATUS "Build name: ${BUILD_NAME}")
 
-# Create version info
-add_compile_definitions(
-    BUILDTIME_APP_NAME="${CMAKE_PROJECT_NAME}"
-    BUILDTIME_BRANCH="${GIT_BRANCH}"
-    BUILDTIME_BUILD_NAME="${BUILD_NAME}"
-    BUILDTIME_COMMIT="${GIT_HASH}"
-    BUILDTIME_DATE="${DATE}"
-    BUILDTIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
-)
-
 # ccache
 # https://ccache.dev/
 find_program(CCACHE_EXECUTABLE ccache)
@@ -77,6 +67,16 @@ add_executable(othello_cpp
     src/player.hpp
     src/utils.hpp
     src/version.hpp
+)
+
+# Create version info
+target_compile_definitions(othello_cpp PRIVATE
+    BUILDTIME_APP_NAME="${CMAKE_PROJECT_NAME}"
+    BUILDTIME_BRANCH="${GIT_BRANCH}"
+    BUILDTIME_BUILD_NAME="${BUILD_NAME}"
+    BUILDTIME_COMMIT="${GIT_HASH}"
+    BUILDTIME_DATE="${DATE}"
+    BUILDTIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
 )
 
 # {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
