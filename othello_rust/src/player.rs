@@ -35,6 +35,26 @@ impl Player {
         }
     }
 
+    pub fn black() -> Player {
+        Player {
+            color: Disk::Black,
+            human: true,
+            can_play: true,
+            show_helpers: true,
+            rounds_played: 0,
+        }
+    }
+
+    pub fn white() -> Player {
+        Player {
+            color: Disk::White,
+            human: true,
+            can_play: true,
+            show_helpers: true,
+            rounds_played: 0,
+        }
+    }
+
     /// Play one round as this player.
     pub fn play_one_move(&mut self, board: &mut Board) {
         println!("Turn: {}", self.color);

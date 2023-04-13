@@ -29,8 +29,8 @@ impl Othello {
         Othello {
             board: Board::new(size),
             board_size: size,
-            player_black: Player::new(Disk::Black),
-            player_white: Player::new(Disk::White),
+            player_black: Player::black(),
+            player_white: Player::white(),
             rounds_played: 0,
         }
     }
