@@ -41,9 +41,9 @@ impl Disk {
     /// Returns a single character identifier string for the given disk.
     pub(crate) fn board_char(&self) -> ColoredString {
         match self {
-            Disk::Black => "B".magenta(),
-            Disk::Empty => "_".white(),
-            Disk::White => "W".cyan(),
+            Disk::Black => "B".color(self.color()),
+            Disk::Empty => "_".color(self.color()),
+            Disk::White => "W".color(self.color()),
         }
     }
 
@@ -59,9 +59,9 @@ impl Disk {
     /// Returns the disk formatted as a colored string.
     pub(crate) fn disk_string(&self) -> ColoredString {
         match self {
-            Disk::Black => "BLACK".magenta(),
-            Disk::Empty => "EMPTY".white(),
-            Disk::White => "WHITE".cyan(),
+            Disk::Black => "BLACK".color(self.color()),
+            Disk::Empty => "EMPTY".color(self.color()),
+            Disk::White => "WHITE".color(self.color()),
         }
     }
 
