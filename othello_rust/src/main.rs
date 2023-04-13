@@ -27,14 +27,16 @@ fn main() {
 
     println!("{}", "OTHELLO GAME - RUST".green());
     let args: Vec<String> = env::args().collect();
-    let mut board_size: usize = 0;
-    if args.len() == 2 {
-        let cmd = &args[1];
-        board_size = cmd.parse().unwrap_or(0);
-    }
-    if board_size == 0 {
-        board_size = othello::Othello::get_board_size();
-    }
+    let board_size: usize = {
+        if args.len() >= 2 {
+            match args[1].parse() {
+                Ok(n) => n,
+                Err(_) => othello::Othello::get_board_size(),
+            }
+        } else {
+            othello::Othello::get_board_size()
+        }
+    };
     let mut game = othello::Othello::new(board_size);
     game.play();
 }
