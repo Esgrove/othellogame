@@ -115,6 +115,17 @@ impl Add<Step> for Square {
     }
 }
 
+impl Add<Step> for Step {
+    type Output = Self;
+
+    fn add(self, other: Step) -> Self {
+        Self {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
 impl AddAssign for Square {
     fn add_assign(&mut self, other: Self) {
         *self = Self {
@@ -126,6 +137,15 @@ impl AddAssign for Square {
 
 impl AddAssign<Step> for Square {
     fn add_assign(&mut self, other: Step) {
+        *self = Self {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl AddAssign<Step> for Step {
+    fn add_assign(&mut self, other: Self) {
         *self = Self {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -164,5 +184,58 @@ impl Hash for Move {
         self.value.hash(state);
         self.disk.hash(state);
         self.directions.hash(state);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn step_addition() {
+        let mut result = Step { x: 0, y: 0 } + Step { x: 1, y: 1 };
+        assert_eq!(result, Step { x: 1, y: 1 });
+
+        result = Step { x: -1, y: 0 } + Step { x: 1, y: 0 };
+        assert_eq!(result, Step { x: 0, y: 0 });
+
+        result += Step { x: -1, y: -1 };
+        assert_eq!(result, Step { x: -1, y: -1 });
+
+        result += Step { x: 1, y: 1 };
+        assert_eq!(result, Step { x: 0, y: 0 });
+    }
+
+    #[test]
+    fn square_addition() {
+        let mut result = Square { x: 4, y: 4 } + Square { x: 1, y: 1 };
+        assert_eq!(result, Square { x: 5, y: 5 });
+
+        result = Square { x: 4, y: 4 } + Square { x: 0, y: 0 };
+        assert_eq!(result, Square { x: 4, y: 4 });
+
+        result = Square { x: 4, y: 4 } + Step { x: -1, y: 1 };
+        assert_eq!(result, Square { x: 3, y: 5 });
+
+        result += Square { x: 0, y: 0 };
+        assert_eq!(result, Square { x: 3, y: 5 });
+
+        result += Step { x: -1, y: -1 };
+        assert_eq!(result, Square { x: 2, y: 4 });
+
+        result += Step { x: -1, y: -1 };
+        assert_eq!(result, Square { x: 1, y: 3 });
+
+        result += Step { x: -1, y: -1 };
+        assert_eq!(result, Square { x: 0, y: 2 });
+
+        result += Step { x: -1, y: -1 };
+        assert_eq!(result, Square { x: -1, y: 1 });
+
+        result += Step { x: 1, y: -1 };
+        assert_eq!(result, Square { x: 0, y: 0 });
+
+        result += Step { x: -1, y: -1 };
+        assert_eq!(result, Square { x: -1, y: -1 });
     }
 }
