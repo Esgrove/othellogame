@@ -112,7 +112,7 @@ generate_msvc_project() {
         -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
 }
 
-generate_project() {
+generate_ninja_project() {
     cmake -B "$CMAKE_BUILD_DIR" \
         -G Ninja \
         -S "$PROJECT_PATH" \
@@ -120,7 +120,7 @@ generate_project() {
 }
 
 build_project() {
-    cd "$PROJECT_PATH"
+    pushd "$PROJECT_PATH" > /dev/null
     mkdir -p "$CMAKE_BUILD_DIR"
     if [ "$PLATFORM" = windows ] && [ "$USE_NINJA_ON_WINDOWS" != true ]; then
         print_magenta "Generating Visual Studio project"
@@ -133,10 +133,10 @@ build_project() {
         time cmake --build "$CMAKE_BUILD_DIR" --target othello_cpp --config "$BUILD_TYPE"
     else
         print_magenta "Generating Ninja build"
-        if ! generate_project; then
+        if ! generate_ninja_project; then
             print_yellow "CMake failed, removing existing cache and trying again..."
             rm -rf "$CMAKE_BUILD_DIR"
-            generate_project
+            generate_ninja_project
         fi
         print_magenta "Building $BUILD_TYPE"
         ccache_zero_stats
@@ -144,19 +144,24 @@ build_project() {
         ccache_show_stats
     fi
     print_green "Build succeeded"
+    popd > /dev/null
+}
+
+move_exe_to_root() {
+    pushd "$PROJECT_PATH" > /dev/null
+    if [ "$PLATFORM" = windows ]; then
+        executable="othello_cpp.exe"
+    else
+        executable="othello_cpp"
+    fi
+    # Move executable from build dir to project root
+    mv "$(find "$CMAKE_BUILD_DIR" -type f -name "$executable")" "$executable"
+    file "$executable"
+    # Run executable to check it works and print the version info
+    ./"$executable" --version
+    popd > /dev/null
 }
 
 init_options "$@"
 build_project
-
-if [ "$PLATFORM" = windows ]; then
-    # Move executable from build dir to project root
-    mv "$(find "$CMAKE_BUILD_DIR" -type f -name othello_cpp.exe)" othello_cpp.exe
-    file othello_cpp.exe
-    # Run executable to check it works and print the version info
-    ./othello_cpp.exe --version
-else
-    mv "$CMAKE_BUILD_DIR/othello_cpp" othello_cpp
-    file othello_cpp
-    ./othello_cpp --version
-fi
+move_exe_to_root
