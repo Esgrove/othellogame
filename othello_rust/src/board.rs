@@ -79,6 +79,7 @@ impl Board {
             panic!("Trying to place disk to an occupied square: {}!", start);
         }
         self.set_square(&start, &player_move.disk);
+        self.empty_squares.remove(&start);
         for step in &player_move.directions {
             let mut pos = start + *step;
             while self.get_square(&pos).unwrap_or(Disk::Empty) == player_move.disk.opponent() {
