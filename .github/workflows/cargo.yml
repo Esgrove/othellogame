@@ -40,4 +40,4 @@ jobs:
         # workaround for color output
         env:
           TERM: xterm-256color
-        run: cargo clippy --check --verbose
+        run: cargo clippy
