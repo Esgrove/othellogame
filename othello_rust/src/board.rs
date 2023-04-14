@@ -150,7 +150,7 @@ impl Board {
                 print!(" {}", formatted_board[y * self.size + x]);
             }
         }
-        println!("");
+        println!();
     }
 
     /// Print current score for both players.

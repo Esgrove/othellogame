@@ -8,6 +8,7 @@ extern crate colored;
 
 use colored::Colorize;
 use rand::{self, Rng};
+
 use std::io::Write;
 use std::{fmt, io};
 use std::{thread, time::Duration};

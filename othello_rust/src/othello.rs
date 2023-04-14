@@ -6,15 +6,15 @@
 //==========================================================
 
 extern crate colored;
+use crate::colored::Colorize;
 
 use log::debug;
 
-use colored::*;
+use std::io::{self, Write};
 
 use crate::board::Board;
 use crate::player::Player;
 use crate::utils::Disk;
-use std::io::{self, Write};
 
 pub(crate) struct Othello {
     board: Board,

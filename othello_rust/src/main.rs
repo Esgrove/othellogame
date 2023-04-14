@@ -7,8 +7,6 @@
 
 // print with color to terminal
 extern crate colored;
-
-#[macro_use]
 extern crate log;
 
 use clap::Parser;
