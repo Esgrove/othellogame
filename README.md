@@ -23,7 +23,7 @@ yet small enough that it could be done in a weekend even when starting with a ne
 It is also very easy to check that the code is working correctly,
 especially since it is possible to compare side-by-side with the older implementations.
 
-I have added *C#* and *Swift* implementations, and currently working on a *Rust* version.
+I have so far added *C#*, *Swift*, and *Rust* implementations.
 I might do a few other (modern) languages that interest me and/or have some hype around them,
 such as *Zig*, *Go* and *Kotlin*.
 
@@ -99,8 +99,6 @@ Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 * colorprint.swift
 
 ### Rust
-
-*In progress...*
 
 Rust 2021 edition.
 Uses the [colored](https://crates.io/crates/colored) crate for colored text in the terminal.
