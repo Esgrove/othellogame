@@ -150,18 +150,14 @@ impl Board {
                 print!(" {}", formatted_board[y * self.size + x]);
             }
         }
-        println!();
+        println!("");
     }
 
     /// Print current score for both players.
     pub(crate) fn print_score(&self) {
         let (black, white) = self.player_scores();
         println!("\n{}", self);
-        println!(
-            "Score: {} | {}\n",
-            black.to_string().magenta(),
-            white.to_string().cyan()
-        )
+        println!("Score: {} | {}", black.to_string().magenta(), white.to_string().cyan())
     }
 
     /// Count and return the number of black and white disks.

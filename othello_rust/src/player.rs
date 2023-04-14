@@ -85,7 +85,7 @@ impl Player {
         // wait a bit and pick a random move
         thread::sleep(Duration::from_millis(rand::thread_rng().gen_range(1000..2000)));
         let chosen_move = moves[rand::thread_rng().gen_range(0..moves.len())].clone();
-        println!("  -> {}\n", chosen_move);
+        println!("  -> {}", chosen_move.square);
         chosen_move
     }
 
