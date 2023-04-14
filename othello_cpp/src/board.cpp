@@ -64,30 +64,30 @@ void othello::Board::place_disk(const othello::Move& move)
     empty_squares.erase(start);
     for (const auto& step : move.directions) {
         Square pos = start + step;
-        while (get_square(pos) == opposing_disk(move.disk)) {
+        while (get_square(pos) == opponent(move.disk)) {
             set_square(pos, move.disk);
             pos += step;
         }
     }
 }
 
-/// Returns a list of possible moves for given player.
+/// Returns a list of possible moves for the given player.
 std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
 {
     std::vector<Move> moves;
-    Disk other = opposing_disk(disk);
+    Disk opposing_disk = opponent(disk);
     for (const Square& square : empty_squares) {
         int value {0};
         std::vector<Step> directions;
         for (const auto& step : step_directions) {
             Square pos {square + step};
             // next square in this direction needs to be opponents disk
-            if (get_square(pos) != other) {
+            if (get_square(pos) != opposing_disk) {
                 continue;
             }
             int num_steps {0};
             // keep stepping forward while opponents disks are found
-            while (get_square(pos) == other) {
+            while (get_square(pos) == opposing_disk) {
                 ++num_steps;
                 pos += step;
             }
@@ -194,7 +194,7 @@ std::optional<othello::Disk> othello::Board::get_square(const Square& square) co
 void othello::Board::set_square(const Square& square, Disk disk)
 {
     if (!check_coordinates(square.x, square.y)) {
-        throw std::invalid_argument(fmt::format("Invalid coordinates {}!", square));
+        throw std::invalid_argument(fmt::format("Invalid coordinates: {}!", square));
     }
     board[square.y * size + square.x] = disk;
 }

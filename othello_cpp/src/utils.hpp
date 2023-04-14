@@ -10,8 +10,8 @@
 #include <algorithm>  // transform
 #include <iostream>   // cout, cin
 #include <sstream>
-#include <string>   // string
-#include <utility>  // move
+#include <string>     // string
+#include <utility>    // move
 #include <vector>
 
 namespace othello
@@ -112,7 +112,7 @@ inline std::string disk_string(const Disk& disk)
 }
 
 /// Returns the opponents disk color.
-inline Disk opposing_disk(const Disk& disk)
+inline Disk opponent(const Disk& disk)
 {
     switch (disk) {
         case Disk::white:

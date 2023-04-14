@@ -48,16 +48,18 @@ class Board:
         """Return true if board contains empty squares -> still possible to make a move."""
         return bool(self._empty_squares)
 
-    def place_disk(self, move: Move) -> None:
+    def place_disk(self, player_move: Move) -> None:
         """Update board for given disk placement."""
-        start = move.square
-        assert self._get_square(start) == Disk.EMPTY, f"Trying to place disk to an occupied square {move.square}!"
-        self._set_square(start, move.disk)
+        start = player_move.square
+        assert (
+            self._get_square(start) == Disk.EMPTY
+        ), f"Trying to place disk to an occupied square {player_move.square}!"
+        self._set_square(start, player_move.disk)
         self._empty_squares.remove(start)
-        for step in move.directions:
+        for step in player_move.directions:
             pos = start + step
-            while self._get_square(pos) == move.disk.other_disk():
-                self._set_square(pos, move.disk)
+            while self._get_square(pos) == player_move.disk.other_disk():
+                self._set_square(pos, player_move.disk)
                 pos += step
 
     def possible_moves(self, disk: Disk) -> list[Move]:
@@ -149,7 +151,7 @@ class Board:
         """Sets the given square to given value."""
         x, y = square
         if not self._check_coordinates(x, y):
-            raise ValueError(f"Invalid coordinates {square}!")
+            raise ValueError(f"Invalid coordinates: {square}!")
         self._board[y][x] = disk
 
     def __str__(self):

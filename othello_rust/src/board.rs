@@ -76,7 +76,7 @@ impl Board {
             .unwrap_or_else(|| panic!("Invalid coordinates: {}", start))
             != Disk::Empty
         {
-            panic!("Trying to place disk to an occupied square {}!", start);
+            panic!("Trying to place disk to an occupied square: {}!", start);
         }
         self.set_square(&start, &player_move.disk);
         for step in &player_move.directions {
@@ -88,7 +88,7 @@ impl Board {
         }
     }
 
-    /// Returns a list of possible moves for given player.
+    /// Returns a list of possible moves for the given player.
     pub(crate) fn possible_moves(&self, disk: Disk) -> Vec<Move> {
         let mut moves = Vec::<Move>::new();
         let opposing_disk = disk.opponent();
@@ -196,9 +196,11 @@ impl Board {
     fn get_square(&self, square: &Square) -> Option<Disk> {
         if self.check_coordinates(square.x, square.y) {
             let disk = self.board[square.y as usize * self.size + square.x as usize];
-            return Some(disk);
+            Some(disk)
+        } else {
+            // square is out of bounds
+            None
         }
-        None
     }
 
     /// Sets the given square to given value.
@@ -209,8 +211,8 @@ impl Board {
         self.board[square.y as usize * self.size + square.x as usize] = *disk;
     }
 
+    /// init game board with empty disks.
     fn init_board(size: usize) -> Vec<Disk> {
-        // init game board with empty disks.
         let mut board = vec![Disk::Empty; size * size];
         // set starting positions
         let row = if size % 2 == 0 {

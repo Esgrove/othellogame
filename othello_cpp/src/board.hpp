@@ -30,17 +30,6 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const Board& othello);
 
 private:
-    std::array<Step, 8> step_directions {{
-        {-1, -1},
-        {-1, 0},
-        {-1, 1},
-        {0, -1},
-        {0, 1},
-        {1, -1},
-        {1, 0},
-        {1, 1},
-    }};
-
     [[nodiscard]] bool check_coordinates(const int& x, const int& y) const;
     [[nodiscard]] int score() const;
     [[nodiscard]] std::optional<othello::Disk> get_square(const Square& square) const;
@@ -51,6 +40,16 @@ private:
     std::vector<Disk> board;
     std::vector<size_t> indices;
     size_t size;
+    std::array<Step, 8> step_directions {{
+        {-1, -1},
+        {-1, 0},
+        {-1, 1},
+        {0, -1},
+        {0, 1},
+        {1, -1},
+        {1, 0},
+        {1, 1},
+    }};
 };
 
 }  // namespace othello
