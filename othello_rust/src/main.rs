@@ -9,8 +9,10 @@
 extern crate colored;
 extern crate log;
 
+use anyhow::Result;
 use clap::Parser;
 use colored::Colorize;
+use shadow_rs::shadow;
 
 use std::env;
 
@@ -18,6 +20,8 @@ mod board;
 mod othello;
 mod player;
 mod utils;
+
+shadow!(build);
 
 /// Command line arguments
 ///
@@ -27,17 +31,21 @@ mod utils;
 #[derive(Parser)]
 #[command(
     author,
-    version,
     about = "A simple Othello CLI game implementation.",
     long_about = "A simple Othello CLI game implementation.",
-    arg_required_else_help = false
+    arg_required_else_help = false,
+    disable_version_flag = true
 )]
 struct Args {
     /// Optional Othello board size
     size: Option<usize>,
+
+    /// Print version
+    #[arg(short, long, help = "Print version and exit")]
+    version: bool,
 }
 
-fn main() {
+fn main() -> Result<()> {
     // Uncomment to display backtrace in case of a panic
     env::set_var("RUST_BACKTRACE", "1");
     env_logger::init();
@@ -47,6 +55,18 @@ fn main() {
     // parse command line arguments using clap
     let args = Args::parse();
     // let args: Vec<String> = env::args().collect();
+
+    if args.version {
+        println!(
+            "{} {} {} {} {}",
+            build::PROJECT_NAME,
+            build::PKG_VERSION,
+            build::BUILD_TIME,
+            build::BRANCH,
+            build::SHORT_COMMIT
+        );
+        return Ok(());
+    }
 
     let board_size: usize = {
         if let Some(size) = args.size {
@@ -58,4 +78,6 @@ fn main() {
     };
     let mut game = othello::Othello::new(board_size);
     game.play();
+
+    Ok(())
 }

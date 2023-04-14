@@ -7,6 +7,7 @@ name = "othello_rust"
 readme = "README.md"
 repository = "https://github.com/Esgrove/othellogame"
 version = "1.0.0"
+build = "build.rs"
 
 [dependencies]
 anyhow = "1.0.70"
@@ -15,6 +16,10 @@ colored = "2"
 env_logger = "0.10.0"
 log = "0.4.17"
 rand = "0.8.5"
+shadow-rs = "0.21.0"
+
+[build-dependencies]
+shadow-rs = "0.21.0"
 
 [[bin]]
 name = "othello_rust"
