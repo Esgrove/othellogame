@@ -83,7 +83,7 @@ impl fmt::Display for Disk {
 
 impl fmt::Display for Square {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", self.x, self.y)
+        write!(f, "({},{})", self.x, self.y)
     }
 }
 

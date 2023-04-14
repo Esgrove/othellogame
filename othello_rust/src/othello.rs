@@ -66,7 +66,7 @@ impl Othello {
             self.rounds_played += 1;
             println!(
                 "{}",
-                format!("\n=========== ROUND: {} ===========\n", self.rounds_played).bold()
+                format!("\n=========== ROUND: {} ===========", self.rounds_played).bold()
             );
             self.player_black.play_one_move(&mut self.board);
             println!("--------------------------------");
