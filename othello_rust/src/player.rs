@@ -127,7 +127,7 @@ impl Player {
     }
 
     /// Reset player status for a new game.
-    pub fn  reset(&mut self) {
+    pub fn reset(&mut self) {
         self.can_play = true;
         self.rounds_played = 0;
     }

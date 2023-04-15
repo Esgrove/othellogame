@@ -8,8 +8,6 @@
 extern crate colored;
 use crate::colored::Colorize;
 
-use log::debug;
-
 use std::io::{self, Write};
 
 use crate::board::Board;
