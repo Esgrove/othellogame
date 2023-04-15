@@ -117,5 +117,11 @@ namespace Othello
         {
             return _human ? "Human   " : "Computer";
         }
+
+        private void reset()
+        {
+            _roundsPlayed = 0;
+            _canPlay = true;
+        }
     }
 }

@@ -76,7 +76,7 @@ fn main() -> Result<()> {
             othello::Othello::get_board_size()
         }
     };
-    let mut game = othello::Othello::new(board_size);
+    let mut game = othello::Othello::init(board_size);
     game.play();
 
     Ok(())

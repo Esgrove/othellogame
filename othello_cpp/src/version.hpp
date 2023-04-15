@@ -1,3 +1,9 @@
+//==========================================================
+// Version header
+// Version information is set in preprocessor definitions
+// Akseli Lukkarila
+//==========================================================
+
 #pragma once
 namespace version
 {

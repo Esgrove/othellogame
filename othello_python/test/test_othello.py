@@ -1,6 +1,6 @@
 import pytest
 
-from othello import Othello
+from othello.othello import Othello
 
 
 @pytest.fixture

@@ -34,7 +34,7 @@ othello::Board::Board(size_t size) : indices(size), size(size)
     for (auto y : indices) {
         for (auto x : indices) {
             if (board[y * size + x] == Disk::empty) {
-                empty_squares.emplace(Square(x, y));
+                empty_squares.emplace(Square(static_cast<int>(x), static_cast<int>(y)));
             }
         }
     }

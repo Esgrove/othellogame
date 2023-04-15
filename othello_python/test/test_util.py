@@ -1,6 +1,6 @@
 import pytest
 
-from utils import Disk, Move, Square, clamp
+from othello.utils import Disk, Move, Square, clamp
 
 
 @pytest.fixture

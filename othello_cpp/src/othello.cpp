@@ -15,6 +15,19 @@
 
 othello::Othello::Othello(size_t board_size) : board(Board(board_size)), board_size(board_size) {}
 
+/// Play one full game of Othello.
+void othello::Othello::play()
+{
+    while (true) {
+        init_game();
+        game_loop();
+        print_result();
+        if (!get_answer("\nWould you like to play again")) {
+            break;
+        }
+    }
+}
+
 /// Initialize game board and players for a new game.
 void othello::Othello::init_game()
 {
@@ -34,20 +47,6 @@ void othello::Othello::init_game()
     }
     print_bold("\nPlayers:\n");
     print_status();
-}
-
-/// Play one full game of Othello.
-void othello::Othello::play()
-{
-    // Recursion could be used here but sticking to a loop to match other language implementations more closely.
-    while (true) {
-        init_game();
-        game_loop();
-        print_result();
-        if (!get_answer("\nWould you like to play again")) {
-            break;
-        }
-    }
 }
 
 /// Keep making moves until both players can't make a move anymore.
@@ -105,6 +104,7 @@ bool othello::Othello::get_answer(const std::string& question, const std::string
 /// Ask the desired board size from user.
 size_t othello::Othello::get_board_size()
 {
+    // TODO: error handling for invalid input
     print("Choose board size (default is 8): ", false);
     int size;
     std::cin >> size;
@@ -119,7 +119,7 @@ int main(int argc, const char* argv[])
     // Handle 'help' and 'version' arguments
     for (const auto& arg : arguments) {
         if (arg == "--help" || arg == "-h") {
-            auto usage = fmt::format(
+            fmt::print(
                 "{} {} {}\n\n"
                 "USAGE: othello_cpp [board size]\n\n"
                 "Optional arguments:\n"
@@ -128,7 +128,6 @@ int main(int argc, const char* argv[])
                 version::APP_NAME,
                 version::VERSION_NUMBER,
                 version::DATE);
-            std::cout << usage;
             return 1;
         } else if (arg == "--version" || arg == "-v") {
             fmt::print(

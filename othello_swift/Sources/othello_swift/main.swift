@@ -1,5 +1,12 @@
 #!/usr/bin/env swift
 
+//==========================================================
+// Main
+// Play Othello (Reversi) on the command line
+// https://en.wikipedia.org/wiki/Reversi
+// Akseli Lukkarila
+//==========================================================
+
 import ColorizeSwift
 
 print("OTHELLO GAME - SWIFT".bold().green())

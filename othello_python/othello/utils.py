@@ -5,7 +5,7 @@ Akseli Lukkarila
 """
 from enum import IntEnum
 
-from colorprint import Color, get_color
+from othello.colorprint import Color, get_color
 
 
 class Disk(IntEnum):

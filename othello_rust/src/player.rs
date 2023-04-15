@@ -126,6 +126,12 @@ impl Player {
         self.human = is_human;
     }
 
+    /// Reset player status for a new game.
+    pub fn  reset(&mut self) {
+        self.can_play = true;
+        self.rounds_played = 0;
+    }
+
     pub fn can_play(&self) -> bool {
         self.can_play
     }

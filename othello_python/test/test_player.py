@@ -1,8 +1,8 @@
 import pytest
 
-from board import Board
-from player import Player
-from utils import Disk
+from othello.board import Board
+from othello.player import Player
+from othello.utils import Disk
 
 
 @pytest.fixture

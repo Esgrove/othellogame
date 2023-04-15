@@ -1,3 +1,3 @@
 @echo off
-python othello.py
+python src/othello.py
 pause

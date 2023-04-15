@@ -1,6 +1,6 @@
 import pytest
 
-from board import Board
+from othello.board import Board
 
 
 @pytest.fixture

@@ -7,8 +7,8 @@ Akseli Lukkarila
 """
 from typing import Optional
 
-from colorprint import Color, get_color, print_color
-from utils import Disk, Move, Square
+from othello.colorprint import Color, get_color, print_color
+from othello.utils import Disk, Move, Square
 
 
 class Board:

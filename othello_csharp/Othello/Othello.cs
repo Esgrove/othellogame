@@ -1,4 +1,11 @@
-﻿using System;
+﻿//==========================================================
+// Class Othello
+// Play Othello (Reversi) on the command line
+// https://en.wikipedia.org/wiki/Reversi
+// Akseli Lukkarila
+//==========================================================
+
+using System;
 using System.Drawing;
 using Pastel;
 
@@ -11,24 +18,45 @@ namespace Othello
         private Player _playerBlack;
         private Player _playerWhite;
         private int _roundsPlayed;
+        private int _gamesPlayed;
         private readonly int _boardSize;
 
         private Othello(int boardSize)
         {
             _boardSize = boardSize;
-            _board = null;
-            _playerBlack = null;
-            _playerWhite = null;
+            _board = new Board(_boardSize);
+            _playerBlack = new Player(Disk.Black);
+            _playerWhite = new Player(Disk.White);
             _roundsPlayed = 0;
+            _gamesPlayed = 0;
+        }
+
+
+        /// Play one full game of Othello.
+        private void Play()
+        {
+            while (true)
+            {
+                InitGame();
+                GameLoop();
+                PrintResult();
+                if (!GetAnswer("\nWould you like to play again"))
+                {
+                    break;
+                }
+            }
         }
 
         /// Initialize game board and players for a new game.
         private void InitGame()
         {
-            _board = new Board(_boardSize);
-            _playerBlack = new Player(Disk.Black);
-            _playerWhite = new Player(Disk.White);
-            _roundsPlayed = 0;
+            if (_gamesPlayed > 0)
+            {
+                _board = new Board(_boardSize);
+                _playerBlack = new Player(Disk.Black);
+                _playerWhite = new Player(Disk.White);
+                _roundsPlayed = 0;
+            }
 
             if (GetAnswer("Would you like to play against the computer"))
             {
@@ -46,20 +74,6 @@ namespace Othello
             PrintStatus();
         }
 
-        ///  Play one full game of Othello.
-        private void Play()
-        {
-            while (true)
-            {
-                InitGame();
-                GameLoop();
-                PrintResult();
-                if (!GetAnswer("\nWould you like to play again"))
-                {
-                    break;
-                }
-            }
-        }
 
         /// Keep making moves until both players can't make a move anymore.
         private void GameLoop()
