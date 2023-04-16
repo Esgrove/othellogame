@@ -150,7 +150,8 @@ namespace Othello
             {
                 if (boardSize < 4 || boardSize > 10)
                 {
-                    throw new Exception($"Unsupported board size: {boardSize}");
+                    ColorPrint.Error($"Unsupported board size: {boardSize}");
+                    Environment.Exit(1);
                 }
                 Console.WriteLine($"Using board size: {boardSize}");
             }
