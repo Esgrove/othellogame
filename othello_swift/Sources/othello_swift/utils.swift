@@ -2,8 +2,8 @@ import ColorizeSwift
 
 enum Disk: Int, CustomStringConvertible {
     case black = -1
-    case white = 1
     case empty = 0
+    case white = 1
 
     /// Returns a single character identifier string for the given disk.
     func board_char() -> String {

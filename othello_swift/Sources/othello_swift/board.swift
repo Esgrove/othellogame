@@ -110,9 +110,9 @@ class Board {
         let sum: Int = self.score()
         switch sum {
             case ..<0:
-                return Disk.white
-            case 1...:
                 return Disk.black
+            case 1...:
+                return Disk.white
             default:
                 return Disk.empty
         }

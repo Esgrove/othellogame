@@ -1,6 +1,10 @@
 .DS_Store
-/.build
-/Packages
-/*.xcodeproj
-xcuserdata/
 .swiftpm
+/.build
+/*.xcodeproj
+/Packages
+xcuserdata/
+
+# executable
+/othello_swift
+/othello_swift.exe
