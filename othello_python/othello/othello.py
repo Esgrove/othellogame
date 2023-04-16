@@ -7,6 +7,7 @@ Akseli Lukkarila
 2019-2023
 """
 import sys
+from datetime import datetime
 
 from othello.board import Board
 from othello.colorprint import Color, print_bold, print_error
@@ -102,6 +103,17 @@ class Othello:
 if __name__ == "__main__":
     print_bold("OTHELLO GAME - Python", Color.green)
     args = sys.argv[1:]
+    if "--help" in args or "-h" in args:
+        sys.exit(
+            f"Othello Python {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+            "USAGE: python3 othello.py [board size]\n\n"
+            "Optional arguments:\n"
+            "    -h | --help          Print usage and exit\n"
+            "    -v | --version       Print version info and exit\n"
+        )
+    if "--version" in args or "-v" in args:
+        print(f"Othello Python {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
+        sys.exit(0)
     try:
         # try to read board size from command line args
         board_size = int(args[0])
