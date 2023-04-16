@@ -1,12 +1,26 @@
+# https://github.com/nicklockwood/SwiftFormat#config-file
+
 # Swift
 --swiftversion 5
 
 # format options
 --allman false
+--commas always
 --elseposition same-line
+--emptybraces no-space
+--importgrouping
 --indent 4
 --indentcase true
---self remove
+--lineaftermarks true
+--linebreaks lf
+--maxwidth 100
+--ranges spaced
+--self insert
+--selfrequired
+--semicolons inline
+--tabwidth 4
+--trailingclosures
+--trimwhitespace always
 
 # rules
 --disable andOperator
