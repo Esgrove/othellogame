@@ -16,13 +16,14 @@ use std::{thread, time::Duration};
 use crate::board::Board;
 use crate::utils::{Disk, Move, Square};
 
+/// Defines one player (human or computer).
 #[derive(Debug)]
 pub(crate) struct Player {
+    pub can_play: bool,
     color: Disk,
     human: bool,
-    can_play: bool,
-    show_helpers: bool,
     rounds_played: u32,
+    show_helpers: bool,
 }
 
 impl Player {
@@ -37,23 +38,11 @@ impl Player {
     }
 
     pub fn black() -> Player {
-        Player {
-            color: Disk::Black,
-            human: true,
-            can_play: true,
-            show_helpers: true,
-            rounds_played: 0,
-        }
+        Player::new(Disk::Black)
     }
 
     pub fn white() -> Player {
-        Player {
-            color: Disk::White,
-            human: true,
-            can_play: true,
-            show_helpers: true,
-            rounds_played: 0,
-        }
+        Player::new(Disk::White)
     }
 
     /// Play one round as this player.
@@ -130,10 +119,6 @@ impl Player {
     pub fn reset(&mut self) {
         self.can_play = true;
         self.rounds_played = 0;
-    }
-
-    pub fn can_play(&self) -> bool {
-        self.can_play
     }
 }
 

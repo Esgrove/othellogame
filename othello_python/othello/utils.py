@@ -5,10 +5,17 @@ Akseli Lukkarila
 """
 from enum import IntEnum
 
+try:
+    # Python 3.11+
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self  # noqa: UP035
+
 from othello.colorprint import Color, get_color
 
 
 class Disk(IntEnum):
+    """Represents one game piece or lack of one."""
     BLACK = -1
     EMPTY = 0
     WHITE = 1
@@ -34,19 +41,69 @@ class Disk(IntEnum):
 
         return self.WHITE if self.value == self.BLACK else self.BLACK
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Format disk name string with color."""
         return get_color(self.name, self.color())
+
+
+class Step:
+    """Represents one step direction on the board."""
+
+    def __init__(self, x: int, y: int):
+        self.x: int = x
+        self.y: int = y
+
+    def __getitem__(self, key) -> int:
+        # enable iteration so values can be unpacked: x,y = Step
+        if key == 0:
+            return self.x
+        elif key == 1:
+            return self.y
+        raise IndexError
+
+    def __hash__(self) -> int:
+        # needed to enable using this class in sets or as a dictionary key
+        return hash((self.x, self.y))
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Step):
+            return self.x == other.x and self.y == other.y
+        elif len(other) == 2:
+            return self.x == other[0] and self.y == other[1]
+        return NotImplemented
+
+    def __str__(self) -> str:
+        return f"[{self.x},{self.y}]"
+
+    def __repr__(self) -> str:
+        # requires Python 3.10+
+        match self:
+            case (-1, -1):
+                return "🡯"
+            case (-1, 0):
+                return "🡨"
+            case (-1, 1):
+                return "🡬"
+            case (0, -1):
+                return "🡫"
+            case (0, 1):
+                return "🡩"
+            case (1, -1):
+                return "🡮"
+            case (1, 0):
+                return "🡪"
+            case (1, 1):
+                return "🡭"
 
 
 class Square:
     """Represents one square location on the board."""
 
     def __init__(self, x: int, y: int):
-        self.x = x
-        self.y = y
+        self.x: int = x
+        self.y: int = y
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> int:
         # enable iteration so coordinates can be unpacked: x,y = Square
         if key == 0:
             return self.x
@@ -54,16 +111,16 @@ class Square:
             return self.y
         raise IndexError
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         # needed to enable using this class in sets or as a dictionary key
         return hash((self.x, self.y))
 
     def __add__(self, other):
         # enable addition for a pair of squares or a square and an iterable with two values (square + tuple etc...)
-        if isinstance(other, Square):
+        if isinstance(other, Square) or isinstance(other, Step):
             return Square(self.x + other.x, self.y + other.y)
         elif len(other) == 2:
-            return Square(self.x + other[0], self.y + other[1])
+            return Square(self.x + int(other[0]), self.y + int(other[1]))
         return NotImplemented
 
     def __iadd__(self, other):
@@ -74,25 +131,25 @@ class Square:
         # other + self
         return other + self
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return (self.x, self.y) == (other.x, other.y)
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return (self.x, self.y) != (other.x, other.y)
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return self.x < other.x or (self.x <= other.x and self.y < other.y)
 
-    def __le__(self, other):
+    def __le__(self, other) -> bool:
         return self.x <= other.x and self.y < other.y
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
         return self.x > other.x or (self.x >= other.x and self.y > other.y)
 
-    def __ge__(self, other):
+    def __ge__(self, other) -> bool:
         return self.x >= other.x and self.y >= other.y
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"({self.x},{self.y})"
 
 
@@ -100,34 +157,34 @@ class Move:
     """Represents one possible disk placement for given disk color."""
 
     def __init__(self, square: Square, disk=Disk.EMPTY, value=0, directions=None):
-        self.square = square
-        self.disk = disk
-        self.value = value
-        self.directions = directions
+        self.square: Square = square
+        self.disk: Disk = disk
+        self.value: int = value
+        self.directions: list[Step] = directions
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return (self.square, self.value) == (other.square, other.value)
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return (self.square, self.value) != (other.square, other.value)
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return self.value > other.value or (self.value == other.value and self.square < other.square)
 
-    def __le__(self, other):
+    def __le__(self, other) -> bool:
         return self.value >= other.value and self.square <= other.square
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
         return self.value < other.value or (self.value == other.value and self.square > other.square)
 
-    def __ge__(self, other):
+    def __ge__(self, other) -> bool:
         return self.value <= other.value and self.square >= other.square
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Square: {self.square} -> value: {self.value}"
 
 
-def clamp(number, minimum, maximum):
+def clamp(value, minimum, maximum):
     """Clamp value to given range."""
     assert minimum <= maximum, "Minimum value should be less than or equal to maximum!"
-    return max(minimum, min(number, maximum))
+    return max(minimum, min(value, maximum))

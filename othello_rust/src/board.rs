@@ -14,6 +14,7 @@ use std::fmt;
 
 use crate::utils::{Disk, Move, Square, Step};
 
+/// Handles game board state and logic.
 pub(crate) struct Board {
     board: Vec<Disk>,
     size: usize,
@@ -116,8 +117,8 @@ impl Board {
             if value > 0 {
                 moves.push(Move {
                     square: *square,
-                    value,
                     disk,
+                    value,
                     directions,
                 });
             }

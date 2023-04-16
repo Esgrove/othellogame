@@ -16,15 +16,8 @@
 
 namespace othello
 {
+/// Represents one game piece or lack of one.
 enum class Disk { black = -1, empty = 0, white = 1 };
-
-// Workaround for custom types without formatter specialization for fmt
-template<typename T> inline std::string to_string(const T& object)
-{
-    std::ostringstream ss;
-    ss << object;
-    return ss.str();
-}
 
 /// Represents one step direction on the board.
 struct Step {
@@ -81,6 +74,42 @@ struct Square {
     int x;
     int y;
 };
+}  // namespace othello
+
+// Formatter specialization:
+// For some reason MSVC needs to have this here before fmt::format is called below in Move.
+// Having it at the end of the file works fine on Clang like it should.
+// Bug in fmt lib with C++20 maybe? ¯\_(ツ)_/¯
+template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
+
+namespace othello
+{
+/// Represents one possible disk placement for given disk color.
+struct Move {
+    Move() : disk(Disk::empty), square(0, 0), value(0) {}
+    Move(Square square, Disk disk, unsigned int value, std::vector<Step> directions)
+        : disk(disk)
+        , square(square)
+        , directions(std::move(directions))
+        , value(value)
+    {}
+
+    friend std::ostream& operator<<(std::ostream& out, const Move& move)
+    {
+        return out << fmt::format("Square: {} -> value: {}", move.square, move.value);
+    }
+
+    bool operator<(const Move& other) const
+    {
+        // biggest value with the smallest coordinates first
+        return value > other.value || (value == other.value && square < other.square);
+    }
+
+    Square square;
+    Disk disk;
+    unsigned int value;
+    std::vector<Step> directions;
+};
 
 /// Returns print color for given Disk.
 inline fmt::color disk_color(const Disk& disk)
@@ -105,10 +134,16 @@ inline std::string board_char(const Disk& disk)
 inline std::string disk_string(const Disk& disk)
 {
     auto color = disk_color(disk);
-    if (disk == Disk::empty) {
-        return get_color("EMPTY", color);
+    switch (disk) {
+        case Disk::empty:
+            return get_color("EMPTY", color);
+        case Disk::black:
+            return get_color("BLACK", color);
+        case Disk::white:
+            return get_color("WHITE", color);
+        default:
+            return "UNKNOWN";
     }
-    return get_color(disk == Disk::black ? "BLACK" : "WHITE", color);
 }
 
 /// Returns the opponents disk color.
@@ -139,41 +174,16 @@ template<typename T> inline void print(T object, bool newline = true, std::ostre
         out << "\n";
     }
 }
-}  // namespace othello
 
-// Formatter specialization:
-// For some reason MSVC needs to have this here before fmt::format is called below in Move.
-// Having it at the end of the file works fine on Clang like it should. Bug in fmt lib with C++20? ¯\_(ツ)_/¯
-template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
-
-namespace othello
+/// Convert object to string using a stringstream.
+/// Requires that the stream insertion operator `<<` has been implemented for the given object.
+/// Workaround for custom types without formatter specialization for fmt.
+template<typename T> inline std::string to_string(const T& object)
 {
-/// Represents one possible disk placement for given disk color.
-struct Move {
-    Move() : disk(Disk::empty), square(0, 0), value(0) {}
-    Move(Square square, Disk disk, unsigned int value, std::vector<Step> directions)
-        : disk(disk)
-        , square(square)
-        , directions(std::move(directions))
-        , value(value)
-    {}
-
-    friend std::ostream& operator<<(std::ostream& out, const Move& move)
-    {
-        return out << fmt::format("Square: {} -> value: {}", move.square, move.value);
-    }
-
-    bool operator<(const Move& other) const
-    {
-        // biggest value with the smallest coordinates first
-        return value > other.value || (value == other.value && square < other.square);
-    }
-
-    Disk disk;
-    Square square;
-    std::vector<Step> directions;
-    unsigned int value;
-};
+    std::ostringstream ss;
+    ss << object;
+    return ss.str();
+}
 }  // namespace othello
 
 // Formatter specialization: simply use overridden ostream operator

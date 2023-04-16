@@ -10,6 +10,7 @@ use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::ops::{Add, AddAssign};
 
+/// Represents one game piece or lack of one.
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq)]
 pub(crate) enum Disk {
     Black = -1,
@@ -17,23 +18,26 @@ pub(crate) enum Disk {
     White = 1,
 }
 
-#[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
-pub(crate) struct Square {
-    pub(crate) x: isize,
-    pub(crate) y: isize,
-}
-
+/// Represents one step direction on the board.
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
 pub(crate) struct Step {
     pub(crate) x: isize,
     pub(crate) y: isize,
 }
 
+/// Represents one square location on the board.
+#[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
+pub(crate) struct Square {
+    pub(crate) x: isize,
+    pub(crate) y: isize,
+}
+
+/// Represents one possible disk placement for given disk color.
 #[derive(Clone)]
 pub(crate) struct Move {
     pub(crate) square: Square,
-    pub(crate) value: u32,
     pub(crate) disk: Disk,
+    pub(crate) value: u32,
     pub(crate) directions: Vec<Step>,
 }
 
@@ -164,10 +168,11 @@ impl Eq for Move {}
 impl PartialOrd for Move {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Option::from(
+            self.value.cmp(&other.value).then(
             self.square
                 .partial_cmp(&other.square)
                 .unwrap()
-                .then(self.value.cmp(&other.value)),
+            ),
         )
     }
 }

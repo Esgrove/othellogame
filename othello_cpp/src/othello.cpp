@@ -52,7 +52,7 @@ void othello::Othello::init_game()
 /// Keep making moves until both players can't make a move anymore.
 void othello::Othello::game_loop()
 {
-    while (board.can_play() && (player_black.can_play() || player_white.can_play())) {
+    while (board.can_play() && (player_black.can_play || player_white.can_play)) {
         ++rounds_played;
         fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
         player_black.play_one_move(board);

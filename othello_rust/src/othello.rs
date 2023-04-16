@@ -70,7 +70,7 @@ impl Othello {
 
     /// Keep making moves until both players can't make a move anymore.
     fn game_loop(&mut self) {
-        while self.board.can_play() && (self.player_black.can_play() || self.player_white.can_play()) {
+        while self.board.can_play() && (self.player_black.can_play || self.player_white.can_play) {
             self.rounds_played += 1;
             println!(
                 "{}",

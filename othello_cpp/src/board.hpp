@@ -15,6 +15,7 @@
 
 namespace othello
 {
+/// Handles game board state and logic.
 class Board {
 public:
     explicit Board(size_t size);

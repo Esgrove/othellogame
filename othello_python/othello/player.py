@@ -16,21 +16,18 @@ class Player:
     """Defines one player (human or computer)."""
 
     def __init__(self, disk: Disk, human=True, show_helpers=True):
-        self._can_play = True
-        self._disk = disk
-        self._human = human
-        self._rounds_played = 0
-        self._show_helpers = show_helpers
-
-    def can_play(self) -> bool:
-        return self._can_play
+        self.can_play: bool = True
+        self._disk: Disk = disk
+        self._human: bool = human
+        self._rounds_played: int = 0
+        self._show_helpers: bool = show_helpers
 
     def play_one_move(self, board: Board) -> None:
         """Play one round as this player."""
         print(f"Turn: {str(self._disk)}")
         moves = board.possible_moves(self._disk)
         if moves:
-            self._can_play = True
+            self.can_play = True
             if self._human and self._show_helpers:
                 board.print_moves(moves)
 
@@ -40,16 +37,16 @@ class Player:
             self._rounds_played += 1
             time.sleep(1)
         else:
-            self._can_play = False
+            self.can_play = False
             print_color("  No moves available...", Color.yellow)
 
-    def set_human(self, is_human: bool):
+    def set_human(self, is_human: bool) -> None:
         """Set player to be controlled by human or computer."""
         self._human = is_human
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset player status for a new game."""
-        self._can_play = True
+        self.can_play = True
         self._rounds_played = 0
 
     @staticmethod
@@ -87,5 +84,5 @@ class Player:
     def _type_string(self) -> str:
         return "Human   " if self._human else "Computer"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{str(self._disk)} | {self._type_string()} | Moves: {self._rounds_played}"

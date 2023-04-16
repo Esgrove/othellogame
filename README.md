@@ -23,9 +23,9 @@ yet small enough that it could be done in a weekend even when starting with a ne
 It is also very easy to check that the code is working correctly,
 especially since it is possible to compare side-by-side with the older implementations.
 
-I have so far added *C#*, *Swift*, and *Rust* implementations.
+So far, I have added *C#*, *Swift*, and *Rust* implementations.
 I might do a few other (modern) languages that interest me and/or have some hype around them,
-such as *Zig*, *Go* and *Kotlin*.
+such as *Go*, *Kotlin*, *Ruby*, and *Zig*.
 
 In the meantime, there's probably still room to improve in the current implementations,
 especially with the C# and Swift versions since I haven't been actively using those languages.
@@ -44,7 +44,7 @@ All implementations follow this overall architecture:
 
 ### Python
 
-Python 3.9+. Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
+Python 3.10+. Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
 Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 79.
 Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
 Dependencies are handled by pip

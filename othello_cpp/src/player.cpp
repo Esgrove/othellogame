@@ -21,7 +21,7 @@ void othello::Player::play_one_move(Board& board)
     print("Turn: " + disk_string(disk));
     auto moves = board.possible_moves(disk);
     if (!moves.empty()) {
-        can_play_ = true;
+        can_play = true;
         if (human && show_helpers) {
             board.print_moves(moves);
         }
@@ -31,7 +31,7 @@ void othello::Player::play_one_move(Board& board)
         ++rounds_played;
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     } else {
-        can_play_ = false;
+        can_play = false;
         print_color("  No moves available...\n", fmt::color::yellow);
     }
 }

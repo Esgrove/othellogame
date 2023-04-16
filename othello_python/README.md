@@ -4,6 +4,8 @@
 
 ## Dependencies
 
+Python 3.10+
+
 Install dependencies with pip:
 
 ```shell
