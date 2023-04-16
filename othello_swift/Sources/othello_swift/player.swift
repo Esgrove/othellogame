@@ -13,31 +13,32 @@ class Player {
     }
 
     func can_play() -> Bool {
-        can_play_
+        self.can_play_
     }
 
     /// Play one round as this player.
     func play_one_move(board: inout Board) {
-        print("Turn: \(disk)")
-        let moves = board.possible_moves(disk: disk)
+        print("Turn: \(self.disk)")
+        let moves = board.possible_moves(disk: self.disk)
         if !moves.isEmpty {
-            can_play_ = true
-            if human && show_helpers {
+            self.can_play_ = true
+            if self.human && self.show_helpers {
                 board.print_possible_moves(moves)
             }
-            let chosen_move = human ? get_human_move(moves) : get_computer_move(moves)
+            let chosen_move = self.human ? self.get_human_move(moves) : self
+                .get_computer_move(moves)
             board.place_disk(move: chosen_move)
             board.print_score()
-            rounds_played += 1
+            self.rounds_played += 1
         } else {
-            can_play_ = false
+            self.can_play_ = false
             print("  No moves available...".yellow())
         }
     }
 
     /// Set player to be controlled by human or computer.
     func set_human(_ is_human: Bool) {
-        human = is_human
+        self.human = is_human
     }
 
     /// Return move chosen by computer.
@@ -55,12 +56,12 @@ class Player {
     /// Return move chosen by a human player.
     func get_human_move(_ moves: [Move]) -> Move {
         while true {
-            let square = get_square()
+            let square = self.get_square()
             // check if given square is one of the possible moves
             if let move = moves.first(where: { $0.square == square }) {
                 return move
             }
-            print_error("Can't place a \(disk) disk in square \(square)!", indent: 2)
+            print_error("Can't place a \(self.disk) disk in square \(square)!", indent: 2)
         }
     }
 
@@ -79,12 +80,12 @@ class Player {
     }
 
     func type_string() -> String {
-        human ? "Human   " : "Computer"
+        self.human ? "Human   " : "Computer"
     }
 }
 
 extension Player: CustomStringConvertible {
     var description: String {
-        "\(disk) | \(type_string()) | Moves: \(rounds_played)"
+        "\(self.disk) | \(self.type_string()) | Moves: \(self.rounds_played)"
     }
 }

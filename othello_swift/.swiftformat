@@ -1,4 +1,4 @@
-# https://github.com/nicklockwood/SwiftFormat#config-file
+# https://github.com/nicklockwood/SwiftFormat
 
 # Swift
 --swiftversion 5
@@ -8,7 +8,7 @@
 --commas always
 --elseposition same-line
 --emptybraces no-space
---importgrouping
+--importgrouping alpha
 --indent 4
 --indentcase true
 --lineaftermarks true

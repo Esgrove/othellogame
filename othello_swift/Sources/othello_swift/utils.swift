@@ -9,9 +9,9 @@ enum Disk: Int, CustomStringConvertible {
     func board_char() -> String {
         switch self {
             case .black:
-                return "B".foregroundColor(color())
+                return "B".foregroundColor(self.color())
             case .white:
-                return "W".foregroundColor(color())
+                return "W".foregroundColor(self.color())
             case .empty:
                 return "_"
         }
@@ -44,9 +44,9 @@ enum Disk: Int, CustomStringConvertible {
     var description: String {
         switch self {
             case .black:
-                return "BLACK".foregroundColor(color())
+                return "BLACK".foregroundColor(self.color())
             case .white:
-                return "WHITE".foregroundColor(color())
+                return "WHITE".foregroundColor(self.color())
             case .empty:
                 return "EMPTY"
         }
@@ -64,22 +64,22 @@ struct Square {
     }
 
     init(fromSquare square: Square) {
-        x = square.x
-        y = square.y
+        self.x = square.x
+        self.y = square.y
     }
 }
 
 extension Square: CustomStringConvertible {
     var description: String {
-        "(\(x),\(y))"
+        "(\(self.x),\(self.y))"
     }
 }
 
 extension Square: ExpressibleByArrayLiteral {
     init(arrayLiteral: Int...) {
         assert(arrayLiteral.count == 2, "Square takes two int values!")
-        x = arrayLiteral[0]
-        y = arrayLiteral[1]
+        self.x = arrayLiteral[0]
+        self.y = arrayLiteral[1]
     }
 }
 
@@ -99,8 +99,8 @@ extension Square: Hashable {
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(x)
-        hasher.combine(y)
+        hasher.combine(self.x)
+        hasher.combine(self.y)
     }
 }
 
@@ -121,7 +121,7 @@ struct Move {
 
 extension Move: CustomStringConvertible {
     var description: String {
-        "Square: \(square) -> value: \(value)"
+        "Square: \(self.square) -> value: \(self.value)"
     }
 }
 

@@ -14,17 +14,17 @@ class Othello {
     var games_played: Int = 0
 
     init(size: Int) {
-        board_size = size
-        board = Board(size: board_size)
+        self.board_size = size
+        self.board = Board(size: self.board_size)
     }
 
     /// Play one full game of Othello.
     func play() {
         while true {
-            init_game()
-            game_loop()
-            print_result()
-            if !get_answer("\nWould you like to play again") {
+            self.init_game()
+            self.game_loop()
+            self.print_result()
+            if !self.get_answer("\nWould you like to play again") {
                 break
             }
         }
@@ -32,33 +32,34 @@ class Othello {
 
     /// Initialize game board and players for a new game.
     func init_game() {
-        if (self.games_played > 0) {
-            board = Board(size: board_size)
-            player_black = Player(Disk.black)
-            player_white = Player(Disk.white)
-            rounds_played = 0
+        if self.games_played > 0 {
+            self.board = Board(size: self.board_size)
+            self.player_black = Player(Disk.black)
+            self.player_white = Player(Disk.white)
+            self.rounds_played = 0
         }
 
-        if get_answer("Would you like to play against the computer") {
-            if get_answer("Would you like to play as black or white", yes: "b", no: "w") {
-                player_white.set_human(false)
+        if self.get_answer("Would you like to play against the computer") {
+            if self.get_answer("Would you like to play as black or white", yes: "b", no: "w") {
+                self.player_white.set_human(false)
             } else {
-                player_black.set_human(false)
+                self.player_black.set_human(false)
             }
         }
         print("\nPlayers:".bold())
-        print_status()
+        self.print_status()
     }
-
 
     /// Keep making moves until both players can't make a move anymore.
     func game_loop() {
-        while board.can_play() && (player_black.can_play() || player_white.can_play()) {
-            rounds_played += 1
-            print("\n=========== ROUND: \(rounds_played) ===========".bold())
-            player_black.play_one_move(board: &board)
+        while self.board
+            .can_play() && (self.player_black.can_play() || self.player_white.can_play())
+        {
+            self.rounds_played += 1
+            print("\n=========== ROUND: \(self.rounds_played) ===========".bold())
+            self.player_black.play_one_move(board: &self.board)
             print("-------------------------------")
-            player_white.play_one_move(board: &board)
+            self.player_white.play_one_move(board: &self.board)
         }
     }
 
@@ -67,10 +68,10 @@ class Othello {
         print("\n===============================".bold())
         print("The game is finished!\n".green())
         print("Result:".bold())
-        print_status()
+        self.print_status()
         print("")
 
-        let winner = board.result()
+        let winner = self.board.result()
         switch winner {
             case Disk.empty:
                 print("The game ended in a tie...")
@@ -81,9 +82,9 @@ class Othello {
 
     /// Print current board and player info.
     func print_status() {
-        print(player_black)
-        print(player_white, terminator: "\n\n")
-        print(board)
+        print(self.player_black)
+        print(self.player_white, terminator: "\n\n")
+        print(self.board)
     }
 
     /// Ask a question with two options, and return bool from user answer.
