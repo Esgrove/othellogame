@@ -1,4 +1,4 @@
 #!/bin/bash
 set -eo pipefail
 
-python3 src/othello.py
+python3 othello/othello.py

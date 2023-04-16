@@ -11,7 +11,7 @@ try:
 except ImportError:
     from typing_extensions import Self  # noqa: F401, UP035
 
-from othello.colorprint import Color, get_color
+from colorprint import Color, get_color
 
 
 class Disk(IntEnum):

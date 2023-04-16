@@ -9,10 +9,10 @@ Akseli Lukkarila
 import sys
 from datetime import datetime
 
-from othello.board import Board
-from othello.colorprint import Color, print_bold, print_error
-from othello.player import Player
-from othello.utils import Disk, clamp
+from board import Board
+from colorprint import Color, print_bold, print_error
+from player import Player
+from utils import Disk, clamp
 
 
 class Othello:
@@ -114,18 +114,19 @@ if __name__ == "__main__":
     if "--version" in args or "-v" in args:
         print(f"Othello Python {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
         sys.exit(0)
-    try:
-        # try to read board size from command line args
-        board_size = int(args[0])
-        if board_size < 4 or board_size > 10:
-            print_error("Unsupported board size: {}", board_size)
-            sys.exit(1)
-
-        print(f"Using board size: {board_size}")
-    except (ValueError, IndexError):
-        board_size = Othello.get_board_size()
 
     try:
+        try:
+            # try to read board size from command line args
+            board_size = int(args[0])
+            if board_size < 4 or board_size > 10:
+                print_error(f"Unsupported board size: {board_size}")
+                sys.exit(1)
+
+            print(f"Using board size: {board_size}")
+        except (ValueError, IndexError):
+            board_size = Othello.get_board_size()
+
         game = Othello(board_size)
         game.play()
     except KeyboardInterrupt:

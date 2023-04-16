@@ -7,9 +7,9 @@ Akseli Lukkarila
 import random
 import time
 
-from othello.board import Board
-from othello.colorprint import Color, print_color, print_error
-from othello.utils import Disk, Move, Square
+from board import Board
+from colorprint import Color, print_color, print_error
+from utils import Disk, Move, Square
 
 
 class Player:
