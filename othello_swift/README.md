@@ -1,6 +1,6 @@
 # Othello Swift
 
-Note: Swift works reasonable well on Windows too nowadays (at least well enough to run this project).
+**Note:** Swift works reasonable well on Windows too nowadays (at least well enough to run this project).
 
 ## Build
 
