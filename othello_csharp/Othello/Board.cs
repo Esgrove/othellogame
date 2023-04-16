@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -132,7 +132,7 @@ namespace Othello
         /// Print available move coordinates and resulting points gained.
         public void PrintMoves(IReadOnlyCollection<Move> moves)
         {
-            ColorPrint.Write($"  Possible moves ({moves.Count}):\n", Color.Yellow);
+            ColorPrint.WriteLine($"  Possible moves ({moves.Count}):", Color.Yellow);
             // convert board from Disk enums to strings
             var boardStr = new List<string>(_board.Count);
             boardStr.AddRange(_board.Select(disk => disk.BoardChar()));

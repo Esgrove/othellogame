@@ -52,7 +52,10 @@ struct Square {
         return out << fmt::format("({},{})", square.x, square.y);
     }
 
-    bool operator<(const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
+    bool operator<(const Square& other) const
+    {
+        return x < other.x || (x <= other.x && y < other.y);
+    }
     bool operator==(const Square& other) const { return x == other.x && y == other.y; }
     Square operator+(const Square& other) const { return {x + other.x, y + other.y}; }
     Square& operator+=(const Square& other)
@@ -200,6 +203,7 @@ template<> struct fmt::formatter<othello::Move> : ostream_formatter {};
 // template<> struct fmt::formatter<othello::Move> : fmt::formatter<std::string> {
 //    auto format(othello::Move m, format_context& ctx)
 //    {
-//        return formatter<std::string>::format(fmt::format("Square: {} -> value: {}", m.square, m.value), ctx);
+//        return formatter<std::string>::format(
+//            fmt::format("Square: {} -> value: {}", m.square, m.value), ctx);
 //    }
 //};

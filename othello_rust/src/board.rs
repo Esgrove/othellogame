@@ -131,12 +131,17 @@ impl Board {
 
     /// Print board with available move coordinates and the resulting points gained.
     pub(crate) fn print_moves(&self, moves: &Vec<Move>) {
-        println!("{}", format!("  Possible plays ({}):", moves.len()).yellow());
+        println!(
+            "{}",
+            format!("  Possible plays ({}):", moves.len()).yellow()
+        );
         // Convert board from Disk enums to strings
-        let mut formatted_board: Vec<ColoredString> = self.board.iter().map(|&d| d.board_char()).collect();
+        let mut formatted_board: Vec<ColoredString> =
+            self.board.iter().map(|&d| d.board_char()).collect();
         // Add possible moves to board
         for possible_move in moves {
-            let index = possible_move.square.y as usize * self.size + possible_move.square.x as usize;
+            let index =
+                possible_move.square.y as usize * self.size + possible_move.square.x as usize;
             formatted_board[index] = possible_move.value.to_string().yellow();
             println!("  {}", possible_move);
         }
@@ -158,7 +163,11 @@ impl Board {
     pub(crate) fn print_score(&self) {
         let (black, white) = self.player_scores();
         println!("\n{}", self);
-        println!("Score: {} | {}", black.to_string().magenta(), white.to_string().cyan())
+        println!(
+            "Score: {} | {}",
+            black.to_string().magenta(),
+            white.to_string().cyan()
+        )
     }
 
     /// Count and return the number of black and white disks.

@@ -9,13 +9,14 @@ try:
     # Python 3.11+
     from typing import Self
 except ImportError:
-    from typing_extensions import Self  # noqa: UP035
+    from typing_extensions import Self  # noqa: F401, UP035
 
 from othello.colorprint import Color, get_color
 
 
 class Disk(IntEnum):
     """Represents one game piece or lack of one."""
+
     BLACK = -1
     EMPTY = 0
     WHITE = 1
@@ -34,12 +35,17 @@ class Disk(IntEnum):
 
         return Color.magenta if self.value == self.BLACK else Color.cyan
 
-    def other_disk(self):
+    def other_disk(self) -> Self:
         """Return the opposing disk color for this disk."""
-        if self.value == self.EMPTY:
-            return self.EMPTY
-
-        return self.WHITE if self.value == self.BLACK else self.BLACK
+        match self:
+            case self.EMPTY:
+                return self.EMPTY
+            case self.BLACK:
+                return self.WHITE
+            case self.WHITE:
+                return self.BLACK
+            case _:
+                raise NotImplementedError("Unknown disk type")
 
     def __str__(self) -> str:
         """Format disk name string with color."""
@@ -116,18 +122,19 @@ class Square:
         return hash((self.x, self.y))
 
     def __add__(self, other):
-        # enable addition for a pair of squares or a square and an iterable with two values (square + tuple etc...)
+        # enable addition for a pair of squares,
+        # or a square and an iterable with two values (square + tuple etc...)
         if isinstance(other, Square) or isinstance(other, Step):
             return Square(self.x + other.x, self.y + other.y)
         elif len(other) == 2:
             return Square(self.x + int(other[0]), self.y + int(other[1]))
         return NotImplemented
 
-    def __iadd__(self, other):
+    def __iadd__(self, other) -> Self:
         # += operator
         return self + other
 
-    def __radd__(self, other):
+    def __radd__(self, other) -> Self:
         # other + self
         return other + self
 
@@ -169,13 +176,17 @@ class Move:
         return (self.square, self.value) != (other.square, other.value)
 
     def __lt__(self, other) -> bool:
-        return self.value > other.value or (self.value == other.value and self.square < other.square)
+        return self.value > other.value or (
+            self.value == other.value and self.square < other.square
+        )
 
     def __le__(self, other) -> bool:
         return self.value >= other.value and self.square <= other.square
 
     def __gt__(self, other) -> bool:
-        return self.value < other.value or (self.value == other.value and self.square > other.square)
+        return self.value < other.value or (
+            self.value == other.value and self.square > other.square
+        )
 
     def __ge__(self, other) -> bool:
         return self.value <= other.value and self.square >= other.square

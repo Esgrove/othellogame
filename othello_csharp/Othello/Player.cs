@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -49,7 +49,7 @@ namespace Othello
             else
             {
                 _canPlay = false;
-                ColorPrint.Write("  No moves available...", Color.Yellow);
+                ColorPrint.WriteLine("  No moves available...", Color.Yellow);
             }
         }
 

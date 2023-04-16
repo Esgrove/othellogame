@@ -31,7 +31,9 @@ class Player:
             if self._human and self._show_helpers:
                 board.print_moves(moves)
 
-            chosen_move = self._get_human_move(moves) if self._human else self._get_computer_move(moves)
+            chosen_move = (
+                self._get_human_move(moves) if self._human else self._get_computer_move(moves)
+            )
             board.place_disk(chosen_move)
             board.print_score()
             self._rounds_played += 1

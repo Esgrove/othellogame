@@ -5,10 +5,9 @@ https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
 2019-2023
 """
-from typing import Optional
 
 from othello.colorprint import Color, get_color, print_color
-from othello.utils import Disk, Move, Square
+from othello.utils import Disk, Move, Square, Step
 
 
 class Board:
@@ -16,14 +15,14 @@ class Board:
 
     # Store all possible step directions on board
     STEP_DIRECTIONS = (
-        (-1, -1),
-        (-1, 0),
-        (-1, 1),
-        (0, -1),
-        (0, 1),
-        (1, -1),
-        (1, 0),
-        (1, 1),
+        Step(-1, -1),
+        Step(-1, 0),
+        Step(-1, 1),
+        Step(0, -1),
+        Step(0, 1),
+        Step(1, -1),
+        Step(1, 0),
+        Step(1, 1),
     )
 
     def __init__(self, size=8):
@@ -41,7 +40,10 @@ class Board:
 
         # keep track of empty squares on board to avoid checking already filled positions
         self._empty_squares = {
-            Square(x, y) for x in range(self._size) for y in range(self._size) if self._board[y][x] == Disk.EMPTY
+            Square(x, y)
+            for x in range(self._size)
+            for y in range(self._size)
+            if self._board[y][x] == Disk.EMPTY
         }
 
     def can_play(self) -> bool:
@@ -111,7 +113,10 @@ class Board:
         """Count and print the number of black and white disks."""
         black, white = self._player_scores()
         print(f"\n{self}")
-        print(f"Score: {get_color(black, Disk.BLACK.color())} | {get_color(white, Disk.WHITE.color())}")
+        print(
+            f"Score: {get_color(black, Disk.BLACK.color())} | "
+            f"{get_color(white, Disk.WHITE.color())}"
+        )
 
     def result(self) -> Disk:
         """Calculates the final score and returns the winning player disk."""
@@ -139,10 +144,13 @@ class Board:
         return black, white
 
     def _score(self) -> int:
-        """Returns the total score (positive means more white disks and negative means more black disks)."""
+        """
+        Returns the total score.
+        Positive value means more white disks and negative means more black disks.¨
+        """
         return sum(sum(row) for row in self._board)
 
-    def _get_square(self, square: Square) -> Optional[Disk]:
+    def _get_square(self, square: Square) -> Disk | None:
         """Returns the state of the board (empty, white, black) at the given square."""
         x, y = square
         return self._board[y][x] if self._check_coordinates(x, y) else None

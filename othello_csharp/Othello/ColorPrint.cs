@@ -1,6 +1,6 @@
+using Pastel;
 using System;
 using System.Drawing;
-using Pastel;
 
 namespace Othello
 {
@@ -14,6 +14,10 @@ namespace Othello
         public static void Write<T>(T text, Color color)
         {
             Console.Write($"{text}".Pastel(color));
+        }
+        public static void WriteLine<T>(T text, Color color)
+        {
+            Console.WriteLine($"{text}".Pastel(color));
         }
         public static void Error(string message, int indent = 0)
         {

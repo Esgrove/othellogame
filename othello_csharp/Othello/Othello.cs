@@ -5,9 +5,9 @@
 // Akseli Lukkarila
 //==========================================================
 
+using Pastel;
 using System;
 using System.Drawing;
-using Pastel;
 
 namespace Othello
 {
@@ -92,7 +92,7 @@ namespace Othello
         private void PrintResult()
         {
             Console.WriteLine("\n================================");
-            ColorPrint.Write("The game is finished!\n", Color.Green);
+            ColorPrint.WriteLine("The game is finished!", Color.Green);
             Console.WriteLine("Result:".Pastel(Color.Silver));
             PrintStatus();
             Console.WriteLine("");
@@ -140,7 +140,7 @@ namespace Othello
 
         public static void Main(string[] args)
         {
-            ColorPrint.Write("OTHELLO GAME - C#\n", Color.Green);
+            ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
             // try to read board size from command line args
             if (args.Length == 0 || !int.TryParse(args[0], out var boardSize))
             {

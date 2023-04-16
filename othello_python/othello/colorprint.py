@@ -38,10 +38,12 @@ def print_color(text: str, color=Color.white, bold=False, **kwargs):
 
     You can pass optional extra arguments for the Python default print function if wanted:
 
-    - sep='separator': Specify how to separate the objects, if there is more than one. Default is ' '
+    - sep='separator': Specify how to separate the objects, if there is more than one.
+        Default is ' '
     - end='end': Specify what to print at the end. Default is '\\n' (line feed)
     - file: An object with a write method. Default is sys.stdout
-    - flush: A Boolean, specifying if the output is flushed (True) or buffered (False). Default is False
+    - flush: A Boolean, specifying if the output is flushed (True) or buffered (False).
+        Default is False
     """
     print(get_color(text, color, bold), **kwargs)
 

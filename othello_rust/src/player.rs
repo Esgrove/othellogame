@@ -73,7 +73,9 @@ impl Player {
     fn get_computer_move(&self, moves: &Vec<Move>) -> Move {
         println!("  Computer plays...");
         // wait a bit and pick a random move
-        thread::sleep(Duration::from_millis(rand::thread_rng().gen_range(1000..2000)));
+        thread::sleep(Duration::from_millis(
+            rand::thread_rng().gen_range(1000..2000),
+        ));
         let chosen_move = moves[rand::thread_rng().gen_range(0..moves.len())].clone();
         println!("  -> {}", chosen_move.square);
         chosen_move
@@ -87,7 +89,10 @@ impl Player {
             if let Some(valid_move) = moves.iter().find(|m| m.square == square) {
                 return valid_move.clone();
             }
-            println!("  Can't place a {} disk in square {}!\n", self.color, square);
+            println!(
+                "  Can't place a {} disk in square {}!\n",
+                self.color, square
+            );
         }
     }
 
