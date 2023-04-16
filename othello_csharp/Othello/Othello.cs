@@ -132,7 +132,7 @@ namespace Othello
                 Console.Write("Choose board size (default is 8): ");
                 if (int.TryParse(Console.ReadLine(), out var boardSize))
                 {
-                    return Math.Max(4, Math.Min(boardSize, 16));
+                    return Math.Max(4, Math.Min(boardSize, 10));
                 }
                 ColorPrint.Error("give a valid number...");
             }
@@ -148,6 +148,10 @@ namespace Othello
             }
             else
             {
+                if (boardSize < 4 || boardSize > 10)
+                {
+                    throw new Exception($"Unsupported board size: {boardSize}");
+                }
                 Console.WriteLine($"Using board size: {boardSize}");
             }
 

@@ -112,7 +112,7 @@ size_t othello::Othello::get_board_size()
     print("Choose board size (default is 8): ", false);
     int size;
     std::cin >> size;
-    return static_cast<size_t>(std::clamp(size, 4, 16));
+    return static_cast<size_t>(std::clamp(size, 4, 10));
 }
 
 int main(int argc, const char* argv[])

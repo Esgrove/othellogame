@@ -95,7 +95,7 @@ build_project() {
         print_error_and_exit "dotnet not found in path"
     fi
 
-    print_magenta "Building $BUILD_TYPE for $RUNTIME"
+    print_magenta "Building Othello C# $BUILD_TYPE for $RUNTIME"
     time dotnet publish \
         --configuration "$BUILD_TYPE" \
         --output "$BUILD_DIR" \

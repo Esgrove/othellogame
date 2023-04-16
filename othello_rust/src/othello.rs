@@ -122,7 +122,7 @@ impl Othello {
             let mut input = String::new();
             if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {
                 if let Ok(board_size) = input.trim().parse::<usize>() {
-                    return board_size.clamp(4, 16);
+                    return board_size.clamp(4, 10);
                 }
             }
             println!("{}", "give a valid number...".red());

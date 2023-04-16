@@ -95,7 +95,7 @@ class Othello:
         while True:
             try:
                 ans = int(input("Choose board size (default is 8): "))
-                return clamp(ans, 4, 16)
+                return clamp(ans, 4, 10)
             except ValueError:
                 print_error("give a valid number...")
 
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     try:
         # try to read board size from command line args
         board_size = int(args[0])
-        if board_size < 4 or board_size > 16:
+        if board_size < 4 or board_size > 10:
             print_error("Unsupported board size: {}", board_size)
             sys.exit(1)
 
