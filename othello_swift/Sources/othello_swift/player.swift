@@ -2,7 +2,7 @@
 import Foundation
 
 class Player {
-    var can_play_: Bool = true
+    var can_play: Bool = true
     var disk: Disk
     var human: Bool = true
     var rounds_played: Int = 0
@@ -12,16 +12,12 @@ class Player {
         self.disk = disk
     }
 
-    func can_play() -> Bool {
-        self.can_play_
-    }
-
     /// Play one round as this player.
     func play_one_move(board: inout Board) {
         print("Turn: \(self.disk)")
         let moves = board.possible_moves(disk: self.disk)
         if !moves.isEmpty {
-            self.can_play_ = true
+            self.can_play = true
             if self.human && self.show_helpers {
                 board.print_possible_moves(moves)
             }
@@ -31,7 +27,7 @@ class Player {
             board.print_score()
             self.rounds_played += 1
         } else {
-            self.can_play_ = false
+            self.can_play = false
             print("  No moves available...".yellow())
         }
     }

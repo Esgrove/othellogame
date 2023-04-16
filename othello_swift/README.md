@@ -7,6 +7,7 @@
 ```shell
 swift build
 swift build --configuration release
+
 swift run
 swift run --configuration release
 ```
