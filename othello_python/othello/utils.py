@@ -73,6 +73,7 @@ class Step:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Step):
+            # another way: `(self.x, self.y) == (other.x, other.y)`
             return self.x == other.x and self.y == other.y
         elif len(other) == 2:
             return self.x == other[0] and self.y == other[1]
@@ -177,22 +178,46 @@ class Square:
         return other + self
 
     def __eq__(self, other) -> bool:
-        return (self.x, self.y) == (other.x, other.y)
+        if isinstance(other, Square):
+            return self.x == other.x and self.y == other.y
+        elif len(other) == 2:
+            return self.x == other[0] and self.y == other[1]
+        return NotImplemented
 
     def __ne__(self, other) -> bool:
-        return (self.x, self.y) != (other.x, other.y)
+        if isinstance(other, Square):
+            return self.x != other.x or self.y != other.y
+        elif len(other) == 2:
+            return self.x != other[0] or self.y != other[1]
+        return NotImplemented
 
     def __lt__(self, other) -> bool:
-        return self.x < other.x or (self.x <= other.x and self.y < other.y)
+        if isinstance(other, Square):
+            return self.x < other.x or (self.x <= other.x and self.y < other.y)
+        elif len(other) == 2:
+            return self.x < other[0] or (self.x <= other[0] and self.y < other[1])
+        return NotImplemented
 
     def __le__(self, other) -> bool:
-        return self.x <= other.x and self.y < other.y
+        if isinstance(other, Square):
+            return self.x <= other.x and self.y < other.y
+        elif len(other) == 2:
+            return self.x <= other[0] and self.y < other[1]
+        return NotImplemented
 
     def __gt__(self, other) -> bool:
-        return self.x > other.x or (self.x >= other.x and self.y > other.y)
+        if isinstance(other, Square):
+            return self.x > other.x or (self.x >= other.x and self.y > other.y)
+        elif len(other) == 2:
+            return self.x > other[0] or (self.x >= other[0] and self.y > other[1])
+        return NotImplemented
 
     def __ge__(self, other) -> bool:
-        return self.x >= other.x and self.y >= other.y
+        if isinstance(other, Square):
+            return self.x >= other.x and self.y >= other.y
+        elif len(other) == 2:
+            return self.x >= other[0] and self.y >= other[1]
+        return NotImplemented
 
     def __str__(self) -> str:
         return f"({self.x},{self.y})"
@@ -214,17 +239,13 @@ class Move:
         return (self.square, self.value) != (other.square, other.value)
 
     def __lt__(self, other) -> bool:
-        return self.value > other.value or (
-            self.value == other.value and self.square < other.square
-        )
+        return self.value > other.value or (self.value == other.value and self.square < other.square)
 
     def __le__(self, other) -> bool:
         return self.value >= other.value and self.square <= other.square
 
     def __gt__(self, other) -> bool:
-        return self.value < other.value or (
-            self.value == other.value and self.square > other.square
-        )
+        return self.value < other.value or (self.value == other.value and self.square > other.square)
 
     def __ge__(self, other) -> bool:
         return self.value <= other.value and self.square >= other.square
