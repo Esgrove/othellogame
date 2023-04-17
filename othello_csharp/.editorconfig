@@ -1,3 +1,9 @@
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Generated from Visual Studio 2022
+
 # C# files
 [*.cs]
 

@@ -1,4 +1,4 @@
-﻿//==========================================================
+//==========================================================
 // Class Othello
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi

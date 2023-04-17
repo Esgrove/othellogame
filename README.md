@@ -76,7 +76,7 @@ Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFor
 
 ### C\#
 
-.NET 6 and C# 8.
+.NET 7 and C# 8.
 Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal.
 Follows the C# style guide (*PascalCase*).
 
