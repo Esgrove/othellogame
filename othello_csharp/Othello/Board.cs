@@ -1,3 +1,10 @@
+//==========================================================
+// Class Board
+// Othello (Reversi) game
+// https://en.wikipedia.org/wiki/Reversi
+// Akseli Lukkarila
+//==========================================================
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -53,7 +60,8 @@ namespace Othello
             }
         }
 
-        /// Return true if board contains empty squares
+        /// Return true if board contains empty squares.
+        /// -> still possible to make a move.
         public bool CanPlay()
         {
             return _emptySquares.Any();
@@ -163,7 +171,7 @@ namespace Othello
         public void PrintScore()
         {
             var (black, white) = PlayerScores();
-            Console.WriteLine("\n" + this);
+            Console.WriteLine($"\n{this}");
             Console.Write($"Score: {ColorPrint.Get(black, Disk.Black.DiskColor())} | " +
                                  $"{ColorPrint.Get(white, Disk.White.DiskColor())}\n");
         }
@@ -177,20 +185,6 @@ namespace Othello
                 return Disk.Empty;
             }
             return sum > 0 ? Disk.White : Disk.Black;
-        }
-
-        /// Format game board to string
-        public override string ToString()
-        {
-            var text = _indices.Aggregate(" ", (current, i) => current + $" {i}");
-            foreach (var y in _indices)
-            {
-                text += $"\n{y}";
-                text = _indices
-                    .Select(x => _board[y * _size + x])
-                    .Aggregate(text, (current, disk) => current + $" {disk.BoardChar()}");
-            }
-            return text;
         }
 
         /// Check that the given coordinates are inside the board
@@ -229,6 +223,17 @@ namespace Othello
             return _board.Sum(x => Convert.ToInt32(x));
         }
 
+        /// Returns the state of the board (empty, white, black) at the given coordinates.
+        private Disk? GetSquare(Square square)
+        {
+            var (x, y) = square;
+            if (!CheckCoordinates(x, y))
+            {
+                return null;
+            }
+            return _board[y * _size + x];
+        }
+
         /// Sets the given square to given value.
         private void SetSquare(Square square, Disk disk)
         {
@@ -240,15 +245,18 @@ namespace Othello
             _board[y * _size + x] = disk;
         }
 
-        /// Returns the state of the board (empty, white, black) at the given coordinates.
-        private Disk? GetSquare(Square square)
+        /// Format game board to string
+        public override string ToString()
         {
-            var (x, y) = square;
-            if (!CheckCoordinates(x, y))
+            var text = _indices.Aggregate(" ", (current, i) => current + $" {i}");
+            foreach (var y in _indices)
             {
-                return null;
+                text += $"\n{y}";
+                text = _indices
+                    .Select(x => _board[y * _size + x])
+                    .Aggregate(text, (current, disk) => current + $" {disk.BoardChar()}");
             }
-            return _board[y * _size + x];
+            return text;
         }
     }
 }

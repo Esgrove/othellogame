@@ -11,22 +11,25 @@
 #include <iostream>  // std::cout
 #include <string>    // std::string
 
+/// Format string with color using fmt.
 template<typename T> std::string get_color(const T& object, fmt::color color)
 {
     return fmt::format(fmt::fg(color), "{}", object);
 }
 
+/// Print text with color.
 template<typename T> void print_color(const T& object, fmt::color color = fmt::color::white)
 {
     fmt::print(fmt::fg(color), object);
 }
 
+/// Print bold text.
 template<typename T> void print_bold(const T& object, fmt::color color = fmt::color::white)
 {
     fmt::print(fmt::emphasis::bold | fmt::fg(color), object);
 }
 
-template<typename T> void print_error(const T& message, const int& indent = 0)
+template<typename T> void print_error(const T& message, int indent = 0)
 {
     auto whitespace = std::string(indent, ' ');
     fmt::print(

@@ -78,7 +78,7 @@ namespace Othello
         /// Keep making moves until both players can't make a move anymore.
         private void GameLoop()
         {
-            while (_board.CanPlay() && (_playerBlack.CanPlay() || _playerWhite.CanPlay()))
+            while (_board.CanPlay() && (_playerBlack.canPlay || _playerWhite.canPlay))
             {
                 ++_roundsPlayed;
                 Console.WriteLine($"\n=========== ROUND: {_roundsPlayed} ===========");

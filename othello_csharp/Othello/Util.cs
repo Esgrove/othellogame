@@ -1,14 +1,66 @@
+//==========================================================
+// Utils
+// Helper utilities for Othello game
+// Akseli Lukkarila
+//==========================================================
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 
 namespace Othello
 {
+    /// Represents one game piece or lack of one.
     public enum Disk : int
     {
         Black = -1,
         Empty = 0,
         White = 1
+    }
+
+    /// Represents one step direction on the board.
+    // TODO
+    public readonly struct Step
+    {
+        public Step(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (!(obj is Step step))
+            {
+                return false;
+            }
+            return Equals(step);
+        }
+
+        public bool Equals(Step other)
+        {
+            var (x, y) = other;
+            return X.Equals(x) && Y.Equals(y);
+        }
+
+        public override string ToString()
+        {
+            return $"[{X},{Y}]";
+        }
+
+        public void Deconstruct(out int x, out int y)
+        {
+            x = X;
+            y = Y;
+        }
+
+        public readonly int X;
+        public readonly int Y;
     }
 
     /// Represents one square location on the board.

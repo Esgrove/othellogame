@@ -36,6 +36,19 @@ void othello::Player::play_one_move(Board& board)
     }
 }
 
+/// Set player to be controlled by human or computer.
+void othello::Player::set_human(bool is_human)
+{
+    this->human = is_human;
+}
+
+/// Reset player status for a new game.
+void othello::Player::reset()
+{
+    this->rounds_played = 0;
+    this->can_play = true;
+}
+
 /// Return move chosen by computer.
 othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
 {
@@ -59,13 +72,13 @@ othello::Move othello::Player::get_human_move(const std::vector<Move>& moves)
     while (true) {
         auto square = get_square();
         // check if given square is one of the possible moves
-        if (auto move_iter = std::find_if(
+        if (auto move = std::find_if(
                 moves.begin(),
                 moves.end(),
                 [&square](const Move& move) { return move.square == square; });
-            move_iter != moves.end()) {
+            move != moves.end()) {
             // dereference iterator to get value
-            return *move_iter;
+            return *move;
         }
         print_error(
             fmt::format("Can't place a {} disk in square {}!\n", disk_string(disk), square), 2);

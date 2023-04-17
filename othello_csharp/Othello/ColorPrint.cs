@@ -15,10 +15,12 @@ namespace Othello
         {
             Console.Write($"{text}".Pastel(color));
         }
+
         public static void WriteLine<T>(T text, Color color)
         {
             Console.WriteLine($"{text}".Pastel(color));
         }
+
         public static void Error(string message, int indent = 0)
         {
             var whitespace = indent > 0 ? new string(' ', indent) : "";

@@ -16,11 +16,11 @@ class Player:
     """Defines one player (human or computer)."""
 
     def __init__(self, disk: Disk, human=True, show_helpers=True):
-        self.can_play: bool = True
         self._disk: Disk = disk
         self._human: bool = human
         self._rounds_played: int = 0
         self._show_helpers: bool = show_helpers
+        self.can_play: bool = True
 
     def play_one_move(self, board: Board) -> None:
         """Play one round as this player."""

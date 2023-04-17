@@ -1,3 +1,9 @@
+//==========================================================
+// Class Player
+// Defines one player for Othello
+// Akseli Lukkarila
+//==========================================================
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,9 +12,10 @@ using System.Threading;
 
 namespace Othello
 {
+    /// Defines one player (human or computer).
     internal class Player
     {
-        private bool _canPlay;
+        public bool canPlay;
         private bool _human;
         private int _roundsPlayed;
         private readonly Disk _disk;
@@ -20,13 +27,8 @@ namespace Othello
             _disk = color;
             _human = true;
             _random = new Random();
-            _canPlay = true;
+            canPlay = true;
             _showHelpers = true;
-        }
-
-        public bool CanPlay()
-        {
-            return _canPlay;
         }
 
         /// Play one round as this player.
@@ -36,7 +38,7 @@ namespace Othello
             var moves = board.PossibleMoves(_disk);
             if (moves.Any())
             {
-                _canPlay = true;
+                canPlay = true;
                 if (_human && _showHelpers)
                 {
                     board.PrintMoves(moves);
@@ -45,14 +47,16 @@ namespace Othello
                 board.PlaceDisc(chosenMove);
                 board.PrintScore();
                 ++_roundsPlayed;
+                Thread.Sleep(1000);
             }
             else
             {
-                _canPlay = false;
+                canPlay = false;
                 ColorPrint.WriteLine("  No moves available...", Color.Yellow);
             }
         }
 
+        /// Set player to be controlled by human or computer.
         public void SetHuman(bool isHuman)
         {
             _human = isHuman;
@@ -61,6 +65,12 @@ namespace Othello
         public override string ToString()
         {
             return $"{_disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
+        }
+
+        public void reset()
+        {
+            _roundsPlayed = 0;
+            canPlay = true;
         }
 
         /// Return move chosen by computer.
@@ -116,12 +126,6 @@ namespace Othello
         private string TypeString()
         {
             return _human ? "Human   " : "Computer";
-        }
-
-        private void reset()
-        {
-            _roundsPlayed = 0;
-            _canPlay = true;
         }
     }
 }

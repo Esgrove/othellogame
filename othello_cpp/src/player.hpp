@@ -20,12 +20,8 @@ public:
     [[nodiscard]] std::string type_string() const { return this->human ? "Human   " : "Computer"; }
 
     void play_one_move(Board& board);
-    void set_human(bool is_human) { this->human = is_human; }
-    void reset()
-    {
-        this->rounds_played = 0;
-        this->can_play = true;
-    }
+    void set_human(bool is_human);
+    void reset();
 
     // String formatting
     friend std::ostream& operator<<(std::ostream& out, Player& player);
@@ -39,7 +35,6 @@ private:
     Move get_human_move(const std::vector<Move>& moves);
 
     Disk disk;
-
     bool human {true};
     bool show_helpers {true};
     int rounds_played {0};

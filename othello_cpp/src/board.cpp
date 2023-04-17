@@ -41,16 +41,11 @@ othello::Board::Board(size_t size) : indices(size), size(size)
 }
 
 /// Return true if board contains empty squares.
+/// -> still possible to make a move.
 bool othello::Board::can_play() const
 {
     // std::find(board.begin(), board.end(), Disk::empty) != board.end();
     return !empty_squares.empty();
-}
-
-/// Check that the given coordinates are inside the board.
-bool othello::Board::check_coordinates(const int& x, const int& y) const
-{
-    return 0 <= x && x < static_cast<int>(size) && 0 <= y && y < static_cast<int>(size);
 }
 
 /// Update board for given disk placement.
@@ -151,6 +146,23 @@ void othello::Board::print_score() const
         get_color(std::to_string(white), disk_color(Disk::white)));
 }
 
+/// Returns the winner color.
+othello::Disk othello::Board::result() const
+{
+    using enum othello::Disk;
+    int sum = score();
+    if (sum == 0) {
+        return empty;
+    }
+    return sum > 0 ? white : black;
+}
+
+/// Check that the given coordinates are inside the board.
+bool othello::Board::check_coordinates(const int& x, const int& y) const
+{
+    return 0 <= x && x < static_cast<int>(size) && 0 <= y && y < static_cast<int>(size);
+}
+
 /// Count and return the number of black and white disks.
 std::tuple<int, int> othello::Board::player_scores() const
 {
@@ -171,18 +183,8 @@ std::tuple<int, int> othello::Board::player_scores() const
     return {black, white};
 }
 
-/// Returns the winner color.
-othello::Disk othello::Board::result() const
-{
-    using enum othello::Disk;
-    int sum = score();
-    if (sum == 0) {
-        return empty;
-    }
-    return sum > 0 ? white : black;
-}
-
-/// Returns the total score (positive means more white disks and negative means more black disks).
+/// Returns the total score.
+/// Positive value means more white disks and negative means more black disks.
 int othello::Board::score() const
 {
     // enum class prevents implicit conversion from Disk to int,

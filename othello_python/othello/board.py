@@ -47,7 +47,10 @@ class Board:
         }
 
     def can_play(self) -> bool:
-        """Return true if board contains empty squares -> still possible to make a move."""
+        """
+        Return true if board contains empty squares.
+        -> still possible to make a move.
+        """
         return bool(self._empty_squares)
 
     def place_disk(self, player_move: Move) -> None:
@@ -91,7 +94,7 @@ class Board:
 
         return sorted(moves)
 
-    def print_moves(self, moves: list[Move]):
+    def print_moves(self, moves: list[Move]) -> None:
         """Print available move coordinates and resulting points gained."""
         print_color(f"  Possible moves ({len(moves)}):", Color.yellow)
         # convert board from Disk enums to strings
@@ -109,7 +112,7 @@ class Board:
             text += " ".join(disk for disk in row)
             print(text)
 
-    def print_score(self):
+    def print_score(self) -> None:
         """Count and print the number of black and white disks."""
         black, white = self._player_scores()
         print(f"\n{self}")
@@ -131,7 +134,7 @@ class Board:
         return 0 <= x < self._size and 0 <= y < self._size
 
     def _player_scores(self) -> tuple[int, int]:
-        """Count and return the number of black and white disks (white, black)."""
+        """Count and return the number of black and white disks."""
         white = 0  # sum(1 for d in self._board if d == Disk.WHITE)
         black = 0  # sum(1 for d in self._board if d == Disk.BLACK)
         for row in self._board:
@@ -146,7 +149,7 @@ class Board:
     def _score(self) -> int:
         """
         Returns the total score.
-        Positive value means more white disks and negative means more black disks.¨
+        Positive value means more white disks and negative means more black disks.
         """
         return sum(sum(row) for row in self._board)
 
@@ -155,14 +158,14 @@ class Board:
         x, y = square
         return self._board[y][x] if self._check_coordinates(x, y) else None
 
-    def _set_square(self, square: Square, disk: Disk):
+    def _set_square(self, square: Square, disk: Disk) -> None:
         """Sets the given square to given value."""
         x, y = square
         if not self._check_coordinates(x, y):
             raise ValueError(f"Invalid coordinates: {square}!")
         self._board[y][x] = disk
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Format game board to string."""
         text = f"  {' '.join(get_color(str(x), bold=True) for x in range(self._size))}"
         for index, row in enumerate(self._board):
