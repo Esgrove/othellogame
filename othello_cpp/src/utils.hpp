@@ -89,12 +89,12 @@ namespace othello
 {
 /// Represents one possible disk placement for given disk color.
 struct Move {
-    Move() : disk(Disk::empty), square(0, 0), value(0) {}
+    Move() : square(0, 0), disk(Disk::empty), value(0) {}
     Move(Square square, Disk disk, unsigned int value, std::vector<Step> directions)
-        : disk(disk)
-        , square(square)
-        , directions(std::move(directions))
+        : square(square)
+        , disk(disk)
         , value(value)
+        , directions(std::move(directions))
     {}
 
     friend std::ostream& operator<<(std::ostream& out, const Move& move)
