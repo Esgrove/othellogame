@@ -78,28 +78,66 @@ class Step:
             return self.x == other[0] and self.y == other[1]
         return NotImplemented
 
+    def __ne__(self, other) -> bool:
+        if isinstance(other, Step):
+            return self.x != other.x or self.y != other.y
+        elif len(other) == 2:
+            return self.x != other[0] or self.y != other[1]
+        return NotImplemented
+
+    def __lt__(self, other) -> bool:
+        if isinstance(other, Step):
+            return self.x < other.x or (self.x <= other.x and self.y < other.y)
+        elif len(other) == 2:
+            return self.x < other[0] or (self.x <= other[0] and self.y < other[1])
+        return NotImplemented
+
+    def __le__(self, other) -> bool:
+        if isinstance(other, Step):
+            return self.x <= other.x and self.y < other.y
+        elif len(other) == 2:
+            return self.x <= other[0] and self.y < other[1]
+        return NotImplemented
+
+    def __gt__(self, other) -> bool:
+        if isinstance(other, Step):
+            return self.x > other.x or (self.x >= other.x and self.y > other.y)
+        elif len(other) == 2:
+            return self.x > other[0] or (self.x >= other[0] and self.y > other[1])
+        return NotImplemented
+
+    def __ge__(self, other) -> bool:
+        if isinstance(other, Step):
+            return self.x >= other.x and self.y >= other.y
+        elif len(other) == 2:
+            return self.x >= other[0] and self.y >= other[1]
+        return NotImplemented
+
     def __str__(self) -> str:
+        """Convert to string."""
         return f"[{self.x},{self.y}]"
 
     def __repr__(self) -> str:
-        # requires Python 3.10+
-        match self:
-            case (-1, -1):
-                return "🡯"
-            case (-1, 0):
-                return "🡨"
-            case (-1, 1):
-                return "🡬"
-            case (0, -1):
-                return "🡫"
-            case (0, 1):
-                return "🡩"
-            case (1, -1):
-                return "🡮"
-            case (1, 0):
-                return "🡪"
-            case (1, 1):
-                return "🡭"
+        """Display Step with direction arrow."""
+        # `match` does not work here without unpacking step :(
+        if self == (-1, -1):
+            return f"{self} \u2199"
+        elif self == (-1, 0):
+            return f"{self} \u2190"
+        elif self == (-1, 1):
+            return f"{self} \u2196"
+        elif self == (0, -1):
+            return f"{self} \u2193"
+        elif self == (0, 1):
+            return f"{self} \u2191"
+        elif self == (1, -1):
+            return f"{self} \u2198"
+        elif self == (1, 0):
+            return f"{self} \u2192"
+        elif self == (1, 1):
+            return f"{self} \u2197"
+
+        return str(self)
 
 
 class Square:
