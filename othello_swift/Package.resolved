@@ -1,16 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "ColorizeSwift",
-        "repositoryURL": "https://github.com/mtynior/ColorizeSwift.git",
-        "state": {
-          "branch": null,
-          "revision": "2a354639173d021f4648cf1912b2b00a3a7cd83c",
-          "version": "1.6.0"
-        }
+  "pins" : [
+    {
+      "identity" : "colorizeswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mtynior/ColorizeSwift.git",
+      "state" : {
+        "revision" : "2a354639173d021f4648cf1912b2b00a3a7cd83c",
+        "version" : "1.6.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
+        "version" : "1.2.2"
+      }
+    }
+  ],
+  "version" : 2
 }
