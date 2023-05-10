@@ -83,11 +83,10 @@ target_compile_definitions(othello_cpp PRIVATE
 # https://github.com/fmtlib/fmt
 # This can be used if fmt is installed locally (brew, vcpkg, apt...)
 # find_package(fmt 9 REQUIRED)
-
 message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 9.1.0
+    GIT_TAG 10.0.0
 )
 FetchContent_MakeAvailable(fmt)
 
