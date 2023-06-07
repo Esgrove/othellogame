@@ -1,8 +1,14 @@
-# Othello CPP
+# Othello C++
 # Akseli Lukkarila
+# 2019 - 2023
 cmake_minimum_required(VERSION 3.18)
 
-project("Othello CPP" VERSION 2.0 LANGUAGES CXX)
+project("Othello CPP"
+    VERSION 2.0
+    DESCRIPTION "Othello CLI game implementation"
+    HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
+    LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -120,5 +126,5 @@ endif()
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
 message(STATUS "CMAKE_CXX_COMPILER_LAUNCHER: ${CMAKE_CXX_COMPILER_LAUNCHER}")
 
-message(STATUS "CMAKE_CXX_FLAGS_DEBUG is: ${CMAKE_CXX_FLAGS_DEBUG}")
-message(STATUS "CMAKE_CXX_FLAGS_RELEASE is: ${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS "CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
