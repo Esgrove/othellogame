@@ -10,8 +10,8 @@
 #include <algorithm>  // transform
 #include <iostream>   // cout, cin
 #include <sstream>
-#include <string>     // string
-#include <utility>    // move
+#include <string>   // string
+#include <utility>  // move
 #include <vector>
 
 namespace othello
@@ -52,10 +52,7 @@ struct Square {
         return out << fmt::format("({},{})", square.x, square.y);
     }
 
-    bool operator<(const Square& other) const
-    {
-        return x < other.x || (x <= other.x && y < other.y);
-    }
+    bool operator<(const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
     bool operator==(const Square& other) const { return x == other.x && y == other.y; }
     Square operator+(const Square& other) const { return {x + other.x, y + other.y}; }
     Square& operator+=(const Square& other)

@@ -72,16 +72,14 @@ othello::Move othello::Player::get_human_move(const std::vector<Move>& moves)
     while (true) {
         auto square = get_square();
         // check if given square is one of the possible moves
-        if (auto move = std::find_if(
-                moves.begin(),
-                moves.end(),
-                [&square](const Move& move) { return move.square == square; });
-            move != moves.end()) {
+        if (auto move
+            = std::find_if(moves.begin(), moves.end(), [&square](const Move& move) { return move.square == square; });
+            move != moves.end())
+        {
             // dereference iterator to get value
             return *move;
         }
-        print_error(
-            fmt::format("Can't place a {} disk in square {}!\n", disk_string(disk), square), 2);
+        print_error(fmt::format("Can't place a {} disk in square {}!\n", disk_string(disk), square), 2);
     }
 }
 
@@ -107,10 +105,6 @@ othello::Square othello::Player::get_square()
 
 std::ostream& operator<<(std::ostream& out, Player& player)
 {
-    return out << fmt::format(
-               "{} | {} | {}",
-               disk_string(player.disk),
-               player.type_string(),
-               player.rounds_played);
+    return out << fmt::format("{} | {} | {}", disk_string(player.disk), player.type_string(), player.rounds_played);
 }
 }  // namespace othello

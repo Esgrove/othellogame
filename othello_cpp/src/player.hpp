@@ -12,7 +12,8 @@
 namespace othello
 {
 /// Defines one player (human or computer).
-class Player {
+class Player
+{
 public:
     explicit Player(Disk disk) : disk(disk) {};
 
