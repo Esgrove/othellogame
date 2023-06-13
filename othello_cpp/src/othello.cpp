@@ -13,6 +13,9 @@
 #include <algorithm>  // clamp, transform
 #include <iostream>
 
+static constexpr size_t MIN_BOARD_SIZE = 4;
+static constexpr size_t MAX_BOARD_SIZE = 16;
+
 othello::Othello::Othello(size_t board_size) : board(Board(board_size)), board_size(board_size) {}
 
 /// Play one full game of Othello.
@@ -130,7 +133,8 @@ int main(int argc, const char* argv[])
                 version::VERSION_NUMBER,
                 version::DATE);
             return 1;
-        } else if (arg == "--version" || arg == "-v") {
+        }
+        if (arg == "--version" || arg == "-v") {
             fmt::print(
                 "{} {} {} {} {}\n",
                 version::APP_NAME,
@@ -147,7 +151,7 @@ int main(int argc, const char* argv[])
     try {
         if (arguments.size() >= 2) {
             board_size = std::stoi(arguments[1]);
-            if (board_size < 4 || board_size > 16) {
+            if (board_size < MIN_BOARD_SIZE || board_size > MAX_BOARD_SIZE) {
                 print_error(fmt::format("Unsupported board size: {}", board_size));
                 return 1;
             }

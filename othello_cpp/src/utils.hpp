@@ -180,9 +180,9 @@ template<typename T> inline void print(T object, bool newline = true, std::ostre
 /// Workaround for custom types without formatter specialization for fmt.
 template<typename T> inline std::string to_string(const T& object)
 {
-    std::ostringstream ss;
-    ss << object;
-    return ss.str();
+    std::ostringstream stream;
+    stream << object;
+    return stream.str();
 }
 }  // namespace othello
 
