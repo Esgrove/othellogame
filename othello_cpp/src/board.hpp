@@ -29,7 +29,7 @@ public:
     [[nodiscard]] bool can_play() const;
     [[nodiscard]] std::vector<Move> possible_moves(Disk disk) const;
 
-    friend std::ostream& operator<<(std::ostream& out, const Board& othello);
+    friend std::ostream& operator<<(std::ostream& out, const Board& board);
 
 private:
     [[nodiscard]] bool check_coordinates(const int& x, const int& y) const;
