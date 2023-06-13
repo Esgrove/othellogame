@@ -91,8 +91,8 @@ void othello::Othello::print_status() const
 /// Read user input for yes/no question and return bool.
 bool othello::Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no)
 {
-    // fmt library enables nice modern) string formatting,
-    // instead of having to use the horrible stringstream version:
+    // fmt library enables nice, modern string formatting,
+    // instead of having to use the horrible stringstream system:
     // `std::cout << question << " (" << yes << "/" << no << ")? ";`
     fmt::print("{} ({}/{})? ", question, yes, no);
     std::string input;
