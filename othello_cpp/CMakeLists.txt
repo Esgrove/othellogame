@@ -11,6 +11,8 @@ project("Othello CPP"
 )
 
 set(CMAKE_CXX_STANDARD 20)
+# Export compile commands for clang-tidy
+# Note: only works with makefile and ninja generators
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # https://cmake.org/cmake/help/latest/module/FetchContent.html
