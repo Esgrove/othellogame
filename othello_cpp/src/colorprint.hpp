@@ -64,44 +64,44 @@ namespace ansi
 // Stream manipulators for easy ANSI color usage with stringstreams.
 // Example usage: std::cout << ansi::red << "example" << ansi::reset << std::endl;
 
-template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& reset(std::basic_ostream<T, Traits>& os)
+template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& reset(std::basic_ostream<T, Traits>& stream)
 {
-    return os << ANSI_RESET;
+    return stream << ANSI_RESET;
 }
 
-template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& black(std::basic_ostream<T, Traits>& os)
+template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& black(std::basic_ostream<T, Traits>& stream)
 {
-    return os << ANSI_BLACK;
+    return stream << ANSI_BLACK;
 }
 
-template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& blue(std::basic_ostream<T, Traits>& os)
+template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& blue(std::basic_ostream<T, Traits>& stream)
 {
-    return os << ANSI_BLUE;
+    return stream << ANSI_BLUE;
 }
 
-template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& red(std::basic_ostream<T, Traits>& os)
+template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& red(std::basic_ostream<T, Traits>& stream)
 {
-    return os << ANSI_RED;
+    return stream << ANSI_RED;
 }
 
-template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& yellow(std::basic_ostream<T, Traits>& os)
+template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& yellow(std::basic_ostream<T, Traits>& stream)
 {
-    return os << ANSI_YELLOW;
+    return stream << ANSI_YELLOW;
 }
 
-template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& cyan(std::basic_ostream<T, Traits>& os)
+template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& cyan(std::basic_ostream<T, Traits>& stream)
 {
-    return os << ANSI_CYAN;
+    return stream << ANSI_CYAN;
 }
 
-template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& magenta(std::basic_ostream<T, Traits>& os)
+template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& magenta(std::basic_ostream<T, Traits>& stream)
 {
-    return os << ANSI_MAGENTA;
+    return stream << ANSI_MAGENTA;
 }
 
-template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& green(std::basic_ostream<T, Traits>& os)
+template<class T, class Traits> constexpr std::basic_ostream<T, Traits>& green(std::basic_ostream<T, Traits>& stream)
 {
-    return os << ANSI_GREEN;
+    return stream << ANSI_GREEN;
 }
 
 }  // namespace ansi
