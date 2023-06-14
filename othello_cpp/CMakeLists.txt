@@ -47,7 +47,7 @@ if(CCACHE_EXECUTABLE)
     message(STATUS "ccache found: ${CCACHE_EXECUTABLE}")
     # print version with nice formatting
     execute_process(
-        COMMAND bash -c "ccache --version | sed '1q;d'"
+        COMMAND bash -c "${CCACHE_EXECUTABLE} --version | sed '1q;d'"
         OUTPUT_VARIABLE CCACHE_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
