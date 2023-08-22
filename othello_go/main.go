@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-
+	// https://github.com/logrusorgru/aurora
 	"github.com/logrusorgru/aurora/v4"
 )
 
 func main() {
-	fmt.Println("Hello,", aurora.Magenta("Aurora"))
-	fmt.Println(aurora.Bold(aurora.Cyan("Cya!")))
+	fmt.Println(aurora.Green("OTHELLO GAME - GO").Bold())
 }
