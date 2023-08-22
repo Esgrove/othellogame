@@ -2,6 +2,7 @@
 set -eo pipefail
 
 REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "${BASH_SOURCE[0]}")" && pwd))
+export REPO_ROOT
 
 # Check platform
 case "$(uname -s)" in

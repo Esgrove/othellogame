@@ -14,6 +14,11 @@ OPTIONS: All options are optional
         Display commands being executed.
 "
 
+# Import common functions
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=../common.sh
+source "$DIR/../common.sh"
+
 init_options() {
     BUILD_TYPE="Release"
 
@@ -54,37 +59,8 @@ init_options() {
             ;;
     esac
 
-    # Get absolute path to repo root
-    REPO_PATH=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
-    PROJECT_PATH="$REPO_PATH/othello_csharp"
+    PROJECT_PATH="$REPO_ROOT/othello_csharp"
     BUILD_DIR="$PROJECT_PATH/dotnet-build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
-}
-
-# Print a message with green color
-print_green() {
-    printf "\e[1;49;32m%s\e[0m\n" "$1"
-}
-
-# Print a message with magenta color
-print_magenta() {
-    printf "\e[1;49;35m%s\e[0m\n" "$1"
-}
-
-# Print a message with red color
-print_red() {
-    printf "\e[1;49;31m%s\e[0m\n" "$1"
-}
-
-# Print a message with yellow color
-print_yellow() {
-    printf "\e[1;49;33m%s\e[0m\n" "$1"
-}
-
-# Print an error and exit the program
-print_error_and_exit() {
-    print_red "ERROR: $1"
-    # use exit code if given as argument, otherwise default to 1
-    exit "${2:-1}"
 }
 
 build_project() {

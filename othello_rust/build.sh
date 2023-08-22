@@ -1,27 +1,19 @@
 #!/bin/bash
 set -eo pipefail
 
+# Import common functions
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=../common.sh
+source "$DIR/../common.sh"
+
 # Get absolute path to repo root
-REPO_PATH=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
-PROJECT_PATH="$REPO_PATH/othello_rust"
+REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
+PROJECT_PATH="$REPO_ROOT/othello_rust"
 
 if [ -z "$(command -v cargo)" ]; then
     echo "Cargo not found in path. Maybe install rustup?"
     exit 1
 fi
-
-# Check platform
-case "$(uname -s)" in
-    "Darwin")
-        PLATFORM="mac"
-        ;;
-    "MINGW"*)
-        PLATFORM="windows"
-        ;;
-    *)
-        PLATFORM="linux"
-        ;;
-esac
 
 pushd "$PROJECT_PATH" > /dev/null
 cargo build --release
