@@ -41,19 +41,6 @@ init_options() {
         shift
     done
 
-    # Check platform
-    case "$(uname -s)" in
-        "Darwin")
-            PLATFORM="mac"
-            ;;
-        "MINGW"*)
-            PLATFORM="windows"
-            ;;
-        *)
-            PLATFORM="linux"
-            ;;
-    esac
-
     # Get absolute path to repo root
     REPO_PATH=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
     PROJECT_PATH="$REPO_PATH/othello_cpp"

@@ -119,7 +119,7 @@ if __name__ == "__main__":
         try:
             # try to read board size from command line args
             board_size = int(args[0])
-            if board_size < 4 or board_size > 10:
+            if board_size < 4 or board_size > 16:
                 print_error(f"Unsupported board size: {board_size}")
                 sys.exit(1)
 
@@ -131,4 +131,4 @@ if __name__ == "__main__":
         game.play()
     except KeyboardInterrupt:
         # Catches CTRL-C
-        sys.exit("\ninterrupted...")
+        sys.exit("\naborted...")
