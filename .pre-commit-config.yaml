@@ -12,6 +12,7 @@ repos:
       - id: check-merge-conflict
       - id: check-toml
       - id: check-yaml
+        args: [--allow-multiple-documents]
       - id: debug-statements
       - id: end-of-file-fixer
       - id: mixed-line-ending
@@ -23,30 +24,36 @@ repos:
       - id: git-check
       - id: shfmt
 
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.285
+    hooks:
+      - id: ruff
+        name: python ruff
+        files: ^othello_python/
+        args: [--fix, --exit-non-zero-on-fix, --config, othello_python/pyproject.toml]
+
   - repo: https://github.com/psf/black
     rev: 23.7.0
     hooks:
       - id: black
+        name: python black
         language_version: python3.11
         files: ^othello_python/
-
-  - repo: https://github.com/pycqa/flake8
-    rev: 6.1.0
-    hooks:
-      - id: flake8
-        files: ^othello_python/
-        args: [--config, othello_python/setup.cfg]
+        args: [--config, othello_python/pyproject.toml]
 
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
       - id: isort
+        name: python isort
         files: ^othello_python/
+        args: [--settings-path, othello_python/pyproject.toml]
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.10.1
     hooks:
       - id: pyupgrade
+        name: python pyupgrade
         files: ^othello_python/
         args: [--py39-plus]
 
@@ -54,4 +61,25 @@ repos:
     rev: v16.0.6
     hooks:
       - id: clang-format
+        name: C++ clang-format
         files: ^othello_cpp/
+
+  - repo: local
+    hooks:
+      - id: rust-fmt
+        name: rust format
+        description: Run cargo fmt on files included in the commit.
+        entry: bash -c 'cd othello_rust && cargo fmt'
+        pass_filenames: true
+        types: [file, rust]
+        language: system
+        files: ^othello_rust/
+
+      - id: rust-clippy
+        name: rust lint
+        description: Run cargo clippy on files included in the commit.
+        entry: bash -c 'cd othello_rust && cargo clippy'
+        pass_filenames: false
+        types: [file, rust]
+        language: system
+        files: ^othello_rust/
