@@ -1,4 +1,5 @@
 """
+Utils
 Helper utilities for Othello game
 Akseli Lukkarila
 2019-2023

@@ -5,6 +5,7 @@
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
+// 2019-2023
 //==========================================================
 
 import ColorizeSwift

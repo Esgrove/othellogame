@@ -3,6 +3,7 @@
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
+// 2019-2023
 //==========================================================
 
 #include "othello.hpp"
@@ -105,7 +106,7 @@ bool othello::Othello::get_answer(const std::string& question, const std::string
     return input == yes;
 }
 
-/// Ask the desired board size from user.
+/// Ask and return the desired board size.
 size_t othello::Othello::get_board_size()
 {
     // TODO: error handling for invalid input

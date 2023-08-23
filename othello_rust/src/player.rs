@@ -1,7 +1,8 @@
 //==========================================================
 // Player
-// Play Othello (Reversi) on the command line
+// Defines one player for Othello
 // Akseli Lukkarila
+// 2019-2023
 //==========================================================
 
 extern crate colored;

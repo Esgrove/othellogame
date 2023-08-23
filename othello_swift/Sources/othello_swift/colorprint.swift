@@ -1,3 +1,10 @@
+//==========================================================
+// Colorprint
+// Interface for colored printing
+// Akseli Lukkarila
+// 2019-2023
+//==========================================================
+
 import ColorizeSwift
 
 func get_color<T>(_ message: T, _ color: TerminalColor) -> String {

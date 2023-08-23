@@ -1,7 +1,8 @@
 //==========================================================
-// Colorprint util
+// Colorprint header
 // Interface for colored printing
 // Akseli Lukkarila
+// 2019-2023
 //==========================================================
 
 #pragma once

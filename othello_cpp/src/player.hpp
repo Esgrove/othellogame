@@ -2,6 +2,7 @@
 // Class Player header
 // Defines one player for Othello
 // Akseli Lukkarila
+// 2019-2023
 //==========================================================
 
 #pragma once

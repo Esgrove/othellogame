@@ -1,5 +1,7 @@
 # Othello Rust
 
+Othello [Rust](https://www.rust-lang.org/) implementation.
+
 ## Build
 
 Rust and Cargo make things really easy:

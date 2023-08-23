@@ -1,8 +1,8 @@
 //==========================================================
 // Class Board header
-// Othello (Reversi) game
-// https://en.wikipedia.org/wiki/Reversi
+// Defines the game board
 // Akseli Lukkarila
+// 2019-2023
 //==========================================================
 
 #pragma once

@@ -3,6 +3,7 @@
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
+// 2019-2023
 //==========================================================
 
 extern crate colored;
@@ -24,7 +25,7 @@ pub(crate) struct Othello {
 }
 
 impl Othello {
-    // Typically this would be `new` but using init to match other languages
+    // Typically this would be `new` but using init to match other implementations
     pub fn init(size: usize) -> Othello {
         Othello {
             board: Board::new(size),
