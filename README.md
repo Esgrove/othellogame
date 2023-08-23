@@ -20,20 +20,21 @@ While the project is quite simple,
 it also covers pretty well most of the basic functionality and tooling one would commonly use in a programming language.
 It's big enough to get a good feel for a language,
 yet small enough that it could be done in a weekend even when starting with a new language.
-It is also very easy to check that the code is working correctly,
-especially since it is possible to compare side-by-side with the older implementations.
+It is also quite easy to check that the code is working correctly,
+especially since it is possible to compare side-by-side with the other implementations.
 
 So far, I have added *C#*, *Swift*, and *Rust* implementations.
 I might do a few other (modern) languages that interest me and/or have some hype around them,
 such as *Go*, *Kotlin*, *Ruby*, and *Zig*.
 
 In the meantime, there's probably still room to improve in the current implementations,
-especially with the C# and Swift versions since I haven't been actively using those languages.
+especially with the languages that I haven't been actively using.
 
 ## Program structure
 
 All implementations follow this overall architecture:
 
+* *main*: command line argument handling and entry point to initialize the game.
 * *othello*: The main gameplay loop.
 * *board*: Game board state and logic.
 * *player*: Player object used for making moves and storing player information.
@@ -67,12 +68,13 @@ Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rl
 which sadly very few C++ codebases seem to be using (in my experience).
 Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html).
 
+* main.cpp
 * othello.hpp & othello.cpp
 * board.hpp & board.cpp
 * player.hpp & player.cpp
 * utils.hpp
 * colorprint.hpp
-* (version.hpp)
+* version.hpp
 
 ### C\#
 
@@ -108,6 +110,7 @@ Uses the [colored](https://crates.io/crates/colored) crate for colored text in t
 * board.rs
 * player.rs
 * utils.rs
+* colorprint.rs
 
 ## TODO
 
