@@ -12,6 +12,7 @@ use crate::colored::Colorize;
 use std::io::{self, Write};
 
 use crate::board::Board;
+use crate::colorprint::print_error;
 use crate::player::Player;
 use crate::utils::Disk;
 
@@ -107,7 +108,7 @@ impl Othello {
     }
 
     /// Ask a question with two options, and return bool from user answer.
-    // Associated aka static functions (no self parameter)
+    // Associated aka static function (no self parameter)
     fn get_answer(text: &str, yes: &str, no: &str) -> bool {
         print!("{} ({}/{})? ", text, yes, no);
         let mut input = String::new();
@@ -126,7 +127,7 @@ impl Othello {
                     return board_size.clamp(4, 10);
                 }
             }
-            println!("{}", "give a valid number...".red());
+            print_error("Give a valid number...");
         }
     }
 }

@@ -6,7 +6,6 @@
 // 2019-2023
 //==========================================================
 
-// print with color to terminal
 extern crate colored;
 extern crate log;
 
@@ -18,10 +17,12 @@ use shadow_rs::shadow;
 use std::env;
 
 mod board;
+mod colorprint;
 mod othello;
 mod player;
 mod utils;
 
+// Get build information
 shadow!(build);
 
 /// Command line arguments
@@ -53,7 +54,7 @@ fn main() -> Result<()> {
 
     println!("{}", "OTHELLO GAME - RUST".green().bold());
 
-    // parse command line arguments using clap
+    // Parse command line arguments using clap
     let args = Args::parse();
     // let args: Vec<String> = env::args().collect();
 
@@ -70,15 +71,20 @@ fn main() -> Result<()> {
     }
 
     let board_size: usize = {
+        // Try to read board size from command line args
         if let Some(size) = args.size {
+            if size < 4 || size > 16 {
+                anyhow::bail!(format!("Unsupported board size: {}", size))
+            }
             println!("Using board size: {size}");
             size
         } else {
+            // Otherwise ask user for size
             othello::Othello::get_board_size()
         }
     };
+
     let mut game = othello::Othello::init(board_size);
     game.play();
-
     Ok(())
 }
