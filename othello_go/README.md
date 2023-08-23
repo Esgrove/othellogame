@@ -14,6 +14,10 @@ go run .
 go build -race
 ```
 
+```shell
+go install
+```
+
 Check binary install target:
 ```shell
 go list -f '{{.Target}}'
@@ -21,6 +25,8 @@ go list -f '{{.Target}}'
 
 ## Format code
 
-```shellß
+Using [gofmt](https://pkg.go.dev/cmd/gofmt)
+
+```shell
 gofmt -s -w .
 ```
