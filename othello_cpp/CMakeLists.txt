@@ -3,8 +3,8 @@
 # 2019 - 2023
 cmake_minimum_required(VERSION 3.18)
 
-project("Othello CPP"
-    VERSION 2.0
+project("Othello C++"
+    VERSION 2.1
     DESCRIPTION "Othello CLI game implementation"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -70,6 +70,7 @@ add_executable(othello_cpp
     src/board.cpp
     src/board.hpp
     src/colorprint.hpp
+    src/main.cpp
     src/othello.cpp
     src/othello.hpp
     src/player.cpp
