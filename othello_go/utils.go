@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cmp"
 	"fmt"
 	"runtime/debug"
 )
@@ -25,4 +26,12 @@ func versionInfo() string {
 		return fmt.Sprintf("Othello Go %s %s %s %s", timestamp, commit, version, arch)
 	}
 	return ""
+}
+
+// Clamp value to given range.
+func clamp[T cmp.Ordered](value T, minimum T, maximum T) T {
+	if minimum > maximum {
+		panic("Minimum value should be less than or equal to maximum!")
+	}
+	return max(minimum, min(value, maximum))
 }
