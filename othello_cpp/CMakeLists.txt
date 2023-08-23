@@ -96,7 +96,7 @@ target_compile_definitions(othello_cpp PRIVATE
 message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 10.0.0
+    GIT_TAG 10.1.0
 )
 FetchContent_MakeAvailable(fmt)
 
@@ -105,7 +105,7 @@ message(STATUS "Fetching GoogleTest library")
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest
-    GIT_TAG v1.13.0
+    GIT_TAG v1.14.0
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
