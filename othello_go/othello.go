@@ -1,6 +1,23 @@
+//==========================================================
+// Othello
+// Play Othello (Reversi) on the command line
+// https://en.wikipedia.org/wiki/Reversi
+// Akseli Lukkarila
+// 2019-2023
+//==========================================================
+
 package main
 
 import "fmt"
+
+type Othello struct {
+	boardSize    int
+	board        Board
+	gamesPlayed  int
+	playerBlack  Player
+	playerWhite  Player
+	roundsPlayed int
+}
 
 // Ask and return the desired board size.
 func getBoardSize() int {

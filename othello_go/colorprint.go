@@ -1,3 +1,10 @@
+//==========================================================
+// Colorprint
+// Interface for colored printing
+// Akseli Lukkarila
+// 2019-2023
+//==========================================================
+
 package main
 
 import (
