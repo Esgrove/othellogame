@@ -17,5 +17,5 @@ func print_color<T>(_ message: T, _ color: TerminalColor) {
 
 func print_error(_ message: String, indent: Int = 0) {
     let whitespace = String(repeating: " ", count: indent)
-    print("\(whitespace)Error: ".red() + message)
+    print("\(whitespace)Error: \(message)".red())
 }
