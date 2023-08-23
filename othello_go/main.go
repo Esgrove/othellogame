@@ -27,9 +27,9 @@ func main() {
 	}
 	boardSize, err := strconv.Atoi(args[0])
 	if err != nil {
-		fmt.Println(aurora.Red("Invalid board size"))
+		printError("Invalid board size")
 	} else if boardSize < 4 || boardSize > 16 {
-		fmt.Println(aurora.Red(fmt.Sprintf("Unsupported board size: %d", boardSize)))
+		printError("Unsupported board size: %d", boardSize)
 	}
 
 	fmt.Printf("Using board size: %d\n", boardSize)
