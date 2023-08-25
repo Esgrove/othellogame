@@ -83,9 +83,9 @@ func (o *Othello) getAnswer(text, yes, no string) bool {
 }
 
 func (o *Othello) printStatus() {
-	fmt.Println(o.playerBlack)
-	fmt.Println(o.playerWhite)
-	fmt.Println(o.board)
+	fmt.Println(o.playerBlack.String())
+	fmt.Println(o.playerWhite.String())
+	fmt.Println(o.board.String())
 }
 
 func (o *Othello) printResult() {
@@ -99,7 +99,7 @@ func (o *Othello) printResult() {
 	if winner == Empty {
 		fmt.Println("The game ended in a tie...")
 	} else {
-		fmt.Printf("The winner is %v!\n", winner)
+		fmt.Printf("The winner is %s!\n", winner.DiskString())
 	}
 }
 

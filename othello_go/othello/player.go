@@ -40,7 +40,7 @@ func WhitePlayer() *Player {
 }
 
 func (p *Player) PlayOneMove(board *Board) {
-	fmt.Printf("Turn: %v\n", p.color)
+	fmt.Printf("Turn: %s\n", p.color.DiskString())
 	moves := board.PossibleMoves(p.color)
 	if len(moves) > 0 {
 		p.CanPlay = true
@@ -59,7 +59,7 @@ func (p *Player) PlayOneMove(board *Board) {
 		time.Sleep(time.Second)
 	} else {
 		p.CanPlay = false
-		fmt.Println("  No moves available...\n")
+		fmt.Print("  No moves available...\n\n")
 	}
 }
 
@@ -69,7 +69,7 @@ func (p *Player) getComputerMove(moves []Move) Move {
 	time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)+1000))
 
 	chosenMove := moves[rand.Intn(len(moves))]
-	fmt.Printf("  -> %v\n", chosenMove.Square)
+	fmt.Printf("  -> %s\n", chosenMove.Square)
 	return chosenMove
 }
 
@@ -81,7 +81,7 @@ func (p *Player) getHumanMove(moves []Move) Move {
 				return validMove
 			}
 		}
-		fmt.Printf("  Can't place a %v disk in square %v!\n", p.color, square)
+		fmt.Printf("  Can't place a %s disk in square %s!\n", p.color.DiskString(), square)
 	}
 }
 
@@ -115,5 +115,5 @@ func (p *Player) String() string {
 	if p.human {
 		humanStr = "Human   "
 	}
-	return fmt.Sprintf("%v | %s | %d", p.color, humanStr, p.roundsPlayed)
+	return fmt.Sprintf("%s | %s | %d", p.color.DiskString(), humanStr, p.roundsPlayed)
 }

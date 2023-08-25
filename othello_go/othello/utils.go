@@ -10,6 +10,7 @@ package othello
 import (
 	"cmp"
 	"fmt"
+	"github.com/logrusorgru/aurora/v4"
 	"runtime/debug"
 )
 
@@ -42,17 +43,42 @@ type Move struct {
 	Directions []Step
 }
 
+func (d Disk) BoardChar() aurora.Value {
+	switch d {
+	case Black:
+		return aurora.Magenta("B")
+	case White:
+		return aurora.Cyan("W")
+	default:
+		return aurora.White("_")
+	}
+}
+
+func (d Disk) DiskString() aurora.Value {
+	switch d {
+	case Black:
+		return aurora.Magenta("BLACK")
+	case White:
+		return aurora.Cyan("WHITE")
+	default:
+		return aurora.White("EMPTY")
+	}
+}
+
 func (s Square) Add(step Step) Square {
 	return Square{X: s.X + step.X, Y: s.Y + step.Y}
 }
 
 func (s Step) String() string {
+	return fmt.Sprintf("[%d, %d]", s.X, s.Y)
+}
+
+func (s Square) String() string {
 	return fmt.Sprintf("(%d, %d)", s.X, s.Y)
 }
 
 func (m Move) String() string {
-	return fmt.Sprintf("Move{Square: %v, Disk: %v, Value: %d, Directions: %v}",
-		m.Square, m.Disk, m.Value, m.Directions)
+	return fmt.Sprintf("Square: %s -> value: %d", m.Square, m.Value)
 }
 
 // VersionInfo Returns build version info string.

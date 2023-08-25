@@ -8,6 +8,7 @@
 package othello
 
 import (
+	"errors"
 	"fmt"
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/logrusorgru/aurora/v4"
@@ -93,17 +94,6 @@ func (d Disk) Opponent() Disk {
 	return Empty
 }
 
-func (d Disk) BoardChar() string {
-	switch d {
-	case Black:
-		return "B"
-	case White:
-		return "W"
-	default:
-		return "."
-	}
-}
-
 func (b *Board) CanPlay() bool {
 	return b.emptySquares.Cardinality() > 0
 }
@@ -119,6 +109,13 @@ func (b *Board) getSquare(square *Square) Disk {
 	return Empty
 }
 
+func (b *Board) get(x, y int) (Disk, error) {
+	if b.CheckCoordinates(x, y) {
+		return b.board[y*b.size+x], nil
+	}
+	return Empty, errors.New("invalid coordinates")
+}
+
 func (b *Board) setSquare(square *Square, disk Disk) {
 	if !b.CheckCoordinates(square.X, square.Y) {
 		panic("Invalid coordinates")
@@ -129,7 +126,7 @@ func (b *Board) setSquare(square *Square, disk Disk) {
 func (b *Board) PlaceDisk(playerMove *Move) {
 	start := playerMove.Square
 	if b.getSquare(&start) != Empty {
-		panic(fmt.Sprintf("Trying to place disk to an occupied square: %v!", start))
+		panic(fmt.Sprintf("Trying to place disk to an occupied square: %s!", start))
 	}
 	b.setSquare(&start, playerMove.Disk)
 	b.emptySquares.Remove(start)
@@ -196,19 +193,19 @@ func (b *Board) PlayerScores() (int, int) {
 func (b *Board) PrintScore() {
 	black, white := b.PlayerScores()
 	fmt.Println(b)
-	fmt.Printf("Score: %s | %s\n", aurora.Magenta(black), aurora.Cyan(white))
+	fmt.Printf("Score: %d | %d\n", aurora.Magenta(black), aurora.Cyan(white))
 }
 
 func (b *Board) PrintMoves(moves []Move) {
 	fmt.Printf("  Possible plays (%d):\n", len(moves))
-	formattedBoard := make([]string, len(b.board))
+	formattedBoard := make([]aurora.Value, len(b.board))
 	for i, disk := range b.board {
 		formattedBoard[i] = disk.BoardChar()
 	}
 	for _, possibleMove := range moves {
 		index := possibleMove.Square.Y*b.size + possibleMove.Square.X
-		formattedBoard[index] = fmt.Sprintf("%d", possibleMove.Value)
-		fmt.Printf("  %v\n", possibleMove)
+		formattedBoard[index] = aurora.Yellow(fmt.Sprintf("%d", possibleMove.Value))
+		fmt.Printf("  %s\n", possibleMove)
 	}
 	fmt.Print("   ")
 	for i := range b.indices {
@@ -241,4 +238,23 @@ func (b *Board) Score() int {
 		sum += int(disk)
 	}
 	return sum
+}
+
+// Format game board to string
+func (b *Board) String() string {
+	text := " "
+	// Horizontal header indices
+	for _, i := range b.indices {
+		text += fmt.Sprintf(" %d", i)
+	}
+	for _, y := range b.indices {
+		// Vertical header index
+		text += fmt.Sprintf("\n%d", y)
+		// Output row
+		for _, x := range b.indices {
+			disk := b.board[y*b.size+x]
+			text += fmt.Sprintf(" %s", disk.BoardChar())
+		}
+	}
+	return text
 }
