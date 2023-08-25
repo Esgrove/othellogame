@@ -86,7 +86,7 @@ impl Player {
     fn get_human_move(&self, moves: &[Move]) -> Move {
         loop {
             let square = Self::get_square();
-            // check if given square is one of the possible moves
+            // Check that the chosen square is actually one of the possible moves
             if let Some(valid_move) = moves.iter().find(|m| m.square == square) {
                 return valid_move.clone();
             }
@@ -116,7 +116,7 @@ impl Player {
             println!("{}", "  Give coordinates in the form 'x,y'\n".red())
         }
     }
-
+    /// Set the player as human or computer controlled
     pub fn set_human(&mut self, is_human: bool) {
         self.human = is_human;
     }

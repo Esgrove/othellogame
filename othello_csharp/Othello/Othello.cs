@@ -76,7 +76,7 @@ namespace Othello
         }
 
 
-        /// Keep making moves until both players can't make a move anymore.
+        /// Keep making moves until both players can't make a move any more.
         private void GameLoop()
         {
             while (_board.CanPlay() && (_playerBlack.canPlay || _playerWhite.canPlay))

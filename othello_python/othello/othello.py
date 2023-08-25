@@ -53,7 +53,7 @@ class Othello:
         self._print_status()
 
     def _game_loop(self):
-        """Keep making moves until both players can't make a move anymore."""
+        """Keep making moves until both players can't make a move any more."""
         while self.board.can_play() and (self.player_black.can_play or self.player_white.can_play):
             self.rounds_played += 1
             print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")

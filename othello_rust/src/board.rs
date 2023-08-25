@@ -64,11 +64,6 @@ impl Board {
         !self.empty_squares.is_empty()
     }
 
-    /// Check that the given coordinates are valid (inside the board).
-    fn check_coordinates(&self, x: isize, y: isize) -> bool {
-        x >= 0 && x < self.size as isize && y >= 0 && y < self.size as isize
-    }
-
     /// Update board for given disk placement.
     pub(crate) fn place_disk(&mut self, player_move: &Move) {
         let start = player_move.square;
@@ -99,7 +94,7 @@ impl Board {
             let mut directions = Vec::<Step>::new();
             for step in self.step_directions.iter() {
                 let mut pos = *square + *step;
-                // next square in this direction needs to be opponents disk
+                // Next square in this direction needs to be the opponents disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) != opposing_disk {
                     continue;
                 }
@@ -108,7 +103,7 @@ impl Board {
                     num_steps += 1;
                     pos += *step;
                 }
-                // valid move only if a line of opponents disks ends in own disk
+                // Valid move only if a line of opponents disks ends in own disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) == disk {
                     value += num_steps;
                     directions.push(*step);
@@ -170,6 +165,32 @@ impl Board {
         )
     }
 
+    /// Returns the winner disk color.
+    pub(crate) fn result(&self) -> Disk {
+        let sum = self.score();
+        match sum.cmp(&0) {
+            Ordering::Greater => Disk::White,
+            Ordering::Less => Disk::Black,
+            Ordering::Equal => Disk::Empty,
+        }
+    }
+
+    /// Check that the given coordinates are valid (inside the board).
+    fn check_coordinates(&self, x: isize, y: isize) -> bool {
+        x >= 0 && x < self.size as isize && y >= 0 && y < self.size as isize
+    }
+
+    /// Returns the state of the board (empty, white, black) at the given square.
+    fn get_square(&self, square: &Square) -> Option<Disk> {
+        if self.check_coordinates(square.x, square.y) {
+            let disk = self.board[square.y as usize * self.size + square.x as usize];
+            Some(disk)
+        } else {
+            // square is out of bounds
+            None
+        }
+    }
+
     /// Count and return the number of black and white disks.
     fn player_scores(&self) -> (u32, u32) {
         let mut black: u32 = 0;
@@ -184,30 +205,9 @@ impl Board {
         (black, white)
     }
 
-    /// Returns the winner color.
-    pub(crate) fn result(&self) -> Disk {
-        let sum = self.score();
-        match sum.cmp(&0) {
-            Ordering::Greater => Disk::White,
-            Ordering::Less => Disk::Black,
-            Ordering::Equal => Disk::Empty,
-        }
-    }
-
     /// Returns the total score (positive means more white disks and negative means more black disks).
     fn score(&self) -> i32 {
         self.board.iter().map(|d| *d as i32).sum()
-    }
-
-    /// Returns the state of the board (empty, white, black) at the given coordinates.
-    fn get_square(&self, square: &Square) -> Option<Disk> {
-        if self.check_coordinates(square.x, square.y) {
-            let disk = self.board[square.y as usize * self.size + square.x as usize];
-            Some(disk)
-        } else {
-            // square is out of bounds
-            None
-        }
     }
 
     /// Sets the given square to given value.
@@ -218,7 +218,7 @@ impl Board {
         self.board[square.y as usize * self.size + square.x as usize] = *disk;
     }
 
-    /// Initialize game board with empty disks.
+    /// Initialize game board with starting disk positions.
     fn init_board(size: usize) -> Vec<Disk> {
         let mut board = vec![Disk::Empty; size * size];
         // Set starting positions
@@ -238,13 +238,13 @@ impl Board {
 
 impl fmt::Display for Board {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Horizontal header indices
+        // Horizontal indices
         let column_indices: Vec<String> = self.indices.iter().map(|&i| i.to_string()).collect();
         let mut text: String = format!("  {}", column_indices.join(" ").bold());
         for y in 0..self.size {
-            // Vertical header index
+            // Vertical index
             text += &*format!("\n{}", y.to_string().bold());
-            // Output row values
+            // Row values
             let row = &self.board[(y * self.size)..(y * self.size + self.size)];
             for disk in row {
                 text += &*format!(" {}", disk.board_char());

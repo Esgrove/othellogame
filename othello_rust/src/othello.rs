@@ -16,7 +16,7 @@ use crate::colorprint::print_error;
 use crate::player::Player;
 use crate::utils::Disk;
 
-/// Gameplay loop and main logic
+/// Gameplay loop and main logic.
 pub(crate) struct Othello {
     board_size: usize,
     board: Board,
@@ -27,6 +27,7 @@ pub(crate) struct Othello {
 }
 
 impl Othello {
+    /// Initialize Othello game.
     // Typically this would be `new` but using init to match other implementations
     pub fn init(size: usize) -> Othello {
         Othello {
@@ -71,7 +72,7 @@ impl Othello {
         self.print_status();
     }
 
-    /// Keep making moves until both players can't make a move anymore.
+    /// Keep making moves until both players can't make a move any more.
     fn game_loop(&mut self) {
         while self.board.can_play() && (self.player_black.can_play || self.player_white.can_play) {
             self.rounds_played += 1;

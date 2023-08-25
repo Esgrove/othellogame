@@ -50,7 +50,7 @@ void othello::Othello::init_game()
     print_status();
 }
 
-/// Keep making moves until both players can't make a move anymore.
+/// Keep making moves until both players can't make a move any more.
 void othello::Othello::game_loop()
 {
     while (board.can_play() && (player_black.can_play || player_white.can_play)) {

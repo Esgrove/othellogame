@@ -52,7 +52,7 @@ class Othello {
         self.print_status()
     }
 
-    /// Keep making moves until both players can't make a move anymore.
+    /// Keep making moves until both players can't make a move any more.
     func game_loop() {
         while self.board
             .can_play() && (self.player_black.can_play || self.player_white.can_play)
