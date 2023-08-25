@@ -11,6 +11,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"othello_go/othello"
 	"slices"
 	"strconv"
 
@@ -24,31 +25,34 @@ func main() {
 	var boardSize int
 	if len(args) > 0 {
 		if slices.Contains(args, "--help") || slices.Contains(args, "-h") {
-			fmt.Println(versionInfo())
-			fmt.Println("USAGE: othello_go [board size]")
-			fmt.Println("\nOptional arguments:")
+			fmt.Println(othello.VersionInfo())
+			fmt.Println("\nUSAGE: othello_go [board size]")
+			fmt.Println("Optional arguments:")
 			fmt.Println("    -h | --help          Print usage and exit")
 			fmt.Println("    -v | --version       Print version info and exit")
 			os.Exit(1)
 		}
 		if slices.Contains(args, "--version") || slices.Contains(args, "-v") {
-			fmt.Println(versionInfo())
+			fmt.Println(othello.VersionInfo())
 			os.Exit(0)
 		}
 		size, err := strconv.Atoi(args[0])
 		if err != nil {
-			printError("Invalid board size")
-			boardSize = getBoardSize()
+			othello.PrintError("Invalid board size")
+			boardSize = othello.GetBoardSize()
 		} else if size < 4 || size > 16 {
-			printError("Unsupported board size: %d", size)
-			boardSize = getBoardSize()
+			othello.PrintError("Unsupported board size: %d", size)
+			boardSize = othello.GetBoardSize()
 		} else {
 			boardSize = size
 			fmt.Printf("Using board size: %d\n", boardSize)
 		}
 	} else {
-		boardSize = getBoardSize()
+		boardSize = othello.GetBoardSize()
 	}
 
 	fmt.Println(aurora.Green(fmt.Sprintf("Board size: %d\n", boardSize)))
+
+	game := othello.NewOthello(boardSize)
+	game.Play()
 }

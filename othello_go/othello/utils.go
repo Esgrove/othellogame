@@ -5,7 +5,7 @@
 // 2019-2023
 //==========================================================
 
-package main
+package othello
 
 import (
 	"cmp"
@@ -24,26 +24,39 @@ const (
 
 // Step represents a step direction on the board.
 type Step struct {
-	x int
-	y int
+	X int
+	Y int
 }
 
 // Square represents one square location on the board.
 type Square struct {
-	x int
-	y int
+	X int
+	Y int
 }
 
 // Move represents one possible disk placement for given disk colour.
 type Move struct {
-	square     Square
-	disk       Disk
-	value      int
-	directions []Step
+	Square     Square
+	Disk       Disk
+	Value      int
+	Directions []Step
 }
 
-// Returns build version info string.
-func versionInfo() string {
+func (s Square) Add(step Step) Square {
+	return Square{X: s.X + step.X, Y: s.Y + step.Y}
+}
+
+func (s Step) String() string {
+	return fmt.Sprintf("(%d, %d)", s.X, s.Y)
+}
+
+func (m Move) String() string {
+	return fmt.Sprintf("Move{Square: %v, Disk: %v, Value: %d, Directions: %v}",
+		m.Square, m.Disk, m.Value, m.Directions)
+}
+
+// VersionInfo Returns build version info string.
+func VersionInfo() string {
 	if info, ok := debug.ReadBuildInfo(); ok {
 		version := info.GoVersion
 		commit := ""
@@ -66,7 +79,7 @@ func versionInfo() string {
 }
 
 // Clamp a value to the given range.
-func clamp[T cmp.Ordered](value T, minimum T, maximum T) T {
+func Clamp[T cmp.Ordered](value T, minimum T, maximum T) T {
 	if minimum > maximum {
 		panic("Minimum value should be less than or equal to maximum!")
 	}
