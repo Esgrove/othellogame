@@ -103,6 +103,7 @@ class Othello:
 if __name__ == "__main__":
     print_bold("OTHELLO GAME - Python", Color.green)
     args = sys.argv[1:]
+    # Handle 'help' and 'version' arguments
     if "--help" in args or "-h" in args:
         sys.exit(
             f"Othello Python {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
@@ -125,6 +126,7 @@ if __name__ == "__main__":
 
             print(f"Using board size: {board_size}")
         except (ValueError, IndexError):
+            # Otherwise ask user for board size
             board_size = Othello.get_board_size()
 
         game = Othello(board_size)

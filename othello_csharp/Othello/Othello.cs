@@ -145,6 +145,7 @@ namespace Othello
             // try to read board size from command line args
             if (args.Length == 0 || !int.TryParse(args[0], out var boardSize))
             {
+                // Otherwise ask user for board size
                 boardSize = GetBoardSize();
             }
             else

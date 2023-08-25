@@ -79,7 +79,7 @@ fn main() -> Result<()> {
             println!("Using board size: {size}");
             size
         } else {
-            // Otherwise ask user for size
+            // Otherwise ask user for board size
             othello::Othello::get_board_size()
         }
     };

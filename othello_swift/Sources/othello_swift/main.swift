@@ -14,8 +14,8 @@ import Foundation
 print("OTHELLO GAME - SWIFT".bold().green())
 
 // Handle 'help' and 'version' arguments
-for argument in CommandLine.arguments {
-    switch argument {
+for arg in CommandLine.arguments {
+    switch arg {
         case "--version", "-v":
             // TODO: add version info
             print("Othello Swift")
@@ -38,7 +38,7 @@ if board_size > 0 {
     }
     print("Using board size: \(board_size)")
 } else {
-    // Otherwise ask user for size
+    // Otherwise ask user for board size
     board_size = Othello.get_board_size()
 }
 

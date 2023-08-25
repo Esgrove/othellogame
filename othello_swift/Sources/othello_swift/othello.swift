@@ -6,6 +6,7 @@
 // 2019-2023
 //==========================================================
 
+/// Gameplay loop and main logic.
 class Othello {
     var board_size: Int = 0
     var board: Board
