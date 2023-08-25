@@ -96,12 +96,8 @@ func (p *Player) getSquare() Square {
 		fmt.Print("  Give disk position (x,y): ")
 		var x, y int
 		_, err := fmt.Scanf("%d,%d", &x, &y)
-		if err != nil {
-			fmt.Println("Input failed")
-			continue
-		}
-		if x >= 0 && y >= 0 {
-			return Square{X: x, Y: y}
+		if err == nil && x >= 0 && y >= 0 {
+			return Square{x, y}
 		}
 		fmt.Print(aurora.Red("  Give coordinates in the form 'x,y'\n\n"))
 	}
