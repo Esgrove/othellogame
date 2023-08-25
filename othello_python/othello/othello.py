@@ -16,7 +16,7 @@ from utils import Disk, clamp
 
 
 class Othello:
-    """Play Othello CLI game."""
+    """Gameplay loop and main logic."""
 
     def __init__(self, board_size: int):
         self.board = Board(board_size)

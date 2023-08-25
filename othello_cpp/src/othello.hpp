@@ -11,6 +11,7 @@
 
 namespace othello
 {
+/// Gameplay loop and main logic
 class Othello
 {
 public:

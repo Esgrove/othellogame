@@ -26,7 +26,7 @@ pub(crate) struct Board {
 impl Board {
     pub(crate) fn new(size: usize) -> Board {
         let board = Self::init_board(size);
-        // Index list (0...size) to avoid repeating same range in for loops.
+        // Index list (0...size) to avoid repeating same range in loops.
         // Not really needed in Rust but kept here to more closely match other implementations...
         let indices = Vec::from_iter(0..size);
         // Keep track of empty squares on board to avoid checking already filled positions.
@@ -218,10 +218,10 @@ impl Board {
         self.board[square.y as usize * self.size + square.x as usize] = *disk;
     }
 
-    /// init game board with empty disks.
+    /// Initialize game board with empty disks.
     fn init_board(size: usize) -> Vec<Disk> {
         let mut board = vec![Disk::Empty; size * size];
-        // set starting positions
+        // Set starting positions
         let row = if size % 2 == 0 {
             (size - 1) / 2
         } else {

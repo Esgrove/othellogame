@@ -16,6 +16,7 @@ use crate::colorprint::print_error;
 use crate::player::Player;
 use crate::utils::Disk;
 
+/// Gameplay loop and main logic
 pub(crate) struct Othello {
     board_size: usize,
     board: Board,
