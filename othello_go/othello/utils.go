@@ -16,7 +16,6 @@ import (
 
 // Disk enum
 type Disk int
-
 const (
 	Black Disk = -1
 	Empty Disk = 0
@@ -43,6 +42,7 @@ type Move struct {
 	Directions []Step
 }
 
+// Returns a single character identifier string for the given disk.
 func (d Disk) BoardChar() string {
 	switch d {
 	case Black:
@@ -54,6 +54,7 @@ func (d Disk) BoardChar() string {
 	}
 }
 
+// Returns the disk formatted as a colored string.
 func (d Disk) DiskString() string {
 	switch d {
 	case Black:
@@ -65,12 +66,22 @@ func (d Disk) DiskString() string {
 	}
 }
 
-func (s Square) Add(step Step) Square {
-	return Square{X: s.X + step.X, Y: s.Y + step.Y}
+// Return the opposing disk color for this disk.
+func (d Disk) Opponent() Disk {
+	if d == Black {
+		return White
+	} else if d == White {
+		return Black
+	}
+	return Empty
 }
 
 func (s Step) String() string {
 	return fmt.Sprintf("[%d, %d]", s.X, s.Y)
+}
+
+func (s Square) Add(step Step) Square {
+	return Square{X: s.X + step.X, Y: s.Y + step.Y}
 }
 
 func (s Square) String() string {
@@ -81,7 +92,7 @@ func (m Move) String() string {
 	return fmt.Sprintf("Square: %s -> value: %d", m.Square, m.Value)
 }
 
-// VersionInfo Returns build version info string.
+// VersionInfo Returns formatted build version info string.
 func VersionInfo() string {
 	if info, ok := debug.ReadBuildInfo(); ok {
 		version := info.GoVersion

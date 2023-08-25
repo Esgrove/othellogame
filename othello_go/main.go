@@ -54,6 +54,6 @@ func main() {
 		boardSize = othello.GetBoardSize()
 	}
 
-	game := othello.NewOthello(boardSize)
+	game := othello.InitOthello(boardSize)
 	game.Play()
 }

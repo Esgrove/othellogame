@@ -14,6 +14,7 @@ import (
 	"time"
 )
 
+// Player Defines one player (human or computer).
 type Player struct {
 	CanPlay      bool
 	color        Disk
@@ -39,6 +40,7 @@ func WhitePlayer() *Player {
 	return NewPlayer(White)
 }
 
+// PlayOneMove Play one round as this player.
 func (p *Player) PlayOneMove(board *Board) {
 	fmt.Printf("Turn: %s\n", p.color.DiskString())
 	moves := board.PossibleMoves(p.color)
@@ -63,6 +65,7 @@ func (p *Player) PlayOneMove(board *Board) {
 	}
 }
 
+// Return move chosen by computer.
 func (p *Player) getComputerMove(moves []Move) Move {
 	fmt.Println("  Computer plays...")
 
@@ -73,9 +76,11 @@ func (p *Player) getComputerMove(moves []Move) Move {
 	return chosenMove
 }
 
+// Return move chosen by a human player.
 func (p *Player) getHumanMove(moves []Move) Move {
 	for {
 		square := p.getSquare()
+		// Check that the chosen square is actually one of the possible moves
 		for _, validMove := range moves {
 			if validMove.Square == square {
 				return validMove
@@ -85,6 +90,7 @@ func (p *Player) getHumanMove(moves []Move) Move {
 	}
 }
 
+// Ask human player for square coordinates.
 func (p *Player) getSquare() Square {
 	for {
 		fmt.Print("  Give disk position (x,y): ")
@@ -101,10 +107,12 @@ func (p *Player) getSquare() Square {
 	}
 }
 
+// SetHuman Set the player as human or computer controlled
 func (p *Player) SetHuman(isHuman bool) {
 	p.human = isHuman
 }
 
+// Reset player status for a new game.
 func (p *Player) Reset() {
 	p.CanPlay = true
 	p.roundsPlayed = 0

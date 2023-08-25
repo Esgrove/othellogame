@@ -10,9 +10,11 @@ package othello
 
 import (
 	"fmt"
+	"github.com/logrusorgru/aurora/v4"
 	"strings"
 )
 
+// Othello Gameplay loop and main logic.
 type Othello struct {
 	boardSize    int
 	board        Board
@@ -22,7 +24,8 @@ type Othello struct {
 	roundsPlayed int
 }
 
-func NewOthello(size int) Othello {
+// InitOthello Initialize Othello game.
+func InitOthello(size int) Othello {
 	return Othello{
 		board:        NewBoard(size),
 		boardSize:    size,
@@ -33,17 +36,19 @@ func NewOthello(size int) Othello {
 	}
 }
 
+// Play one full game of Othello.
 func (o *Othello) Play() {
 	for {
 		o.initGame()
 		o.gameLoop()
 		o.printResult()
-		if !o.getAnswer("\nWould you like to play again", "y", "n") {
+		if !GetAnswer("\nWould you like to play again", "y", "n") {
 			break
 		}
 	}
 }
 
+// Initialize game board and players for a new game.
 func (o *Othello) initGame() {
 	if o.gamesPlayed > 0 {
 		o.board = NewBoard(o.boardSize)
@@ -52,46 +57,33 @@ func (o *Othello) initGame() {
 		o.roundsPlayed = 0
 	}
 
-	if o.getAnswer("Would you like to play against the computer", "y", "n") {
-		if o.getAnswer("Would you like to play as black or white", "b", "w") {
+	if GetAnswer("Would you like to play against the computer", "y", "n") {
+		if GetAnswer("Would you like to play as black or white", "b", "w") {
 			o.playerWhite.SetHuman(false)
 		} else {
 			o.playerBlack.SetHuman(false)
 		}
 	}
-	fmt.Println("\nPlayers:")
+	PrintBold("\nPlayers:")
 	o.printStatus()
 }
 
+// Keep making moves until both players can't make a move any more.
 func (o *Othello) gameLoop() {
 	for o.board.CanPlay() && (o.playerBlack.CanPlay || o.playerWhite.CanPlay) {
 		o.roundsPlayed++
-		fmt.Printf("\n=========== ROUND: %d ===========\n", o.roundsPlayed)
+		PrintBold("\n=========== ROUND: %d ===========", o.roundsPlayed)
 		o.playerBlack.PlayOneMove(&o.board)
 		fmt.Println("--------------------------------")
 		o.playerWhite.PlayOneMove(&o.board)
 	}
 }
 
-func (o *Othello) getAnswer(text, yes, no string) bool {
-	fmt.Printf("%s (%s/%s)? ", text, yes, no)
-	var input string
-	if _, err := fmt.Scanln(&input); err == nil {
-		return strings.ToLower(strings.TrimSpace(input)) == yes
-	}
-	return false
-}
-
-func (o *Othello) printStatus() {
-	fmt.Println(o.playerBlack.String())
-	fmt.Println(o.playerWhite.String())
-	fmt.Println(o.board.String())
-}
-
+// Print ending status and winner info.
 func (o *Othello) printResult() {
-	fmt.Println("\n================================")
-	fmt.Println("The game is finished!")
-	fmt.Println("\nResult:")
+	PrintBold("\n================================")
+	fmt.Println(aurora.Green("The game is finished!"))
+	PrintBold("\nResult:")
 	o.printStatus()
 	fmt.Println()
 
@@ -101,6 +93,23 @@ func (o *Othello) printResult() {
 	} else {
 		fmt.Printf("The winner is %s!\n", winner.DiskString())
 	}
+}
+
+// Print current board and player info.
+func (o *Othello) printStatus() {
+	fmt.Println(o.playerBlack.String())
+	fmt.Println(o.playerWhite.String())
+	fmt.Println(o.board.String())
+}
+
+// GetAnswer Ask a question with two options, and return bool from user answer.
+func GetAnswer(text, yes, no string) bool {
+	fmt.Printf("%s (%s/%s)? ", text, yes, no)
+	var input string
+	if _, err := fmt.Scanln(&input); err == nil {
+		return strings.ToLower(strings.TrimSpace(input)) == yes
+	}
+	return false
 }
 
 // GetBoardSize Ask and return the desired board size.
