@@ -58,7 +58,7 @@ int main(int argc, const char* argv[])
             throw std::invalid_argument("Invalid board size");
         }
     } catch (const std::invalid_argument&) {
-        // Otherwise ask user for size
+        // Otherwise ask user for board size
         board_size = othello::Othello::get_board_size();
     }
 

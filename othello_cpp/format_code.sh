@@ -3,4 +3,4 @@
 set -eo pipefail
 
 REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-clang-format -i -style=file "$REPO"/src/*.cpp "$REPO"/src/*.hpp
+clang-format --verbose -i -style=file "$REPO"/src/*.cpp "$REPO"/src/*.hpp

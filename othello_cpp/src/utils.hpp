@@ -53,7 +53,10 @@ struct Square {
         return out << fmt::format("({},{})", square.x, square.y);
     }
 
-    bool operator<(const Square& other) const { return x < other.x || (x <= other.x && y < other.y); }
+    bool operator<(const Square& other) const
+    {
+        return x < other.x || (x <= other.x && y < other.y);
+    }
     bool operator==(const Square& other) const { return x == other.x && y == other.y; }
     Square operator+(const Square& other) const { return {x + other.x, y + other.y}; }
     Square& operator+=(const Square& other)

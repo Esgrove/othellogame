@@ -53,7 +53,8 @@ void othello::Board::place_disk(const othello::Move& move)
 {
     auto start = move.square;
     if (get_square(start) != Disk::empty) {
-        throw std::invalid_argument(fmt::format("Trying to place disk to an occupied square {}!", start));
+        throw std::invalid_argument(
+            fmt::format("Trying to place disk to an occupied square {}!", start));
     }
     set_square(start, move.disk);
     empty_squares.erase(start);
@@ -105,15 +106,18 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
 /// Print board with available move coordinates and the resulting points gained.
 void othello::Board::print_moves(const std::vector<Move>& moves)
 {
-    fmt::print(fmt::fg(fmt::color::yellow), "  Possible plays ({}):\n", std::to_string(moves.size()));
+    fmt::print(
+        fmt::fg(fmt::color::yellow), "  Possible plays ({}):\n", std::to_string(moves.size()));
     // Convert board from Disk enums to strings
     std::vector<std::string> formatted_board(board.size());
-    std::transform(board.begin(), board.end(), formatted_board.begin(), [&](Disk disk) -> std::string {
-        return board_char(disk);
-    });
+    std::transform(
+        board.begin(), board.end(), formatted_board.begin(), [&](Disk disk) -> std::string {
+            return board_char(disk);
+        });
     // Add possible moves
     for (const Move& move : moves) {
-        formatted_board[move.square.y * size + move.square.x] = get_color(move.value, fmt::color::yellow);
+        formatted_board[move.square.y * size + move.square.x]
+            = get_color(move.value, fmt::color::yellow);
         fmt::print("  {}\n", move);
     }
     // Print board with move positions
@@ -185,14 +189,16 @@ int othello::Board::score() const
 {
     // enum class prevents implicit conversion from Disk to int,
     // need to use lambda to cast Disk values to int
-    return std::accumulate(board.begin(), board.end(), 0, [](int s, Disk d) { return s + static_cast<int>(d); });
+    return std::accumulate(
+        board.begin(), board.end(), 0, [](int s, Disk d) { return s + static_cast<int>(d); });
 }
 
 /// Returns the state of the board (empty, white, black) at the given coordinates.
 std::optional<othello::Disk> othello::Board::get_square(const Square& square) const
 {
-    return check_coordinates(square.x, square.y) ? std::optional<Disk> {board[square.y * size + square.x]}
-                                                 : std::nullopt;
+    return check_coordinates(square.x, square.y)
+        ? std::optional<Disk> {board[square.y * size + square.x]}
+        : std::nullopt;
 }
 
 /// Sets the given square to given value.
