@@ -24,6 +24,7 @@ func main() {
 	args := os.Args[1:]
 	var boardSize int
 	if len(args) > 0 {
+		// Handle 'help' and 'version' arguments
 		if slices.Contains(args, "--help") || slices.Contains(args, "-h") {
 			fmt.Println(othello.VersionInfo())
 			fmt.Println("\nUSAGE: othello_go [board size]")
@@ -36,6 +37,7 @@ func main() {
 			fmt.Println(othello.VersionInfo())
 			os.Exit(0)
 		}
+		// Try to read board size from command line args
 		size, err := strconv.Atoi(args[0])
 		if err != nil {
 			othello.PrintError("Invalid board size")
@@ -48,10 +50,9 @@ func main() {
 			fmt.Printf("Using board size: %d\n", boardSize)
 		}
 	} else {
+		// Otherwise ask user for board size
 		boardSize = othello.GetBoardSize()
 	}
-
-	fmt.Println(aurora.Green(fmt.Sprintf("Board size: %d\n", boardSize)))
 
 	game := othello.NewOthello(boardSize)
 	game.Play()
