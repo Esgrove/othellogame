@@ -43,25 +43,25 @@ type Move struct {
 	Directions []Step
 }
 
-func (d Disk) BoardChar() aurora.Value {
+func (d Disk) BoardChar() string {
 	switch d {
 	case Black:
-		return aurora.Magenta("B")
+		return aurora.Magenta("B").String()
 	case White:
-		return aurora.Cyan("W")
+		return aurora.Cyan("W").String()
 	default:
-		return aurora.White("_")
+		return aurora.White("_").String()
 	}
 }
 
-func (d Disk) DiskString() aurora.Value {
+func (d Disk) DiskString() string {
 	switch d {
 	case Black:
-		return aurora.Magenta("BLACK")
+		return aurora.Magenta("BLACK").String()
 	case White:
-		return aurora.Cyan("WHITE")
+		return aurora.Cyan("WHITE").String()
 	default:
-		return aurora.White("EMPTY")
+		return aurora.White("EMPTY").String()
 	}
 }
 

@@ -198,13 +198,13 @@ func (b *Board) PrintScore() {
 
 func (b *Board) PrintMoves(moves []Move) {
 	fmt.Printf("  Possible plays (%d):\n", len(moves))
-	formattedBoard := make([]aurora.Value, len(b.board))
+	formattedBoard := make([]string, len(b.board))
 	for i, disk := range b.board {
 		formattedBoard[i] = disk.BoardChar()
 	}
 	for _, possibleMove := range moves {
 		index := possibleMove.Square.Y*b.size + possibleMove.Square.X
-		formattedBoard[index] = aurora.Yellow(fmt.Sprintf("%d", possibleMove.Value))
+		formattedBoard[index] = aurora.Yellow(fmt.Sprintf("%d", possibleMove.Value)).String()
 		fmt.Printf("  %s\n", possibleMove)
 	}
 	fmt.Print("   ")
