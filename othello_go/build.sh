@@ -15,11 +15,11 @@ print_magenta "Building Othello Go..."
 if [ -z "$(command -v go)" ]; then
     print_error_and_exit "go not found in path"
 else
-    go --version
+    go version
 fi
 
 pushd "$PROJECT_PATH" > /dev/null
-go build -race -v
+time go build -race -v
 
 if [ "$PLATFORM" = windows ]; then
     executable="othello_go.exe"

@@ -10,9 +10,19 @@ go run .
 
 ## Build
 
+Manually:
+
 ```shell
 go build -race -v
 ```
+
+Or using script:
+
+```shell
+./build.sh
+```
+
+## Install
 
 ```shell
 go install
