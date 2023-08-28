@@ -52,7 +52,7 @@ func (a MoveDescending) Less(i, j int) bool {
 	return a[i].Value > a[j].Value || (a[i].Value == a[j].Value && a[i].Square.X <= a[j].Square.X && a[i].Square.Y < a[j].Square.Y)
 }
 
-// Returns a single character identifier string for the given disk.
+// BoardChar Returns a single character identifier string for the given disk.
 func (d Disk) BoardChar() string {
 	switch d {
 	case Black:
@@ -64,7 +64,7 @@ func (d Disk) BoardChar() string {
 	}
 }
 
-// Returns the disk formatted as a colored string.
+// DiskString Returns the disk formatted as a colored string.
 func (d Disk) DiskString() string {
 	switch d {
 	case Black:
@@ -76,7 +76,7 @@ func (d Disk) DiskString() string {
 	}
 }
 
-// Return the opposing disk color for this disk.
+// Opponent Return the opposing disk color for this disk.
 func (d Disk) Opponent() Disk {
 	if d == Black {
 		return White
