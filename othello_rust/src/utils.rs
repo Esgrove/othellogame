@@ -169,8 +169,9 @@ impl Eq for Move {}
 impl PartialOrd for Move {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Option::from(
-            self.value
-                .cmp(&other.value)
+            other
+                .value
+                .cmp(&self.value)
                 .then(self.square.partial_cmp(&other.square).unwrap()),
         )
     }
@@ -178,8 +179,9 @@ impl PartialOrd for Move {
 
 impl Ord for Move {
     fn cmp(&self, other: &Self) -> Ordering {
-        self.value
-            .cmp(&other.value)
+        other
+            .value
+            .cmp(&self.value)
             .then(self.square.cmp(&other.square))
     }
 }
