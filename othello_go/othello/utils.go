@@ -49,7 +49,7 @@ type MoveDescending []Move
 func (a MoveDescending) Len() int      { return len(a) }
 func (a MoveDescending) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a MoveDescending) Less(i, j int) bool {
-	return a[i].Value > a[j].Value || (a[i].Value == a[j].Value && a[i].Square.X < a[j].Square.X && a[i].Square.Y < a[j].Square.Y)
+	return a[i].Value > a[j].Value || (a[i].Value == a[j].Value && a[i].Square.X <= a[j].Square.X && a[i].Square.Y < a[j].Square.Y)
 }
 
 // Returns a single character identifier string for the given disk.
