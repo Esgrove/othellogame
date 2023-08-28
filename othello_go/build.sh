@@ -19,6 +19,7 @@ else
 fi
 
 pushd "$PROJECT_PATH" > /dev/null
+rm -f "$executable"
 time go build -race -v
 
 if [ "$PLATFORM" = windows ]; then
