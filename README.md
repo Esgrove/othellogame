@@ -112,9 +112,9 @@ Uses the [colored](https://crates.io/crates/colored) crate for colored text in t
 * utils.rs
 * colorprint.rs
 
-### GO
+### Go
 
-Go 1.21. Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
+Go 1.21+. Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 
 * main.go
 * othello/othello.go
