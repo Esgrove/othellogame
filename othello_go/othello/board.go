@@ -148,7 +148,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 
 // PrintMoves Print board with available move coordinates and the resulting points gained.
 func (b *Board) PrintMoves(moves []Move) {
-	fmt.Printf(aurora.Yellow(fmt.Sprintf("  Possible moves (%d):\n", len(moves))))
+	fmt.Println(aurora.Yellow(fmt.Sprintf("  Possible moves (%d):", len(moves))))
 	// Convert board from Disk enums to strings
 	formattedBoard := make([]string, len(b.board))
 	for i, disk := range b.board {
