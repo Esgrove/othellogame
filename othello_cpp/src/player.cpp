@@ -110,7 +110,7 @@ othello::Square othello::Player::get_square()
 std::ostream& operator<<(std::ostream& out, Player& player)
 {
     return out << fmt::format(
-               "{} | {} | {}",
+               "{} | {} | Moves: {}",
                disk_string(player.disk),
                player.type_string(),
                player.rounds_played);

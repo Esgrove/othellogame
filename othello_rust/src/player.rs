@@ -17,7 +17,7 @@ use std::{thread, time::Duration};
 use crate::board::Board;
 use crate::utils::{Disk, Move, Square};
 
-/// Defines one player (human or computer).
+/// Defines one player that can be either human or computer controlled.
 #[derive(Debug)]
 pub(crate) struct Player {
     pub can_play: bool,
@@ -28,6 +28,7 @@ pub(crate) struct Player {
 }
 
 impl Player {
+    /// Initialize new player for the given disk color.
     pub fn new(color: Disk) -> Player {
         Player {
             color,
@@ -38,10 +39,12 @@ impl Player {
         }
     }
 
+    /// Shorthand to initialize new player for black disks.
     pub fn black() -> Player {
         Player::new(Disk::Black)
     }
 
+    /// Shorthand to initialize new player for white disks.
     pub fn white() -> Player {
         Player::new(Disk::White)
     }
@@ -68,6 +71,17 @@ impl Player {
             self.can_play = false;
             println!("{}", "  No moves available...\n".yellow());
         }
+    }
+
+    /// Reset player status for a new game.
+    pub fn reset(&mut self) {
+        self.can_play = true;
+        self.rounds_played = 0;
+    }
+
+    /// Set the player as human or computer controlled
+    pub fn set_human(&mut self, is_human: bool) {
+        self.human = is_human;
     }
 
     /// Return move chosen by computer.
@@ -116,23 +130,13 @@ impl Player {
             println!("{}", "  Give coordinates in the form 'x,y'\n".red())
         }
     }
-    /// Set the player as human or computer controlled
-    pub fn set_human(&mut self, is_human: bool) {
-        self.human = is_human;
-    }
-
-    /// Reset player status for a new game.
-    pub fn reset(&mut self) {
-        self.can_play = true;
-        self.rounds_played = 0;
-    }
 }
 
 impl fmt::Display for Player {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
-            "{} | {} | {}",
+            "{} | {} | Moves: {}",
             self.color,
             if self.human { "Human   " } else { "Computer" },
             self.rounds_played
