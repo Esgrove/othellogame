@@ -66,6 +66,15 @@ repos:
 
   - repo: local
     hooks:
+      - id: gofmt
+        name: go format
+        description: Run gofmt on files included in the commit.
+        entry: bash -c 'cd othello_go && gofmt -s -l'
+        pass_filenames: true
+        types: [file, go]
+        language: system
+        files: ^othello_go/
+
       - id: rust-fmt
         name: rust format
         description: Run cargo fmt on files included in the commit.

@@ -112,6 +112,17 @@ Uses the [colored](https://crates.io/crates/colored) crate for colored text in t
 * utils.rs
 * colorprint.rs
 
+### GO
+
+Go 1.21. Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
+
+* main.go
+* othello/othello.go
+* othello/board.go
+* othello/player.go
+* othello/utils.go
+* othello/colorprint.go
+
 ## TODO
 
 * Add unit tests for each language

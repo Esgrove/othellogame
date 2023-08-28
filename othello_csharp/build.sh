@@ -67,8 +67,12 @@ build_project() {
     cd "$PROJECT_PATH"
     mkdir -p "$BUILD_DIR"
 
+    print_magenta "Building Othello C#..."
+
     if [ -z "$(command -v dotnet)" ]; then
         print_error_and_exit "dotnet not found in path"
+    else
+        echo "dotnet $(dotnet --version)"
     fi
 
     print_magenta "Building Othello C# $BUILD_TYPE for $RUNTIME"

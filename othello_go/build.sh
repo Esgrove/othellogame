@@ -8,27 +8,26 @@ source "$DIR/../common.sh"
 
 # Get absolute path to repo root
 REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
-PROJECT_PATH="$REPO_ROOT/othello_swift"
+PROJECT_PATH="$REPO_ROOT/othello_go"
 
-print_magenta "Building Othello Swift..."
+print_magenta "Building Othello Go..."
 
-if [ -z "$(command -v swift)" ]; then
-    print_error_and_exit "swift not found in path"
+if [ -z "$(command -v go)" ]; then
+    print_error_and_exit "go not found in path"
 else
-    swift --version
+    go version
 fi
 
 pushd "$PROJECT_PATH" > /dev/null
-swift build --configuration release
+rm -f "$executable"
+time go build -race -v
 
 if [ "$PLATFORM" = windows ]; then
-    executable="othello_swift.exe"
+    executable="othello_go.exe"
 else
-    executable="othello_swift"
+    executable="othello_go"
 fi
 
-rm -f "$executable"
-mv "$(find .build -type d -name release -print -quit)/$executable" "$executable"
 file "$executable"
 ./"$executable" --version
 popd > /dev/null
