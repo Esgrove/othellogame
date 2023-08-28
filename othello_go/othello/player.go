@@ -119,5 +119,5 @@ func (p *Player) String() string {
 	if p.human {
 		humanStr = "Human   "
 	}
-	return fmt.Sprintf("%s | %s | %d", p.color.DiskString(), humanStr, p.roundsPlayed)
+	return fmt.Sprintf("%s | %s | %d moves", p.color.DiskString(), humanStr, p.roundsPlayed)
 }

@@ -98,7 +98,7 @@ func (o *Othello) printResult() {
 // Print current board and player info.
 func (o *Othello) printStatus() {
 	fmt.Println(o.playerBlack.String())
-	fmt.Println(o.playerWhite.String())
+	fmt.Print(o.playerWhite.String() + "\n\n")
 	fmt.Println(o.board.String())
 }
 
