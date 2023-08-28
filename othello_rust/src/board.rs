@@ -128,7 +128,7 @@ impl Board {
     pub(crate) fn print_moves(&self, moves: &Vec<Move>) {
         println!(
             "{}",
-            format!("  Possible plays ({}):", moves.len()).yellow()
+            format!("  Possible moves ({}):", moves.len()).yellow()
         );
         // Convert board from Disk enums to strings
         let mut formatted_board: Vec<ColoredString> =

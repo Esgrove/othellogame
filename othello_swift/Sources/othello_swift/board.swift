@@ -90,7 +90,7 @@ class Board {
 
     /// Print available move coordinates and resulting points gained.
     func print_possible_moves(_ moves: [Move]) {
-        print("  Possible plays (\(moves.count)):".yellow())
+        print("  Possible moves (\(moves.count)):".yellow())
         // convert board from Disk enums to strings
         var board_str = self.board.map { $0.board_char() }
         for move in moves {

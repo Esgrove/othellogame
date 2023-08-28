@@ -107,7 +107,7 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
 void othello::Board::print_moves(const std::vector<Move>& moves)
 {
     fmt::print(
-        fmt::fg(fmt::color::yellow), "  Possible plays ({}):\n", std::to_string(moves.size()));
+        fmt::fg(fmt::color::yellow), "  Possible moves ({}):\n", std::to_string(moves.size()));
     // Convert board from Disk enums to strings
     std::vector<std::string> formatted_board(board.size());
     std::transform(
