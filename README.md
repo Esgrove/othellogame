@@ -23,12 +23,12 @@ yet small enough that it could be done in a weekend even when starting with a ne
 It is also quite easy to check that the code is working correctly,
 especially since it is possible to compare side-by-side with the other implementations.
 
-So far, I have added *C#*, *Swift*, and *Rust* implementations.
-I might do a few other (modern) languages that interest me and/or have some hype around them,
-such as *Go*, *Kotlin*, *Ruby*, and *Zig*.
+So far, I have added *C#*, *Swift*, *Rust*, and *Go* implementations.
+I might still do a few other (modern) languages that interest me and/or have some hype around them,
+such as *Kotlin*, *Ruby*, and *Zig*.
 
 In the meantime, there's probably still room to improve in the current implementations,
-especially with the languages that I haven't been actively using.
+especially in the languages that I haven't been actively using.
 
 ## Program structure
 
