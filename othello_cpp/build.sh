@@ -85,8 +85,11 @@ generate_ninja_project() {
 build_project() {
     pushd "$PROJECT_PATH" > /dev/null
     mkdir -p "$CMAKE_BUILD_DIR"
+
+    print_magenta "Building Othello C++..."
+
     if [ "$PLATFORM" = windows ] && [ "$USE_NINJA_ON_WINDOWS" != true ]; then
-        print_magenta "Generating Visual Studio project"
+        echo "Generating Visual Studio project..."
         if ! generate_msvc_project; then
             print_yellow "CMake failed, removing existing cache and trying again..."
             rm -rf "$CMAKE_BUILD_DIR"
@@ -95,7 +98,7 @@ build_project() {
         print_magenta "Building $BUILD_TYPE"
         time cmake --build "$CMAKE_BUILD_DIR" --target othello_cpp --config "$BUILD_TYPE"
     else
-        print_magenta "Generating Ninja build"
+        echo "Generating Ninja build..."
         if ! generate_ninja_project; then
             print_yellow "CMake failed, removing existing cache and trying again..."
             rm -rf "$CMAKE_BUILD_DIR"
@@ -106,7 +109,7 @@ build_project() {
         time ninja -C "$CMAKE_BUILD_DIR" othello_cpp
         ccache_show_stats
     fi
-    print_green "Build succeeded"
+    print_green "Build successful"
     popd > /dev/null
 }
 

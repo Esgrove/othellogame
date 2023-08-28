@@ -10,9 +10,12 @@ source "$DIR/../common.sh"
 REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
 PROJECT_PATH="$REPO_ROOT/othello_rust"
 
+print_magenta "Building Othello Rust..."
+
 if [ -z "$(command -v cargo)" ]; then
-    echo "Cargo not found in path. Maybe install rustup?"
-    exit 1
+    print_error_and_exit "Cargo not found in path. Maybe install rustup?"
+else
+    cargo --version
 fi
 
 pushd "$PROJECT_PATH" > /dev/null

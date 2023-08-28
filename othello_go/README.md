@@ -11,7 +11,7 @@ go run .
 ## Build
 
 ```shell
-go build -race
+go build -race -v
 ```
 
 ```shell
@@ -19,6 +19,7 @@ go install
 ```
 
 Check binary install target:
+
 ```shell
 go list -f '{{.Target}}'
 ```
