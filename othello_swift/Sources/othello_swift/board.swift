@@ -47,7 +47,7 @@ class Board {
         self.empty_squares.remove(start)
         for step in move.directions {
             var pos = start + step
-            while self.get_square(pos) == move.disk.other_disk() {
+            while self.get_square(pos) == move.disk.opponent() {
                 self.set_square(pos, move.disk)
                 pos += step
             }
@@ -57,7 +57,7 @@ class Board {
     /// Returns a list of possible moves for given player.
     func possible_moves(disk: Disk) -> [Move] {
         var moves = [Move]()
-        let other: Disk = disk.other_disk()
+        let other: Disk = disk.opponent()
         for square in self.empty_squares {
             var value = 0
             var directions = [Square]()
@@ -85,7 +85,7 @@ class Board {
                 moves.append(Move(square, value, disk, directions))
             }
         }
-        return moves.sorted(by: { $0.value > $1.value })
+        return moves.sorted()
     }
 
     /// Print available move coordinates and resulting points gained.

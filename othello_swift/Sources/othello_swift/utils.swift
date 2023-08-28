@@ -37,7 +37,7 @@ enum Disk: Int, CustomStringConvertible {
     }
 
     /// Returns the opposing disk.
-    func other_disk() -> Disk {
+    func opponent() -> Disk {
         switch self {
             case .black:
                 return .white
@@ -76,6 +76,21 @@ struct Square {
     }
 }
 
+/// Represents one possible disk placement for given disk color.
+struct Move {
+    var square: Square
+    var disk: Disk
+    var value: Int
+    var directions: [Square]
+
+    init(_ square: Square, _ value: Int, _ disk: Disk, _ directions: [Square]) {
+        self.square = square
+        self.disk = disk
+        self.value = value
+        self.directions = directions
+    }
+}
+
 extension Square: CustomStringConvertible {
     var description: String {
         "(\(self.x),\(self.y))"
@@ -100,29 +115,22 @@ extension Square {
     }
 }
 
-extension Square: Hashable {
+extension Square: Comparable {
     static func == (left: Square, right: Square) -> Bool {
         left.x == right.x && left.y == right.y
     }
 
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.x)
-        hasher.combine(self.y)
+    static func < (left: Square, right: Square) -> Bool {
+        if left.x < right.x { return true }
+        if left.x == right.x && left.y < right.y { return true }
+        return false
     }
 }
 
-/// Represents one possible disk placement for given disk color.
-struct Move {
-    var square: Square
-    var disk: Disk
-    var value: Int
-    var directions: [Square]
-
-    init(_ square: Square, _ value: Int, _ disk: Disk, _ directions: [Square]) {
-        self.square = square
-        self.disk = disk
-        self.value = value
-        self.directions = directions
+extension Square: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.x)
+        hasher.combine(self.y)
     }
 }
 
@@ -132,8 +140,12 @@ extension Move: CustomStringConvertible {
     }
 }
 
-extension Move: Equatable {
+extension Move: Comparable {
     static func == (left: Move, right: Move) -> Bool {
         left.square == right.square && left.value == right.value && left.disk == right.disk
+    }
+
+    static func < (left: Move, right: Move) -> Bool {
+        left.value > right.value || (left.value == right.value && left.square < right.square)
     }
 }
