@@ -4,13 +4,13 @@ set -eo pipefail
 USAGE="Usage: build.sh [OPTIONS]
 
 OPTIONS: All options are optional
-    --help
+    -h | --help
         Display these instructions.
 
-    --build-type <type>
+    -b | --build-type <type>
         Specify build type. Default is 'Release'.
 
-    --verbose
+    -v | --verbose
         Display commands being executed.
 "
 
@@ -24,15 +24,15 @@ init_options() {
 
     while [ $# -gt 0 ]; do
         case "$1" in
-            --help)
+            -h | --help)
                 echo "$USAGE"
                 exit 1
                 ;;
-            --build-type)
+            -b | --build-type)
                 BUILD_TYPE="$2"
                 shift
                 ;;
-            --verbose)
+            -v | --verbose)
                 set -x
                 ;;
         esac

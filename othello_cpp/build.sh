@@ -4,16 +4,19 @@ set -eo pipefail
 USAGE="Usage: build.sh [OPTIONS]
 
 OPTIONS: All options are optional
-    --help
+    -h | --help
         Display these instructions.
 
-    --build-type <type>
+    -b | --build-type <type>
         Specify build type for CMake. Default is 'Release'.
 
-    --ninja
+    -c | --clean
+        Clean temporary files before building.
+
+    -n | --ninja
         Use Ninja generator also on Windows.
 
-    --verbose
+    -v | --verbose
         Display commands being executed.
 "
 
@@ -25,21 +28,27 @@ source "$DIR/../common.sh"
 init_options() {
     BUILD_TYPE="Release"
     USE_NINJA_ON_WINDOWS=false
+    CLEAN=false
 
     while [ $# -gt 0 ]; do
         case "$1" in
-            --help)
+            -h | --help)
                 echo "$USAGE"
                 exit 1
                 ;;
-            --build-type)
+            -b | --build-type)
                 BUILD_TYPE="$2"
                 shift
                 ;;
-            --ninja)
+            -c | --clean)
+                CLEAN=true
+                print_magenta "Cleaning..."
+                git -C "$DIR" clean -fdx
+                ;;
+            -n | --ninja)
                 USE_NINJA_ON_WINDOWS=true
                 ;;
-            --verbose)
+            -v | --verbose)
                 set -x
                 ;;
         esac
@@ -84,6 +93,9 @@ generate_ninja_project() {
 
 build_project() {
     pushd "$PROJECT_PATH" > /dev/null
+    if [ "$CLEAN" = true ]; then
+        rm -rf "$CMAKE_BUILD_DIR"
+    fi
     mkdir -p "$CMAKE_BUILD_DIR"
 
     print_magenta "Building Othello C++..."
