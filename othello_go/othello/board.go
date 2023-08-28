@@ -141,9 +141,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 		}
 	}
 	if len(moves) > 0 {
-		sort.SliceStable(moves, func(i, j int) bool {
-			return moves[i].Value > moves[j].Value
-		})
+		sort.Sort(MoveDescending(moves))
 	}
 	return moves
 }

@@ -16,6 +16,7 @@ import (
 
 // Disk enum
 type Disk int
+
 const (
 	Black Disk = -1
 	Empty Disk = 0
@@ -40,6 +41,15 @@ type Move struct {
 	Disk       Disk
 	Value      int
 	Directions []Step
+}
+
+// MoveDescending implements sort.Interface with custom sort order.
+type MoveDescending []Move
+
+func (a MoveDescending) Len() int      { return len(a) }
+func (a MoveDescending) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a MoveDescending) Less(i, j int) bool {
+	return a[i].Value > a[j].Value || (a[i].Value == a[j].Value && a[i].Square.X < a[j].Square.X && a[i].Square.Y < a[j].Square.Y)
 }
 
 // Returns a single character identifier string for the given disk.
