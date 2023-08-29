@@ -1,4 +1,4 @@
-name: rust
+name: Rust cargo
 
 # Run either when pushing directly to main/master or in a PR targeting main/master
 on:

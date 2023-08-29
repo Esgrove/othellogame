@@ -1,4 +1,4 @@
-name: Ruff
+name: Python ruff
 
 # Run either when pushing directly to main/master or in a PR targeting main/master
 on:
@@ -18,7 +18,7 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    name: Ruff
+    name: ruff
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
