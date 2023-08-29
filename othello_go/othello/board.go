@@ -212,8 +212,8 @@ func (b *Board) getSquare(square *Square) Disk {
 	if b.checkCoordinates(square.X, square.Y) {
 		return b.board[square.Y*b.size+square.X]
 	}
-	// TODO: return error
-	// square is out of bounds
+	// Square is out of bounds.
+	// This probably should return a (Disk, error) instead but that makes using this quite cumbersome...
 	return Empty
 }
 
