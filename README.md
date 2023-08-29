@@ -92,6 +92,7 @@ Follows the C# style guide (*PascalCase*).
 
 Swift 5. Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
 Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
+Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/), no Xcode project.
 
 * main.swift
 * othello.swift
@@ -115,7 +116,8 @@ Uses the [colored](https://crates.io/crates/colored) crate for colored text in t
 
 ### Go
 
-Go 1.21+. Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
+Go 1.21+.
+Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 
 * main.go
 * othello/othello.go

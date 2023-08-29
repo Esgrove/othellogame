@@ -92,3 +92,10 @@ repos:
         types: [file, rust]
         language: system
         files: ^othello_rust/
+
+      - id: swiftformat
+        name: swift format
+        description: Run swiftformat on files included in the commit.
+        entry: bash -c 'cd othello_swift && swiftformat --lint .'
+        language: system
+        files: ^othello_swift/

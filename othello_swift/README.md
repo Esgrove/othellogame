@@ -25,8 +25,11 @@ brew install swiftformat
 swiftformat .
 ```
 
+Configuration in [.swiftformat](./.swiftformat)
+
 ## Update dependencies
 
 ```shell
 swift package update
+swift package resolve
 ```
