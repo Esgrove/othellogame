@@ -69,7 +69,7 @@ impl Player {
             thread::sleep(Duration::from_secs(1));
         } else {
             self.can_play = false;
-            println!("{}", "  No moves available...\n".yellow());
+            println!("{}", "  No moves available...".yellow());
         }
     }
 

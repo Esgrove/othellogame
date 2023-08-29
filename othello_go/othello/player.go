@@ -61,7 +61,7 @@ func (p *Player) PlayOneMove(board *Board) {
 		time.Sleep(time.Second)
 	} else {
 		p.CanPlay = false
-		fmt.Print("  No moves available...\n\n")
+		fmt.Println("  No moves available...")
 	}
 }
 
