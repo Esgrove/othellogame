@@ -231,7 +231,8 @@ func (b *Board) playerScores() (int, int) {
 	return black, white
 }
 
-// Returns the total score (positive means more white disks and negative means more black disks).
+// Returns the total score.
+// Positive value means more white disks and negative means more black disks.
 func (b *Board) score() int {
 	var sum int
 	for _, disk := range b.board {
