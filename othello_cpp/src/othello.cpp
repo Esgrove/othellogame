@@ -9,6 +9,7 @@
 #include "othello.hpp"
 
 #include "colorprint.hpp"
+#include "utils.hpp"
 #include "version.hpp"
 
 #include <algorithm>  // clamp, transform
@@ -111,7 +112,7 @@ size_t othello::Othello::get_board_size()
 {
     // TODO: error handling for invalid input
     print("Choose board size (default is 8): ", false);
-    int size;
+    size_t size;
     std::cin >> size;
-    return static_cast<size_t>(std::clamp(size, 4, 10));
+    return std::clamp(size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
 }

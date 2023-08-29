@@ -10,9 +10,6 @@
 #include "othello.hpp"
 #include "version.hpp"
 
-static constexpr size_t MIN_BOARD_SIZE = 4;
-static constexpr size_t MAX_BOARD_SIZE = 16;
-
 int main(int argc, const char* argv[])
 {
     print_bold("OTHELLO GAME - C++\n", fmt::color::green);
@@ -49,7 +46,7 @@ int main(int argc, const char* argv[])
     try {
         if (arguments.size() >= 2) {
             board_size = std::stoi(arguments[1]);
-            if (board_size < MIN_BOARD_SIZE || board_size > MAX_BOARD_SIZE) {
+            if (board_size < othello::MIN_BOARD_SIZE || board_size > othello::MAX_BOARD_SIZE) {
                 print_error(fmt::format("Unsupported board size: {}", board_size));
                 return 1;
             }
