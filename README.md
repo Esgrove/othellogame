@@ -45,14 +45,13 @@ All implementations follow this overall architecture:
 
 ### Python
 
-Python 3.10+. Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
+Python 3.10+.
+Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
 Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 79.
 Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
-Dependencies are handled by pip
-([Poetry](https://github.com/python-poetry/poetry) or
-[pip-compile](https://github.com/jazzband/pip-tools) would be a bit overkill with only a few dependencies).
+Dependencies are handled by [Poetry](https://github.com/python-poetry/poetry).
 Formatting with [Black](https://github.com/psf/black) and [isort](https://github.com/PyCQA/isort),
-linting with [Flake8](https://github.com/PyCQA/flake8).
+linting with [ruff](https://github.com/astral-sh/ruff).
 
 * othello.py
 * board.py
@@ -90,9 +89,11 @@ Follows the C# style guide (*PascalCase*).
 
 ### Swift
 
-Swift 5. Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
+Swift 5.
+Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
 Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
-Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/), no Xcode project.
+Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/),
+so there is no Xcode project.
 
 * main.swift
 * othello.swift

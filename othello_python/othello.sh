@@ -17,4 +17,5 @@ fi
 
 echo "$($PYTHON --version) from $PYTHON"
 
-$PYTHON othello/othello.py
+# Pass arguments
+$PYTHON othello/othello.py "$@"

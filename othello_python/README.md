@@ -4,30 +4,34 @@
 
 ## Dependencies
 
-Python 3.10+
+Requires Python 3.11+
 
-Install dependencies with pip:
+Dependencies are managed by [Poetry](https://python-poetry.org/docs/).
+
+Install dependencies:
 
 ```shell
-pip install -r requirements.txt
+poetry install
 ```
 
-If `pip` is not in path for some reason, you can always do:
+Update dependencies:
 
 ```shell
-python3 -m pip install -r requirements.txt
+poetry update
 ```
 
 ## Run
 
 ```shell
-python3 othello.py
+python3 othello/othello.py
+# or with helper script
+./othello.sh
 ```
 
 In a unix shell (bash etc.), executing directly also works:
 
 ```shell
-./othello.py
+./othello/othello.py
 ```
 
 **Note:** Windows uses `python` by default for Python 3,
