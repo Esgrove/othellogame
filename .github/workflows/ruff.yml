@@ -33,4 +33,3 @@ jobs:
         uses: chartboost/ruff-action@v1
         with:
           src: "./othello_python"
-          args: "ruff check --config othello_python/pyproject.toml"
