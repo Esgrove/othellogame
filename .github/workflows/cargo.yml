@@ -40,4 +40,6 @@ jobs:
         # workaround for color output
         env:
           TERM: xterm-256color
-        run: cargo clippy
+        # exit non-zero if there are any warnings
+        # https://doc.rust-lang.org/stable/clippy/usage.html
+        run: cargo clippy -- -Dwarnings
