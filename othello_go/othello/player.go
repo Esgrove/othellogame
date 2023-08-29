@@ -103,21 +103,25 @@ func (p *Player) getSquare() Square {
 	}
 }
 
-// SetHuman Set the player as human or computer controlled
-func (p *Player) SetHuman(isHuman bool) {
-	p.human = isHuman
-}
-
 // Reset player status for a new game.
 func (p *Player) Reset() {
 	p.CanPlay = true
 	p.roundsPlayed = 0
 }
 
+// SetHuman Set the player as human or computer controlled.
+func (p *Player) SetHuman(isHuman bool) {
+	p.human = isHuman
+}
+
 func (p *Player) String() string {
-	humanStr := "Computer"
+	return fmt.Sprintf("%s | %s | Moves: %d", p.color.DiskString(), p.typeString(), p.roundsPlayed)
+}
+
+// Return player type description string.
+func (p *Player) typeString() string {
 	if p.human {
-		humanStr = "Human   "
+		return "Human   "
 	}
-	return fmt.Sprintf("%s | %s | Moves: %d", p.color.DiskString(), humanStr, p.roundsPlayed)
+	return "Computer"
 }

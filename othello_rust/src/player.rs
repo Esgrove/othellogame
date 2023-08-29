@@ -15,13 +15,14 @@ use std::{fmt, io};
 use std::{thread, time::Duration};
 
 use crate::board::Board;
+use crate::colorprint::print_error;
 use crate::utils::{Disk, Move, Square};
 
 /// Defines one player that can be either human or computer controlled.
 #[derive(Debug)]
 pub(crate) struct Player {
     pub can_play: bool,
-    color: Disk,
+    disk: Disk,
     human: bool,
     rounds_played: u32,
     show_helpers: bool,
@@ -31,7 +32,7 @@ impl Player {
     /// Initialize new player for the given disk color.
     pub fn new(color: Disk) -> Player {
         Player {
-            color,
+            disk: color,
             human: true,
             can_play: true,
             show_helpers: true,
@@ -39,20 +40,20 @@ impl Player {
         }
     }
 
-    /// Shorthand to initialize new player for black disks.
+    /// Shorthand to initialize a new player for black disks.
     pub fn black() -> Player {
         Player::new(Disk::Black)
     }
 
-    /// Shorthand to initialize new player for white disks.
+    /// Shorthand to initialize a new player for white disks.
     pub fn white() -> Player {
         Player::new(Disk::White)
     }
 
     /// Play one round as this player.
     pub fn play_one_move(&mut self, board: &mut Board) {
-        println!("Turn: {}", self.color);
-        let moves = board.possible_moves(self.color);
+        println!("Turn: {}", self.disk);
+        let moves = board.possible_moves(self.disk);
         if !moves.is_empty() {
             self.can_play = true;
             if self.human && self.show_helpers {
@@ -87,7 +88,7 @@ impl Player {
     /// Return move chosen by computer.
     fn get_computer_move(&self, moves: &Vec<Move>) -> Move {
         println!("  Computer plays...");
-        // wait a bit and pick a random move
+        // Wait a bit and pick a random move
         thread::sleep(Duration::from_millis(
             rand::thread_rng().gen_range(1000..2000),
         ));
@@ -104,10 +105,7 @@ impl Player {
             if let Some(valid_move) = moves.iter().find(|m| m.square == square) {
                 return valid_move.clone();
             }
-            println!(
-                "  Can't place a {} disk in square {}!\n",
-                self.color, square
-            );
+            println!("  Can't place a {} disk in square {}!", self.disk, square);
         }
     }
 
@@ -127,7 +125,7 @@ impl Player {
                     return Square { x, y };
                 }
             }
-            println!("{}", "  Give coordinates in the form 'x,y'\n".red())
+            print_error("  Give coordinates in the form 'x,y'!")
         }
     }
 }
@@ -137,7 +135,7 @@ impl fmt::Display for Player {
         write!(
             f,
             "{} | {} | Moves: {}",
-            self.color,
+            self.disk,
             if self.human { "Human   " } else { "Computer" },
             self.rounds_played
         )

@@ -29,15 +29,15 @@ def move():
 
 
 def test_disk_other_disk_for_white(white):
-    assert white.other_disk() == Disk.BLACK
+    assert white.opponent() == Disk.BLACK
 
 
 def test_disk_other_disk_for_black(black):
-    assert black.other_disk() == Disk.WHITE
+    assert black.opponent() == Disk.WHITE
 
 
 def test_disk_other_disk_for_empty(empty):
-    assert empty.other_disk() == Disk.EMPTY
+    assert empty.opponent() == Disk.EMPTY
 
 
 def test_disk_get_board_string(empty):

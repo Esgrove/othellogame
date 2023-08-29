@@ -101,7 +101,7 @@ class Othello:
 
 
 if __name__ == "__main__":
-    print_bold("OTHELLO GAME - Python", Color.green)
+    print_bold("OTHELLO GAME - PYTHON", Color.green)
     args = sys.argv[1:]
     # Handle 'help' and 'version' arguments
     if "--help" in args or "-h" in args:

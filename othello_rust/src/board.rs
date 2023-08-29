@@ -99,6 +99,7 @@ impl Board {
                     continue;
                 }
                 let mut num_steps: u32 = 0;
+                // Keep stepping over opponents disks
                 while self.get_square(&pos).unwrap_or(Disk::Empty) == opposing_disk {
                     num_steps += 1;
                     pos += *step;
@@ -165,7 +166,7 @@ impl Board {
         )
     }
 
-    /// Returns the winner disk color.
+    /// Returns the winning disk colour. Empty indicates a draw.
     pub(crate) fn result(&self) -> Disk {
         let sum = self.score();
         match sum.cmp(&0) {
@@ -205,21 +206,23 @@ impl Board {
         (black, white)
     }
 
-    /// Returns the total score (positive means more white disks and negative means more black disks).
+    /// Returns the total score.
+    /// Positive value means more white disks and negative means more black disks.
     fn score(&self) -> i32 {
         self.board.iter().map(|d| *d as i32).sum()
     }
 
-    /// Sets the given square to given value.
+    /// Sets the given square to the given value.
     fn set_square(&mut self, square: &Square, disk: &Disk) {
         if !self.check_coordinates(square.x, square.y) {
-            panic!("Invalid coordinates");
+            panic!("Invalid coordinates: {}", square);
         }
         self.board[square.y as usize * self.size + square.x as usize] = *disk;
     }
 
     /// Initialize game board with starting disk positions.
     fn init_board(size: usize) -> Vec<Disk> {
+        // Initialize game board with empty disks
         let mut board = vec![Disk::Empty; size * size];
         // Set starting positions
         let row = if size % 2 == 0 {

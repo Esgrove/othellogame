@@ -24,7 +24,7 @@ class Color:
 
 
 def get_color(text: str, color=Color.white, bold=False) -> str:
-    """Format string with color using Colorama."""
+    """Format string with colour using Colorama."""
     return f"{colorama.Style.BRIGHT if bold else ''}{color}{text}{colorama.Style.RESET_ALL}"
 
 
@@ -35,7 +35,7 @@ def print_bold(text: str, color=Color.white, **kwargs):
 
 def print_color(text: str, color=Color.white, bold=False, **kwargs):
     """
-    Print text with color using Colorama.
+    Print text with colour using Colorama.
 
     You can pass optional extra arguments for the Python default print function if wanted:
 

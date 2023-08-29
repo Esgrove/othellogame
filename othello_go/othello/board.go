@@ -107,7 +107,7 @@ func (b *Board) PlaceDisk(playerMove *Move) {
 	}
 }
 
-// PossibleMoves Returns a list of possible moves for the given player.
+// PossibleMoves Returns a list of possible moves for the given disk colour.
 func (b *Board) PossibleMoves(disk Disk) []Move {
 	var moves []Move
 	opposingDisk := disk.Opponent()

@@ -36,7 +36,7 @@ class Disk(IntEnum):
 
         return Color.magenta if self.value == self.BLACK else Color.cyan
 
-    def other_disk(self) -> Self:
+    def opponent(self) -> Self:
         """Return the opposing disk color for this disk."""
         match self:
             case self.EMPTY:
@@ -54,7 +54,7 @@ class Disk(IntEnum):
 
 
 class Step:
-    """Represents one step direction on the board."""
+    """Represents a step direction on the board."""
 
     def __init__(self, x: int, y: int):
         self.x: int = x
