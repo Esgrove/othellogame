@@ -1,6 +1,8 @@
 # Othello Python
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
+[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 ## Dependencies
 
@@ -20,17 +22,22 @@ Update dependencies:
 poetry update
 ```
 
+Activate virtual env:
+
+```shell
+poetry shell
+```
+
 ## Run
 
 ```shell
+# with virtual env active
 python3 othello/othello.py
+# through poetry
+poetry run python othello/othello.py
 # or with helper script
 ./othello.sh
-```
-
-In a unix shell (bash etc.), executing directly also works:
-
-```shell
+# executing directly also works in a unix shell
 ./othello/othello.py
 ```
 
