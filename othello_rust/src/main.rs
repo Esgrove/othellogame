@@ -73,7 +73,7 @@ fn main() -> Result<()> {
     let board_size: usize = {
         // Try to read board size from command line args
         if let Some(size) = args.size {
-            if !(4..=16).contains(&size) {
+            if !(4..=10).contains(&size) {
                 anyhow::bail!("Unsupported board size: {}", size)
             }
             println!("Using board size: {size}");

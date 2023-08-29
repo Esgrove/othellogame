@@ -101,8 +101,9 @@ class Othello {
         while true {
             print("Choose board size (default is 8): ", terminator: "")
             if let input = readLine() {
+                // TODO: create clamp method
                 if let size = Int(input) {
-                    return max(4, min(size, 16))
+                    return max(4, min(size, 10))
                 }
             }
             print_error("give a valid number...")

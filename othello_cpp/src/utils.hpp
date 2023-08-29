@@ -18,7 +18,7 @@
 namespace othello
 {
 static constexpr size_t MIN_BOARD_SIZE = 4;
-static constexpr size_t MAX_BOARD_SIZE = 16;
+static constexpr size_t MAX_BOARD_SIZE = 10;
 
 /// Represents one game piece or lack of one.
 enum class Disk { black = -1, empty = 0, white = 1 };

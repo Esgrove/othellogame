@@ -14,6 +14,9 @@ except ImportError:
 
 from colorprint import Color, get_color
 
+MIN_BOARD_SIZE = 4
+MAX_BOARD_SIZE = 10
+
 
 class Disk(IntEnum):
     """Represents one game piece or lack of one."""
@@ -121,7 +124,7 @@ class Step:
 
     def __repr__(self) -> str:
         """Display Step with direction arrow."""
-        # `match` does not work here without unpacking step :(
+        # `match` does not work here without the unpacking step :(
         if self == (-1, -1):
             return f"{self} \u2199"
         elif self == (-1, 0):

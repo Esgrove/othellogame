@@ -15,7 +15,7 @@ import (
 )
 
 const MinBoardSize int = 4
-const MaxBoardSize int = 16
+const MaxBoardSize int = 10
 
 // Disk enum
 type Disk int

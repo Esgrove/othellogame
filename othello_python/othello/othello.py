@@ -10,9 +10,9 @@ import sys
 from datetime import datetime
 
 from board import Board
-from colorprint import Color, print_bold, print_error
+from colorprint import Color, print_bold, print_error, print_warn
 from player import Player
-from utils import Disk, clamp
+from utils import Disk, clamp, MIN_BOARD_SIZE, MAX_BOARD_SIZE
 
 
 class Othello:
@@ -92,12 +92,16 @@ class Othello:
     @staticmethod
     def get_board_size() -> int:
         """Ask and return the desired board size."""
-        while True:
-            try:
-                ans = int(input("Choose board size (default is 8): "))
-                return clamp(ans, 4, 10)
-            except ValueError:
-                print_error("Give a valid number...")
+        try:
+            ans = int(input("Choose board size (default is 8): "))
+            if ans < MIN_BOARD_SIZE or ans > MAX_BOARD_SIZE:
+                print_warn(
+                    f"Limiting board size to valid range {MIN_BOARD_SIZE}...{MAX_BOARD_SIZE}"
+                )
+            return clamp(ans, MIN_BOARD_SIZE, MAX_BOARD_SIZE)
+        except ValueError:
+            print_warn("Invalid value, defaulting to 8...")
+        return 8
 
 
 if __name__ == "__main__":
@@ -120,7 +124,7 @@ if __name__ == "__main__":
         try:
             # try to read board size from command line args
             board_size = int(args[0])
-            if board_size < 4 or board_size > 16:
+            if board_size < MIN_BOARD_SIZE or board_size > MAX_BOARD_SIZE:
                 print_error(f"Unsupported board size: {board_size}")
                 raise ValueError
 
