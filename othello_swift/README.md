@@ -12,6 +12,12 @@ swift run
 swift run --configuration release
 ```
 
+Or using script:
+
+```shell
+./build.sh
+```
+
 ## Format
 
 ```shell

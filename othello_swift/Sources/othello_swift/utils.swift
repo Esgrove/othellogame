@@ -5,8 +5,8 @@
 // 2019-2023
 //==========================================================
 
-import Foundation
 import ColorizeSwift
+import Foundation
 
 import BuildInfo
 

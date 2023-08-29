@@ -11,6 +11,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]
 PROJECT_PATH="$REPO_ROOT/othello_swift"
 VERSION_HEADER="$PROJECT_PATH/Sources/BuildInfo/include/version.h"
 
+# Version info
 BUILD_TIME=$(date +"%Y-%m-%d_%H%M")
 GIT_HASH=$(git rev-parse --short HEAD)
 GIT_BRANCH=$(git branch --show-current)

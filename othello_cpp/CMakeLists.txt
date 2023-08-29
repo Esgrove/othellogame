@@ -79,7 +79,7 @@ add_executable(othello_cpp
     src/version.hpp
 )
 
-# Create version info
+# Include version info
 target_compile_definitions(othello_cpp PRIVATE
     BUILDTIME_APP_NAME="${CMAKE_PROJECT_NAME}"
     BUILDTIME_BRANCH="${GIT_BRANCH}"

@@ -25,7 +25,7 @@ CMake will pull required C++ libraries automatically:
 
 ## Build
 
-Use the provided script to automatically build the app using CMake.
+Use the provided script to automatically build the app using CMake:
 
 ```shell
 ./build.sh

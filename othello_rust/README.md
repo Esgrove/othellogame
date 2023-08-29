@@ -4,13 +4,18 @@ Othello [Rust](https://www.rust-lang.org/) implementation.
 
 ## Build
 
-Rust and Cargo make things really easy:
-
 ```shell
 cargo build
 cargo build --release
+
 cargo run
 cargo run --release
+```
+
+Or using script:
+
+```shell
+./build.sh
 ```
 
 ## Format code
