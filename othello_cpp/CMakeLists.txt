@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project("Othello CPP"
     VERSION 2.1
-    DESCRIPTION "Othello CLI game implementation"
+    DESCRIPTION "A simple Othello CLI game implementation."
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
 )
@@ -38,9 +38,9 @@ execute_process(
 string(TIMESTAMP DATE "%Y-%m-%d" UTC)
 string(TIMESTAMP TIMESTAMP "%Y-%m-%d_%H%M" UTC)
 
-set(BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_HASH}_${TIMESTAMP}")
+set(APP_BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_HASH}_${TIMESTAMP}")
 
-message(STATUS "Build name: ${BUILD_NAME}")
+message(STATUS "Build name: ${APP_BUILD_NAME}")
 
 # ccache
 # https://ccache.dev/
@@ -83,7 +83,7 @@ add_executable(othello_cpp
 target_compile_definitions(othello_cpp PRIVATE
     BUILDTIME_APP_NAME="${CMAKE_PROJECT_NAME}"
     BUILDTIME_BRANCH="${GIT_BRANCH}"
-    BUILDTIME_BUILD_NAME="${BUILD_NAME}"
+    BUILDTIME_BUILD_NAME="${APP_BUILD_NAME}"
     BUILDTIME_COMMIT="${GIT_HASH}"
     BUILDTIME_DATE="${DATE}"
     BUILDTIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
