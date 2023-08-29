@@ -52,11 +52,7 @@ func (m MovesDescending) Less(i, j int) bool {
 	if m[i].Value > m[j].Value {
 		return true
 	} else if m[i].Value == m[j].Value {
-		if m[i].Square.X < m[j].Square.X {
-			return true
-		} else if m[i].Square.X == m[j].Square.X {
-			return m[i].Square.Y < m[j].Square.Y
-		}
+		return m[i].Square.IsLessThan(m[j].Square)
 	}
 	return false
 }
@@ -101,6 +97,16 @@ func (s Step) String() string {
 
 func (s Square) Add(step Step) Square {
 	return Square{X: s.X + step.X, Y: s.Y + step.Y}
+}
+
+// IsLessThan Custom comparison method since can't overload '<' operator in Go :(
+func (s Square) IsLessThan(other Square) bool {
+	if s.X < other.X {
+		return true
+	} else if s.X == other.X {
+		return s.Y < other.Y
+	}
+	return false
 }
 
 func (s Square) String() string {
