@@ -22,3 +22,9 @@ updates:
     directory: "/othello_rust"
     schedule:
       interval: "weekly"
+
+  # Go
+  - package-ecosystem: "gomod"
+    directory: "/othello_go"
+    schedule:
+      interval: "weekly"

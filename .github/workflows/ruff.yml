@@ -1,4 +1,4 @@
-name: flake8
+name: Ruff
 
 # Run either when pushing directly to main/master or in a PR targeting main/master
 on:
@@ -7,18 +7,18 @@ on:
       - master
       - main
     paths:
-      - '**.py'
+      - "**.py"
   pull_request:
     branches:
       - master
       - main
     paths:
-      - '**.py'
+      - "**.py"
 
 jobs:
   lint:
     runs-on: ubuntu-latest
-    name: Lint
+    name: Ruff
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
@@ -26,11 +26,11 @@ jobs:
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      # https://github.com/py-actions/flake8
-      - name: flake8 lint
-        uses: py-actions/flake8@v2
+      # https://github.com/chartboost/ruff-action
+      - name: ruff lint
+        uses: chartboost/ruff-action@v1
         with:
-          path: othello_python
-          args: "--config othello_python/setup.cfg"
+          src: "./othello_python"
+          args: "ruff check --config othello_python/pyproject.toml"
