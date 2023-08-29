@@ -12,7 +12,7 @@ from datetime import datetime
 from board import Board
 from colorprint import Color, print_bold, print_error, print_warn
 from player import Player
-from utils import Disk, clamp, MIN_BOARD_SIZE, MAX_BOARD_SIZE
+from utils import MAX_BOARD_SIZE, MIN_BOARD_SIZE, Disk, clamp
 
 
 class Othello:
