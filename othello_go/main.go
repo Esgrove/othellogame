@@ -42,7 +42,7 @@ func main() {
 		if err != nil {
 			othello.PrintError("Invalid board size")
 			boardSize = othello.GetBoardSize()
-		} else if size < 4 || size > 16 {
+		} else if size < othello.MinBoardSize || size > othello.MaxBoardSize {
 			othello.PrintError("Unsupported board size: %d", size)
 			boardSize = othello.GetBoardSize()
 		} else {

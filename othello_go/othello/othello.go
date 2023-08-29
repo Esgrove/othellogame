@@ -120,7 +120,8 @@ func GetBoardSize() int {
 	if err != nil {
 		PrintWarn("Invalid value, defaulting to 8...")
 		return 8
-	} else {
-		return Clamp(input, 4, 10)
+	} else if input < MinBoardSize || input > MaxBoardSize {
+		PrintWarn("Limiting board size to valid range %d...%d", MinBoardSize, MaxBoardSize)
 	}
+	return Clamp(input, MinBoardSize, MaxBoardSize)
 }

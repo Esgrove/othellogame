@@ -11,6 +11,9 @@ use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::ops::{Add, AddAssign};
 
+pub const MIN_BOARD_SIZE: usize = 4;
+pub const MAX_BOARD_SIZE: usize = 10;
+
 /// Represents one game piece or lack of one.
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq)]
 pub(crate) enum Disk {

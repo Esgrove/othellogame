@@ -12,9 +12,10 @@ use crate::colored::Colorize;
 use std::io::{self, Write};
 
 use crate::board::Board;
-use crate::colorprint::print_error;
+use crate::colorprint::{print_error, print_warn};
 use crate::player::Player;
 use crate::utils::Disk;
+use crate::utils::{MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 /// Gameplay loop and main logic.
 pub(crate) struct Othello {
@@ -121,15 +122,14 @@ impl Othello {
 
     /// Ask and return the desired board size.
     pub(crate) fn get_board_size() -> usize {
-        loop {
-            print!("Choose board size (default is 8): ");
-            let mut input = String::new();
-            if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {
-                if let Ok(board_size) = input.trim().parse::<usize>() {
-                    return board_size.clamp(4, 10);
-                }
+        print!("Choose board size (default is 8): ");
+        let mut input = String::new();
+        if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {
+            if let Ok(board_size) = input.trim().parse::<usize>() {
+                return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
             }
-            print_error("Give a valid number...");
         }
+        print_warn("Invalid value, defaulting to 8...");
+        return 8;
     }
 }

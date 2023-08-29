@@ -14,6 +14,9 @@ import (
 	"runtime/debug"
 )
 
+const MinBoardSize int = 4
+const MaxBoardSize int = 16
+
 // Disk enum
 type Disk int
 
@@ -81,7 +84,7 @@ func (d Disk) DiskString() string {
 	}
 }
 
-// Opponent Return the opposing disk colour for this disk.
+// Opponent Returns the opposing disk colour for this disk.
 func (d Disk) Opponent() Disk {
 	if d == Black {
 		return White
