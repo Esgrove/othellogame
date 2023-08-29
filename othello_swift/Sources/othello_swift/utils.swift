@@ -5,7 +5,10 @@
 // 2019-2023
 //==========================================================
 
+import Foundation
 import ColorizeSwift
+
+import BuildInfo
 
 enum Disk: Int, CustomStringConvertible {
     case black = -1
@@ -148,4 +151,11 @@ extension Move: Comparable {
     static func < (left: Move, right: Move) -> Bool {
         left.value > right.value || (left.value == right.value && left.square < right.square)
     }
+}
+
+func version_info() -> String {
+    let buildTime = BUILD_TIME
+    let gitHash = GIT_HASH
+    let gitBranch = GIT_BRANCH
+    return "\(buildTime) \(gitHash) \(gitBranch)"
 }

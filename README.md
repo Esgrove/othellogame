@@ -99,6 +99,7 @@ Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 * player.swift
 * utils.swift
 * colorprint.swift
+* version.h
 
 ### Rust
 
