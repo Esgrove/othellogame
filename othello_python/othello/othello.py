@@ -110,7 +110,7 @@ if __name__ == "__main__":
             "USAGE: python3 othello.py [board size]\n\n"
             "Optional arguments:\n"
             "    -h | --help          Print usage and exit\n"
-            "    -v | --version       Print version info and exit\n"
+            "    -v | --version       Print version info and exit"
         )
     if "--version" in args or "-v" in args:
         print(f"Othello Python {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
