@@ -118,7 +118,7 @@ func GetBoardSize() int {
 	var input int
 	_, err := fmt.Scanf("%d", &input)
 	if err != nil {
-		PrintWarn("Invalid value, defaulting to 8...")
+		PrintWarn("Invalid size, defaulting to 8...")
 		return 8
 	} else if input < MinBoardSize || input > MaxBoardSize {
 		PrintWarn("Limiting board size to valid range %d...%d", MinBoardSize, MaxBoardSize)

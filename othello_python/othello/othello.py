@@ -100,7 +100,7 @@ class Othello:
                 )
             return clamp(ans, MIN_BOARD_SIZE, MAX_BOARD_SIZE)
         except ValueError:
-            print_warn("Invalid value, defaulting to 8...")
+            print_warn("Invalid size, defaulting to 8...")
         return 8
 
 

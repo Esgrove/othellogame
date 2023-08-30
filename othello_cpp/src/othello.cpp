@@ -123,7 +123,7 @@ size_t othello::Othello::get_board_size()
         }
         return std::clamp(size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
     } catch (const std::exception& e) {
-        print_color("Invalid value, defaulting to 8...\n", fmt::color::yellow);
+        print_color("Invalid size, defaulting to 8...\n", fmt::color::yellow);
     }
     return 8;
 }

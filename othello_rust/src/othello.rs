@@ -133,7 +133,7 @@ impl Othello {
                 return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
             }
         }
-        print_warn("Invalid value, defaulting to 8...");
+        print_warn("Invalid size, defaulting to 8...");
         8
     }
 }
