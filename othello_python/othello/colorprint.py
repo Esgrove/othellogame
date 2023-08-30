@@ -49,18 +49,22 @@ def print_color(text: str, color=Color.white, bold=False, **kwargs):
     print(get_color(text, color, bold), **kwargs)
 
 
-def print_error_and_exit(text: str, exit_code=1):
+def print_error_and_exit(message: str, exit_code=1):
     """Print error message and exit with given exit code."""
-    print_error(text)
+    print_error(message)
     sys.exit(exit_code)
 
 
-def print_error(text: str, bold=False, **kwargs):
-    print_color(f"ERROR: {text}", Color.red, bold, **kwargs)
+def print_error(message: str, bold=False, **kwargs):
+    """Print error message with red colour."""
+    indent, text = _split_leading_whitespace(message)
+    print_color(f"{indent}ERROR: {text}", Color.red, bold, **kwargs)
 
 
-def print_warn(text: str, bold=False, **kwargs):
-    print_color(f"WARNING: {text}", Color.yellow, bold, **kwargs)
+def print_warn(message: str, bold=False, **kwargs):
+    """Print warning message with yellow colour."""
+    indent, text = _split_leading_whitespace(message)
+    print_color(f"{indent}WARNING: {text}", Color.yellow, bold, **kwargs)
 
 
 def print_green(text: str, bold=False, **kwargs):
@@ -85,3 +89,12 @@ def print_magenta(text: str, bold=False, **kwargs):
 
 def print_cyan(text: str, bold=False, **kwargs):
     print_color(text, Color.cyan, bold, **kwargs)
+
+
+def _split_leading_whitespace(message: str) -> (str, str):
+    """Split a string to the leading whitespace and rest of the string."""
+    indent_size = next((i for i, c in enumerate(message) if not c.isspace()), len(message))
+    print(f"indent_size: {indent_size}")
+    indent = message[:indent_size]
+    text = message[indent_size:]
+    return indent, text
