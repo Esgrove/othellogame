@@ -67,8 +67,8 @@ fn main() -> Result<()> {
             build::PROJECT_NAME,
             build::PKG_VERSION,
             build::BUILD_TIME,
+            build::SHORT_COMMIT,
             build::BRANCH,
-            build::SHORT_COMMIT
         );
         return Ok(());
     }
