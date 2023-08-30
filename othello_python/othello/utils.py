@@ -33,14 +33,14 @@ class Disk(IntEnum):
         return get_color(self.name[0], self.color())
 
     def color(self) -> Color:
-        """Return the associated color for this disk."""
+        """Return the associated colour for this disk."""
         if self.value == self.EMPTY:
             return Color.white
 
         return Color.magenta if self.value == self.BLACK else Color.cyan
 
     def opponent(self) -> Self:
-        """Return the opposing disk color for this disk."""
+        """Return the opposing disk colour for this disk."""
         match self:
             case self.EMPTY:
                 return self.EMPTY

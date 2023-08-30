@@ -21,8 +21,8 @@ class Othello:
     def __init__(self, board_size: int):
         self.board = Board(board_size)
         self.board_size = board_size
-        self.player_black = Player(Disk.BLACK)
-        self.player_white = Player(Disk.WHITE)
+        self.player_black = Player.black()
+        self.player_white = Player.white()
         self.rounds_played = 0
         self.games_played = 0
 

@@ -30,9 +30,9 @@ pub(crate) struct Player {
 
 impl Player {
     /// Initialize new player for the given disk color.
-    pub fn new(color: Disk) -> Player {
+    pub fn new(disk: Disk) -> Player {
         Player {
-            disk: color,
+            disk,
             human: true,
             can_play: true,
             show_helpers: true,
@@ -80,7 +80,7 @@ impl Player {
         self.rounds_played = 0;
     }
 
-    /// Set the player as human or computer controlled
+    /// Set the player as human or computer controlled.
     pub fn set_human(&mut self, is_human: bool) {
         self.human = is_human;
     }
@@ -105,7 +105,10 @@ impl Player {
             if let Some(valid_move) = moves.iter().find(|m| m.square == square) {
                 return valid_move.clone();
             }
-            println!("  Can't place a {} disk in square {}!", self.disk, square);
+            print_error(&format!(
+                "  Can't place a {} disk in square {}!",
+                self.disk, square
+            ));
         }
     }
 

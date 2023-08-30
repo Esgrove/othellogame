@@ -29,7 +29,7 @@ pub(crate) struct Othello {
 
 impl Othello {
     /// Initialize Othello game.
-    // Typically this would be `new` but using init to match other implementations
+    // Typically this would be called `new` but using `init` to match other implementations
     pub fn init(size: usize) -> Othello {
         Othello {
             board: Board::new(size),
@@ -90,7 +90,7 @@ impl Othello {
     /// Print ending status and winner info.
     fn print_result(&self) {
         println!("{}", "\n================================".bold());
-        println!("{}", "The game is finished!\n".green());
+        println!("{}", "The game is finished!\n".green().bold());
         println!("{}", "Result:".bold());
         self.print_status();
         println!();
@@ -112,8 +112,8 @@ impl Othello {
 
     /// Ask a question with two options, and return bool from user answer.
     // Associated aka static function (no self parameter)
-    fn get_answer(text: &str, yes: &str, no: &str) -> bool {
-        print!("{} ({}/{})? ", text, yes, no);
+    fn get_answer(question: &str, yes: &str, no: &str) -> bool {
+        print!("{} ({}/{})? ", question, yes, no);
         let mut input = String::new();
         io::stdout().flush().unwrap();
         io::stdin().read_line(&mut input).expect("Input failed");
@@ -126,6 +126,9 @@ impl Othello {
         let mut input = String::new();
         if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {
             if let Ok(board_size) = input.trim().parse::<usize>() {
+                if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&board_size) {
+                    println!("{}", format!("Limiting board size to valid range {MIN_BOARD_SIZE}...{MAX_BOARD_SIZE}").yellow());
+                }
                 return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
             }
         }
