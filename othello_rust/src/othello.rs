@@ -12,7 +12,7 @@ use crate::colored::Colorize;
 use std::io::{self, Write};
 
 use crate::board::Board;
-use crate::colorprint::{print_warn};
+use crate::colorprint::print_warn;
 use crate::player::Player;
 use crate::utils::Disk;
 use crate::utils::{MAX_BOARD_SIZE, MIN_BOARD_SIZE};

@@ -83,11 +83,11 @@ fn main() -> Result<()> {
             size
         } else {
             // Otherwise ask user for board size
-            othello::Othello::get_board_size()
+            Othello::get_board_size()
         }
     };
 
-    let mut game = othello::Othello::init(board_size);
+    let mut game = Othello::init(board_size);
     game.play();
     Ok(())
 }
