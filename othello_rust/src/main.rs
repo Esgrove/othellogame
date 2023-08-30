@@ -16,6 +16,9 @@ use shadow_rs::shadow;
 
 use std::env;
 
+use crate::othello::Othello;
+use crate::utils::{MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+
 mod board;
 mod colorprint;
 mod othello;
@@ -73,7 +76,7 @@ fn main() -> Result<()> {
     let board_size: usize = {
         // Try to read board size from command line args
         if let Some(size) = args.size {
-            if !(4..=10).contains(&size) {
+            if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&size) {
                 anyhow::bail!("Unsupported board size: {}", size)
             }
             println!("Using board size: {size}");
