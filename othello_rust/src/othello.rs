@@ -85,6 +85,7 @@ impl Othello {
             println!("--------------------------------");
             self.player_white.play_one_move(&mut self.board);
         }
+        self.games_played += 1;
     }
 
     /// Print ending status and winner info.
