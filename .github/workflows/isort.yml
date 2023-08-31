@@ -17,7 +17,7 @@ on:
 
 # https://github.com/marketplace/actions/python-isort
 jobs:
-  sort-imports:
+  format:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source repository

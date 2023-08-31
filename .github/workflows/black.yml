@@ -15,6 +15,7 @@ on:
     paths:
       - '**.py'
 
+# https://black.readthedocs.io/en/stable/integrations/github_actions.html
 jobs:
   format:
     runs-on: ubuntu-latest
