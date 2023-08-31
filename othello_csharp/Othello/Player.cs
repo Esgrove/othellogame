@@ -78,11 +78,11 @@ namespace Othello
         private Move GetComputerMove(IReadOnlyList<Move> moves)
         {
             Console.WriteLine("  Computer plays...");
-            // wait a bit and pick a random move
+            // Wait a bit and pick a random move
             Thread.Sleep(_random.Next(1000, 2000));
-            var move = moves[_random.Next(moves.Count)];
-            Console.WriteLine($"  -> {move.Square}");
-            return move;
+            var chosenMove = moves[_random.Next(moves.Count)];
+            Console.WriteLine($"  {chosenMove.Square} -> {chosenMove.Value}");
+            return chosenMove;
         }
 
         /// Return move chosen by a human player.

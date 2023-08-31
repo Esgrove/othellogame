@@ -51,7 +51,7 @@ class Player {
         Thread.sleep(forTimeInterval: seconds)
         // safe to force unwrap since moves will always contain elements
         let move = moves.randomElement()!
-        print("  -> \(move.square)")
+        print("  \(move.square) -> \(move.value)")
         return move
     }
 

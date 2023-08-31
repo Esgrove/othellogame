@@ -93,7 +93,7 @@ impl Player {
             rand::thread_rng().gen_range(1000..2000),
         ));
         let chosen_move = moves[rand::thread_rng().gen_range(0..moves.len())].clone();
-        println!("  -> {}", chosen_move.square);
+        println!("  {} -> {}", chosen_move.square, chosen_move.value);
         chosen_move
     }
 

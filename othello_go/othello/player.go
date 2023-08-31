@@ -68,11 +68,10 @@ func (p *Player) PlayOneMove(board *Board) {
 // Return move chosen by computer.
 func (p *Player) getComputerMove(moves []Move) Move {
 	fmt.Println("  Computer plays...")
-
+	// Wait a bit and pick a random move
 	time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)+1000))
-
 	chosenMove := moves[rand.Intn(len(moves))]
-	fmt.Printf("  -> %s\n", chosenMove.Square)
+	fmt.Printf("  %s -> %s\n", chosenMove.Square, chosenMove.Value)
 	return chosenMove
 }
 

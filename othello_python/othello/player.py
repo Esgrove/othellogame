@@ -69,7 +69,7 @@ class Player:
         # Wait a bit and pick a random move
         time.sleep(random.uniform(1.0, 2.0))
         chosen_move = random.choice(moves)
-        print(f"  -> {chosen_move.square}")
+        print(f"  {chosen_move.square} -> {chosen_move.value}")
         return chosen_move
 
     def _get_human_move(self, moves: list[Move]) -> Move:

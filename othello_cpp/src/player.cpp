@@ -63,7 +63,7 @@ othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
     // C++17 std::sample is even more convoluted here :(
     auto move = moves[rand_item(this->rand_gen)];
     // std::cout << "  -> " << move.square << "\n";
-    fmt::print("  -> {}\n", move.square);
+    fmt::print("  {} -> {}\n", move.square, move.value);
     return move;
 }
 
