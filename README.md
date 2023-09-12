@@ -1,23 +1,22 @@
 # othellogame
 
-A simple [Othello (Reversi)](https://en.wikipedia.org/wiki/Reversi) command line game implementation in different programming languages.
+A simple [Othello (Reversi)](https://en.wikipedia.org/wiki/Reversi) CLI game implementation in different programming languages.
 
-I originally did this in Python many years ago for a university programming course assignment,
-and then a few years later redid it in C++ for learning purposes.
+I originally did this in Python many years ago for my university basic programming course assignment,
+and then a few years later implemented it in C++ for learning purposes.
 Since then, I figured that this could actually be a useful project to:
 
-1. learn new languages by re-implementing it,
+1. try out and learn new languages by re-implementing it,
 2. compare different languages easily with each other, and
-3. be a practical syntax and formatting reference.
+3. be a practical syntax, formatting, and tooling reference for each language.
 
 I have since cleaned up and improved both my old implementations in Python and C++,
 the two languages I have been using the most.
 For each language, I try to make the program structure and all the functions match as close as possible,
 while also trying to follow the best practices and guidelines for each language.
 
-This makes it very easy to compare the implementations to each other.
-While the project is quite simple,
-it also covers pretty well most of the basic functionality and tooling one would commonly use in a programming language.
+While the program is quite simple,
+it also covers quite well most of the basic functionality and tooling one would commonly use in a programming language.
 It's big enough to get a good feel for a language,
 yet small enough that it could be done in a weekend even when starting with a new language.
 It is also quite easy to check that the code is working correctly,
@@ -64,7 +63,7 @@ linting with [ruff](https://github.com/astral-sh/ruff).
 C++20. Uses [CMake](https://cmake.org/) as the build system,
 and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text (stringstreams :unamused:).
 Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rl-camel) recommended naming style (*snake_case*),
-which sadly very few C++ codebases seem to be using (in my experience).
+which sadly not that many C++ codebases seem to be using (in my experience).
 Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html).
 
 * main.cpp
@@ -93,7 +92,7 @@ Swift 5.
 Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
 Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/),
-so there is no Xcode project.
+meaning there is no Xcode project.
 
 * main.swift
 * othello.swift
@@ -129,7 +128,7 @@ Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 
 ## TODO
 
+* Write some thoughts on the languages and their differences
 * Add unit tests for each language
 * Unify naming and comments across the different implementations
 * Make a NumPy version of Python implementation (not really needed but why not)
-* Write some thoughts on the languages and their differences
