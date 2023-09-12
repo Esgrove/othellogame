@@ -25,15 +25,15 @@ repos:
       - id: shfmt
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.286
+    rev: v0.0.288
     hooks:
       - id: ruff
         name: python ruff
         files: ^othello_python/
         args: [--fix, --exit-non-zero-on-fix, --config, othello_python/pyproject.toml]
 
-  - repo: https://github.com/psf/black
-    rev: 23.7.0
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 23.9.1
     hooks:
       - id: black
         name: python black
