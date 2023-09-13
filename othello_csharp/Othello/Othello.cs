@@ -9,12 +9,16 @@
 using Pastel;
 using System;
 using System.Drawing;
+using System.Linq;
 
 namespace Othello
 {
     /// Gameplay loop and main logic.
     internal class Othello
     {
+        public static int MIN_BOARD_SIZE = 4;
+        public static int MAX_BOARD_SIZE = 10;
+
         private Board _board;
         private Player _playerBlack;
         private Player _playerWhite;
@@ -24,7 +28,7 @@ namespace Othello
 
         private Othello(int boardSize)
         {
-            _board = new Board(_boardSize);
+            _board = new Board(boardSize);
             _boardSize = boardSize;
             _gamesPlayed = 0;
             _playerBlack = new Player(Disk.Black);
@@ -134,7 +138,7 @@ namespace Othello
                 Console.Write("Choose board size (default is 8): ");
                 if (int.TryParse(Console.ReadLine(), out var boardSize))
                 {
-                    return Math.Max(MIN_BOARD_SIZE, Math.Min(boardSize, MAX_BOARD_SIZE));
+                    return Math.Max(Othello.MIN_BOARD_SIZE, Math.Min(boardSize, Othello.MAX_BOARD_SIZE));
                 }
                 ColorPrint.Error("give a valid number...");
             }
@@ -160,33 +164,24 @@ namespace Othello
                 Environment.Exit(0);
             }
 
-            try
+            // try to read board size from command line args
+            if (args.Length == 0 || !int.TryParse(args[0], out var boardSize))
             {
-                // try to read board size from command line args
-                if (args.Length == 0 || !int.TryParse(args[0], out var boardSize))
+                // Otherwise ask user for board size
+                boardSize = GetBoardSize();
+            }
+            else
+            {
+                if (boardSize < Othello.MIN_BOARD_SIZE || boardSize > Othello.MAX_BOARD_SIZE)
                 {
-                    // Otherwise ask user for board size
-                    boardSize = GetBoardSize();
+                    ColorPrint.Error($"Unsupported board size: {boardSize}");
+                    Environment.Exit(1);
                 }
-                else
-                {
-                    if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE)
-                    {
-                        ColorPrint.Error($"Unsupported board size: {boardSize}");
-                        Environment.Exit(1);
-                    }
-                    Console.WriteLine($"Using board size: {boardSize}");
-                }
+                Console.WriteLine($"Using board size: {boardSize}");
+            }
 
-                var game = new Othello(boardSize);
-                game.Play();
-            }
-            catch (OperationCanceledException)
-            {
-                // Catches CTRL-C
-                Console.WriteLine("\naborted...");
-                Environment.Exit(1);
-            }
+            var game = new Othello(boardSize);
+            game.Play();
         }
     }
 }
