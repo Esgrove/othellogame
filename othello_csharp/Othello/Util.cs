@@ -11,6 +11,9 @@ using System.Drawing;
 
 namespace Othello
 {
+    public const int MIN_BOARD_SIZE = 4;
+    public const int MAX_BOARD_SIZE = 10;
+
     /// Represents one game piece or lack of one.
     public enum Disk : int
     {

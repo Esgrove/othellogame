@@ -12,7 +12,7 @@ using System.Drawing;
 
 namespace Othello
 {
-    /// Play Othello CLI game.
+    /// Gameplay loop and main logic.
     internal class Othello
     {
         private Board _board;
@@ -24,12 +24,12 @@ namespace Othello
 
         private Othello(int boardSize)
         {
-            _boardSize = boardSize;
             _board = new Board(_boardSize);
+            _boardSize = boardSize;
+            _gamesPlayed = 0;
             _playerBlack = new Player(Disk.Black);
             _playerWhite = new Player(Disk.White);
             _roundsPlayed = 0;
-            _gamesPlayed = 0;
         }
 
 
@@ -87,6 +87,7 @@ namespace Othello
                 Console.WriteLine("--------------------------------");
                 _playerWhite.PlayOneMove(_board);
             }
+            ++_roundsPlayed;
         }
 
         /// Print ending status and winner info.
@@ -133,7 +134,7 @@ namespace Othello
                 Console.Write("Choose board size (default is 8): ");
                 if (int.TryParse(Console.ReadLine(), out var boardSize))
                 {
-                    return Math.Max(4, Math.Min(boardSize, 10));
+                    return Math.Max(MIN_BOARD_SIZE, Math.Min(boardSize, MAX_BOARD_SIZE));
                 }
                 ColorPrint.Error("give a valid number...");
             }
@@ -142,24 +143,50 @@ namespace Othello
         public static void Main(string[] args)
         {
             ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
-            // try to read board size from command line args
-            if (args.Length == 0 || !int.TryParse(args[0], out var boardSize))
+            // Handle 'help' and 'version' arguments
+            // TODO: version info
+            if (args.Contains("--help") || args.Contains("-h"))
             {
-                // Otherwise ask user for board size
-                boardSize = GetBoardSize();
+                Console.WriteLine($"Othello C# {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}\n");
+                Console.WriteLine("USAGE: othello.exe [board size]\n");
+                Console.WriteLine("Optional arguments:");
+                Console.WriteLine("    -h | --help          Print usage and exit");
+                Console.WriteLine("    -v | --version       Print version info and exit");
+                Environment.Exit(1);
             }
-            else
+            if (args.Contains("--version") || args.Contains("-v"))
             {
-                if (boardSize < 4 || boardSize > 10)
-                {
-                    ColorPrint.Error($"Unsupported board size: {boardSize}");
-                    Environment.Exit(1);
-                }
-                Console.WriteLine($"Using board size: {boardSize}");
+                Console.WriteLine($"Othello C# {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+                Environment.Exit(0);
             }
 
-            var game = new Othello(boardSize);
-            game.Play();
+            try
+            {
+                // try to read board size from command line args
+                if (args.Length == 0 || !int.TryParse(args[0], out var boardSize))
+                {
+                    // Otherwise ask user for board size
+                    boardSize = GetBoardSize();
+                }
+                else
+                {
+                    if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE)
+                    {
+                        ColorPrint.Error($"Unsupported board size: {boardSize}");
+                        Environment.Exit(1);
+                    }
+                    Console.WriteLine($"Using board size: {boardSize}");
+                }
+
+                var game = new Othello(boardSize);
+                game.Play();
+            }
+            catch (OperationCanceledException)
+            {
+                // Catches CTRL-C
+                Console.WriteLine("\naborted...");
+                Environment.Exit(1);
+            }
         }
     }
 }
