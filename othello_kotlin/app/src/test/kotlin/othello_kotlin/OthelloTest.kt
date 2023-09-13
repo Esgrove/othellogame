@@ -6,9 +6,9 @@ package othello_kotlin
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
-class AppTest {
+class OthelloTest {
     @Test fun appHasAGreeting() {
-        val classUnderTest = App()
+        val classUnderTest = Othello()
         assertNotNull(classUnderTest.greeting, "app should have a greeting")
     }
 }

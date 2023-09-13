@@ -3,7 +3,7 @@
  */
 package othello_kotlin
 
-class App {
+class Othello {
     val greeting: String
         get() {
             return "Hello World!"
@@ -11,5 +11,5 @@ class App {
 }
 
 fun main() {
-    println(App().greeting)
+    println(Othello().greeting)
 }
