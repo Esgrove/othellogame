@@ -20,7 +20,6 @@ namespace Othello
     }
 
     /// Represents one step direction on the board.
-    // TODO
     public readonly struct Step
     {
         public Step(int x, int y)
