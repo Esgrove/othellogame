@@ -79,7 +79,7 @@ Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFor
 .NET 7 and C# 11.
 Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal.
 Follows the [C# style guide](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) (*PascalCase*),
-but with line lenght limit of 100.
+but with line length limit of 100.
 Code formatting with [CSharpier](https://github.com/belav/csharpier).
 
 * Othello.cs
