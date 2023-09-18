@@ -78,7 +78,7 @@ build_project() {
     print_magenta "Building Othello C# $BUILD_TYPE for $RUNTIME"
     time dotnet publish \
         --configuration "$BUILD_TYPE" \
-        --output "$BUILD_DIR" \
+        --property:PublishDir="$BUILD_DIR" \
         --runtime "$RUNTIME" \
         --self-contained true \
         --verbosity minimal
