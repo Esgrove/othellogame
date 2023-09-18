@@ -17,6 +17,16 @@ case "$(uname -s)" in
         ;;
 esac
 
+# Set variables BUILD_TIME, GIT_HASH, and GIT_BRANCH
+set_version_info() {
+    BUILD_TIME=$(date +"%Y-%m-%d_%H%M")
+    GIT_HASH=$(git -C "$REPO_ROOT" rev-parse --short HEAD)
+    GIT_BRANCH=$(git -C "$REPO_ROOT" branch --show-current)
+    export BUILD_TIME
+    export GIT_HASH
+    export GIT_BRANCH
+}
+
 # Print a message with green color
 print_green() {
     printf "\e[1;49;32m%s\e[0m\n" "$1"
