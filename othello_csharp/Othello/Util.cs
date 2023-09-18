@@ -150,12 +150,14 @@ namespace Othello
 
         public static bool operator <(Move left, Move right)
         {
-            return left.Value > right.Value || (left.Value == right.Value && left.Square < right.Square);
+            return left.Value > right.Value
+                || (left.Value == right.Value && left.Square < right.Square);
         }
 
         public static bool operator >(Move left, Move right)
         {
-            return left.Value < right.Value || (left.Value == right.Value && left.Square > right.Square);
+            return left.Value < right.Value
+                || (left.Value == right.Value && left.Square > right.Square);
         }
 
         public readonly Square Square;

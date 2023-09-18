@@ -36,7 +36,6 @@ namespace Othello
             _roundsPlayed = 0;
         }
 
-
         /// Play one full game of Othello.
         private void Play()
         {
@@ -78,7 +77,6 @@ namespace Othello
             Console.WriteLine("\nPlayers:".Pastel(Color.Silver));
             PrintStatus();
         }
-
 
         /// Keep making moves until both players can't make a move any more.
         private void GameLoop()
@@ -127,7 +125,8 @@ namespace Othello
         {
             Console.Write($"{question} ({yes}/{no})? ");
             var ans = Console.ReadLine();
-            return !string.IsNullOrEmpty(ans) && string.Equals(ans, yes, StringComparison.CurrentCultureIgnoreCase);
+            return !string.IsNullOrEmpty(ans)
+                && string.Equals(ans, yes, StringComparison.CurrentCultureIgnoreCase);
         }
 
         /// Ask and return the desired board size.
@@ -138,7 +137,10 @@ namespace Othello
                 Console.Write("Choose board size (default is 8): ");
                 if (int.TryParse(Console.ReadLine(), out var boardSize))
                 {
-                    return Math.Max(Othello.MIN_BOARD_SIZE, Math.Min(boardSize, Othello.MAX_BOARD_SIZE));
+                    return Math.Max(
+                        Othello.MIN_BOARD_SIZE,
+                        Math.Min(boardSize, Othello.MAX_BOARD_SIZE)
+                    );
                 }
                 ColorPrint.Error("give a valid number...");
             }

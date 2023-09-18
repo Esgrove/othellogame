@@ -23,14 +23,14 @@ namespace Othello
 
         private static readonly int[][] StepDirections =
         {
-            new [] {-1,-1},
-            new [] {-1, 0},
-            new [] {-1, 1},
-            new [] { 0,-1},
-            new [] { 0, 1},
-            new [] { 1,-1},
-            new [] { 1, 0},
-            new [] { 1, 1}
+            new[] { -1, -1 },
+            new[] { -1, 0 },
+            new[] { -1, 1 },
+            new[] { 0, -1 },
+            new[] { 0, 1 },
+            new[] { 1, -1 },
+            new[] { 1, 0 },
+            new[] { 1, 1 }
         };
 
         public Board(int size)
@@ -53,9 +53,11 @@ namespace Othello
 
             // keep track of empty squares on board to avoid checking already filled positions
             _emptySquares = new List<Square>(numSquares);
-            foreach (var square in _indices
-                .SelectMany(y => _indices, (y, x) => new Square(x, y))
-                .Where(square => GetSquare(square) == Disk.Empty))
+            foreach (
+                var square in _indices
+                    .SelectMany(y => _indices, (y, x) => new Square(x, y))
+                    .Where(square => GetSquare(square) == Disk.Empty)
+            )
             {
                 _emptySquares.Add(square);
             }
@@ -129,11 +131,13 @@ namespace Othello
             }
             if (moves.Any())
             {
-                moves.Sort(delegate (Move left, Move right)
-                {
-                    var value = right.Value.CompareTo(left.Value);
-                    return value == 0 ? left.Square.X.CompareTo(right.Square.X) : value;
-                });
+                moves.Sort(
+                    delegate(Move left, Move right)
+                    {
+                        var value = right.Value.CompareTo(left.Value);
+                        return value == 0 ? left.Square.X.CompareTo(right.Square.X) : value;
+                    }
+                );
             }
             return moves;
         }
@@ -173,8 +177,10 @@ namespace Othello
         {
             var (black, white) = PlayerScores();
             Console.WriteLine($"\n{this}");
-            Console.Write($"Score: {ColorPrint.Get(black, Disk.Black.DiskColor())} | " +
-                                 $"{ColorPrint.Get(white, Disk.White.DiskColor())}\n");
+            Console.Write(
+                $"Score: {ColorPrint.Get(black, Disk.Black.DiskColor())} | "
+                    + $"{ColorPrint.Get(white, Disk.White.DiskColor())}\n"
+            );
         }
 
         /// Calculates the final score and returns the winning player.
