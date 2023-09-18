@@ -28,8 +28,8 @@ namespace Othello
             _disk = color;
             _human = true;
             _random = new Random();
-            canPlay = true;
             _showHelpers = true;
+            canPlay = true;
         }
 
         /// Play one round as this player.
@@ -68,7 +68,7 @@ namespace Othello
             return $"{_disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
         }
 
-        public void reset()
+        public void Reset()
         {
             _roundsPlayed = 0;
             canPlay = true;

@@ -35,7 +35,7 @@ namespace Othello
 
         public override bool Equals(Object obj)
         {
-            if (!(obj is Step step))
+            if (obj is not Step step)
             {
                 return false;
             }
@@ -61,6 +61,16 @@ namespace Othello
 
         public readonly int X;
         public readonly int Y;
+
+        public static bool operator ==(Step left, Step right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Step left, Step right)
+        {
+            return !(left == right);
+        }
     }
 
     /// Represents one square location on the board.
@@ -79,7 +89,7 @@ namespace Othello
 
         public override bool Equals(Object obj)
         {
-            if (!(obj is Square square))
+            if (obj is not Square square)
             {
                 return false;
             }

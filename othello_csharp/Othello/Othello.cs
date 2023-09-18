@@ -153,7 +153,7 @@ namespace Othello
             // TODO: version info
             if (args.Contains("--help") || args.Contains("-h"))
             {
-                Console.WriteLine($"Othello C# {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}\n");
+                Console.WriteLine($"Othello C# {DateTime.Now:yyyy-MM-dd HH:mm:ss}\n");
                 Console.WriteLine("USAGE: othello.exe [board size]\n");
                 Console.WriteLine("Optional arguments:");
                 Console.WriteLine("    -h | --help          Print usage and exit");
@@ -162,7 +162,7 @@ namespace Othello
             }
             if (args.Contains("--version") || args.Contains("-v"))
             {
-                Console.WriteLine($"Othello C# {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+                Console.WriteLine($"Othello C# {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
                 Environment.Exit(0);
             }
 
