@@ -89,7 +89,7 @@ namespace Othello
                 Console.WriteLine("--------------------------------");
                 _playerWhite.PlayOneMove(_board);
             }
-            ++_roundsPlayed;
+            ++_gamesPlayed;
         }
 
         /// Print ending status and winner info.
