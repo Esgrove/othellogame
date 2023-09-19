@@ -2,26 +2,41 @@ package othello_kotlin
 
 import java.awt.Color
 
-fun colorPrint(text: String, color: Color): String {
+/** */
+fun getColor(text: String, color: Color): String {
     val ansiColor = when (color) {
-        Color.WHITE -> "\u001B[37m"
         Color.CYAN -> "\u001B[36m"
+        Color.GREEN -> "\u001B[32m"
         Color.MAGENTA -> "\u001B[35m"
         Color.RED -> "\u001B[31m"
-        else -> "\u001B[37m" // Default to white
+        Color.WHITE -> "\u001B[37m"
+        Color.YELLOW -> "\u001B[33m"
+        // Default to white
+        else -> "\u001B[37m"
     }
-    return "$ansiColor$text\u001B[0m"  // \u001B[0m resets the color
+    // \u001B[0m resets the colour
+    return "$ansiColor$text\u001B[0m"
 }
 
-fun write(text: String, color: Color) {
-    print(colorPrint(text, color))
+/** */
+fun printColor(text: String, color: Color) {
+    println(getColor(text, color))
 }
 
-fun writeLine(text: String, color: Color) {
-    println(colorPrint(text, color))
-}
-
-fun error(message: String, indent: Int = 0) {
+/** */
+fun printBold(text: String, indent: Int = 0) {
     val whitespace = if (indent > 0) " ".repeat(indent) else ""
-    println("$whitespace${colorPrint("Error:", Color.RED)} $message")
+    println("$whitespace\u001B[1m${text}\u001B[0m")
+}
+
+/** */
+fun printError(message: String, indent: Int = 0) {
+    val whitespace = if (indent > 0) " ".repeat(indent) else ""
+    println("$whitespace${getColor("Error: $message", Color.RED)}")
+}
+
+/** */
+fun printWarn(message: String, indent: Int = 0) {
+    val whitespace = if (indent > 0) " ".repeat(indent) else ""
+    println("$whitespace${getColor("Warning: $message", Color.YELLOW)}")
 }

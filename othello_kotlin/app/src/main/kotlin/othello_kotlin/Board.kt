@@ -3,52 +3,59 @@ package othello_kotlin
 import java.awt.Color
 import java.lang.IllegalArgumentException
 
+/** */
 class Board(private val size: Int) {
 
     private val board: MutableList<Disk>
-    private val emptySquares: MutableList<Square>
+    private lateinit var emptySquares: HashSet<Square>
     private val indices: List<Int>
 
     companion object {
+        // Store all possible step directions on board
         val stepDirections = arrayOf(
-            intArrayOf(-1, -1),
-            intArrayOf(-1, 0),
-            intArrayOf(-1, 1),
-            intArrayOf(0, -1),
-            intArrayOf(0, 1),
-            intArrayOf(1, -1),
-            intArrayOf(1, 0),
-            intArrayOf(1, 1)
+            Step(-1, -1),
+            Step(-1, 0),
+            Step(-1, 1),
+            Step(0, -1),
+            Step(0, 1),
+            Step(1, -1),
+            Step(1, 0),
+            Step(1, 1),
         )
     }
 
     init {
+        // Initialize game board with empty disks.
         val numSquares = size * size
         board = MutableList(numSquares) { Disk.Empty }
 
+        // Set starting positions
         val row = if (size % 2 == 0) (size - 1) / 2 else (size - 1) / 2 - 1
         val col = size / 2
-
         board[row * size + row] = Disk.Black
         board[row * size + col] = Disk.White
         board[col * size + row] = Disk.White
         board[col * size + col] = Disk.Black
 
-        indices = List(size) { it }
+        // Index list (0...size) to avoid repeating same range in loops.
+        indices = (0 until size).toList()
 
-        emptySquares = mutableListOf()
-
-        for (square in indices.flatMap { y -> indices.map { x -> Square(x, y) } }) {
-            if (getSquare(square) == Disk.Empty) {
-                emptySquares.add(square)
+        // Keep track of empty squares on board to avoid checking already filled positions
+        for (y in indices) {
+            for (x in indices) {
+                if (board[y * size + x] == Disk.Empty) {
+                    emptySquares.add(Square(x, y))
+                }
             }
         }
     }
 
+    /** */
     fun canPlay(): Boolean {
         return emptySquares.isNotEmpty()
     }
 
+    /** */
     fun placeDisc(move: Move) {
         val start = move.square
         if (getSquare(start) != Disk.Empty) {
@@ -65,6 +72,7 @@ class Board(private val size: Int) {
         }
     }
 
+    /** */
     fun possibleMoves(color: Disk): List<Move> {
         val moves = mutableListOf<Move>()
         val other = color.otherDisk()
@@ -72,7 +80,7 @@ class Board(private val size: Int) {
             var value = 0
             val directions = mutableListOf<Square>()
             for (dir in stepDirections) {
-                val step = Square(dir[0], dir[1])
+                val step = Square(dir.x, dir.y)
                 var pos = square + step
                 if (getSquare(pos) != other) {
                     continue
@@ -92,11 +100,15 @@ class Board(private val size: Int) {
                 moves.add(Move(square, value, color, directions))
             }
         }
-        return moves.sortedWith(compareByDescending<Move> { it.value }.thenBy { it.square.x })
+        return moves.sortedWith(
+            compareByDescending<Move> { it.value }.thenBy { it.square.x }
+                .thenBy { it.square.y },
+        )
     }
 
+    /** */
     fun printMoves(moves: Collection<Move>) {
-        writeLine("  Possible moves (${moves.size}):", Color.YELLOW)
+        printColor("  Possible moves (${moves.size}):", Color.YELLOW)
 
         // convert board from Disk enums to strings
         val boardStr = ArrayList<String>(board.size)
@@ -105,7 +117,7 @@ class Board(private val size: Int) {
         for (move in moves) {
             println("  $move")
             val (x, y) = move.square
-            boardStr[y * size + x] = colorPrint(move.value.toString(), Color.YELLOW)
+            boardStr[y * size + x] = getColor(move.value.toString(), Color.YELLOW)
         }
 
         // print board with move positions
@@ -124,10 +136,12 @@ class Board(private val size: Int) {
         println("")
     }
 
+    /** */
     private fun checkCoordinates(x: Int, y: Int): Boolean {
         return x in 0 until size && y in 0 until size
     }
 
+    /** */
     private fun getSquare(square: Square): Disk? {
         val (x, y) = square
         return if (!checkCoordinates(x, y)) {
@@ -137,6 +151,7 @@ class Board(private val size: Int) {
         }
     }
 
+    /** */
     private fun setSquare(square: Square, disk: Disk) {
         val (x, y) = square
         if (!checkCoordinates(x, y)) {
@@ -145,6 +160,7 @@ class Board(private val size: Int) {
         board[y * size + x] = disk
     }
 
+    /** */
     override fun toString(): String {
         val builder = StringBuilder(" ")
         for (i in indices) {
@@ -159,6 +175,7 @@ class Board(private val size: Int) {
         return builder.toString()
     }
 
+    /** */
     fun printScore() {
         TODO("Not yet implemented")
     }

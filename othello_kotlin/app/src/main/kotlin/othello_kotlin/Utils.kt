@@ -3,21 +3,21 @@ package othello_kotlin
 import java.awt.Color
 import java.util.Objects
 
-// Represents one game piece or lack of one.
+/** Represents one game piece or lack of one.*/
 enum class Disk(val value: Int) {
     Black(-1),
     Empty(0),
     White(1)
 }
 
-// Represents one step direction on the board.
+/** Represents one step direction on the board.*/
 data class Step(val x: Int, val y: Int) {
     override fun hashCode(): Int {
         return Objects.hash(x, y)
     }
 }
 
-// Represents one square location on the board.
+/** Represents one square location on the board.*/
 data class Square(val x: Int, val y: Int) : Comparable<Square> {
     override fun hashCode(): Int {
         return Objects.hash(x, y)
@@ -36,7 +36,7 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
     }
 }
 
-// Represents one possible disk placement for given disk color.
+/** Represents one possible disk placement for given disk color.*/
 data class Move(
     val square: Square,
     val value: Int,
@@ -52,7 +52,6 @@ data class Move(
     }
 }
 
-// Extensions for the Disk class
 fun Disk.diskColor(): Color {
     return when (this) {
         Disk.Empty -> Color.WHITE
@@ -70,13 +69,13 @@ fun Disk.otherDisk(): Disk {
 }
 
 fun Disk.name(): String {
-    return colorPrint(this.name.uppercase(), this.diskColor())
+    return getColor(this.name.uppercase(), this.diskColor())
 }
 
 fun Disk.boardChar(): String {
     return when (this) {
         Disk.Empty -> "_"
-        Disk.White -> colorPrint("W", this.diskColor())
-        Disk.Black -> colorPrint("B", this.diskColor())
+        Disk.White -> getColor("W", this.diskColor())
+        Disk.Black -> getColor("B", this.diskColor())
     }
 }
