@@ -31,8 +31,8 @@ impl Board {
         let indices = Vec::from_iter(0..size);
         // Keep track of empty squares on board to avoid checking already filled positions.
         let mut empty_squares = HashSet::<Square>::new();
-        for y in 0..size {
-            for x in 0..size {
+        for y in indices.iter() {
+            for x in indices.iter() {
                 if board[y * size + x] == Disk::Empty {
                     empty_squares.insert(Square {
                         x: x as isize,
