@@ -44,7 +44,7 @@ All implementations follow this overall architecture:
 
 ### Python
 
-Python 3.10+.
+Python 3.11+.
 Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
 Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 79.
 Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
