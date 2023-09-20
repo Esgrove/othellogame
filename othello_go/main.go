@@ -6,6 +6,8 @@
 // 2019-2023
 //==========================================================
 
+//go:generate ./update_version.sh
+
 package main
 
 import (

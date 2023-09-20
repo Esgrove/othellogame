@@ -123,7 +123,7 @@ func (m Move) String() string {
 // VersionInfo Returns formatted build version info string.
 func VersionInfo() string {
 	if info, ok := debug.ReadBuildInfo(); ok {
-		version := info.GoVersion
+		goVersion := info.GoVersion
 		commit := ""
 		timestamp := ""
 		arch := ""
@@ -138,7 +138,7 @@ func VersionInfo() string {
 				arch = setting.Value
 			}
 		}
-		return fmt.Sprintf("Othello Go %s %s %s %s", timestamp, commit, version, arch)
+		return fmt.Sprintf("Othello Go %s %s %s %s %s", VersionNumber, timestamp, commit, goVersion, arch)
 	}
 	return ""
 }
