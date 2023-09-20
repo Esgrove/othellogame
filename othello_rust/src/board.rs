@@ -35,8 +35,8 @@ impl Board {
             for x in indices.iter() {
                 if board[y * size + x] == Disk::Empty {
                     empty_squares.insert(Square {
-                        x: x as isize,
-                        y: y as isize,
+                        x: *x as isize,
+                        y: *y as isize,
                     });
                 }
             }
