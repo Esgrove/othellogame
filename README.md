@@ -127,6 +127,7 @@ Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 * othello/player.go
 * othello/utils.go
 * othello/colorprint.go
+* othello/version.go
 
 ## TODO
 
