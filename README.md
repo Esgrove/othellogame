@@ -87,6 +87,7 @@ Code formatting with [CSharpier](https://github.com/belav/csharpier).
 * Player.cs
 * Util.cs (*'Utils.cs'* does not work with VS syntax highlight for me :man_shrugging:)
 * ColorPrint.cs
+* Version.cs
 
 ### Swift
 

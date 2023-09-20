@@ -47,19 +47,43 @@ init_options() {
             else
                 RUNTIME="osx.10.15-x64"
             fi
+            EXECUTABLE="othello_csharp"
             ;;
         "MINGW"*)
             PLATFORM="windows"
             RUNTIME="win10-x64"
+            EXECUTABLE="othello_csharp.exe"
             ;;
         *)
             PLATFORM="linux"
             RUNTIME="linux-x64"
+            EXECUTABLE="othello_csharp"
             ;;
     esac
 
     PROJECT_PATH="$REPO_ROOT/othello_csharp"
     BUILD_DIR="$PROJECT_PATH/dotnet-build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
+    VERSION_FILE="$PROJECT_PATH/Othello/Version.cs"
+}
+
+update_version_info() {
+    set_version_info
+    VERSION="$(awk -F'[<>]' '/<Version>/{print $3}' "$PROJECT_PATH/Othello/Othello.csproj")"
+    print_yellow "Writing version information with version $VERSION"
+    {
+        echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
+        echo ""
+        echo "namespace Othello"
+        echo "{"
+        echo "    public static class Version"
+        echo "    {"
+        echo "        public const string BuildTime = \"$BUILD_TIME\";"
+        echo "        public const string GitBranch = \"$GIT_HASH\";"
+        echo "        public const string GitCommit = \"$GIT_BRANCH\";"
+        echo "        public const string VersionNumber = \"$VERSION\";"
+        echo "    }"
+        echo "}"
+    } > "$VERSION_FILE"
 }
 
 build_project() {
@@ -84,13 +108,14 @@ build_project() {
 
     # Move executable from build dir to project root
     if [ "$PLATFORM" = windows ]; then
-        mv "$(find "$BUILD_DIR" -type f -name Othello.exe)" othello_csharp.exe
-        file othello_csharp.exe
+        mv "$(find "$BUILD_DIR" -type f -name Othello.exe)" $EXECUTABLE
     else
-        mv "$(find "$BUILD_DIR" -type f -name Othello)" othello_csharp
-        file othello_csharp
+        mv "$(find "$BUILD_DIR" -type f -name Othello)" $EXECUTABLE
     fi
+    file "$EXECUTABLE"
+    ./"$EXECUTABLE" --version
 }
 
 init_options "$@"
+update_version_info
 build_project
