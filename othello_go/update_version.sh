@@ -8,16 +8,23 @@ source "$DIR/../common.sh"
 
 VERSION_FILE="$DIR/othello/version.go"
 
-if [ -z "$VERSION_NUMBER" ]; then
-    VERSION_NUMBER="1.2.0"
-else
-    print_yellow "Using version number $VERSION_NUMBER"
+CURRENT_VERSION="$(grep "const VersionNumber =" "$VERSION_FILE" | cut -d\" -f 2)"
+MAJOR=${CURRENT_VERSION//.*/}
+MINOR=${CURRENT_VERSION##*.}
+
+echo "Current version: $CURRENT_VERSION"
+
+if [ -z "$VERSION" ]; then
+    MINOR=$(($MINOR + 1))
+    VERSION="$MAJOR.$MINOR.0"
 fi
+
+print_green "New version number: $VERSION"
 
 {
     echo "package othello"
     echo ""
     echo "// Generated automatically by go generate; DO NOT EDIT MANUALLY."
     echo ""
-    echo "const VersionNumber = \"$VERSION_NUMBER\""
+    echo "const VersionNumber = \"$VERSION\""
 } > "$VERSION_FILE"
