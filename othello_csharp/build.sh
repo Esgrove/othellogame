@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-USAGE="Usage: build.sh [OPTIONS]
+USAGE="Usage: $(basename "$0") [OPTIONS]
 
 OPTIONS: All options are optional
     -h | --help
@@ -11,8 +11,7 @@ OPTIONS: All options are optional
         Specify build type. Default is 'Release'.
 
     -v | --verbose
-        Display commands being executed.
-"
+        Display commands being executed."
 
 # Import common functions
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
