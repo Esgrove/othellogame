@@ -7,12 +7,12 @@ Akseli Lukkarila
 2019-2023
 """
 import sys
-from datetime import datetime
 
 from board import Board
 from colorprint import Color, print_bold, print_error, print_warn
 from player import Player
 from utils import MAX_BOARD_SIZE, MIN_BOARD_SIZE, Disk, clamp
+from version import BRANCH, COMMIT, DATE, VERSION_NUMBER
 
 
 class Othello:
@@ -110,14 +110,14 @@ if __name__ == "__main__":
     # Handle 'help' and 'version' arguments
     if "--help" in args or "-h" in args:
         sys.exit(
-            f"Othello Python {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+            f"Othello Python {VERSION_NUMBER} {DATE} {COMMIT} {BRANCH}\n\n"
             "USAGE: python3 othello.py [board size]\n\n"
             "Optional arguments:\n"
             "    -h | --help          Print usage and exit\n"
             "    -v | --version       Print version info and exit"
         )
     if "--version" in args or "-v" in args:
-        print(f"Othello Python {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Othello Python {VERSION_NUMBER} {DATE} {COMMIT} {BRANCH}")
         sys.exit(0)
 
     try:
