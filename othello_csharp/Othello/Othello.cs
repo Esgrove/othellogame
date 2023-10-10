@@ -18,6 +18,7 @@ namespace Othello
     {
         public static int MIN_BOARD_SIZE = 4;
         public static int MAX_BOARD_SIZE = 10;
+        public static int DEFAULT_BOARD_SIZE = 8;
 
         private Board _board;
         private Player _playerBlack;
@@ -132,18 +133,20 @@ namespace Othello
         /// Ask and return the desired board size.
         private static int GetBoardSize()
         {
-            while (true)
+            Console.Write($"Choose board size (default is {DEFAULT_BOARD_SIZE}): ");
+            if (int.TryParse(Console.ReadLine(), out var boardSize))
             {
-                Console.Write("Choose board size (default is 8): ");
-                if (int.TryParse(Console.ReadLine(), out var boardSize))
+                if (boardSize < Othello.MIN_BOARD_SIZE || boardSize > Othello.MAX_BOARD_SIZE)
                 {
-                    return Math.Max(
-                        Othello.MIN_BOARD_SIZE,
-                        Math.Min(boardSize, Othello.MAX_BOARD_SIZE)
-                    );
+                    ColorPrint.Warn($"Limiting board size to valid range {Othello.MIN_BOARD_SIZE}...{Othello.MAX_BOARD_SIZE}");
                 }
-                ColorPrint.Error("give a valid number...");
+                return Math.Max(
+                    Othello.MIN_BOARD_SIZE,
+                    Math.Min(boardSize, Othello.MAX_BOARD_SIZE)
+                );
             }
+            ColorPrint.Warn($"Invalid size, defaulting to {Othello.DEFAULT_BOARD_SIZE}...");
+            return Othello.DEFAULT_BOARD_SIZE;
         }
 
         public static void Main(string[] args)

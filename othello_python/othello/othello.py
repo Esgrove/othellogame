@@ -11,7 +11,7 @@ import sys
 from board import Board
 from colorprint import Color, print_bold, print_error, print_warn
 from player import Player
-from utils import MAX_BOARD_SIZE, MIN_BOARD_SIZE, Disk, clamp
+from utils import DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Disk, clamp
 from version import BRANCH, COMMIT, DATE, VERSION_NUMBER
 
 
@@ -93,15 +93,15 @@ class Othello:
     def get_board_size() -> int:
         """Ask and return the desired board size."""
         try:
-            ans = int(input("Choose board size (default is 8): "))
+            ans = int(input(f"Choose board size (default is {DEFAULT_BOARD_SIZE}): "))
             if ans < MIN_BOARD_SIZE or ans > MAX_BOARD_SIZE:
                 print_warn(
                     f"Limiting board size to valid range {MIN_BOARD_SIZE}...{MAX_BOARD_SIZE}"
                 )
             return clamp(ans, MIN_BOARD_SIZE, MAX_BOARD_SIZE)
         except ValueError:
-            print_warn("Invalid size, defaulting to 8...")
-        return 8
+            print_warn(f"Invalid size, defaulting to {DEFAULT_BOARD_SIZE}...")
+        return DEFAULT_BOARD_SIZE
 
 
 if __name__ == "__main__":

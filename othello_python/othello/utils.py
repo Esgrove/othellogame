@@ -15,8 +15,9 @@ except ImportError:
 
 from colorprint import Color, get_color
 
-MIN_BOARD_SIZE = 4
-MAX_BOARD_SIZE = 10
+MIN_BOARD_SIZE: int = 4
+MAX_BOARD_SIZE: int = 10
+DEFAULT_BOARD_SIZE: int = 8
 
 
 class Disk(IntEnum):

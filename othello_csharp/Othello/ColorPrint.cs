@@ -28,10 +28,34 @@ namespace Othello
             Console.WriteLine($"{text}".Pastel(color));
         }
 
-        public static void Error(string message, int indent = 0)
+        /// Print error message with red colour.
+        public static void Error(string message)
         {
-            var whitespace = indent > 0 ? new string(' ', indent) : "";
-            Console.WriteLine($"{whitespace}{"Error:".Pastel(Color.Red)} {message}");
+            var (indent, text) = SplitLeadingWhitespace(message);
+            Console.WriteLine($"{indent}Error: {message}".Pastel(Color.Red));
+        }
+
+        /// Print warning message with yellow colour.
+        public static void Warn(string message)
+        {
+            var (indent, text) = SplitLeadingWhitespace(message);
+            Console.WriteLine($"{indent}Warning: {text}".Pastel(Color.Yellow));
+        }
+
+        /// Split a string to the leading whitespace and rest of the string.
+        private static (string, string) SplitLeadingWhitespace(string message)
+        {
+            // Find the index of the first non-whitespace character.
+            int indentSize = 0;
+            foreach (char c in message)
+            {
+                if (char.IsWhiteSpace(c))
+                    indentSize++;
+                else
+                    break;
+            }
+
+            return (message[..indentSize], message[indentSize..]);
         }
     }
 }

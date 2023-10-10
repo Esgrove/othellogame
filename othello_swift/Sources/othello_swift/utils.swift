@@ -10,6 +10,10 @@ import Foundation
 
 import BuildInfo
 
+let MIN_BOARD_SIZE: Int = 4
+let MAX_BOARD_SIZE: Int = 10
+let DEFAULT_BOARD_SIZE: Int = 8
+
 enum Disk: Int, CustomStringConvertible {
     case black = -1
     case empty = 0

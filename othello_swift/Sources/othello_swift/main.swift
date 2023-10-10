@@ -11,6 +11,9 @@
 import ColorizeSwift
 import Foundation
 
+// `main.swift`is automatically used as the entry point,
+// without needing to call a main() function explicitly.
+
 print("OTHELLO GAME - SWIFT".bold().green())
 
 // Handle 'help' and 'version' arguments
@@ -35,7 +38,7 @@ for arg in CommandLine.arguments {
 // Try to read board size from command line args
 var board_size: Int = CommandLine.argc >= 2 ? (Int(CommandLine.arguments[1]) ?? 0) : 0
 if board_size > 0 {
-    if board_size < 4 || board_size > 10 {
+    if board_size < MIN_BOARD_SIZE || board_size > MAX_BOARD_SIZE {
         print("Error: unsupported board size: \(board_size)")
         exit(1)
     }

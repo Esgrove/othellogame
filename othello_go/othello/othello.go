@@ -114,12 +114,12 @@ func GetAnswer(text, yes, no string) bool {
 
 // GetBoardSize Ask and return the desired board size.
 func GetBoardSize() int {
-	fmt.Print("Choose board size (default is 8): ")
+	fmt.Printf("Choose board size (default is %d): ", DefaultBoardSize)
 	var input int
 	_, err := fmt.Scanf("%d", &input)
 	if err != nil {
-		PrintWarn("Invalid size, defaulting to 8...")
-		return 8
+		PrintWarn("Invalid size, defaulting to %d...", DefaultBoardSize)
+		return DefaultBoardSize
 	} else if input < MinBoardSize || input > MaxBoardSize {
 		PrintWarn("Limiting board size to valid range %d...%d", MinBoardSize, MaxBoardSize)
 	}

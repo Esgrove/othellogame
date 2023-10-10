@@ -14,8 +14,7 @@ use std::io::{self, Write};
 use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::player::Player;
-use crate::utils::Disk;
-use crate::utils::{MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+use crate::utils::{Disk, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 /// Gameplay loop and main logic.
 pub(crate) struct Othello {
@@ -123,7 +122,7 @@ impl Othello {
 
     /// Ask and return the desired board size.
     pub(crate) fn get_board_size() -> usize {
-        print!("Choose board size (default is 8): ");
+        print!("Choose board size (default is {}): ", DEFAULT_BOARD_SIZE);
         let mut input = String::new();
         if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {
             if let Ok(board_size) = input.trim().parse::<usize>() {
@@ -133,7 +132,7 @@ impl Othello {
                 return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
             }
         }
-        print_warn("Invalid size, defaulting to 8...");
-        8
+        print_warn(format!("Invalid size, defaulting to {}...", DEFAULT_BOARD_SIZE).as_str());
+        DEFAULT_BOARD_SIZE
     }
 }

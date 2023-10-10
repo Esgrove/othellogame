@@ -99,11 +99,11 @@ class Othello {
     /// Ask and return the desired board size.
     class func get_board_size() -> Int {
         while true {
-            print("Choose board size (default is 8): ", terminator: "")
+            print("Choose board size (default is \(DEFAULT_BOARD_SIZE)): ", terminator: "")
             if let input = readLine() {
                 // TODO: create clamp method
                 if let size = Int(input) {
-                    return max(4, min(size, 10))
+                    return max(MIN_BOARD_SIZE, min(size, MAX_BOARD_SIZE))
                 }
             }
             print_error("give a valid number...")

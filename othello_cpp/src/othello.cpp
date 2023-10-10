@@ -110,20 +110,18 @@ bool othello::Othello::get_answer(
 /// Ask and return the desired board size.
 size_t othello::Othello::get_board_size()
 {
-    print("Choose board size (default is 8): ", false);
+    fmt::print("Choose board size (default is {}): ", DEFAULT_BOARD_SIZE);
     std::string input;
     std::cin >> input;
     try {
         size_t size = std::stoi(input);
         if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
-            print_color(
-                fmt::format(
-                    "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE),
-                fmt::color::yellow);
+            print_warn(fmt::format(
+                "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE));
         }
         return std::clamp(size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
     } catch (const std::exception& e) {
-        print_color("Invalid size, defaulting to 8...\n", fmt::color::yellow);
+        print_warn(fmt::format("Invalid size, defaulting to {}...\n", DEFAULT_BOARD_SIZE));
     }
-    return 8;
+    return DEFAULT_BOARD_SIZE;
 }

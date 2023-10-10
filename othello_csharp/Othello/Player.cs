@@ -96,7 +96,7 @@ namespace Othello
                 {
                     return moves.Find(x => square.Equals(x.Square));
                 }
-                ColorPrint.Error($"can't place a {_disk.Name()} disk in square {square}!", 2);
+                ColorPrint.Error($"  Can't place a {_disk.Name()} disk in square {square}!");
             }
         }
 
@@ -111,15 +111,15 @@ namespace Othello
                     var coords = Console.ReadLine();
                     if (string.IsNullOrEmpty(coords) || coords.Length != 3 || coords[1] != ',')
                     {
-                        throw new FormatException();
+                        throw new FormatException("Invalid coordinates");
                     }
-                    var x = int.Parse(coords.Substring(0, 1));
-                    var y = int.Parse(coords.Substring(2, 1));
+                    var x = int.Parse(coords[0..1]);
+                    var y = int.Parse(coords[2..3]);
                     return new Square(x, y);
                 }
                 catch (FormatException)
                 {
-                    ColorPrint.Error("give coordinates in the form (x,y)!", 2);
+                    ColorPrint.Error("  Give coordinates in the form 'x,y'");
                 }
             }
         }

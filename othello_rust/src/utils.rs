@@ -13,6 +13,7 @@ use std::ops::{Add, AddAssign};
 
 pub const MIN_BOARD_SIZE: usize = 4;
 pub const MAX_BOARD_SIZE: usize = 10;
+pub const DEFAULT_BOARD_SIZE: usize = 8;
 
 /// Represents one game piece or lack of one.
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq)]
