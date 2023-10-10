@@ -27,7 +27,7 @@ class Board:
     def __init__(self, size=8):
         self._size = size
         # Initialize game board with empty disks.
-        # Uses a 2D list ("list of rows").
+        # Uses a 2D list ("list of rows") unlike other implementations.
         self._board = [[Disk.EMPTY for _ in range(self._size)] for _ in range(self._size)]
 
         # Set starting positions
@@ -141,15 +141,8 @@ class Board:
 
     def _player_scores(self) -> tuple[int, int]:
         """Count and return the number of black and white disks."""
-        white = 0
-        black = 0
-        for row in self._board:
-            for disk in row:
-                if disk == Disk.WHITE:
-                    white += 1
-                elif disk == Disk.BLACK:
-                    black += 1
-
+        white = sum(disk == Disk.WHITE for row in self._board for disk in row)
+        black = sum(disk == Disk.BLACK for row in self._board for disk in row)
         return black, white
 
     def _score(self) -> int:
