@@ -20,7 +20,7 @@ enum Disk: Int, CustomStringConvertible {
     case white = 1
 
     /// Returns a single character identifier string for the given disk.
-    func board_char() -> String {
+    func boardChar() -> String {
         switch self {
             case .black:
                 return "B".foregroundColor(self.color())
@@ -83,7 +83,7 @@ struct Square {
     }
 }
 
-/// Represents one possible disk placement for given disk color.
+/// Represents one possible disk placement for the given disk color.
 struct Move {
     var square: Square
     var disk: Disk
@@ -157,7 +157,7 @@ extension Move: Comparable {
     }
 }
 
-func version_info() -> String {
+func versionInfo() -> String {
     let buildTime = BUILD_TIME
     let gitHash = GIT_HASH
     let gitBranch = GIT_BRANCH

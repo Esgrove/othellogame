@@ -8,69 +8,67 @@
 
 /// Gameplay loop and main logic.
 class Othello {
-    var board_size: Int = 0
+    var boardSize: Int = 0
     var board: Board
-    var player_black: Player = .init(Disk.black)
-    var player_white: Player = .init(Disk.white)
-    var rounds_played: Int = 0
-    var games_played: Int = 0
+    var playerBlack: Player = .init(Disk.black)
+    var playerWhite: Player = .init(Disk.white)
+    var roundsPlayed: Int = 0
+    var gamesPlayed: Int = 0
 
     init(size: Int) {
-        self.board_size = size
-        self.board = Board(size: self.board_size)
+        self.boardSize = size
+        self.board = Board(size: self.boardSize)
     }
 
     /// Play one full game of Othello.
     func play() {
         while true {
-            self.init_game()
-            self.game_loop()
-            self.print_result()
-            if !self.get_answer("\nWould you like to play again") {
+            self.initGame()
+            self.gameLoop()
+            self.printResult()
+            if !self.getAnswer("\nWould you like to play again") {
                 break
             }
         }
     }
 
     /// Initialize game board and players for a new game.
-    func init_game() {
-        if self.games_played > 0 {
-            self.board = Board(size: self.board_size)
-            self.player_black = Player(Disk.black)
-            self.player_white = Player(Disk.white)
-            self.rounds_played = 0
+    func initGame() {
+        if self.gamesPlayed > 0 {
+            self.board = Board(size: self.boardSize)
+            self.playerBlack = Player(Disk.black)
+            self.playerWhite = Player(Disk.white)
+            self.roundsPlayed = 0
         }
 
-        if self.get_answer("Would you like to play against the computer") {
-            if self.get_answer("Would you like to play as black or white", yes: "b", no: "w") {
-                self.player_white.set_human(false)
+        if self.getAnswer("Would you like to play against the computer") {
+            if self.getAnswer("Would you like to play as black or white", yes: "b", no: "w") {
+                self.playerWhite.setHuman(false)
             } else {
-                self.player_black.set_human(false)
+                self.playerBlack.setHuman(false)
             }
         }
         print("\nPlayers:".bold())
-        self.print_status()
+        self.printStatus()
     }
 
     /// Keep making moves until both players can't make a move any more.
-    func game_loop() {
-        while self.board
-            .can_play() && (self.player_black.can_play || self.player_white.can_play)
-        {
-            self.rounds_played += 1
-            print("\n=========== ROUND: \(self.rounds_played) ===========".bold())
-            self.player_black.play_one_move(board: &self.board)
+    func gameLoop() {
+        while self.board.canPlay() && (self.playerBlack.canPlay || self.playerWhite.canPlay) {
+            self.roundsPlayed += 1
+            print("\n=========== ROUND: \(self.roundsPlayed) ===========".bold())
+            self.playerBlack.playOneMove(board: &self.board)
             print("-------------------------------")
-            self.player_white.play_one_move(board: &self.board)
+            self.playerWhite.playOneMove(board: &self.board)
         }
     }
 
     /// Print ending status and winner info.
-    func print_result() {
+    func printResult() {
         print("\n===============================".bold())
         print("The game is finished!\n".green())
         print("Result:".bold())
-        self.print_status()
+        self.printStatus()
         print("")
 
         let winner = self.board.result()
@@ -83,21 +81,21 @@ class Othello {
     }
 
     /// Print current board and player info.
-    func print_status() {
-        print(self.player_black)
-        print(self.player_white, terminator: "\n\n")
+    func printStatus() {
+        print(self.playerBlack)
+        print(self.playerWhite, terminator: "\n\n")
         print(self.board)
     }
 
     /// Ask a question with two options, and return bool from user answer.
-    func get_answer(_ question: String, yes: String = "y", no: String = "n") -> Bool {
+    func getAnswer(_ question: String, yes: String = "y", no: String = "n") -> Bool {
         print("\(question) (\(yes)/\(no))? ", terminator: "")
         let ans = readLine()
         return ans?.lowercased() == yes.lowercased()
     }
 
     /// Ask and return the desired board size.
-    class func get_board_size() -> Int {
+    class func getBoardSize() -> Int {
         while true {
             print("Choose board size (default is \(DEFAULT_BOARD_SIZE)): ", terminator: "")
             if let input = readLine() {
@@ -106,7 +104,7 @@ class Othello {
                     return max(MIN_BOARD_SIZE, min(size, MAX_BOARD_SIZE))
                 }
             }
-            print_error("give a valid number...")
+            printError("give a valid number...")
         }
     }
 }

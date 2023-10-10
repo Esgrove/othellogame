@@ -7,15 +7,27 @@
 
 import ColorizeSwift
 
-func get_color<T>(_ message: T, _ color: TerminalColor) -> String {
+func getColor<T>(_ message: T, _ color: TerminalColor) -> String {
     "\(message)".foregroundColor(color)
 }
 
-func print_color<T>(_ message: T, _ color: TerminalColor) {
-    print(get_color(message, color))
+func printColor<T>(_ message: T, _ color: TerminalColor) {
+    print(getColor(message, color))
 }
 
-func print_error(_ message: String, indent: Int = 0) {
-    let whitespace = String(repeating: " ", count: indent)
-    print("\(whitespace)Error: \(message)".red())
+func printError(_ message: String) {
+    let (indent, text) = splitLeadingWhitespace(message)
+    print("\(indent)Error: \(text)".red())
+}
+
+func printWarn(_ message: String) {
+    let (indent, text) = splitLeadingWhitespace(message)
+    print("\(indent)Warning: \(text)".yellow())
+}
+
+/// Split a string to the leading whitespace and rest of the string.
+func splitLeadingWhitespace(message: String) -> (String, String) {
+    let indentSize = message.prefix(while: { $0.isWhitespace }).count
+    let index = message.index(message.startIndex, offsetBy: indentSize)
+    return (String(message[..<index]), String(message[index...]))
 }

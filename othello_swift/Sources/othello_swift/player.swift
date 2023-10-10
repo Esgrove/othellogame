@@ -8,67 +8,63 @@
 import Foundation
 
 class Player {
-    var can_play: Bool = true
+    var canPlay: Bool = true
     var disk: Disk
-    var human: Bool = true
-    var rounds_played: Int = 0
-    var show_helpers: Bool = true
+    var isHuman: Bool = true
+    var roundsPlayed: Int = 0
+    var showHelpers: Bool = true
 
     init(_ disk: Disk) {
         self.disk = disk
     }
 
     /// Play one round as this player.
-    func play_one_move(board: inout Board) {
+    func playOneMove(board: inout Board) {
         print("Turn: \(self.disk)")
-        let moves = board.possible_moves(disk: self.disk)
+        let moves = board.possibleMoves(disk: self.disk)
         if !moves.isEmpty {
-            self.can_play = true
-            if self.human && self.show_helpers {
-                board.print_possible_moves(moves)
+            self.canPlay = true
+            if self.isHuman && self.showHelpers {
+                board.printPossibleMoves(moves)
             }
-            let chosen_move = self.human ? self.get_human_move(moves) : self
-                .get_computer_move(moves)
-            board.place_disk(move: chosen_move)
-            board.print_score()
-            self.rounds_played += 1
+            let chosenMove = self.isHuman ? self.getHumanMove(moves) : self.getComputerMove(moves)
+            board.placeDisk(move: chosenMove)
+            board.printScore()
+            self.roundsPlayed += 1
         } else {
-            self.can_play = false
+            self.canPlay = false
             print("  No moves available...".yellow())
         }
     }
 
     /// Set player to be controlled by human or computer.
-    func set_human(_ is_human: Bool) {
-        self.human = is_human
+    func setHuman(_ isHuman: Bool) {
+        self.isHuman = isHuman
     }
 
     /// Return move chosen by computer.
-    func get_computer_move(_ moves: [Move]) -> Move {
+    func getComputerMove(_ moves: [Move]) -> Move {
         print("  Computer plays...")
-        // wait a bit and pick a random move
         let seconds = Double.random(in: 1 ... 2)
         Thread.sleep(forTimeInterval: seconds)
-        // safe to force unwrap since moves will always contain elements
         let move = moves.randomElement()!
         print("  \(move.square) -> \(move.value)")
         return move
     }
 
     /// Return move chosen by a human player.
-    func get_human_move(_ moves: [Move]) -> Move {
+    func getHumanMove(_ moves: [Move]) -> Move {
         while true {
-            let square = self.get_square()
-            // check if given square is one of the possible moves
+            let square = self.getSquare()
             if let move = moves.first(where: { $0.square == square }) {
                 return move
             }
-            print_error("Can't place a \(self.disk) disk in square \(square)!", indent: 2)
+            printError("  Can't place a \(self.disk) disk in square \(square)")
         }
     }
 
     /// Ask human player for square coordinates.
-    func get_square() -> Square {
+    func getSquare() -> Square {
         while true {
             print("  Give disk position (x,y): ", terminator: "")
             if let pos = readLine() {
@@ -77,17 +73,17 @@ class Player {
                     return Square(coordinates[0], coordinates[1])
                 }
             }
-            print_error("Give coordinates in the form 'x,y'!", indent: 2)
+            printError("  Give coordinates in the form 'x,y'")
         }
     }
 
-    func type_string() -> String {
-        self.human ? "Human   " : "Computer"
+    func typeString() -> String {
+        self.isHuman ? "Human   " : "Computer"
     }
 }
 
 extension Player: CustomStringConvertible {
     var description: String {
-        "\(self.disk) | \(self.type_string()) | Moves: \(self.rounds_played)"
+        "\(self.disk) | \(self.typeString()) | Moves: \(self.roundsPlayed)"
     }
 }

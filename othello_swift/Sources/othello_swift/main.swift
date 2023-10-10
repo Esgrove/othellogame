@@ -36,17 +36,17 @@ for arg in CommandLine.arguments {
 }
 
 // Try to read board size from command line args
-var board_size: Int = CommandLine.argc >= 2 ? (Int(CommandLine.arguments[1]) ?? 0) : 0
-if board_size > 0 {
-    if board_size < MIN_BOARD_SIZE || board_size > MAX_BOARD_SIZE {
-        print("Error: unsupported board size: \(board_size)")
+var boardSize: Int = CommandLine.argc >= 2 ? (Int(CommandLine.arguments[1]) ?? 0) : 0
+if boardSize > 0 {
+    if boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE {
+        print("Error: unsupported board size: \(boardSize)")
         exit(1)
     }
-    print("Using board size: \(board_size)")
+    print("Using board size: \(boardSize)")
 } else {
     // Otherwise ask user for board size
-    board_size = Othello.get_board_size()
+    boardSize = Othello.getBoardSize()
 }
 
-let game = Othello(size: board_size)
+let game = Othello(size: boardSize)
 game.play()
