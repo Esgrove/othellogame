@@ -21,10 +21,10 @@ for arg in CommandLine.arguments {
     switch arg {
         case "--version", "-v":
             // TODO: add version info
-            print("Othello Swift \(version_info())")
+            print("Othello Swift \(versionInfo())")
             exit(0)
         case "--help", "-h":
-            print("Othello Swift \(version_info())\n")
+            print("Othello Swift \(versionInfo())\n")
             print("USAGE: othello_swift [board size]")
             print("Optional arguments:")
             print("    -h | --help          Print usage and exit")

@@ -28,7 +28,7 @@ repos:
     rev: v0.0.292
     hooks:
       - id: ruff
-        name: python ruff
+        name: Python ruff
         files: ^othello_python/
         args: [--fix, --exit-non-zero-on-fix, --config, othello_python/pyproject.toml]
 
@@ -36,7 +36,7 @@ repos:
     rev: 23.9.1
     hooks:
       - id: black
-        name: python black
+        name: Python black
         language_version: python3.11
         files: ^othello_python/
         args: [--config, othello_python/pyproject.toml]
@@ -45,7 +45,7 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-        name: python isort
+        name: Python isort
         files: ^othello_python/
         args: [--settings-path, othello_python/pyproject.toml]
 
@@ -53,7 +53,7 @@ repos:
     rev: v3.15.0
     hooks:
       - id: pyupgrade
-        name: python pyupgrade
+        name: Python pyupgrade
         files: ^othello_python/
         args: [--py39-plus]
 
@@ -61,7 +61,7 @@ repos:
     rev: v17.0.2
     hooks:
       - id: clang-format
-        name: C++ clang-format
+        name: C++ Clang-format
         files: ^othello_cpp/
 
   - repo: local

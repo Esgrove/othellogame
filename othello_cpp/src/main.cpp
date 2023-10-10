@@ -26,7 +26,7 @@ int main(int argc, const char* argv[])
                 "    -v | --version       Print version info and exit\n",
                 version::APP_NAME,
                 version::VERSION_NUMBER,
-                version::DATE);
+                version::TIMESTAMP);
             return 1;
         }
         if (arg == "--version" || arg == "-v") {
@@ -34,7 +34,7 @@ int main(int argc, const char* argv[])
                 "{} {} {} {} {}\n",
                 version::APP_NAME,
                 version::VERSION_NUMBER,
-                version::DATE,
+                version::TIMESTAMP,
                 version::BRANCH,
                 version::COMMIT);
             return 0;

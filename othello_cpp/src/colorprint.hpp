@@ -16,40 +16,8 @@
 #include <string>    // std::string
 #include <utility>   // std::pair
 
-/// Format string with colour using fmt.
-template<typename T> std::string get_color(const T& object, fmt::color color)
-{
-    return fmt::format(fmt::fg(color), "{}", object);
-}
-
-/// Print text with colour.
-template<typename T> void print_color(const T& object, fmt::color color = fmt::color::white)
-{
-    fmt::print(fmt::fg(color), object);
-}
-
-/// Print bold text.
-template<typename T> void print_bold(const T& object, fmt::color color = fmt::color::white)
-{
-    fmt::print(fmt::emphasis::bold | fmt::fg(color), object);
-}
-
-/// Print error message with red colour.
-void print_error(const std::string& message)
-{
-    auto [indent, text] = split_leading_whitespace(message);
-    fmt::print(fmt::fg(fmt::color::red), "{}Error: {}", indent, text);
-}
-
-/// Print warning message with yellow colour.
-void print_warn(const std::string& message)
-{
-    auto [indent, text] = split_leading_whitespace(message);
-    fmt::print(fmt::fg(fmt::color::yellow), "{}Warning: {}", indent, text);
-}
-
 /// Split a string to the leading whitespace and rest of the string.
-std::pair<std::string, std::string> split_leading_whitespace(const std::string& message)
+inline std::pair<std::string, std::string> split_leading_whitespace(const std::string& message)
 {
     // Find the index of the first non-whitespace character.
     size_t indent_size = 0;
@@ -57,6 +25,38 @@ std::pair<std::string, std::string> split_leading_whitespace(const std::string& 
         ++indent_size;
     }
     return {message.substr(0, indent_size), message.substr(indent_size)};
+}
+
+/// Format string with colour using fmt.
+template<typename T> inline std::string get_color(const T& object, fmt::color color)
+{
+    return fmt::format(fmt::fg(color), "{}", object);
+}
+
+/// Print text with colour.
+template<typename T> inline void print_color(const T& object, fmt::color color = fmt::color::white)
+{
+    fmt::print(fmt::fg(color), object);
+}
+
+/// Print bold text.
+template<typename T> inline void print_bold(const T& object, fmt::color color = fmt::color::white)
+{
+    fmt::print(fmt::emphasis::bold | fmt::fg(color), object);
+}
+
+/// Print error message with red colour.
+inline void print_error(const std::string& message)
+{
+    auto [indent, text] = split_leading_whitespace(message);
+    fmt::print(fmt::fg(fmt::color::red), "{}Error: {}", indent, text);
+}
+
+/// Print warning message with yellow colour.
+inline void print_warn(const std::string& message)
+{
+    auto [indent, text] = split_leading_whitespace(message);
+    fmt::print(fmt::fg(fmt::color::yellow), "{}Warning: {}", indent, text);
 }
 
 // Fallback with ANSI escape codes for stringstream

@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 project("Othello CPP"
-    VERSION 2.1
+    VERSION 2.2
     DESCRIPTION "A simple Othello CLI game implementation."
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -86,6 +86,7 @@ target_compile_definitions(othello_cpp PRIVATE
     BUILDTIME_BUILD_NAME="${APP_BUILD_NAME}"
     BUILDTIME_COMMIT="${GIT_HASH}"
     BUILDTIME_DATE="${DATE}"
+    BUILDTIME_TIMESTAMP="${TIMESTAMP}"
     BUILDTIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
 )
 

@@ -35,7 +35,7 @@ def print_bold(text: str, color=Color.white, **kwargs):
 
 def print_color(text: str, color=Color.white, bold=False, **kwargs):
     """
-    Print text with colour using Colorama.
+    Print text with specified colour using Colorama.
 
     You can pass optional extra arguments for the Python default print function if wanted:
 
