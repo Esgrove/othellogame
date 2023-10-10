@@ -92,7 +92,7 @@ template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
 
 namespace othello
 {
-/// Represents one possible disk placement for given disk color.
+/// Represents one possible disk placement for the given disk color.
 struct Move {
     Move() : square(0, 0), disk(Disk::empty), value(0) {}
     Move(Square square, Disk disk, unsigned int value, std::vector<Step> directions)

@@ -39,7 +39,7 @@ type Square struct {
 	Y int
 }
 
-// Move represents one possible disk placement for given disk colour.
+// Move represents one possible disk placement for the given disk colour.
 type Move struct {
 	Square     Square
 	Disk       Disk

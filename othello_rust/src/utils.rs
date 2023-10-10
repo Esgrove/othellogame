@@ -37,7 +37,7 @@ pub(crate) struct Square {
     pub(crate) y: isize,
 }
 
-/// Represents one possible disk placement for given disk color.
+/// Represents one possible disk placement for the given disk color.
 #[derive(Clone)]
 pub(crate) struct Move {
     pub(crate) square: Square,

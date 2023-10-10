@@ -142,7 +142,7 @@ namespace Othello
         public readonly int Y;
     }
 
-    /// Represents one possible disk placement for given disk color.
+    /// Represents one possible disk placement for the given disk color.
     public readonly struct Move
     {
         public Move(Square square, int value, Disk disk, List<Square> directions)

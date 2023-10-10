@@ -230,7 +230,7 @@ class Square:
 
 
 class Move:
-    """Represents one possible disk placement for given disk color."""
+    """Represents one possible disk placement for the given disk color."""
 
     def __init__(self, square: Square, disk=Disk.EMPTY, value=0, directions=None):
         self.square: Square = square
