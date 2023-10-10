@@ -161,22 +161,14 @@ impl AddAssign<Step> for Step {
     }
 }
 
-impl PartialEq for Move {
-    fn eq(&self, other: &Self) -> bool {
-        self.square == other.square && self.value == other.value
-    }
-}
-
 impl Eq for Move {}
 
-impl PartialOrd for Move {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Option::from(
-            other
-                .value
-                .cmp(&self.value)
-                .then(self.square.partial_cmp(&other.square).unwrap()),
-        )
+impl Hash for Move {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.square.hash(state);
+        self.value.hash(state);
+        self.disk.hash(state);
+        self.directions.hash(state);
     }
 }
 
@@ -189,12 +181,16 @@ impl Ord for Move {
     }
 }
 
-impl Hash for Move {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.square.hash(state);
-        self.value.hash(state);
-        self.disk.hash(state);
-        self.directions.hash(state);
+impl PartialEq for Move {
+    fn eq(&self, other: &Self) -> bool {
+        self.square == other.square && self.value == other.value
+    }
+}
+
+impl PartialOrd for Move {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        // This uses `Ord` so no need to re-implement same comparison twice
+        Some(self.cmp(other))
     }
 }
 
