@@ -9,6 +9,7 @@ import kotlin.system.exitProcess
 object OthelloGame {
     private const val MIN_BOARD_SIZE = 4
     private const val MAX_BOARD_SIZE = 10
+    private const val DEFAULT_BOARD_SIZE = 8
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -24,7 +25,7 @@ object OthelloGame {
         }
 
         if (args.contains("--version") || args.contains("-v")) {
-            println("othello_kotlin.Othello Kotlin ${getCurrentDateTime()}")
+            println("Othello Kotlin ${getCurrentDateTime()}")
             exitProcess(0)
         }
 
@@ -48,23 +49,25 @@ object OthelloGame {
         return now.time.toString()
     }
 
-    /** */
+    /** Ask and return the desired board size.*/
     private fun getBoardSize(): Int {
-        while (true) {
-            print("Choose board size (default is 8): ")
-            val input = readlnOrNull()
-            if (input != null) {
-                val boardSize = input.toIntOrNull()
-                if (boardSize != null && boardSize in MIN_BOARD_SIZE..MAX_BOARD_SIZE) {
-                    return boardSize
+        print("Choose board size (default is $DEFAULT_BOARD_SIZE): ")
+        val input = readlnOrNull()
+        if (input != null) {
+            val boardSize = input.toIntOrNull()
+            if (boardSize != null) {
+                if (boardSize !in MIN_BOARD_SIZE..MAX_BOARD_SIZE) {
+                    printWarn("Limiting board size to valid range $MIN_BOARD_SIZE...$MAX_BOARD_SIZE")
                 }
+                return boardSize.coerceIn(MIN_BOARD_SIZE, MAX_BOARD_SIZE)
             }
-            error("Give a valid number...")
         }
+        printWarn("Invalid size, defaulting to $DEFAULT_BOARD_SIZE...")
+        return DEFAULT_BOARD_SIZE
     }
 }
 
-/** Othello Gameplay loop and main logic.*/
+/** Gameplay loop and main logic.*/
 class Othello(private val boardSize: Int) {
     private var board: Board = Board(boardSize)
     private val playerBlack: Player = Player(Disk.Black)
@@ -77,7 +80,7 @@ class Othello(private val boardSize: Int) {
         roundsPlayed = 0
     }
 
-    /** */
+    /** Play one full game of Othello.*/
     fun play() {
         while (true) {
             initGame()
@@ -122,7 +125,7 @@ class Othello(private val boardSize: Int) {
         gamesPlayed++
     }
 
-    /** */
+    /** Print ending status and winner info.*/
     private fun printResult() {
         printBold("\n================================")
         printColor("The game is finished!", Color.GREEN)

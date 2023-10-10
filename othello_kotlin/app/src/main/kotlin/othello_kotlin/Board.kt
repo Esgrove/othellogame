@@ -136,6 +136,20 @@ class Board(private val size: Int) {
         println("")
     }
 
+    /** Print current score for both players.*/
+    fun printScore() {
+        TODO("Not yet implemented")
+    }
+
+    fun result(): Disk {
+        val sum = score()
+        return when {
+            sum < 0 -> Disk.Black
+            sum > 0 -> Disk.White
+            else -> Disk.Empty
+        }
+    }
+
     /** */
     private fun checkCoordinates(x: Int, y: Int): Boolean {
         return x in 0 until size && y in 0 until size
@@ -160,6 +174,14 @@ class Board(private val size: Int) {
         board[y * size + x] = disk
     }
 
+    /**
+    * Returns the total score.
+    * Positive value means more white disks and negative means more black disks.
+    * */
+    private fun score(): Int {
+        return board.sumOf { it.value }
+    }
+
     /** */
     override fun toString(): String {
         val builder = StringBuilder(" ")
@@ -173,10 +195,5 @@ class Board(private val size: Int) {
             }
         }
         return builder.toString()
-    }
-
-    /** */
-    fun printScore() {
-        TODO("Not yet implemented")
     }
 }
