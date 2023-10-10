@@ -45,7 +45,7 @@ struct Args {
     /// Optional Othello board size
     size: Option<usize>,
 
-    /// Print version
+    /// Custom version flag instead of clap default
     #[arg(short, long, help = "Print version and exit")]
     version: bool,
 }
@@ -70,6 +70,7 @@ fn main() -> Result<()> {
             build::SHORT_COMMIT,
             build::BRANCH,
         );
+        println!("{} {}", build::BUILD_OS, build::RUST_VERSION);
         return Ok(());
     }
 
