@@ -16,7 +16,7 @@
 #include <string>    // std::string
 #include <utility>   // std::pair
 
-/// Split a string to the leading whitespace and rest of the string.
+/// Split a string into the leading whitespace and the rest of the string.
 inline std::pair<std::string, std::string> split_leading_whitespace(const std::string& message)
 {
     // Find the index of the first non-whitespace character.

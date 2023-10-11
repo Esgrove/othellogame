@@ -42,7 +42,7 @@ namespace Othello
             Console.WriteLine($"{indent}Warning: {text}".Pastel(Color.Yellow));
         }
 
-        /// Split a string to the leading whitespace and rest of the string.
+        /// Split a string into the leading whitespace and the rest of the string.
         private static (string, string) SplitLeadingWhitespace(string message)
         {
             // Find the index of the first non-whitespace character.

@@ -19,7 +19,7 @@ pub fn print_warn(message: &str) {
     println!("{}", format!("{}Warning: {}", indent, text).yellow())
 }
 
-/// Split a string to the leading whitespace and rest of the string.
+/// Split a string into the leading whitespace and the rest of the string.
 fn split_leading_whitespace(message: &str) -> (&str, &str) {
     let indent_size = message.chars().take_while(|c| c.is_whitespace()).count();
     message.split_at(indent_size)

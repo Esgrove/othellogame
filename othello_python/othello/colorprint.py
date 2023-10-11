@@ -92,7 +92,7 @@ def print_cyan(text: str, bold=False, **kwargs):
 
 
 def _split_leading_whitespace(message: str) -> (str, str):
-    """Split a string to the leading whitespace and rest of the string."""
+    """Split a string into the leading whitespace and the rest of the string."""
     indent_size = next((i for i, c in enumerate(message) if not c.isspace()), len(message))
     indent = message[:indent_size]
     text = message[indent_size:]

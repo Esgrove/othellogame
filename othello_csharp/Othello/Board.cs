@@ -21,16 +21,16 @@ namespace Othello
         private readonly List<int> _indices;
         private readonly int _size;
 
-        private static readonly int[][] StepDirections =
+        private static readonly Step[] StepDirections =
         {
-            new[] { -1, -1 },
-            new[] { -1, 0 },
-            new[] { -1, 1 },
-            new[] { 0, -1 },
-            new[] { 0, 1 },
-            new[] { 1, -1 },
-            new[] { 1, 0 },
-            new[] { 1, 1 }
+            new(-1, -1),
+            new(-1, 0),
+            new(-1, 1),
+            new(0, -1),
+            new(0, 1),
+            new(1, -1),
+            new(1, 0),
+            new(1, 1)
         };
 
         public Board(int size)
@@ -99,10 +99,10 @@ namespace Othello
             foreach (var square in _emptySquares)
             {
                 var value = 0;
-                var directions = new List<Square>();
+                var directions = new List<Step>();
                 foreach (var dir in StepDirections)
                 {
-                    var step = new Square(dir[0], dir[1]);
+                    var step = new Square(dir.X, dir.Y);
                     var pos = square + step;
                     // next square in this directions needs to be opponents disk
                     if (GetSquare(pos) != other)
@@ -122,7 +122,7 @@ namespace Othello
                         continue;
                     }
                     value += steps;
-                    directions.Add(step);
+                    directions.Add(dir);
                 }
                 if (value > 0)
                 {
@@ -132,7 +132,7 @@ namespace Othello
             if (moves.Any())
             {
                 moves.Sort(
-                    delegate(Move left, Move right)
+                    delegate (Move left, Move right)
                     {
                         var value = right.Value.CompareTo(left.Value);
                         return value == 0 ? left.Square.X.CompareTo(right.Square.X) : value;
@@ -177,9 +177,9 @@ namespace Othello
         {
             var (black, white) = PlayerScores();
             Console.WriteLine($"\n{this}");
-            Console.Write(
+            Console.WriteLine(
                 $"Score: {ColorPrint.Get(black, Disk.Black.DiskColor())} | "
-                    + $"{ColorPrint.Get(white, Disk.White.DiskColor())}\n"
+                    + $"{ColorPrint.Get(white, Disk.White.DiskColor())}"
             );
         }
 
@@ -194,7 +194,7 @@ namespace Othello
             return sum > 0 ? Disk.White : Disk.Black;
         }
 
-        /// Check that the given coordinates are inside the board
+        /// Check that the given coordinates are inside the board.
         private bool CheckCoordinates(int x, int y)
         {
             return 0 <= x && x < _size && 0 <= y && y < _size;

@@ -82,6 +82,11 @@ namespace Othello
             Y = y;
         }
 
+        public static Square operator +(Square square, Step step)
+        {
+            return new Square(square.X + step.X, square.Y + step.Y);
+        }
+
         public override int GetHashCode()
         {
             return HashCode.Combine(X, Y);
@@ -145,7 +150,7 @@ namespace Othello
     /// Represents one possible disk placement for the given disk color.
     public readonly struct Move
     {
-        public Move(Square square, int value, Disk disk, List<Square> directions)
+        public Move(Square square, int value, Disk disk, List<Step> directions)
         {
             Square = square;
             Value = value;
@@ -173,7 +178,7 @@ namespace Othello
         public readonly Square Square;
         public readonly int Value;
         public readonly Disk Disk;
-        public readonly List<Square> Directions;
+        public readonly List<Step> Directions;
     }
 
     public static class Extensions

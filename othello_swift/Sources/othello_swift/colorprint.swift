@@ -29,7 +29,7 @@ func printWarn(_ message: String) {
     print("\(indent)Warning: \(text)".yellow())
 }
 
-/// Split a string to the leading whitespace and rest of the string.
+/// Split a string into the leading whitespace and the rest of the string.
 func splitLeadingWhitespace(_ message: String) -> (String, String) {
     let indentSize = message.prefix(while: { $0.isWhitespace }).count
     let index = message.index(message.startIndex, offsetBy: indentSize)
