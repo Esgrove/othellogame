@@ -46,3 +46,25 @@ application {
     // Define the main class for the application.
     mainClass.set("othello_kotlin.OthelloKt")
 }
+
+// https://github.com/Baeldung/kotlin-tutorials/blob/master/kotlin-self-executable-jar/kotlin-executable-jar/build.gradle.kts
+tasks {
+    val fatJar = register<Jar>("fatJar") {
+        // We need this for Gradle optimization to work
+        dependsOn.addAll(listOf("compileJava", "compileKotlin", "processResources"))
+        // Naming the jar
+        archiveClassifier.set("othello-kotlin")
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        // Provided we set it up in the application plugin configuration
+        manifest { attributes(mapOf("Main-Class" to application.mainClass)) }
+        val sourcesMain = sourceSets.main.get()
+        val contents = configurations.runtimeClasspath.get()
+            .map { if (it.isDirectory) it else zipTree(it) } +
+                sourcesMain.output
+        from(contents)
+    }
+    build {
+        // Trigger fat jar creation during build
+        dependsOn(fatJar)
+    }
+}

@@ -97,7 +97,7 @@ fun main(args: Array<String>) {
     printColor("OTHELLO GAME - Kotlin", Color.GREEN)
 
     if (args.contains("--help") || args.contains("-h")) {
-        println("othello_kotlin.Othello Kotlin ${getCurrentDateTime()}\n")
+        println("Othello Kotlin ${getCurrentDateTime()}\n")
         println("USAGE: othello.jar [board size]\n")
         println("Optional arguments:")
         println("    -h | --help          Print usage and exit")
