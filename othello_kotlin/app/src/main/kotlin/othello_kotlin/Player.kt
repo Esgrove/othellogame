@@ -67,7 +67,7 @@ class Player(private val disk: Disk) {
             if (validMove != null) {
                 return validMove
             }
-            printError("  Can't place a ${disk.name()} disk in square $square!")
+            printError("  Can't place a ${disk.name()} disk in square $square")
         }
     }
 
