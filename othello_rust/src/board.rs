@@ -94,7 +94,7 @@ impl Board {
             let mut directions = Vec::<Step>::new();
             for step in self.step_directions.iter() {
                 let mut pos = *square + *step;
-                // Next square in this direction needs to be the opponents disk
+                // Next square in this direction needs to be the opposing disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) != opposing_disk {
                     continue;
                 }

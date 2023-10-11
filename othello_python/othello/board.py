@@ -76,7 +76,7 @@ class Board:
             # try stepping in all directions from this starting point
             for step in self.STEP_DIRECTIONS:
                 pos = square + step
-                # Next square in this direction needs to be the opponents disk
+                # Next square in this direction needs to be the opposing disk
                 if self._get_square(pos) != opposing_disk:
                     continue
                 steps = 0

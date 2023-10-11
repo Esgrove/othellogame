@@ -116,7 +116,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 		var directions []Step
 		for _, step := range b.directions {
 			pos := square.Add(step)
-			// Next square in this direction needs to be the opponents disk
+			// Next square in this direction needs to be the opposing disk
 			if b.getSquare(&pos) != opposingDisk {
 				continue
 			}
@@ -125,7 +125,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 				numSteps++
 				pos = pos.Add(step)
 			}
-			// Valid move only if a line of opponents disks ends in own disk
+			// Valid move only if a line of opposing disks ends in own disk
 			if b.getSquare(&pos) == disk {
 				value += numSteps
 				directions = append(directions, step)

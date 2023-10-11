@@ -77,7 +77,7 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
         std::vector<Step> directions;
         for (const auto& step : step_directions) {
             Square pos {square + step};
-            // next square in this direction needs to be opponents disk
+            // Next square in this direction needs to be the opposing disk
             if (get_square(pos) != opposing_disk) {
                 continue;
             }
