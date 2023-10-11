@@ -58,5 +58,20 @@ build_project() {
     popd > /dev/null
 }
 
+update_version_file() {
+    set_version_info
+    VERSION_FILE="$PROJECT_PATH/othello/version.go"
+    CURRENT_VERSION="$(grep "const VersionNumber =" "$VERSION_FILE" | cut -d\" -f 2)"
+    {
+        echo "package othello"
+        echo ""
+        echo "// Generated automatically; DO NOT EDIT MANUALLY."
+        echo ""
+        echo "const VersionNumber = \"$CURRENT_VERSION\""
+        echo "const GitBranch = \"$GIT_BRANCH\""
+    } > "$VERSION_FILE"
+}
+
 init_options "$@"
+update_version_file
 build_project

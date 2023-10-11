@@ -25,10 +25,12 @@ else
     print_error_and_exit "Version number needs to be in format 'X.X.X', got: $VERSION"
 fi
 
+set_version_info
 {
     echo "package othello"
     echo ""
-    echo "// Generated automatically by go generate; DO NOT EDIT MANUALLY."
+    echo "// Generated automatically; DO NOT EDIT MANUALLY."
     echo ""
     echo "const VersionNumber = \"$VERSION\""
+    echo "const GitBranch = \"$GIT_BRANCH\""
 } > "$VERSION_FILE"

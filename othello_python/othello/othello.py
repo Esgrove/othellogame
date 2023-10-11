@@ -110,7 +110,7 @@ if __name__ == "__main__":
     # Handle 'help' and 'version' arguments
     if "--help" in args or "-h" in args:
         sys.exit(
-            f"Othello Python {VERSION_NUMBER} {DATE} {COMMIT} {BRANCH}\n\n"
+            f"Othello Python {VERSION_NUMBER} {DATE} {BRANCH} {COMMIT}\n\n"
             "USAGE: python3 othello.py [board size]\n\n"
             "Optional arguments:\n"
             "    -h | --help          Print usage and exit\n"

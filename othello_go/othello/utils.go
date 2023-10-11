@@ -139,7 +139,7 @@ func VersionInfo() string {
 				arch = setting.Value
 			}
 		}
-		return fmt.Sprintf("Othello Go %s %s %s %s %s", VersionNumber, timestamp, commit, goVersion, arch)
+		return fmt.Sprintf("Othello Go %s %s %s %s %s %s", VersionNumber, timestamp, GitBranch, commit, goVersion, arch)
 	}
 	return ""
 }

@@ -161,5 +161,5 @@ func versionInfo() -> String {
     let buildTime = BUILD_TIME
     let gitHash = GIT_HASH
     let gitBranch = GIT_BRANCH
-    return "\(buildTime) \(gitHash) \(gitBranch)"
+    return "\(buildTime) \(gitBranch) \(gitHash)"
 }

@@ -6,7 +6,8 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
-VERSION_FILE="$DIR/othello/version.py"
+PROJECT_PATH="$REPO_ROOT/othello_python"
+VERSION_FILE="$PROJECT_PATH/othello/version.py"
 
 check_and_set_python() {
     # Check Python is found on path and set PYTHON variable to it
@@ -35,7 +36,7 @@ get_pyproject_version_number() {
 }
 
 update_version_information() {
-    print_magenta "Updating version file: $VERSION_FILE"
+    print_yellow "Updating version file: $VERSION_FILE"
     set_version_info
     VERSION_NUMBER="$(get_pyproject_version_number)"
     {
@@ -51,6 +52,8 @@ update_version_information() {
         echo "VERSION_NUMBER = \"$VERSION_NUMBER\""
     } > "$VERSION_FILE"
 }
+
+cd "$PROJECT_PATH" > /dev/null
 
 check_and_set_python
 update_version_information

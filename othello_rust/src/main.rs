@@ -63,12 +63,11 @@ fn main() -> Result<()> {
 
     if args.version {
         println!(
-            "{} {} {} {} {}",
-            build::PROJECT_NAME,
+            "Othello Rust {} {} {} {}",
             build::PKG_VERSION,
             build::BUILD_TIME,
-            build::SHORT_COMMIT,
             build::BRANCH,
+            build::SHORT_COMMIT,
         );
         println!("{} {}", build::BUILD_OS, build::RUST_VERSION);
         return Ok(());

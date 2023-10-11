@@ -157,7 +157,7 @@ namespace Othello
             if (args.Contains("--help") || args.Contains("-h"))
             {
                 Console.WriteLine(
-                    $"Othello C# {Version.VersionNumber} {Version.BuildTime} {Version.GitCommit} {Version.GitBranch}\n"
+                    $"Othello C# {Version.VersionNumber} {Version.BuildTime} {Version.GitBranch} {Version.GitCommit}\n"
                 );
                 Console.WriteLine("USAGE: othello.exe [board size]\n");
                 Console.WriteLine("Optional arguments:");
