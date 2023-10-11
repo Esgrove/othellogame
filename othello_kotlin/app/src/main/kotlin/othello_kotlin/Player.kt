@@ -67,7 +67,7 @@ class Player(private val disk: Disk) {
             if (validMove != null) {
                 return validMove
             }
-            printError("can't place a ${disk.name()} disk in square $square!", 2)
+            printError("  Can't place a ${disk.name()} disk in square $square!")
         }
     }
 
@@ -87,7 +87,7 @@ class Player(private val disk: Disk) {
 
                 return Square(x, y)
             } catch (e: IllegalArgumentException) {
-                printError("give coordinates in the form (x,y)!", 2)
+                printError("  Give coordinates in the form 'x,y'")
             }
         }
     }

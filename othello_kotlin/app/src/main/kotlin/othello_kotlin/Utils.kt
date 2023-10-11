@@ -3,6 +3,10 @@ package othello_kotlin
 import java.awt.Color
 import java.util.Objects
 
+const val MIN_BOARD_SIZE = 4
+const val MAX_BOARD_SIZE = 10
+const val DEFAULT_BOARD_SIZE = 8
+
 /** Represents one game piece or lack of one.*/
 enum class Disk(val value: Int) {
     Black(-1),
@@ -10,10 +14,22 @@ enum class Disk(val value: Int) {
     White(1)
 }
 
-/** Represents one step direction on the board.*/
+/** Represents a step direction on the board.*/
 data class Step(val x: Int, val y: Int) {
     override fun hashCode(): Int {
         return Objects.hash(x, y)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Step
+
+        if (x != other.x) return false
+        if (y != other.y) return false
+
+        return true
     }
 }
 
@@ -23,8 +39,12 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
         return Objects.hash(x, y)
     }
 
-    operator fun plus(other: Square): Square {
-        return Square(x + other.x, y + other.y)
+    operator fun plus(step: Step): Square {
+        return Square(x + step.x, y + step.y)
+    }
+
+    operator fun plus(square: Square): Square {
+        return Square(x + square.x, y + square.y)
     }
 
     override fun compareTo(other: Square): Int {
@@ -34,6 +54,18 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
             else -> 0
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Square
+
+        if (x != other.x) return false
+        if (y != other.y) return false
+
+        return true
+    }
 }
 
 /** Represents one possible disk placement for given disk color.*/
@@ -41,7 +73,7 @@ data class Move(
     val square: Square,
     val value: Int,
     val disk: Disk,
-    val directions: List<Square>
+    val directions: List<Step>
 ) : Comparable<Move> {
     override fun compareTo(other: Move): Int {
         return when {
@@ -52,6 +84,7 @@ data class Move(
     }
 }
 
+/** */
 fun Disk.diskColor(): Color {
     return when (this) {
         Disk.Empty -> Color.WHITE
@@ -60,6 +93,7 @@ fun Disk.diskColor(): Color {
     }
 }
 
+/** */
 fun Disk.otherDisk(): Disk {
     return when (this) {
         Disk.Empty -> Disk.Empty
@@ -68,10 +102,12 @@ fun Disk.otherDisk(): Disk {
     }
 }
 
+/** */
 fun Disk.name(): String {
     return getColor(this.name.uppercase(), this.diskColor())
 }
 
+/** */
 fun Disk.boardChar(): String {
     return when (this) {
         Disk.Empty -> "_"

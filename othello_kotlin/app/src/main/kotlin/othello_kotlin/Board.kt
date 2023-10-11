@@ -7,7 +7,7 @@ import java.lang.IllegalArgumentException
 class Board(private val size: Int) {
 
     private val board: MutableList<Disk>
-    private lateinit var emptySquares: HashSet<Square>
+    private var emptySquares: HashSet<Square>
     private val indices: List<Int>
 
     companion object {
@@ -41,6 +41,7 @@ class Board(private val size: Int) {
         indices = (0 until size).toList()
 
         // Keep track of empty squares on board to avoid checking already filled positions
+        emptySquares = HashSet<Square>()
         for (y in indices) {
             for (x in indices) {
                 if (board[y * size + x] == Disk.Empty) {
@@ -56,7 +57,7 @@ class Board(private val size: Int) {
     }
 
     /** */
-    fun placeDisc(move: Move) {
+    fun placeDisk(move: Move) {
         val start = move.square
         if (getSquare(start) != Disk.Empty) {
             throw IllegalArgumentException("Trying to place disk to an occupied square $start!")
@@ -78,7 +79,7 @@ class Board(private val size: Int) {
         val other = color.otherDisk()
         for (square in emptySquares) {
             var value = 0
-            val directions = mutableListOf<Square>()
+            val directions = mutableListOf<Step>()
             for (dir in stepDirections) {
                 val step = Square(dir.x, dir.y)
                 var pos = square + step
@@ -94,7 +95,7 @@ class Board(private val size: Int) {
                     continue
                 }
                 value += steps
-                directions.add(step)
+                directions.add(dir)
             }
             if (value > 0) {
                 moves.add(Move(square, value, color, directions))
@@ -138,9 +139,14 @@ class Board(private val size: Int) {
 
     /** Print current score for both players.*/
     fun printScore() {
-        TODO("Not yet implemented")
+        val (black, white) = playerScores()
+        println("\n$this")
+        println("Score: ${getColor(black.toString(), Disk.Black.diskColor())} | " +
+            getColor(white.toString(), Disk.White.diskColor())
+        )
     }
 
+    /** Calculates the final score and returns the winning player.*/
     fun result(): Disk {
         val sum = score()
         return when {
@@ -150,12 +156,12 @@ class Board(private val size: Int) {
         }
     }
 
-    /** */
+    /** Check that the given coordinates are inside the board.*/
     private fun checkCoordinates(x: Int, y: Int): Boolean {
         return x in 0 until size && y in 0 until size
     }
 
-    /** */
+    /** Returns the state of the board (empty, white, black) at the given coordinates.*/
     private fun getSquare(square: Square): Disk? {
         val (x, y) = square
         return if (!checkCoordinates(x, y)) {
@@ -165,7 +171,22 @@ class Board(private val size: Int) {
         }
     }
 
-    /** */
+    /** Count and return the number of black and white disks. */
+    private fun playerScores(): Pair<Int, Int> {
+        var black = 0
+        var white = 0
+        for (disk in board) {
+            when (disk) {
+                Disk.White -> ++white
+                Disk.Black -> ++black
+                Disk.Empty -> {}
+            }
+        }
+
+        return black to white
+    }
+
+    /** Sets the given square to given value.*/
     private fun setSquare(square: Square, disk: Disk) {
         val (x, y) = square
         if (!checkCoordinates(x, y)) {
@@ -182,7 +203,6 @@ class Board(private val size: Int) {
         return board.sumOf { it.value }
     }
 
-    /** */
     override fun toString(): String {
         val builder = StringBuilder(" ")
         for (i in indices) {

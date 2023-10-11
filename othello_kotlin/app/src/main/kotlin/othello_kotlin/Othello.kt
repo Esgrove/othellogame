@@ -1,71 +1,8 @@
 package othello_kotlin
 
-import othello_kotlin.*
 import java.awt.Color
 import java.util.*
-import kotlin.error
 import kotlin.system.exitProcess
-
-object OthelloGame {
-    private const val MIN_BOARD_SIZE = 4
-    private const val MAX_BOARD_SIZE = 10
-    private const val DEFAULT_BOARD_SIZE = 8
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        printColor("OTHELLO GAME - Kotlin", Color.GREEN)
-
-        if (args.contains("--help") || args.contains("-h")) {
-            println("othello_kotlin.Othello Kotlin ${getCurrentDateTime()}\n")
-            println("USAGE: othello.jar [board size]\n")
-            println("Optional arguments:")
-            println("    -h | --help          Print usage and exit")
-            println("    -v | --version       Print version info and exit")
-            exitProcess(1)
-        }
-
-        if (args.contains("--version") || args.contains("-v")) {
-            println("Othello Kotlin ${getCurrentDateTime()}")
-            exitProcess(0)
-        }
-
-        val boardSize = if (args.isEmpty() || args[0].toIntOrNull() == null) {
-            getBoardSize()
-        } else {
-            val size = args[0].toInt()
-            if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
-                printError("Unsupported board size: $size")
-            }
-            println("Using board size: $size")
-            size
-        }
-
-        val game = Othello(boardSize)
-        game.play()
-    }
-
-    private fun getCurrentDateTime(): String {
-        val now = Calendar.getInstance()
-        return now.time.toString()
-    }
-
-    /** Ask and return the desired board size.*/
-    private fun getBoardSize(): Int {
-        print("Choose board size (default is $DEFAULT_BOARD_SIZE): ")
-        val input = readlnOrNull()
-        if (input != null) {
-            val boardSize = input.toIntOrNull()
-            if (boardSize != null) {
-                if (boardSize !in MIN_BOARD_SIZE..MAX_BOARD_SIZE) {
-                    printWarn("Limiting board size to valid range $MIN_BOARD_SIZE...$MAX_BOARD_SIZE")
-                }
-                return boardSize.coerceIn(MIN_BOARD_SIZE, MAX_BOARD_SIZE)
-            }
-        }
-        printWarn("Invalid size, defaulting to $DEFAULT_BOARD_SIZE...")
-        return DEFAULT_BOARD_SIZE
-    }
-}
 
 /** Gameplay loop and main logic.*/
 class Othello(private val boardSize: Int) {
@@ -154,4 +91,58 @@ class Othello(private val boardSize: Int) {
         val ans = readlnOrNull()
         return !ans.isNullOrBlank() && ans.equals(yes, ignoreCase = true)
     }
+}
+
+fun main(args: Array<String>) {
+    printColor("OTHELLO GAME - Kotlin", Color.GREEN)
+
+    if (args.contains("--help") || args.contains("-h")) {
+        println("othello_kotlin.Othello Kotlin ${getCurrentDateTime()}\n")
+        println("USAGE: othello.jar [board size]\n")
+        println("Optional arguments:")
+        println("    -h | --help          Print usage and exit")
+        println("    -v | --version       Print version info and exit")
+        exitProcess(1)
+    }
+
+    if (args.contains("--version") || args.contains("-v")) {
+        println("Othello Kotlin ${getCurrentDateTime()}")
+        exitProcess(0)
+    }
+
+    val boardSize = if (args.isEmpty() || args[0].toIntOrNull() == null) {
+        getBoardSize()
+    } else {
+        val size = args[0].toInt()
+        if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
+            printError("Unsupported board size: $size")
+        }
+        println("Using board size: $size")
+        size
+    }
+
+    val game = Othello(boardSize)
+    game.play()
+}
+
+private fun getCurrentDateTime(): String {
+    val now = Calendar.getInstance()
+    return now.time.toString()
+}
+
+/** Ask and return the desired board size.*/
+private fun getBoardSize(): Int {
+    print("Choose board size (default is $DEFAULT_BOARD_SIZE): ")
+    val input = readlnOrNull()
+    if (input != null) {
+        val boardSize = input.toIntOrNull()
+        if (boardSize != null) {
+            if (boardSize !in MIN_BOARD_SIZE..MAX_BOARD_SIZE) {
+                printWarn("Limiting board size to valid range $MIN_BOARD_SIZE...$MAX_BOARD_SIZE")
+            }
+            return boardSize.coerceIn(MIN_BOARD_SIZE, MAX_BOARD_SIZE)
+        }
+    }
+    printWarn("Invalid size, defaulting to $DEFAULT_BOARD_SIZE...")
+    return DEFAULT_BOARD_SIZE
 }

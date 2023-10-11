@@ -2,7 +2,7 @@ package othello_kotlin
 
 import java.awt.Color
 
-/** */
+/** Format string with colour.*/
 fun getColor(text: String, color: Color): String {
     val ansiColor = when (color) {
         Color.CYAN -> "\u001B[36m"
@@ -18,25 +18,30 @@ fun getColor(text: String, color: Color): String {
     return "$ansiColor$text\u001B[0m"
 }
 
-/** */
+/** Print text with specified colour.*/
 fun printColor(text: String, color: Color) {
     println(getColor(text, color))
 }
 
-/** */
-fun printBold(text: String, indent: Int = 0) {
-    val whitespace = if (indent > 0) " ".repeat(indent) else ""
-    println("$whitespace\u001B[1m${text}\u001B[0m")
+/** Print bold text.*/
+fun printBold(text: String) {
+    println("\u001B[1m${text}\u001B[0m")
 }
 
-/** */
-fun printError(message: String, indent: Int = 0) {
-    val whitespace = if (indent > 0) " ".repeat(indent) else ""
-    println("$whitespace${getColor("Error: $message", Color.RED)}")
+/** Print error message with red colour.*/
+fun printError(message: String) {
+    val (indent, text) = splitLeadingWhitespace(message)
+    println("$indent${getColor("Error: $text", Color.RED)}")
 }
 
-/** */
-fun printWarn(message: String, indent: Int = 0) {
-    val whitespace = if (indent > 0) " ".repeat(indent) else ""
-    println("$whitespace${getColor("Warning: $message", Color.YELLOW)}")
+/** Print warning message with yellow colour.*/
+fun printWarn(message: String) {
+    val (indent, text) = splitLeadingWhitespace(message)
+    println("$indent${getColor("Warning: $text", Color.YELLOW)}")
+}
+
+/** Split a string into the leading whitespace and the rest of the string.*/
+fun splitLeadingWhitespace(message: String): Pair<String, String> {
+    val indentSize = message.takeWhile { it.isWhitespace() }.length
+    return message.substring(0, indentSize) to message.substring(indentSize)
 }

@@ -8,7 +8,5 @@ import kotlin.test.assertNotNull
 
 class OthelloTest {
     @Test fun appHasAGreeting() {
-        val classUnderTest = Othello()
-        assertNotNull(classUnderTest.greeting, "app should have a greeting")
     }
 }
