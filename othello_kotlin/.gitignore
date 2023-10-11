@@ -16,3 +16,5 @@ gradle-app.setting
 .gradletasknamecache
 
 bin/
+
+othello_kotlin.jar
