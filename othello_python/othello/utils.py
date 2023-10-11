@@ -7,6 +7,8 @@ Akseli Lukkarila
 import sys
 from enum import IntEnum
 
+from version import BRANCH, COMMIT, DATE, VERSION_NUMBER
+
 try:
     # Python 3.11+
     from typing import Self
@@ -278,3 +280,7 @@ def python_version() -> str:
     For example: 3.11.5
     """
     return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+
+
+def version_info() -> str:
+    return f"{VERSION_NUMBER} {DATE} {BRANCH} {COMMIT}"

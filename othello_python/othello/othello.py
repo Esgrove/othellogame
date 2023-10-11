@@ -11,8 +11,7 @@ import sys
 from board import Board
 from colorprint import Color, print_bold, print_error, print_warn
 from player import Player
-from utils import DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Disk, clamp
-from version import BRANCH, COMMIT, DATE, VERSION_NUMBER
+from utils import DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Disk, clamp, version_info
 
 
 class Othello:
@@ -110,14 +109,14 @@ if __name__ == "__main__":
     # Handle 'help' and 'version' arguments
     if "--help" in args or "-h" in args:
         sys.exit(
-            f"Othello Python {VERSION_NUMBER} {DATE} {BRANCH} {COMMIT}\n\n"
+            f"Othello Python {version_info()}\n\n"
             "USAGE: python3 othello.py [board size]\n\n"
             "Optional arguments:\n"
             "    -h | --help          Print usage and exit\n"
             "    -v | --version       Print version info and exit"
         )
     if "--version" in args or "-v" in args:
-        print(f"Othello Python {VERSION_NUMBER} {DATE} {COMMIT} {BRANCH}")
+        print(f"Othello Python {version_info()}")
         sys.exit(0)
 
     try:

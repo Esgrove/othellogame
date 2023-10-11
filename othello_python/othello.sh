@@ -59,4 +59,4 @@ check_and_set_python
 update_version_information
 
 # Pass arguments to program
-$PYTHON "$DIR/othello/othello.py" "$@"
+$PYTHON "$PROJECT_PATH/othello/othello.py" "$@"
