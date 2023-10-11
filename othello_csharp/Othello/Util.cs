@@ -192,7 +192,7 @@ namespace Othello
             return disk == Disk.White ? Color.Cyan : Color.Magenta;
         }
 
-        public static Disk OtherDisk(this Disk disk)
+        public static Disk Opponent(this Disk disk)
         {
             if (disk == Disk.Empty)
             {

@@ -119,7 +119,7 @@ struct Move {
     std::vector<Step> directions;
 };
 
-/// Returns print color for given Disk.
+/// Returns the print colour for the given Disk.
 inline fmt::color disk_color(const Disk& disk)
 {
     using enum fmt::color;
@@ -138,7 +138,7 @@ inline std::string board_char(const Disk& disk)
     return get_color(disk == Disk::white ? "W" : "B", disk_color(disk));
 }
 
-/// Returns the disk formatted as a colored string.
+/// Returns the disk formatted as a coloured string.
 inline std::string disk_string(const Disk& disk)
 {
     auto color = disk_color(disk);
@@ -154,7 +154,7 @@ inline std::string disk_string(const Disk& disk)
     }
 }
 
-/// Returns the opponents disk color.
+/// Returns the opposing disk colour.
 inline Disk opponent(const Disk& disk)
 {
     switch (disk) {

@@ -83,7 +83,7 @@ namespace Othello
             foreach (var dir in move.Directions)
             {
                 var pos = start + dir;
-                while (GetSquare(pos) == move.Disk.OtherDisk())
+                while (GetSquare(pos) == move.Disk.Opponent())
                 {
                     SetSquare(pos, move.Disk);
                     pos += dir;
@@ -95,7 +95,7 @@ namespace Othello
         public List<Move> PossibleMoves(Disk color)
         {
             var moves = new List<Move>();
-            var other = color.OtherDisk();
+            var other = color.Opponent();
             foreach (var square in _emptySquares)
             {
                 var value = 0;
