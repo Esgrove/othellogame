@@ -4,6 +4,7 @@ import java.awt.Color
 
 /** Format string with colour.*/
 fun getColor(text: String, color: Color): String {
+    val resetColor = "\u001B[0m"
     val ansiColor = when (color) {
         Color.CYAN -> "\u001B[36m"
         Color.GREEN -> "\u001B[32m"
@@ -12,10 +13,16 @@ fun getColor(text: String, color: Color): String {
         Color.WHITE -> "\u001B[37m"
         Color.YELLOW -> "\u001B[33m"
         // Default to white
-        else -> "\u001B[37m"
+        else -> resetColor
     }
-    // \u001B[0m resets the colour
-    return "$ansiColor$text\u001B[0m"
+
+    // Check if the text contains a reset code already
+    val coloredText = if (text.contains(resetColor)) {
+        text.replace(resetColor, "$resetColor$ansiColor")
+    } else {
+        text
+    }
+    return "$ansiColor$coloredText$resetColor"
 }
 
 /** Print text with specified colour.*/

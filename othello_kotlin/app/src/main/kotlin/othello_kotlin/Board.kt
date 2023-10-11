@@ -66,7 +66,7 @@ class Board(private val size: Int) {
         emptySquares.remove(start)
         for (dir in move.directions) {
             var pos = start + dir
-            while (getSquare(pos) == move.disk.otherDisk()) {
+            while (getSquare(pos) == move.disk.opponent()) {
                 setSquare(pos, move.disk)
                 pos += dir
             }
@@ -76,7 +76,7 @@ class Board(private val size: Int) {
     /** */
     fun possibleMoves(color: Disk): List<Move> {
         val moves = mutableListOf<Move>()
-        val other = color.otherDisk()
+        val other = color.opponent()
         for (square in emptySquares) {
             var value = 0
             val directions = mutableListOf<Step>()

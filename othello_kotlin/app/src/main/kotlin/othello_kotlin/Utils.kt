@@ -31,6 +31,10 @@ data class Step(val x: Int, val y: Int) {
 
         return true
     }
+
+    override fun toString(): String {
+        return "[$x,$y]"
+    }
 }
 
 /** Represents one square location on the board.*/
@@ -66,6 +70,10 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
 
         return true
     }
+
+    override fun toString(): String {
+        return "($x,$y)"
+    }
 }
 
 /** Represents one possible disk placement for given disk color.*/
@@ -82,9 +90,13 @@ data class Move(
             else -> 0
         }
     }
+
+    override fun toString(): String {
+        return "Square: $square -> value: $value"
+    }
 }
 
-/** */
+/** Returns the print colour for the given Disk.*/
 fun Disk.diskColor(): Color {
     return when (this) {
         Disk.Empty -> Color.WHITE
@@ -93,25 +105,25 @@ fun Disk.diskColor(): Color {
     }
 }
 
-/** */
-fun Disk.otherDisk(): Disk {
-    return when (this) {
-        Disk.Empty -> Disk.Empty
-        Disk.White -> Disk.Black
-        Disk.Black -> Disk.White
-    }
-}
-
-/** */
-fun Disk.name(): String {
-    return getColor(this.name.uppercase(), this.diskColor())
-}
-
-/** */
+/** Returns string character representing board status (black, white, empty).*/
 fun Disk.boardChar(): String {
     return when (this) {
         Disk.Empty -> "_"
         Disk.White -> getColor("W", this.diskColor())
         Disk.Black -> getColor("B", this.diskColor())
+    }
+}
+
+/** Returns the disk formatted as a coloured string.*/
+fun Disk.name(): String {
+    return getColor(this.name.uppercase(), this.diskColor())
+}
+
+/** Returns the opposing disk colour.*/
+fun Disk.opponent(): Disk {
+    return when (this) {
+        Disk.Empty -> Disk.Empty
+        Disk.White -> Disk.Black
+        Disk.Black -> Disk.White
     }
 }
