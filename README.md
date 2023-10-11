@@ -130,6 +130,16 @@ Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 * othello/colorprint.go
 * othello/version.go
 
+### Kotlin
+
+Uses [Gradle](https://gradle.org/kotlin/) 8.4.
+
+* Othello.kt
+* Board.kt
+* Player.kt
+* Utils.kt
+* ColorPrint.kt
+
 ## TODO
 
 * Write some thoughts on the languages and their differences
