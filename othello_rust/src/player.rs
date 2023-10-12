@@ -131,6 +131,15 @@ impl Player {
             print_error("  Give coordinates in the form 'x,y'!")
         }
     }
+
+    /// Return player type description string.
+    pub fn type_string(&self) -> String {
+        if self.human {
+            "Human   ".to_owned()
+        } else {
+            "Computer".to_owned()
+        }
+    }
 }
 
 impl fmt::Display for Player {
@@ -139,7 +148,7 @@ impl fmt::Display for Player {
             f,
             "{} | {} | Moves: {}",
             self.disk,
-            if self.human { "Human   " } else { "Computer" },
+            self.type_string(),
             self.rounds_played
         )
     }

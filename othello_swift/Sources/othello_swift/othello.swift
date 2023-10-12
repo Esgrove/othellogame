@@ -36,8 +36,8 @@ class Othello {
     func initGame() {
         if self.gamesPlayed > 0 {
             self.board = Board(size: self.boardSize)
-            self.playerBlack = Player(Disk.black)
-            self.playerWhite = Player(Disk.white)
+            self.playerBlack.reset()
+            self.playerWhite.reset()
             self.roundsPlayed = 0
         }
 

@@ -18,6 +18,16 @@ class Player {
         self.disk = disk
     }
 
+    /// Shorthand to initialize a new player for black disks.
+    func black() -> Player {
+        return Player(Disk.black)
+    }
+
+    /// Shorthand to initialize a new player for white disks.
+    func white() -> Player {
+        return Player(Disk.white)
+    }
+
     /// Play one round as this player.
     func playOneMove(board: inout Board) {
         print("Turn: \(self.disk)")
@@ -35,6 +45,12 @@ class Player {
             self.canPlay = false
             print("  No moves available...".yellow())
         }
+    }
+
+    /// Reset player status for a new game.
+    func reset() {
+        self.canPlay = true
+        self.roundsPlayed = 0
     }
 
     /// Set player to be controlled by human or computer.
@@ -77,6 +93,7 @@ class Player {
         }
     }
 
+    /// Return player type description string.
     func typeString() -> String {
         self.isHuman ? "Human   " : "Computer"
     }

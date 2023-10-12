@@ -6,20 +6,20 @@ license = "MIT"
 name = "othello_rust"
 readme = "README.md"
 repository = "https://github.com/Esgrove/othellogame"
-version = "1.4.0"
+version = "1.5.0"
 build = "build.rs"
 
 [dependencies]
 anyhow = "1.0.75"
 clap = { version = "4.4.6", features = ["derive"] }
-colored = "2"
+colored = "2.0.4"
 env_logger = "0.10.0"
 log = "0.4.20"
 rand = "0.8.5"
-shadow-rs = "0.24.0"
+shadow-rs = "0.24.1"
 
 [build-dependencies]
-shadow-rs = "0.24.0"
+shadow-rs = "0.24.1"
 
 [[bin]]
 name = "othello_rust"

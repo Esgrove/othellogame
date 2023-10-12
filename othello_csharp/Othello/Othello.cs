@@ -58,8 +58,8 @@ namespace Othello
             if (_gamesPlayed > 0)
             {
                 _board = new Board(_boardSize);
-                _playerBlack = new Player(Disk.Black);
-                _playerWhite = new Player(Disk.White);
+                _playerBlack.Reset();
+                _playerWhite.Reset();
                 _roundsPlayed = 0;
             }
 

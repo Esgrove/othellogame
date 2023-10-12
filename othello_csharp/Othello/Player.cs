@@ -17,7 +17,7 @@ namespace Othello
     internal class Player
     {
         public bool canPlay;
-        private bool _human;
+        private bool _isHuman;
         private int _roundsPlayed;
         private readonly Disk _disk;
         private readonly Random _random;
@@ -26,7 +26,7 @@ namespace Othello
         public Player(Disk color)
         {
             _disk = color;
-            _human = true;
+            _isHuman = true;
             _random = new Random();
             _showHelpers = true;
             canPlay = true;
@@ -40,11 +40,11 @@ namespace Othello
             if (moves.Any())
             {
                 canPlay = true;
-                if (_human && _showHelpers)
+                if (_isHuman && _showHelpers)
                 {
                     board.PrintMoves(moves);
                 }
-                var chosenMove = _human ? GetHumanMove(moves) : GetComputerMove(moves);
+                var chosenMove = _isHuman ? GetHumanMove(moves) : GetComputerMove(moves);
                 board.PlaceDisc(chosenMove);
                 board.PrintScore();
                 ++_roundsPlayed;
@@ -60,18 +60,14 @@ namespace Othello
         /// Set player to be controlled by human or computer.
         public void SetHuman(bool isHuman)
         {
-            _human = isHuman;
+            _isHuman = isHuman;
         }
 
-        public override string ToString()
-        {
-            return $"{_disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
-        }
-
+        /// Reset player status for a new game.
         public void Reset()
         {
-            _roundsPlayed = 0;
             canPlay = true;
+            _roundsPlayed = 0;
         }
 
         /// Return move chosen by computer.
@@ -124,9 +120,15 @@ namespace Othello
             }
         }
 
+        /// Return player type description string.
         private string TypeString()
         {
-            return _human ? "Human   " : "Computer";
+            return _isHuman ? "Human   " : "Computer";
+        }
+
+        public override string ToString()
+        {
+            return $"{_disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
         }
     }
 }
