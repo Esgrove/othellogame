@@ -77,14 +77,14 @@ class Othello(private val boardSize: Int) {
         }
     }
 
-    /** */
+    /** Print current board and player info.*/
     private fun printStatus() {
         println(playerBlack)
         println(playerWhite)
         println("\n$board")
     }
 
-    /** */
+    /** Ask a question with two options, and return bool from user answer.*/
     private fun getAnswer(question: String, yes: String = "y", no: String = "n"): Boolean {
         print("$question ($yes/$no)? ")
         val ans = readlnOrNull()
@@ -109,6 +109,7 @@ fun main(args: Array<String>) {
         exitProcess(0)
     }
 
+    // Try to read board size from command line args
     val boardSize = if (args.isEmpty() || args[0].toIntOrNull() == null) {
         getBoardSize()
     } else {
