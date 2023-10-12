@@ -12,7 +12,6 @@ fun getColor(text: String, color: Color): String {
         Color.RED -> "\u001B[31m"
         Color.WHITE -> "\u001B[37m"
         Color.YELLOW -> "\u001B[33m"
-        // Default to white
         else -> resetColor
     }
 
