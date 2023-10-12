@@ -41,7 +41,7 @@ class Board(private val size: Int) {
         indices = (0 until size).toList()
 
         // Keep track of empty squares on board to avoid checking already filled positions
-        emptySquares = HashSet<Square>()
+        emptySquares = HashSet()
         for (y in indices) {
             for (x in indices) {
                 if (board[y * size + x] == Disk.Empty) {
