@@ -1,4 +1,4 @@
-package othello_kotlin
+package othello
 
 import java.awt.Color
 import java.lang.IllegalArgumentException
@@ -185,9 +185,9 @@ class Board(private val size: Int) {
     }
 
     /**
-    * Returns the total score.
-    * Positive value means more white disks and negative means more black disks.
-    * */
+     * Returns the total score.
+     * Positive value means more white disks and negative means more black disks.
+    */
     private fun score(): Int {
         return board.sumOf { it.value }
     }

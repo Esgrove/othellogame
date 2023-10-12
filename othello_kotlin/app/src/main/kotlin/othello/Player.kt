@@ -1,4 +1,4 @@
-package othello_kotlin
+package othello
 
 import java.awt.Color
 import java.util.Random

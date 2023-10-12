@@ -1,4 +1,4 @@
-package othello_kotlin
+package othello
 
 import java.awt.Color
 import java.util.*
@@ -11,7 +11,7 @@ const val DEFAULT_BOARD_SIZE = 8
 enum class Disk(val value: Int) {
     Black(-1),
     Empty(0),
-    White(1)
+    White(1),
 }
 
 /** Represents a step direction on the board.*/
@@ -81,7 +81,7 @@ data class Move(
     val square: Square,
     val value: Int,
     val disk: Disk,
-    val directions: List<Step>
+    val directions: List<Step>,
 ) : Comparable<Move> {
     override fun compareTo(other: Move): Int {
         return when {

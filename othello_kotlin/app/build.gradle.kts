@@ -58,7 +58,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("othello_kotlin.OthelloKt")
+    mainClass.set("othello.OthelloKt")
 }
 
 tasks.jar {
