@@ -1,7 +1,7 @@
 package othello_kotlin
 
 import java.awt.Color
-import java.util.Objects
+import java.util.*
 
 const val MIN_BOARD_SIZE = 4
 const val MAX_BOARD_SIZE = 10
@@ -126,4 +126,21 @@ fun Disk.opponent(): Disk {
         Disk.White -> Disk.Black
         Disk.Black -> Disk.White
     }
+}
+
+object BuildInfo {
+    private val properties: Properties = Properties().apply {
+        javaClass.classLoader.getResourceAsStream("build-info.properties")?.use {
+            load(it)
+        }
+    }
+
+    val branch: String = properties.getProperty("build.branch", "unknown")
+    val commit: String = properties.getProperty("build.commit", "unknown")
+    val date: String = properties.getProperty("build.date", "unknown")
+    val version: String = properties.getProperty("build.version", "unknown")
+}
+
+fun versionInfo(): String {
+    return "${BuildInfo.version} ${BuildInfo.date} ${BuildInfo.branch} ${BuildInfo.commit}"
 }

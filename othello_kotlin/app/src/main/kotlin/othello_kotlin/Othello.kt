@@ -1,7 +1,6 @@
 package othello_kotlin
 
 import java.awt.Color
-import java.util.*
 import kotlin.system.exitProcess
 
 /** Gameplay loop and main logic.*/
@@ -97,8 +96,8 @@ fun main(args: Array<String>) {
     printColor("OTHELLO GAME - Kotlin", Color.GREEN)
 
     if (args.contains("--help") || args.contains("-h")) {
-        println("Othello Kotlin ${getCurrentDateTime()}\n")
-        println("USAGE: othello.jar [board size]\n")
+        println("Othello Kotlin ${versionInfo()}\n")
+        println("USAGE: java -jar othello_kotlin.jar [board size]\n")
         println("Optional arguments:")
         println("    -h | --help          Print usage and exit")
         println("    -v | --version       Print version info and exit")
@@ -106,7 +105,7 @@ fun main(args: Array<String>) {
     }
 
     if (args.contains("--version") || args.contains("-v")) {
-        println("Othello Kotlin ${getCurrentDateTime()}")
+        println("Othello Kotlin ${versionInfo()}")
         exitProcess(0)
     }
 
@@ -123,11 +122,6 @@ fun main(args: Array<String>) {
 
     val game = Othello(boardSize)
     game.play()
-}
-
-private fun getCurrentDateTime(): String {
-    val now = Calendar.getInstance()
-    return now.time.toString()
 }
 
 /** Ask and return the desired board size.*/

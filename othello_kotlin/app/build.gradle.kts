@@ -7,6 +7,8 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
+import java.io.ByteArrayOutputStream
+
 version = "1.0.0"
 
 plugins {
@@ -23,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    // This dependency is used by the application.
+    implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:31.1-jre")
 }
 
@@ -49,6 +51,12 @@ application {
     mainClass.set("othello_kotlin.OthelloKt")
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = application.mainClass
+    }
+}
+
 // https://github.com/Baeldung/kotlin-tutorials/blob/master/kotlin-self-executable-jar/kotlin-executable-jar/build.gradle.kts
 tasks {
     val fatJar = register<Jar>("fatJar") {
@@ -69,4 +77,48 @@ tasks {
         // Trigger fat jar creation during build
         dependsOn(fatJar)
     }
+}
+
+tasks.register("generateBuildInfo") {
+    doLast {
+        val propsFile = file("${layout.buildDirectory.get().asFile}/resources/main/build-info.properties")
+        propsFile.parentFile.mkdirs()
+
+        val gitBranch: String = ByteArrayOutputStream().use { outputStream ->
+            exec {
+                commandLine("git", "branch", "--show-current")
+                standardOutput = outputStream
+            }
+            outputStream.toString("UTF-8").trim()
+        }
+
+        val gitCommit: String = ByteArrayOutputStream().use { outputStream ->
+            exec {
+                commandLine("git", "rev-parse", "--short", "HEAD")
+                standardOutput = outputStream
+            }
+            outputStream.toString("UTF-8").trim()
+        }
+
+        val buildDate: String = ByteArrayOutputStream().use { outputStream ->
+            exec {
+                commandLine("date", "+%Y-%m-%d_%H%M")
+                standardOutput = outputStream
+            }
+            outputStream.toString("UTF-8").trim()
+        }
+
+        val projectVersion: String = version.toString()
+
+        propsFile.writeText("""
+            build.branch=$gitBranch
+            build.commit=$gitCommit
+            build.date=$buildDate
+            build.version=$projectVersion
+        """.trimIndent())
+    }
+}
+
+tasks.named("processResources") {
+    dependsOn("generateBuildInfo")
 }
