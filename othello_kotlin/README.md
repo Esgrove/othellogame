@@ -22,3 +22,13 @@ that can then be run with:
 ```shell
 java -jar othello_kotlin.jar
 ```
+
+## Code formatting
+
+Using [ktlint](https://github.com/pinterest/ktlint):
+
+```shell
+brew install ktlint
+
+ktlint --format
+```
