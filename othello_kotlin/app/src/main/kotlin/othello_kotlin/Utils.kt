@@ -130,9 +130,11 @@ fun Disk.opponent(): Disk {
 
 object BuildInfo {
     private val properties: Properties = Properties().apply {
-        javaClass.classLoader.getResourceAsStream("build-info.properties")?.use {
+        val propFileName = "build-info.properties"
+        val classLoader = javaClass.classLoader ?: ClassLoader.getSystemClassLoader()
+        classLoader.getResourceAsStream(propFileName)?.use {
             load(it)
-        }
+        } ?: Properties()
     }
 
     val branch: String = properties.getProperty("build.branch", "unknown")

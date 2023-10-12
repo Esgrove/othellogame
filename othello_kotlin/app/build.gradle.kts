@@ -14,6 +14,8 @@ version = "1.0.0"
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    // https://github.com/johnrengelman/shadow
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -27,6 +29,14 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:31.1-jre")
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir("${layout.buildDirectory.get().asFile}/generated-resources")
+        }
+    }
 }
 
 testing {
@@ -57,31 +67,9 @@ tasks.jar {
     }
 }
 
-// https://github.com/Baeldung/kotlin-tutorials/blob/master/kotlin-self-executable-jar/kotlin-executable-jar/build.gradle.kts
-tasks {
-    val fatJar = register<Jar>("fatJar") {
-        // We need this for Gradle optimization to work
-        dependsOn.addAll(listOf("compileJava", "compileKotlin", "processResources"))
-        // Naming the jar
-        archiveClassifier.set("othello-kotlin")
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        // Provided we set it up in the application plugin configuration
-        manifest { attributes(mapOf("Main-Class" to application.mainClass)) }
-        val sourcesMain = sourceSets.main.get()
-        val contents = configurations.runtimeClasspath.get()
-            .map { if (it.isDirectory) it else zipTree(it) } +
-                sourcesMain.output
-        from(contents)
-    }
-    build {
-        // Trigger fat jar creation during build
-        dependsOn(fatJar)
-    }
-}
-
 tasks.register("generateBuildInfo") {
     doLast {
-        val propsFile = file("${layout.buildDirectory.get().asFile}/resources/main/build-info.properties")
+        val propsFile = file("${layout.buildDirectory.get().asFile}/generated-resources/build-info.properties")
         propsFile.parentFile.mkdirs()
 
         val gitBranch: String = ByteArrayOutputStream().use { outputStream ->
@@ -110,15 +98,25 @@ tasks.register("generateBuildInfo") {
 
         val projectVersion: String = version.toString()
 
-        propsFile.writeText("""
+        logger.lifecycle("Writing build version information to: ${propsFile.absolutePath}")
+
+        propsFile.writeText(
+            """
             build.branch=$gitBranch
             build.commit=$gitCommit
             build.date=$buildDate
             build.version=$projectVersion
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 }
 
+// Make the processResources task depend on your new task
+// to ensure the properties file is generated before the resources are processed.
 tasks.named("processResources") {
     dependsOn("generateBuildInfo")
+}
+
+tasks.named("processResources", Copy::class) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE // INCLUDE, EXCLUDE, FAIL, WARN
 }

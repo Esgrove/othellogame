@@ -16,7 +16,8 @@ Or with shell script:
 ./build.sh
 ```
 
-Build will produce a standalone jar that can then be run with:
+Build script will produce a standalone jar using [Shadow](https://github.com/johnrengelman/shadow)
+that can then be run with:
 
 ```shell
 java -jar othello_kotlin.jar
