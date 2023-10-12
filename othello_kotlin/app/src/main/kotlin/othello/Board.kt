@@ -139,8 +139,9 @@ class Board(private val size: Int) {
     fun printScore() {
         val (black, white) = playerScores()
         println("\n$this")
-        println("Score: ${getColor(black.toString(), Disk.Black.diskColor())} | " +
-            getColor(white.toString(), Disk.White.diskColor())
+        println(
+            "Score: ${getColor(black.toString(), Disk.Black.diskColor())} | " +
+                getColor(white.toString(), Disk.White.diskColor()),
         )
     }
 
@@ -187,7 +188,7 @@ class Board(private val size: Int) {
     /**
      * Returns the total score.
      * Positive value means more white disks and negative means more black disks.
-    */
+     */
     private fun score(): Int {
         return board.sumOf { it.value }
     }

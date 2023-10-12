@@ -69,7 +69,8 @@ tasks.jar {
 
 tasks.register("generateBuildInfo") {
     doLast {
-        val propsFile = file("${layout.buildDirectory.get().asFile}/generated-resources/build-info.properties")
+        val propsFile =
+            file("${layout.buildDirectory.get().asFile}/generated-resources/build-info.properties")
         propsFile.parentFile.mkdirs()
 
         val gitBranch: String = ByteArrayOutputStream().use { outputStream ->
@@ -106,7 +107,7 @@ tasks.register("generateBuildInfo") {
             build.commit=$gitCommit
             build.date=$buildDate
             build.version=$projectVersion
-        """.trimIndent()
+            """.trimIndent(),
         )
     }
 }
