@@ -181,8 +181,7 @@ class Board(private val size: Int) {
                 Disk.Empty -> {}
             }
         }
-
-        return black to white
+        return Pair(black, white)
     }
 
     /**

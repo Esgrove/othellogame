@@ -16,11 +16,8 @@ fun getColor(text: String, color: Color): String {
     }
 
     // Check if the text contains a reset code already
-    val coloredText = if (text.contains(resetColor)) {
-        text.replace(resetColor, "$resetColor$ansiColor")
-    } else {
-        text
-    }
+    val coloredText = text.replace(resetColor, "$resetColor$ansiColor")
+
     return "$ansiColor$coloredText$resetColor"
 }
 

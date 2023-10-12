@@ -5,16 +5,11 @@ import kotlin.system.exitProcess
 
 /** Gameplay loop and main logic.*/
 class Othello(private val boardSize: Int) {
-    private var board: Board = Board(boardSize)
-    private val playerBlack: Player = Player(Disk.Black)
-    private val playerWhite: Player = Player(Disk.White)
+    private var board = Board(boardSize)
+    private val playerBlack = Player(Disk.Black)
+    private val playerWhite = Player(Disk.White)
     private var roundsPlayed = 0
     private var gamesPlayed = 0
-
-    init {
-        gamesPlayed = 0
-        roundsPlayed = 0
-    }
 
     /** Play one full game of Othello.*/
     fun play() {
