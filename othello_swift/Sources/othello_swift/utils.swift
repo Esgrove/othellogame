@@ -158,8 +158,9 @@ extension Move: Comparable {
 }
 
 func versionInfo() -> String {
+    let versionNumber = VERSION
     let buildTime = BUILD_TIME
     let gitHash = GIT_HASH
     let gitBranch = GIT_BRANCH
-    return "\(buildTime) \(gitBranch) \(gitHash)"
+    return "\(versionNumber) \(buildTime) \(gitBranch) \(gitHash)"
 }

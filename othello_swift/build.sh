@@ -11,12 +11,17 @@ REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]
 PROJECT_PATH="$REPO_ROOT/othello_swift"
 VERSION_HEADER="$PROJECT_PATH/Sources/BuildInfo/include/version.h"
 
+# Define poject version number here since Swift Package Manager does not provide a way...
+VERSION_NUMBER="2.0.0"
+
+print_magenta "Building Othello Swift..."
+
+echo "Writing version information..."
 set_version_info
 echo "#define BUILD_TIME \"${BUILD_TIME}\"" > "$VERSION_HEADER"
 echo "#define GIT_HASH \"${GIT_HASH}\"" >> "$VERSION_HEADER"
 echo "#define GIT_BRANCH \"${GIT_BRANCH}\"" >> "$VERSION_HEADER"
-
-print_magenta "Building Othello Swift..."
+echo "#define VERSION \"${VERSION_NUMBER}\"" >> "$VERSION_HEADER"
 
 if [ -z "$(command -v swift)" ]; then
     print_error_and_exit "swift not found in path"
