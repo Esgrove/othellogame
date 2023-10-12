@@ -104,7 +104,7 @@ impl Board {
                     num_steps += 1;
                     pos += *step;
                 }
-                // Valid move only if a line of opponents disks ends in own disk
+                // Valid move only if a line of opposing disks ends in own disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) == disk {
                     value += num_steps;
                     directions.push(*step);
@@ -187,7 +187,6 @@ impl Board {
             let disk = self.board[square.y as usize * self.size + square.x as usize];
             Some(disk)
         } else {
-            // square is out of bounds
             None
         }
     }

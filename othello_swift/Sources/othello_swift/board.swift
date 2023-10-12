@@ -93,10 +93,10 @@ class Board {
     func printPossibleMoves(_ moves: [Move]) {
         print("  Possible moves (\(moves.count)):".yellow())
         // convert board from Disk enums to strings
-        var boardStr = self.board.map { $0.boardChar() }
+        var formattedBoard = self.board.map { $0.boardChar() }
         for move in moves {
             print("  \(move)")
-            boardStr[move.square.y * self.size + move.square.x] = "\(move.value)".yellow()
+            formattedBoard[move.square.y * self.size + move.square.x] = "\(move.value)".yellow()
         }
         // print board with move positions
         print("   ", terminator: "")
@@ -106,7 +106,7 @@ class Board {
         for y in 0 ..< self.size {
             print("\n  \(y)".dim(), terminator: "")
             for x in 0 ..< self.size {
-                print(" \(boardStr[y * self.size + x])", terminator: "")
+                print(" \(formattedBoard[y * self.size + x])", terminator: "")
             }
         }
         print("")

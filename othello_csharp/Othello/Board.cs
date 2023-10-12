@@ -147,13 +147,13 @@ namespace Othello
         {
             ColorPrint.WriteLine($"  Possible moves ({moves.Count}):", Color.Yellow);
             // convert board from Disk enums to strings
-            var boardStr = new List<string>(_board.Count);
-            boardStr.AddRange(_board.Select(disk => disk.BoardChar()));
+            var formattedBoard = new List<string>(_board.Count);
+            formattedBoard.AddRange(_board.Select(disk => disk.BoardChar()));
             foreach (var move in moves)
             {
                 Console.WriteLine($"  {move}");
                 var (x, y) = move.Square;
-                boardStr[y * _size + x] = ColorPrint.Get(move.Value, Color.Yellow);
+                formattedBoard[y * _size + x] = ColorPrint.Get(move.Value, Color.Yellow);
             }
             // print board with move positions
             Console.Write("   ");
@@ -166,7 +166,7 @@ namespace Othello
                 Console.Write($"\n  {y}");
                 foreach (var x in _indices)
                 {
-                    Console.Write($" {boardStr[y * _size + x]}");
+                    Console.Write($" {formattedBoard[y * _size + x]}");
                 }
             }
             Console.WriteLine("");
