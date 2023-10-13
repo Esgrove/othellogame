@@ -85,6 +85,11 @@ impl Board {
         }
     }
 
+    /// Get board status string for game log.
+    pub fn to_log_status(&self) -> String {
+        self.board.iter().map(|&d| d.board_char()).collect()
+    }
+
     /// Returns a list of possible moves for the given player.
     pub(crate) fn possible_moves(&self, disk: Disk) -> Vec<Move> {
         let mut moves = Vec::<Move>::new();
@@ -132,8 +137,11 @@ impl Board {
             format!("  Possible moves ({}):", moves.len()).yellow()
         );
         // Convert board from Disk enums to strings
-        let mut formatted_board: Vec<ColoredString> =
-            self.board.iter().map(|&d| d.board_char()).collect();
+        let mut formatted_board: Vec<ColoredString> = self
+            .board
+            .iter()
+            .map(|&d| d.board_char_with_color())
+            .collect();
         // Add possible moves to board
         for possible_move in moves {
             let index =
@@ -249,7 +257,7 @@ impl fmt::Display for Board {
             // Row values
             let row = &self.board[(y * self.size)..(y * self.size + self.size)];
             for disk in row {
-                text += &*format!(" {}", disk.board_char());
+                text += &*format!(" {}", disk.board_char_with_color());
             }
         }
         write!(f, "{}", text)

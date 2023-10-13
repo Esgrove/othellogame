@@ -56,6 +56,7 @@ pub(crate) struct Settings {
     pub autoplay_mode: bool,
     pub quick_start: bool,
     pub show_helpers: bool,
+    pub(crate) show_log: bool,
 }
 
 impl Settings {
@@ -75,18 +76,24 @@ impl Default for Settings {
             autoplay_mode: false,
             quick_start: false,
             show_helpers: true,
+            show_log: false,
         }
     }
 }
 
 impl Disk {
     /// Returns a single character identifier string for the given disk.
-    pub(crate) fn board_char(&self) -> ColoredString {
+    pub(crate) fn board_char(&self) -> String {
         match self {
-            Disk::Black => "B".color(self.color()),
-            Disk::Empty => "_".color(self.color()),
-            Disk::White => "W".color(self.color()),
+            Disk::Black => String::from("B"),
+            Disk::Empty => String::from("_"),
+            Disk::White => String::from("W"),
         }
+    }
+
+    /// Returns a single character identifier string for the given disk.
+    pub(crate) fn board_char_with_color(&self) -> ColoredString {
+        self.board_char().color(self.color())
     }
 
     /// Return the associated color for this disk.
@@ -114,6 +121,12 @@ impl Disk {
             Disk::Empty => Disk::Empty,
             Disk::White => Disk::Black,
         }
+    }
+}
+
+impl Move {
+    pub fn to_log_entry(&self) -> String {
+        format!("{}:{},{}", self.disk.board_char(), self.square, self.value)
     }
 }
 

@@ -66,7 +66,7 @@ impl Player {
     }
 
     /// Play one round as this player.
-    pub fn play_one_move(&mut self, board: &mut Board) {
+    pub fn play_one_move(&mut self, board: &mut Board) -> Option<String> {
         println!("Turn: {}", self.disk);
         let moves = board.possible_moves(self.disk);
         if !moves.is_empty() {
@@ -85,9 +85,11 @@ impl Player {
             if !self.settings.test_mode {
                 thread::sleep(Duration::from_secs(1));
             }
+            Some(chosen_move.to_log_entry())
         } else {
             self.can_play = false;
             println!("{}", "  No moves available...".yellow());
+            None
         }
     }
 

@@ -7,9 +7,15 @@
 //==========================================================
 
 extern crate colored;
-use crate::colored::Colorize;
 
-use std::io::{self, Write};
+use std::collections::HashMap;
+
+use std::fmt::Write as FmtWrite;
+use std::io::{self, Write as IoWrite};
+
+use base16ct;
+use colored::Colorize;
+use sha2::{Digest, Sha256};
 
 use crate::board::Board;
 use crate::colorprint::print_warn;
@@ -24,6 +30,7 @@ pub(crate) struct Othello {
     player_black: Player,
     player_white: Player,
     rounds_played: u32,
+    game_log: HashMap<u32, Vec<String>>,
 }
 
 impl Othello {
@@ -37,6 +44,7 @@ impl Othello {
             player_white: Player::white(settings.to_player_settings()),
             rounds_played: 0,
             games_played: 0,
+            game_log: HashMap::new(),
         }
     }
 
@@ -46,8 +54,11 @@ impl Othello {
             self.init_game();
             self.game_loop();
             self.print_result();
+            if self.settings.show_log {
+                self.print_log();
+            }
             if self.settings.autoplay_mode
-                || !Othello::get_answer("\nWould you like to play again", "y", "n")
+                || !Othello::get_answer("Would you like to play again", "y", "n")
             {
                 break;
             }
@@ -62,6 +73,8 @@ impl Othello {
             self.player_white.reset();
             self.rounds_played = 0;
         }
+
+        self.game_log.insert(self.games_played, Vec::new());
 
         if self.settings.quick_start {
             // Default: play as black against white computer player
@@ -90,11 +103,34 @@ impl Othello {
                 "{}",
                 format!("\n=========== ROUND: {} ===========", self.rounds_played).bold()
             );
-            self.player_black.play_one_move(&mut self.board);
-            println!("--------------------------------");
-            self.player_white.play_one_move(&mut self.board);
+            for player in [&mut self.player_black, &mut self.player_white].iter_mut() {
+                if let Some(result) = player.play_one_move(&mut self.board) {
+                    self.game_log
+                        .entry(self.games_played)
+                        .or_default()
+                        .push(format!("{};{}", result, self.board.to_log_status()));
+                }
+                println!("--------------------------------");
+            }
         }
         self.games_played += 1;
+    }
+
+    fn print_log(&self) {
+        let log = self.game_log.get(&(self.games_played - 1)).unwrap();
+        let formatted_log: String =
+            log.iter()
+                .enumerate()
+                .fold(String::new(), |mut output, (index, line)| {
+                    let _ = writeln!(output, "{:02}{}", index + 1, line);
+                    output
+                });
+        let hash = Sha256::digest(formatted_log.as_bytes());
+        let hex_hash = base16ct::lower::encode_string(&hash);
+
+        println!("{}", "Game log:".bold());
+        println!("{}", formatted_log.trim());
+        println!("{}", hex_hash);
     }
 
     /// Print ending status and winner info.
@@ -107,9 +143,9 @@ impl Othello {
 
         let winner = self.board.result();
         if winner == Disk::Empty {
-            println!("The game ended in a tie...");
+            println!("The game ended in a tie...\n");
         } else {
-            println!("The winner is {}!", winner);
+            println!("The winner is {}!\n", winner);
         }
     }
 

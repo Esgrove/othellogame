@@ -53,6 +53,10 @@ struct Args {
     #[arg(short, long, help = "Play with default settings")]
     default: bool,
 
+    /// Show game log at the end of a game
+    #[arg(short, long, help = "Show log after a game")]
+    log: bool,
+
     /// Hide disk placement hints for human players
     #[arg(short, long, help = "Hide disk placement hints")]
     no_helpers: bool,
@@ -112,6 +116,7 @@ fn main() -> Result<()> {
         autoplay_mode: args.autoplay,
         quick_start: args.default,
         show_helpers: !args.no_helpers,
+        show_log: args.log,
         test_mode: args.test,
     };
 
