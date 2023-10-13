@@ -10,14 +10,14 @@ extern crate colored;
 extern crate log;
 
 use anyhow::Result;
-use clap::Parser;
+use clap::{arg, Parser};
 use colored::Colorize;
 use shadow_rs::shadow;
 
 use std::env;
 
 use crate::othello::Othello;
-use crate::utils::{MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+use crate::utils::{Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 mod board;
 mod colorprint;
@@ -45,6 +45,22 @@ struct Args {
     /// Optional Othello board size
     size: Option<usize>,
 
+    /// Enable autoplay mode with both player controlled by computer
+    #[arg(short, long, help = "Enable autoplay mode", conflicts_with = "default")]
+    autoplay: bool,
+
+    /// Quick start to play with default settings
+    #[arg(short, long, help = "Play with default settings")]
+    default: bool,
+
+    /// Hide disk placement hints for human players
+    #[arg(short, long, help = "Hide disk placement hints")]
+    no_helpers: bool,
+
+    /// Enable testing mode with deterministic computer move selection
+    #[arg(short, long, help = "Enable test mode")]
+    test: bool,
+
     /// Custom version flag instead of clap default
     #[arg(short, long, help = "Print version and exit")]
     version: bool,
@@ -59,6 +75,7 @@ fn main() -> Result<()> {
 
     // Parse command line arguments using clap
     let args = Args::parse();
+    // Without clap:
     // let args: Vec<String> = env::args().collect();
 
     if args.version {
@@ -82,13 +99,23 @@ fn main() -> Result<()> {
             }
             println!("Using board size: {size}");
             size
+        } else if args.autoplay || args.default {
+            DEFAULT_BOARD_SIZE
         } else {
             // Otherwise ask user for board size
             Othello::get_board_size()
         }
     };
 
-    let mut game = Othello::init(board_size);
+    let settings = Settings {
+        board_size,
+        autoplay_mode: args.autoplay,
+        quick_start: args.default,
+        show_helpers: !args.no_helpers,
+        test_mode: args.test,
+    };
+
+    let mut game = Othello::init(settings);
     game.play();
     Ok(())
 }

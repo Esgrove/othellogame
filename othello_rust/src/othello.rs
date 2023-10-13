@@ -14,12 +14,12 @@ use std::io::{self, Write};
 use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::player::Player;
-use crate::utils::{Disk, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+use crate::utils::{Disk, Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 /// Gameplay loop and main logic.
 pub(crate) struct Othello {
-    board_size: usize,
     board: Board,
+    settings: Settings,
     games_played: u32,
     player_black: Player,
     player_white: Player,
@@ -29,12 +29,12 @@ pub(crate) struct Othello {
 impl Othello {
     /// Initialize Othello game.
     // Typically this would be called `new` but using `init` to match other implementations
-    pub fn init(size: usize) -> Othello {
+    pub fn init(settings: Settings) -> Othello {
         Othello {
-            board: Board::new(size),
-            board_size: size,
-            player_black: Player::black(),
-            player_white: Player::white(),
+            board: Board::new(settings.board_size),
+            settings,
+            player_black: Player::black(settings.to_player_settings()),
+            player_white: Player::white(settings.to_player_settings()),
             rounds_played: 0,
             games_played: 0,
         }
@@ -46,7 +46,9 @@ impl Othello {
             self.init_game();
             self.game_loop();
             self.print_result();
-            if !Othello::get_answer("\nWould you like to play again", "y", "n") {
+            if self.settings.autoplay_mode
+                || !Othello::get_answer("\nWould you like to play again", "y", "n")
+            {
                 break;
             }
         }
@@ -55,19 +57,27 @@ impl Othello {
     /// Initialize game board and players for a new game.
     fn init_game(&mut self) {
         if self.games_played > 0 {
-            self.board = Board::new(self.board_size);
+            self.board = Board::new(self.settings.board_size);
             self.player_black.reset();
             self.player_white.reset();
             self.rounds_played = 0;
         }
 
-        if Othello::get_answer("Would you like to play against the computer", "y", "n") {
+        if self.settings.quick_start {
+            // Default: play as black against white computer player
+            self.player_white.set_human(false);
+        } else if self.settings.autoplay_mode {
+            // Computer plays both
+            self.player_white.set_human(false);
+            self.player_black.set_human(false);
+        } else if Othello::get_answer("Would you like to play against the computer", "y", "n") {
             if Othello::get_answer("Would you like to play as black or white", "b", "w") {
                 self.player_white.set_human(false);
             } else {
                 self.player_black.set_human(false);
             }
         }
+
         println!("{}", "\nPlayers:".bold());
         self.print_status();
     }

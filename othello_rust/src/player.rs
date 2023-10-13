@@ -25,29 +25,44 @@ pub(crate) struct Player {
     disk: Disk,
     human: bool,
     rounds_played: u32,
-    show_helpers: bool,
+    settings: PlayerSettings,
+}
+
+#[derive(Debug, Copy, Clone)]
+pub(crate) struct PlayerSettings {
+    pub show_helpers: bool,
+    pub test_mode: bool,
+}
+
+impl Default for PlayerSettings {
+    fn default() -> Self {
+        PlayerSettings {
+            show_helpers: true,
+            test_mode: false,
+        }
+    }
 }
 
 impl Player {
     /// Initialize new player for the given disk color.
-    pub fn new(disk: Disk) -> Player {
+    pub fn new(disk: Disk, settings: PlayerSettings) -> Player {
         Player {
             disk,
             human: true,
             can_play: true,
-            show_helpers: true,
             rounds_played: 0,
+            settings,
         }
     }
 
     /// Shorthand to initialize a new player for black disks.
-    pub fn black() -> Player {
-        Player::new(Disk::Black)
+    pub fn black(settings: PlayerSettings) -> Player {
+        Player::new(Disk::Black, settings)
     }
 
     /// Shorthand to initialize a new player for white disks.
-    pub fn white() -> Player {
-        Player::new(Disk::White)
+    pub fn white(settings: PlayerSettings) -> Player {
+        Player::new(Disk::White, settings)
     }
 
     /// Play one round as this player.
@@ -56,7 +71,7 @@ impl Player {
         let moves = board.possible_moves(self.disk);
         if !moves.is_empty() {
             self.can_play = true;
-            if self.human && self.show_helpers {
+            if self.human && self.settings.show_helpers {
                 board.print_moves(&moves)
             }
             let chosen_move = if self.human {
@@ -67,7 +82,9 @@ impl Player {
             board.place_disk(&chosen_move);
             board.print_score();
             self.rounds_played += 1;
-            thread::sleep(Duration::from_secs(1));
+            if !self.settings.test_mode {
+                thread::sleep(Duration::from_secs(1));
+            }
         } else {
             self.can_play = false;
             println!("{}", "  No moves available...".yellow());
@@ -88,11 +105,15 @@ impl Player {
     /// Return move chosen by computer.
     fn get_computer_move(&self, moves: &Vec<Move>) -> Move {
         println!("  Computer plays...");
-        // Wait a bit and pick a random move
-        thread::sleep(Duration::from_millis(
-            rand::thread_rng().gen_range(1000..2000),
-        ));
-        let chosen_move = moves[rand::thread_rng().gen_range(0..moves.len())].clone();
+        let chosen_move = if self.settings.test_mode {
+            moves[0].clone()
+        } else {
+            // Wait a bit and pick a random move
+            thread::sleep(Duration::from_millis(
+                rand::thread_rng().gen_range(1000..2000),
+            ));
+            moves[rand::thread_rng().gen_range(0..moves.len())].clone()
+        };
         println!("  {} -> {}", chosen_move.square, chosen_move.value);
         chosen_move
     }

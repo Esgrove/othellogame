@@ -11,6 +11,8 @@ use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::ops::{Add, AddAssign};
 
+use crate::player::PlayerSettings;
+
 pub const MIN_BOARD_SIZE: usize = 4;
 pub const MAX_BOARD_SIZE: usize = 10;
 pub const DEFAULT_BOARD_SIZE: usize = 8;
@@ -44,6 +46,37 @@ pub(crate) struct Move {
     pub(crate) disk: Disk,
     pub(crate) value: u32,
     pub(crate) directions: Vec<Step>,
+}
+
+/// Game settings
+#[derive(Debug, Copy, Clone)]
+pub(crate) struct Settings {
+    pub board_size: usize,
+    pub test_mode: bool,
+    pub autoplay_mode: bool,
+    pub quick_start: bool,
+    pub show_helpers: bool,
+}
+
+impl Settings {
+    pub fn to_player_settings(self) -> PlayerSettings {
+        PlayerSettings {
+            show_helpers: self.show_helpers,
+            test_mode: self.test_mode,
+        }
+    }
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Settings {
+            board_size: 8,
+            test_mode: false,
+            autoplay_mode: false,
+            quick_start: false,
+            show_helpers: true,
+        }
+    }
 }
 
 impl Disk {
