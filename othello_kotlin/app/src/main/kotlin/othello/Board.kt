@@ -123,13 +123,13 @@ class Board(private val size: Int) {
         }
         // print board with move positions
         print("   ")
-        for (i in indices) {
-            print(" $i")
+        for (column in indices) {
+            print(" $column")
         }
-        for (y in indices) {
-            print("\n  $y")
-            for (x in indices) {
-                print(" ${formattedBoard[y * size + x]}")
+        for (row in indices) {
+            print("\n  $row")
+            for (col in indices) {
+                print(" ${formattedBoard[row * size + col]}")
             }
         }
         println("")
@@ -208,8 +208,8 @@ class Board(private val size: Int) {
         }
         for (row in indices) {
             builder.append("\n$row")
-            for (x in indices) {
-                builder.append(" ${board[row * size + x].boardChar()}")
+            for (col in indices) {
+                builder.append(" ${board[row * size + col].boardChar()}")
             }
         }
         return builder.toString()
