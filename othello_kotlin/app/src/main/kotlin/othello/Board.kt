@@ -157,7 +157,7 @@ class Board(private val size: Int) {
 
     /** Check that the given coordinates are inside the board.*/
     private fun checkCoordinates(x: Int, y: Int): Boolean {
-        return x in 0 until size && y in 0 until size
+        return x in 0..<size && y in 0..<size
     }
 
     /** Returns the state of the board (empty, white, black) at the given coordinates.*/
