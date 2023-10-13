@@ -13,7 +13,6 @@ use std::collections::HashMap;
 use std::fmt::Write as FmtWrite;
 use std::io::{self, Write as IoWrite};
 
-use base16ct;
 use colored::Colorize;
 use sha2::{Digest, Sha256};
 
@@ -23,7 +22,7 @@ use crate::player::Player;
 use crate::utils::{Disk, Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 /// Gameplay loop and main logic.
-pub(crate) struct Othello {
+pub struct Othello {
     board: Board,
     settings: Settings,
     games_played: u32,
@@ -167,7 +166,7 @@ impl Othello {
     }
 
     /// Ask and return the desired board size.
-    pub(crate) fn get_board_size() -> usize {
+    pub fn get_board_size() -> usize {
         print!("Choose board size (default is {}): ", DEFAULT_BOARD_SIZE);
         let mut input = String::new();
         if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {

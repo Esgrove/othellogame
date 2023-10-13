@@ -15,7 +15,7 @@ use std::fmt;
 use crate::utils::{Disk, Move, Square, Step};
 
 /// Handles game board state and logic.
-pub(crate) struct Board {
+pub struct Board {
     board: Vec<Disk>,
     size: usize,
     empty_squares: HashSet<Square>,
@@ -24,7 +24,7 @@ pub(crate) struct Board {
 }
 
 impl Board {
-    pub(crate) fn new(size: usize) -> Board {
+    pub fn new(size: usize) -> Board {
         let board = Self::init_board(size);
         // Index list (0...size) to avoid repeating same range in loops.
         // Not really needed in Rust but kept here to more closely match other implementations...
@@ -60,12 +60,12 @@ impl Board {
     }
 
     /// Return true if board contains empty squares.
-    pub(crate) fn can_play(&self) -> bool {
+    pub fn can_play(&self) -> bool {
         !self.empty_squares.is_empty()
     }
 
     /// Update board for given disk placement.
-    pub(crate) fn place_disk(&mut self, player_move: &Move) {
+    pub fn place_disk(&mut self, player_move: &Move) {
         let start = player_move.square;
         if self
             .get_square(&start)
@@ -91,7 +91,7 @@ impl Board {
     }
 
     /// Returns a list of possible moves for the given player.
-    pub(crate) fn possible_moves(&self, disk: Disk) -> Vec<Move> {
+    pub fn possible_moves(&self, disk: Disk) -> Vec<Move> {
         let mut moves = Vec::<Move>::new();
         let opposing_disk = disk.opponent();
         for square in &self.empty_squares {
@@ -131,7 +131,7 @@ impl Board {
     }
 
     /// Print board with available move coordinates and the resulting points gained.
-    pub(crate) fn print_moves(&self, moves: &Vec<Move>) {
+    pub fn print_moves(&self, moves: &Vec<Move>) {
         println!(
             "{}",
             format!("  Possible moves ({}):", moves.len()).yellow()
@@ -164,7 +164,7 @@ impl Board {
     }
 
     /// Print current score for both players.
-    pub(crate) fn print_score(&self) {
+    pub fn print_score(&self) {
         let (black, white) = self.player_scores();
         println!("\n{}", self);
         println!(
@@ -175,7 +175,7 @@ impl Board {
     }
 
     /// Returns the winning disk colour. Empty indicates a draw.
-    pub(crate) fn result(&self) -> Disk {
+    pub fn result(&self) -> Disk {
         let sum = self.score();
         match sum.cmp(&0) {
             Ordering::Greater => Disk::White,

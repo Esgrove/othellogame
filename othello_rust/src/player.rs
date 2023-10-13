@@ -20,7 +20,7 @@ use crate::utils::{Disk, Move, Square};
 
 /// Defines one player that can be either human or computer controlled.
 #[derive(Debug)]
-pub(crate) struct Player {
+pub struct Player {
     pub can_play: bool,
     disk: Disk,
     human: bool,
@@ -29,7 +29,7 @@ pub(crate) struct Player {
 }
 
 #[derive(Debug, Copy, Clone)]
-pub(crate) struct PlayerSettings {
+pub struct PlayerSettings {
     pub show_helpers: bool,
     pub test_mode: bool,
 }

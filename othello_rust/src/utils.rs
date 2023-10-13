@@ -19,7 +19,7 @@ pub const DEFAULT_BOARD_SIZE: usize = 8;
 
 /// Represents one game piece or lack of one.
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq)]
-pub(crate) enum Disk {
+pub enum Disk {
     Black = -1,
     Empty = 0,
     White = 1,
@@ -27,36 +27,36 @@ pub(crate) enum Disk {
 
 /// Represents one step direction on the board.
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
-pub(crate) struct Step {
-    pub(crate) x: isize,
-    pub(crate) y: isize,
+pub struct Step {
+    pub x: isize,
+    pub y: isize,
 }
 
 /// Represents one square location on the board.
 #[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
-pub(crate) struct Square {
-    pub(crate) x: isize,
-    pub(crate) y: isize,
+pub struct Square {
+    pub x: isize,
+    pub y: isize,
 }
 
 /// Represents one possible disk placement for the given disk color.
 #[derive(Clone)]
-pub(crate) struct Move {
-    pub(crate) square: Square,
-    pub(crate) disk: Disk,
-    pub(crate) value: u32,
-    pub(crate) directions: Vec<Step>,
+pub struct Move {
+    pub square: Square,
+    pub disk: Disk,
+    pub value: u32,
+    pub directions: Vec<Step>,
 }
 
 /// Game settings
 #[derive(Debug, Copy, Clone)]
-pub(crate) struct Settings {
+pub struct Settings {
     pub board_size: usize,
     pub test_mode: bool,
     pub autoplay_mode: bool,
     pub quick_start: bool,
     pub show_helpers: bool,
-    pub(crate) show_log: bool,
+    pub show_log: bool,
 }
 
 impl Settings {
@@ -83,7 +83,7 @@ impl Default for Settings {
 
 impl Disk {
     /// Returns a single character identifier string for the given disk.
-    pub(crate) fn board_char(&self) -> String {
+    pub fn board_char(&self) -> String {
         match self {
             Disk::Black => String::from("B"),
             Disk::Empty => String::from("_"),
@@ -92,12 +92,12 @@ impl Disk {
     }
 
     /// Returns a single character identifier string for the given disk.
-    pub(crate) fn board_char_with_color(&self) -> ColoredString {
+    pub fn board_char_with_color(&self) -> ColoredString {
         self.board_char().color(self.color())
     }
 
     /// Return the associated color for this disk.
-    pub(crate) fn color(&self) -> Color {
+    pub fn color(&self) -> Color {
         match self {
             Disk::Black => Color::Magenta,
             Disk::Empty => Color::White,
@@ -106,7 +106,7 @@ impl Disk {
     }
 
     /// Returns the disk formatted as a colored string.
-    pub(crate) fn disk_string(&self) -> ColoredString {
+    pub fn disk_string(&self) -> ColoredString {
         match self {
             Disk::Black => "BLACK".color(self.color()),
             Disk::Empty => "EMPTY".color(self.color()),
@@ -115,7 +115,7 @@ impl Disk {
     }
 
     /// Return the opposing disk color for this disk.
-    pub(crate) fn opponent(&self) -> Disk {
+    pub fn opponent(&self) -> Disk {
         match self {
             Disk::Black => Disk::White,
             Disk::Empty => Disk::Empty,
