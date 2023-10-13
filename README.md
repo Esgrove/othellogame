@@ -22,9 +22,9 @@ yet small enough that it could be done in a weekend even when starting with a ne
 It is also quite easy to check that the code is working correctly,
 especially since it is possible to compare side-by-side with the other implementations.
 
-So far, I have added *C#*, *Swift*, *Rust*, and *Go* implementations.
+So far, I have added *C#*, *Swift*, *Rust*, *Go*, and *Kotlin* implementations.
 I might still do a few other (modern) languages that interest me and/or have some hype around them,
-such as *Kotlin*, *Ruby*, and *Zig*.
+such as *Zig* and *Ruby*.
 
 In the meantime, there's probably still room to improve in the current implementations,
 especially in the languages that I haven't been actively using.
@@ -38,7 +38,7 @@ All implementations follow this overall architecture:
 * *board*: Game board state and logic.
 * *player*: Player object used for making moves and storing player information.
 * *utils*: Helper classes, enums and functions.
-* *colorprint*: Helper methods for color printing and string formatting (if needed).
+* *colorprint*: Helper methods for terminal color printing and string formatting (if needed).
 
 ## Languages
 
@@ -129,6 +129,16 @@ Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 * othello/utils.go
 * othello/colorprint.go
 * othello/version.go
+
+### Kotlin
+
+Uses [Gradle](https://gradle.org/kotlin/) 8.4.
+
+* Othello.kt
+* Board.kt
+* Player.kt
+* Utils.kt
+* ColorPrint.kt
 
 ## TODO
 
