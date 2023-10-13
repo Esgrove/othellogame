@@ -43,10 +43,10 @@ namespace Othello
             // set starting positions
             var row = _size % 2 == 0 ? (_size - 1) / 2 : (_size - 1) / 2 - 1;
             var col = _size / 2;
-            _board[row * _size + row] = Disk.Black;
-            _board[row * _size + col] = Disk.White;
-            _board[col * _size + row] = Disk.White;
-            _board[col * _size + col] = Disk.Black;
+            _board[row * _size + row] = Disk.White;
+            _board[row * _size + col] = Disk.Black;
+            _board[col * _size + row] = Disk.Black;
+            _board[col * _size + col] = Disk.White;
 
             // index list (0...size) to avoid repeating same range in for loops
             _indices = Enumerable.Range(0, _size).ToList();

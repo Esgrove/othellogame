@@ -21,10 +21,10 @@ class Board {
         let pos = (self.size - 1) / 2
         let row: Int = self.size % 2 == 0 ? pos : pos - 1
         let col: Int = self.size / 2
-        self.board[row * self.size + row] = Disk.black
-        self.board[row * self.size + col] = Disk.white
-        self.board[col * self.size + row] = Disk.white
-        self.board[col * self.size + col] = Disk.black
+        self.board[row * self.size + row] = Disk.white
+        self.board[row * self.size + col] = Disk.black
+        self.board[col * self.size + row] = Disk.black
+        self.board[col * self.size + col] = Disk.white
 
         // keep track of empty squares on board to avoid checking already filled positions
         for y in 0 ..< self.size {

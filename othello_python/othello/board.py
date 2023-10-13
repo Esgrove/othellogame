@@ -33,10 +33,10 @@ class Board:
         # Set starting positions
         row = (self._size - 1) // 2 if self._size % 2 == 0 else (self._size - 1) // 2 - 1
         col = self._size // 2
-        self._board[row][row] = Disk.BLACK
-        self._board[row][col] = Disk.WHITE
-        self._board[col][row] = Disk.WHITE
-        self._board[col][col] = Disk.BLACK
+        self._board[row][row] = Disk.WHITE
+        self._board[row][col] = Disk.BLACK
+        self._board[col][row] = Disk.BLACK
+        self._board[col][col] = Disk.WHITE
 
         # Keep track of empty squares on board to avoid checking already filled positions
         self._empty_squares = {

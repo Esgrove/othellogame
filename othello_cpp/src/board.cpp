@@ -22,10 +22,10 @@ othello::Board::Board(size_t size) : indices(size), size(size)
     // set starting positions
     auto row = size % 2 == 0 ? (size - 1) / 2 : (size - 1) / 2 - 1;
     auto col = size / 2;
-    board[row * size + row] = Disk::black;
-    board[row * size + col] = Disk::white;
-    board[col * size + row] = Disk::white;
-    board[col * size + col] = Disk::black;
+    board[row * size + row] = Disk::white;
+    board[row * size + col] = Disk::black;
+    board[col * size + row] = Disk::black;
+    board[col * size + col] = Disk::white;
 
     // index list (0...size) to avoid repeating same range in for loops
     std::iota(indices.begin(), indices.end(), 0);

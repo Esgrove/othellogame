@@ -32,10 +32,10 @@ class Board(private val size: Int) {
         // Set starting positions
         val row = if (size % 2 == 0) (size - 1) / 2 else (size - 1) / 2 - 1
         val col = size / 2
-        board[row * size + row] = Disk.Black
-        board[row * size + col] = Disk.White
-        board[col * size + row] = Disk.White
-        board[col * size + col] = Disk.Black
+        board[row * size + row] = Disk.White
+        board[row * size + col] = Disk.Black
+        board[col * size + row] = Disk.Black
+        board[col * size + col] = Disk.White
 
         // Index list (0...size) to avoid repeating same range in loops
         indices = (0 until size).toList()

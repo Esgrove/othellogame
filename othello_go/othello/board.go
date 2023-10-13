@@ -78,10 +78,10 @@ func initBoard(size int) []Disk {
 		row = (size-1)/2 - 1
 	}
 	col := size / 2
-	board[row*size+row] = Black
-	board[row*size+col] = White
-	board[col*size+row] = White
-	board[col*size+col] = Black
+	board[row*size+row] = White
+	board[row*size+col] = Black
+	board[col*size+row] = Black
+	board[col*size+col] = White
 	return board
 }
 
