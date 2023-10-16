@@ -88,7 +88,7 @@ class Othello(private val boardSize: Int) {
 }
 
 fun main(args: Array<String>) {
-    printColor("OTHELLO GAME - Kotlin", Color.GREEN)
+    printBold("OTHELLO GAME - KOTLIN", Color.GREEN)
 
     if (args.contains("--help") || args.contains("-h")) {
         println("Othello Kotlin ${versionInfo()}\n")

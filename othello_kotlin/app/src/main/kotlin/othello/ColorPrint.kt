@@ -3,7 +3,7 @@ package othello
 import java.awt.Color
 
 /** Format string with colour.*/
-fun getColor(text: String, color: Color): String {
+fun getColor(text: String, color: Color, bold: Boolean = false): String {
     val resetColor = "\u001B[0m"
     val ansiColor = when (color) {
         Color.CYAN -> "\u001B[36m"
@@ -15,10 +15,12 @@ fun getColor(text: String, color: Color): String {
         else -> resetColor
     }
 
-    // Check if the text contains a reset code already
-    val coloredText = text.replace(resetColor, "$resetColor$ansiColor")
+    val boldCode = if (bold) "\u001B[1m" else "\u001B[22m"
 
-    return "$ansiColor$coloredText$resetColor"
+    // Check if the text contains a reset code already
+    val coloredText = text.replace(resetColor, "$resetColor$ansiColor$boldCode")
+
+    return "$ansiColor$boldCode$coloredText$resetColor"
 }
 
 /** Print text with specified colour.*/
@@ -26,9 +28,9 @@ fun printColor(text: String, color: Color) {
     println(getColor(text, color))
 }
 
-/** Print bold text.*/
-fun printBold(text: String) {
-    println("\u001B[1m${text}\u001B[0m")
+/** Print bold text with optional colour.*/
+fun printBold(text: String, color: Color = Color.WHITE) {
+    println(getColor(text, color, bold = true))
 }
 
 /** Print error message with red colour.*/
