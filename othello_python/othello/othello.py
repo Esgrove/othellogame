@@ -56,13 +56,13 @@ class Othello:
             self.player_white.reset()
             self.rounds_played = 0
 
-        if self.settings.quick_start:
-            # Default: play as black against white computer player
-            self.player_white.set_human(False)
-        elif self.settings.autoplay_mode:
+        if self.settings.autoplay_mode:
             # Computer plays both
             self.player_white.set_human(False)
             self.player_black.set_human(False)
+        elif self.settings.quick_start:
+            # Default: play as black against white computer player
+            self.player_white.set_human(False)
         elif self.get_answer("Would you like to play against the computer"):
             if self.get_answer("Would you like to play as black or white", yes="b", no="w"):
                 self.player_white.set_human(False)
