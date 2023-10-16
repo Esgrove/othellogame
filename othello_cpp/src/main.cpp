@@ -15,11 +15,12 @@
 int main(int argc, const char* argv[])
 {
     print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
-    std::vector<std::string> arguments(argv, argv + argc);
 
-    cxxopts::Options options("Othello C++", "A simple Othello CLI game implementation.");
+    cxxopts::Options options("othello_cpp", "A simple Othello CLI game implementation.");
+    options.custom_help("[OPTIONS]");
+    options.positional_help("[SIZE]");
 
-    options.add_options()("size", "Optional board size", cxxopts::value<int>()->default_value("0"))(
+    options.add_options()("size", "Optional board size", cxxopts::value<size_t>())(
         "h,help", "Print help and exit", cxxopts::value<bool>())(
         "a,autoplay", "Enable autoplay mode", cxxopts::value<bool>())(
         "d,default", "Play with default settings", cxxopts::value<bool>())(
@@ -55,13 +56,14 @@ int main(int argc, const char* argv[])
         bool show_log = result["log"].as<bool>();
         bool test_mode = result["test"].as<bool>();
 
-        int board_size = result["size"].as<int>();
-        if (board_size != 0) {
+        size_t board_size;
+        if (result.count("size") > 0) {
+            board_size = result["size"].as<size_t>();
             if (board_size < othello::MIN_BOARD_SIZE || board_size > othello::MAX_BOARD_SIZE) {
                 print_error(fmt::format("Unsupported board size: {}", board_size));
                 return 1;
             }
-            fmt::print("Using board size: {}\n", board_size);
+            fmt::println("Using board size: {}", board_size);
         } else if (autoplay || quick_start) {
             board_size = othello::DEFAULT_BOARD_SIZE;
         } else {

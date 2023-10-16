@@ -38,6 +38,7 @@ private:
     Player player_white;
     int rounds_played {0};
     int games_played {0};
+    std::vector<std::string> game_log;
 };
 
 }  // namespace othello

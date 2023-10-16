@@ -59,9 +59,10 @@ if(CCACHE_EXECUTABLE)
 endif(CCACHE_EXECUTABLE)
 
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
-    # Create universal binary
-    set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15")
+    # Create universal binary.
+    # Disabled due to OpenSSL being arch specific by default...
+    # set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
 endif()
 
 include_directories(src)
@@ -120,10 +121,18 @@ FetchContent_Declare(cxxopts
 )
 FetchContent_MakeAvailable(cxxopts)
 
+find_package(OpenSSL REQUIRED)
+if(OPENSSL_FOUND)
+    message(STATUS "Using OpenSSL version ${OPENSSL_VERSION}")
+else()
+    message(FATAL_ERROR "OpenSSL not found")
+endif()
+
 target_link_libraries(othello_cpp
     fmt::fmt
     GTest::gtest_main
     cxxopts
+    OpenSSL::Crypto
 )
 
 if (MSVC)

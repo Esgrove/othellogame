@@ -1,5 +1,12 @@
 #include "utils.hpp"
 
+#include <openssl/evp.h>
+
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
+
 namespace othello
 {
 std::string Move::to_log_entry()
@@ -52,6 +59,31 @@ Disk opponent(const Disk& disk)
         default:
             return Disk::empty;
     }
+}
+
+std::string sha256(const std::string& text)
+{
+    std::stringstream stream;
+    EVP_MD_CTX* context = EVP_MD_CTX_new();
+
+    if (context != NULL) {
+        if (EVP_DigestInit_ex(context, EVP_sha256(), NULL)) {
+            if (EVP_DigestUpdate(context, text.c_str(), text.length()) != 0) {
+                unsigned char hash[EVP_MAX_MD_SIZE];
+                unsigned int hash_length = 0;
+
+                if (EVP_DigestFinal_ex(context, hash, &hash_length) != 0) {
+                    for (unsigned int i = 0; i < hash_length; ++i) {
+                        stream << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
+                    }
+                }
+            }
+        }
+
+        EVP_MD_CTX_free(context);
+    }
+
+    return stream.str();
 }
 
 }  // namespace othello
