@@ -69,6 +69,7 @@ int main(int argc, const char* argv[])
         } else {
             board_size = othello::Othello::get_board_size();
         }
+
         othello::Settings settings(
             board_size, autoplay, quick_start, show_helpers, show_log, test_mode);
 

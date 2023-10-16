@@ -212,14 +212,6 @@ template<typename T> inline std::string to_string(const T& object)
     return stream.str();
 }
 
-/// Format value as hexadecimal string
-inline std::string to_hex(unsigned char value)
-{
-    std::stringstream stream;
-    stream << std::hex << (int)value;
-    return stream.str();
-}
-
 /// Calculate SHA256 hash using OpenSSL library.
 std::string sha256(const std::string& text);
 

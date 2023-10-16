@@ -63,11 +63,13 @@ Disk opponent(const Disk& disk)
 
 std::string sha256(const std::string& text)
 {
+    // Code adapted from:
+    // https://stackoverflow.com/questions/2262386/generate-sha256-with-openssl-and-c
     std::stringstream stream;
     EVP_MD_CTX* context = EVP_MD_CTX_new();
 
-    if (context != NULL) {
-        if (EVP_DigestInit_ex(context, EVP_sha256(), NULL)) {
+    if (context != nullptr) {
+        if (EVP_DigestInit_ex(context, EVP_sha256(), nullptr) != 0) {
             if (EVP_DigestUpdate(context, text.c_str(), text.length()) != 0) {
                 unsigned char hash[EVP_MAX_MD_SIZE];
                 unsigned int hash_length = 0;
