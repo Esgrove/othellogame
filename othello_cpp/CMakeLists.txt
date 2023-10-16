@@ -129,9 +129,9 @@ else()
 endif()
 
 target_link_libraries(othello_cpp
+    cxxopts
     fmt::fmt
     GTest::gtest_main
-    cxxopts
     OpenSSL::Crypto
 )
 
