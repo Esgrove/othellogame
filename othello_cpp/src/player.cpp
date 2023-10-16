@@ -24,7 +24,7 @@ void othello::Player::play_one_move(Board& board)
     if (!moves.empty()) {
         can_play = true;
         if (human && show_helpers) {
-            board.print_moves(moves);
+            board.print_possible_moves(moves);
         }
         auto chosen_move = human ? get_human_move(moves) : get_computer_move(moves);
         board.place_disk(chosen_move);

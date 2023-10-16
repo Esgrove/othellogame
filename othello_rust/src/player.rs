@@ -72,7 +72,7 @@ impl Player {
         if !moves.is_empty() {
             self.can_play = true;
             if self.human && self.settings.show_helpers {
-                board.print_moves(&moves)
+                board.print_possible_moves(&moves)
             }
             let chosen_move = if self.human {
                 self.get_human_move(&moves)

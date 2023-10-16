@@ -143,7 +143,7 @@ namespace Othello
         }
 
         /// Print available move coordinates and resulting points gained.
-        public void PrintMoves(IReadOnlyCollection<Move> moves)
+        public void printPossibleMoves(IReadOnlyCollection<Move> moves)
         {
             ColorPrint.WriteLine($"  Possible moves ({moves.Count}):", Color.Yellow);
             // convert board from Disk enums to strings

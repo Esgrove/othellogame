@@ -42,7 +42,7 @@ namespace Othello
                 canPlay = true;
                 if (_isHuman && _showHelpers)
                 {
-                    board.PrintMoves(moves);
+                    board.printPossibleMoves(moves);
                 }
                 var chosenMove = _isHuman ? GetHumanMove(moves) : GetComputerMove(moves);
                 board.PlaceDisc(chosenMove);

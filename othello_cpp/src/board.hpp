@@ -23,7 +23,7 @@ public:
 
     void place_disk(const Move& move);
     void print_score() const;
-    void print_moves(const std::vector<Move>& moves);
+    void print_possible_moves(const std::vector<Move>& moves);
 
     [[nodiscard]] Disk result() const;
     [[nodiscard]] bool can_play() const;

@@ -104,7 +104,7 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
 }
 
 /// Print board with available move coordinates and the resulting points gained.
-void othello::Board::print_moves(const std::vector<Move>& moves)
+void othello::Board::print_possible_moves(const std::vector<Move>& moves)
 {
     fmt::print(
         fmt::fg(fmt::color::yellow), "  Possible moves ({}):\n", std::to_string(moves.size()));

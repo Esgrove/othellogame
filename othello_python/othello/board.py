@@ -94,7 +94,7 @@ class Board:
 
         return sorted(moves)
 
-    def print_moves(self, moves: list[Move]) -> None:
+    def print_possible_moves(self, moves: list[Move]) -> None:
         """Print available move coordinates and the resulting points gained."""
         print_color(f"  Possible moves ({len(moves)}):", Color.yellow)
         # Convert board from Disk enums to strings

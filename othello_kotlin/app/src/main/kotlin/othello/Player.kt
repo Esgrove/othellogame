@@ -18,7 +18,7 @@ class Player(private val disk: Disk) {
         if (moves.isNotEmpty()) {
             canPlay = true
             if (isHuman && showHelpers) {
-                board.printMoves(moves)
+                board.printPossibleMoves(moves)
             }
             val chosenMove = if (isHuman) getHumanMove(moves) else getComputerMove(moves)
             board.placeDisk(chosenMove)

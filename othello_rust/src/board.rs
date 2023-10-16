@@ -131,7 +131,7 @@ impl Board {
     }
 
     /// Print board with available move coordinates and the resulting points gained.
-    pub fn print_moves(&self, moves: &Vec<Move>) {
+    pub fn print_possible_moves(&self, moves: &Vec<Move>) {
         println!(
             "{}",
             format!("  Possible moves ({}):", moves.len()).yellow()

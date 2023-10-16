@@ -47,7 +47,7 @@ func (p *Player) PlayOneMove(board *Board) {
 	if len(moves) > 0 {
 		p.CanPlay = true
 		if p.human && p.showHelpers {
-			board.PrintMoves(moves)
+			board.printPossibleMoves(moves)
 		}
 		var chosenMove Move
 		if p.human {

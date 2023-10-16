@@ -110,7 +110,7 @@ class Board(private val size: Int) {
     }
 
     /** Print board with available move coordinates and the resulting points gained.*/
-    fun printMoves(moves: Collection<Move>) {
+    fun printPossibleMoves(moves: Collection<Move>) {
         printColor("  Possible moves (${moves.size}):", Color.YELLOW)
         // Convert board from Disk enums to strings
         val formattedBoard = ArrayList<String>(board.size)
