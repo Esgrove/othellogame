@@ -16,10 +16,10 @@ For each language, I try to make the program structure and all the functions mat
 while also trying to follow the best practices and guidelines for each language.
 
 While the program is quite simple,
-it also covers quite well most of the basic functionality and tooling one would commonly use in a programming language.
+it also covers pretty well most of the functionality and tooling one would commonly use in a programming language.
 It's big enough to get a good feel for a language,
 yet small enough that it could be done in a weekend even when starting with a new language.
-It is also quite easy to check that the code is working correctly,
+It is also easy to check that the code is working correctly,
 especially since it is possible to compare side-by-side with the other implementations.
 
 So far, I have added *C#*, *Swift*, *Rust*, *Go*, and *Kotlin* implementations.
@@ -33,7 +33,7 @@ especially in the languages that I haven't been actively using.
 
 All implementations follow this overall architecture:
 
-* *main*: command line argument handling and entry point to initialize the game.
+* *main*: Command line argument handling and entry point to initialize the game.
 * *othello*: The main gameplay loop.
 * *board*: Game board state and logic.
 * *player*: Player object used for making moves and storing player information.
@@ -70,7 +70,7 @@ Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFor
 * othello.hpp & othello.cpp
 * board.hpp & board.cpp
 * player.hpp & player.cpp
-* utils.hpp
+* utils.hpp & utils.cpp
 * colorprint.hpp
 * version.hpp
 
@@ -132,6 +132,7 @@ Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 
 ### Kotlin
 
+Kotlin 1.9+.
 Uses [Gradle](https://gradle.org/kotlin/) 8.4.
 
 * Othello.kt
@@ -144,5 +145,4 @@ Uses [Gradle](https://gradle.org/kotlin/) 8.4.
 
 * Write some thoughts on the languages and their differences
 * Add unit tests for each language
-* Unify naming and comments across the different implementations
 * Make a NumPy version of Python implementation (not really needed but why not)
