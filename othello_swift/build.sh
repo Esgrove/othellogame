@@ -18,10 +18,13 @@ print_magenta "Building Othello Swift..."
 
 echo "Writing version information..."
 set_version_info
-echo "#define BUILD_TIME \"${BUILD_TIME}\"" > "$VERSION_HEADER"
-echo "#define GIT_HASH \"${GIT_HASH}\"" >> "$VERSION_HEADER"
-echo "#define GIT_BRANCH \"${GIT_BRANCH}\"" >> "$VERSION_HEADER"
-echo "#define VERSION \"${VERSION_NUMBER}\"" >> "$VERSION_HEADER"
+{
+    echo "// Generated automatically; DO NOT EDIT MANUALLY."
+    echo "#define BUILD_TIME \"${BUILD_TIME}\""
+    echo "#define GIT_HASH \"${GIT_HASH}\""
+    echo "#define GIT_BRANCH \"${GIT_BRANCH}\""
+    echo "#define VERSION \"${VERSION_NUMBER}\""
+} > "$VERSION_HEADER"
 
 if [ -z "$(command -v swift)" ]; then
     print_error_and_exit "swift not found in path"
