@@ -7,7 +7,9 @@
 //==========================================================
 
 #include "colorprint.hpp"
+#include "cxxopts.hpp"
 #include "othello.hpp"
+#include "utils.hpp"
 #include "version.hpp"
 
 int main(int argc, const char* argv[])
@@ -15,21 +17,28 @@ int main(int argc, const char* argv[])
     print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
     std::vector<std::string> arguments(argv, argv + argc);
 
-    // Handle 'help' and 'version' arguments
-    for (const auto& arg : arguments) {
-        if (arg == "--help" || arg == "-h") {
-            fmt::print(
-                "{} {} {}\n\n"
-                "USAGE: othello_cpp [board size]\n\n"
-                "Optional arguments:\n"
-                "    -h | --help          Print usage and exit\n"
-                "    -v | --version       Print version info and exit\n",
-                version::APP_NAME,
-                version::VERSION_NUMBER,
-                version::TIMESTAMP);
+    cxxopts::Options options("Othello C++", "A simple Othello CLI game implementation.");
+
+    options.add_options()("size", "Optional board size", cxxopts::value<int>()->default_value("0"))(
+        "h,help", "Print help and exit", cxxopts::value<bool>())(
+        "a,autoplay", "Enable autoplay mode", cxxopts::value<bool>())(
+        "d,default", "Play with default settings", cxxopts::value<bool>())(
+        "l,log", "Show log after a game", cxxopts::value<bool>())(
+        "n,no_helpers", "Hide disk placement hints", cxxopts::value<bool>())(
+        "t,test", "Enable test mode", cxxopts::value<bool>())(
+        "v,version", "Print version and exit", cxxopts::value<bool>());
+
+    options.parse_positional({"size"});
+
+    try {
+        auto result = options.parse(argc, argv);
+
+        if (result["help"].as<bool>()) {
+            std::cout << options.help() << std::endl;
             return 1;
         }
-        if (arg == "--version" || arg == "-v") {
+
+        if (result["version"].as<bool>()) {
             fmt::print(
                 "{} {} {} {} {}\n",
                 version::APP_NAME,
@@ -39,27 +48,34 @@ int main(int argc, const char* argv[])
                 version::COMMIT);
             return 0;
         }
-    }
 
-    // Try to read board size from command line args
-    size_t board_size;
-    try {
-        if (arguments.size() >= 2) {
-            board_size = std::stoi(arguments[1]);
+        bool autoplay = result["autoplay"].as<bool>();
+        bool quick_start = result["default"].as<bool>();
+        bool show_helpers = !result["no_helpers"].as<bool>();
+        bool show_log = result["log"].as<bool>();
+        bool test_mode = result["test"].as<bool>();
+
+        int board_size = result["size"].as<int>();
+        if (board_size != 0) {
             if (board_size < othello::MIN_BOARD_SIZE || board_size > othello::MAX_BOARD_SIZE) {
                 print_error(fmt::format("Unsupported board size: {}", board_size));
                 return 1;
             }
             fmt::print("Using board size: {}\n", board_size);
+        } else if (autoplay || quick_start) {
+            board_size = othello::DEFAULT_BOARD_SIZE;
         } else {
-            throw std::invalid_argument("Invalid board size");
+            board_size = othello::Othello::get_board_size();
         }
-    } catch (const std::invalid_argument&) {
-        // Otherwise ask user for board size
-        board_size = othello::Othello::get_board_size();
-    }
+        othello::Settings settings(
+            board_size, autoplay, quick_start, show_helpers, show_log, test_mode);
 
-    othello::Othello game {board_size};
-    game.play();
-    return 0;
+        othello::Othello game {settings};
+        game.play();
+        return 0;
+    } catch (const cxxopts::exceptions::exception& e) {
+        // TODO: print to cerr
+        print_error(e.what());
+        return 1;
+    }
 }

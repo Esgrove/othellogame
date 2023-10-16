@@ -11,30 +11,34 @@
 
 #include <algorithm>  // sort, transform
 #include <chrono>
+#include <optional>   // std::optional
 #include <stdexcept>  // exceptions
 #include <thread>     // sleep_for
 
 namespace othello
 {
 /// Play one round as this player.
-void othello::Player::play_one_move(Board& board)
+std::optional<std::string> othello::Player::play_one_move(Board& board)
 {
     print("Turn: " + disk_string(disk));
     auto moves = board.possible_moves(disk);
     if (!moves.empty()) {
         can_play = true;
-        if (human && show_helpers) {
+        if (this->human && this->settings.show_helpers) {
             board.print_possible_moves(moves);
         }
         auto chosen_move = human ? get_human_move(moves) : get_computer_move(moves);
         board.place_disk(chosen_move);
         board.print_score();
         ++rounds_played;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    } else {
-        can_play = false;
-        print_color("  No moves available...\n", fmt::terminal_color::yellow);
+        if (!this->settings.test_mode) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
+        return chosen_move.to_log_entry();
     }
+    can_play = false;
+    print_color("  No moves available...\n", fmt::terminal_color::yellow);
+    return std::nullopt;
 }
 
 /// Set player to be controlled by human or computer.
@@ -54,17 +58,21 @@ void othello::Player::reset()
 othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
 {
     print("  Computer plays...");
-    // wait a bit and pick a random move
-    std::uniform_int_distribution<int> rand_time(1000, 2000);
-    auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen));
-    std::this_thread::sleep_for(sleep_duration);
+    Move chosen_move;
+    if (this->settings.test_mode) {
+        chosen_move = moves[0];
+    } else {
+        // Wait a bit and pick a random move
+        std::uniform_int_distribution<int> rand_time(1000, 2000);
+        auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen));
+        std::this_thread::sleep_for(sleep_duration);
 
-    std::uniform_int_distribution<size_t> rand_item(0, moves.size() - 1);
-    // C++17 std::sample is even more convoluted here :(
-    auto move = moves[rand_item(this->rand_gen)];
-    // std::cout << "  -> " << move.square << "\n";
-    fmt::print("  {} -> {}\n", move.square, move.value);
-    return move;
+        std::uniform_int_distribution<size_t> rand_item(0, moves.size() - 1);
+        // C++17 std::sample is even more convoluted here :(
+        chosen_move = moves[rand_item(this->rand_gen)];
+    }
+    fmt::print("  {} -> {}\n", chosen_move.square, chosen_move.value);
+    return chosen_move;
 }
 
 /// Return move chosen by a human player.

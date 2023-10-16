@@ -15,7 +15,7 @@ namespace othello
 class Othello
 {
 public:
-    explicit Othello(size_t board_size);
+    explicit Othello(Settings settings);
     void play();
 
     static size_t get_board_size();
@@ -28,13 +28,14 @@ private:
 
     void init_game();
     void game_loop();
+    void print_log() const;
     void print_result() const;
     void print_status() const;
 
     Board board;
-    Player player_black {Player(Disk::black)};
-    Player player_white {Player(Disk::white)};
-    size_t board_size;
+    Settings settings;
+    Player player_black;
+    Player player_white;
     int rounds_played {0};
     int games_played {0};
 };

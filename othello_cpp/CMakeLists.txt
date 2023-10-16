@@ -113,9 +113,17 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+message(STATUS "Fetching cxxopts library")
+FetchContent_Declare(cxxopts
+    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+    GIT_TAG v3.1.1
+)
+FetchContent_MakeAvailable(cxxopts)
+
 target_link_libraries(othello_cpp
     fmt::fmt
     GTest::gtest_main
+    cxxopts
 )
 
 if (MSVC)

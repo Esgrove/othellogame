@@ -15,7 +15,12 @@
 #include <algorithm>  // clamp, transform
 #include <iostream>
 
-othello::Othello::Othello(size_t board_size) : board(Board(board_size)), board_size(board_size) {}
+othello::Othello::Othello(Settings settings)
+    : board(Board(settings.board_size))
+    , settings(settings)
+    , player_black(Player::black(settings.to_player_settings()))
+    , player_white(Player::white(settings.to_player_settings()))
+{}
 
 /// Play one full game of Othello.
 void othello::Othello::play()
@@ -24,7 +29,10 @@ void othello::Othello::play()
         init_game();
         game_loop();
         print_result();
-        if (!get_answer("\nWould you like to play again")) {
+        if (this->settings.show_log) {
+            print_log();
+        }
+        if (!get_answer("Would you like to play again")) {
             break;
         }
     }
@@ -34,7 +42,7 @@ void othello::Othello::play()
 void othello::Othello::init_game()
 {
     if (games_played > 0) {
-        board = Board(this->board_size);
+        board = Board(this->settings.board_size);
         player_black.reset();
         player_white.reset();
         rounds_played = 0;
@@ -64,6 +72,11 @@ void othello::Othello::game_loop()
     ++games_played;
 }
 
+void othello::Othello::print_log() const
+{
+    print_bold("Game log:");
+}
+
 /// Print ending status and winner info.
 void othello::Othello::print_result() const
 {
@@ -75,9 +88,9 @@ void othello::Othello::print_result() const
 
     Disk winner = board.result();
     if (winner == Disk::empty) {
-        print("The game ended in a tie...");
+        print("The game ended in a tie...\n");
     } else {
-        print(fmt::format("The winner is {}!", disk_string(winner)));
+        print(fmt::format("The winner is {}!\n", disk_string(winner)));
     }
 }
 

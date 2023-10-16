@@ -16,12 +16,19 @@ namespace othello
 class Player
 {
 public:
-    explicit Player(Disk disk) : disk(disk) {};
+    explicit Player(Disk disk, PlayerSettings settings) : disk(disk), settings(settings) {};
+
+    /// Shorthand to initialize a new player for black disks.
+    static Player black(PlayerSettings settings) { return Player(Disk::black, settings); }
+
+    /// Shorthand to initialize a new player for white disks.
+    static Player white(PlayerSettings settings) { return Player(Disk::white, settings); }
 
     // nodiscard -> compiler should warn if value returned by function call is not used
     [[nodiscard]] std::string type_string() const { return this->human ? "Human   " : "Computer"; }
 
-    void play_one_move(Board& board);
+    [[nodiscard]] std::optional<std::string> play_one_move(Board& board);
+
     void set_human(bool is_human);
     void reset();
 
@@ -38,8 +45,9 @@ private:
 
     Disk disk;
     bool human {true};
-    bool show_helpers {true};
     int rounds_played {0};
+    PlayerSettings settings;
+
     std::mt19937 rand_gen {std::mt19937 {std::random_device {}()}};
 };
 
