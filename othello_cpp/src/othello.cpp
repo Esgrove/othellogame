@@ -73,7 +73,7 @@ void Othello::init_game()
 void Othello::game_loop()
 {
     while (board.can_play() && (player_black.can_play || player_white.can_play)) {
-        rounds_played++;
+        ++rounds_played;
         fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
 
         for (Player* player : {&player_black, &player_white}) {
@@ -84,7 +84,7 @@ void Othello::game_loop()
             fmt::print("--------------------------------\n");
         }
     }
-    games_played++;
+    ++games_played;
 }
 
 void Othello::print_log() const
