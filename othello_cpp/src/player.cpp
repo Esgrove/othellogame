@@ -33,7 +33,7 @@ void othello::Player::play_one_move(Board& board)
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     } else {
         can_play = false;
-        print_color("  No moves available...\n", fmt::color::yellow);
+        print_color("  No moves available...\n", fmt::terminal_color::yellow);
     }
 }
 

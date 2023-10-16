@@ -12,7 +12,7 @@
 
 int main(int argc, const char* argv[])
 {
-    print_bold("OTHELLO GAME - C++\n", fmt::color::green);
+    print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
     std::vector<std::string> arguments(argv, argv + argc);
 
     // Handle 'help' and 'version' arguments

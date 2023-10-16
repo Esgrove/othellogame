@@ -120,9 +120,9 @@ struct Move {
 };
 
 /// Returns the print colour for the given Disk.
-inline fmt::color disk_color(const Disk& disk)
+inline fmt::terminal_color disk_color(const Disk& disk)
 {
-    using enum fmt::color;
+    using enum fmt::terminal_color;
     if (disk == Disk::empty) {
         return white;
     }

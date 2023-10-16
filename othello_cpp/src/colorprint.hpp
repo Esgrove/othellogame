@@ -28,19 +28,21 @@ inline std::pair<std::string, std::string> split_leading_whitespace(const std::s
 }
 
 /// Format string with colour using fmt.
-template<typename T> inline std::string get_color(const T& object, fmt::color color)
+template<typename T> inline std::string get_color(const T& object, fmt::terminal_color color)
 {
     return fmt::format(fmt::fg(color), "{}", object);
 }
 
 /// Print text with colour.
-template<typename T> inline void print_color(const T& object, fmt::color color = fmt::color::white)
+template<typename T>
+inline void print_color(const T& object, fmt::terminal_color color = fmt::terminal_color::white)
 {
     fmt::print(fmt::fg(color), object);
 }
 
 /// Print bold text.
-template<typename T> inline void print_bold(const T& object, fmt::color color = fmt::color::white)
+template<typename T>
+inline void print_bold(const T& object, fmt::terminal_color color = fmt::terminal_color::white)
 {
     fmt::print(fmt::emphasis::bold | fmt::fg(color), object);
 }
@@ -49,14 +51,14 @@ template<typename T> inline void print_bold(const T& object, fmt::color color = 
 inline void print_error(const std::string& message)
 {
     auto [indent, text] = split_leading_whitespace(message);
-    fmt::print(fmt::fg(fmt::color::red), "{}Error: {}", indent, text);
+    fmt::print(fmt::fg(fmt::terminal_color::red), "{}Error: {}", indent, text);
 }
 
 /// Print warning message with yellow colour.
 inline void print_warn(const std::string& message)
 {
     auto [indent, text] = split_leading_whitespace(message);
-    fmt::print(fmt::fg(fmt::color::yellow), "{}Warning: {}", indent, text);
+    fmt::print(fmt::fg(fmt::terminal_color::yellow), "{}Warning: {}", indent, text);
 }
 
 // Fallback with ANSI escape codes for stringstream

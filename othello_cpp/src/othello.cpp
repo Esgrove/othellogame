@@ -68,7 +68,7 @@ void othello::Othello::game_loop()
 void othello::Othello::print_result() const
 {
     print_bold("\n================================\n");
-    print_color("The game is finished!\n", fmt::color::green);
+    print_color("The game is finished!\n", fmt::terminal_color::green);
     print("Result:");
     print_status();
     print("");
