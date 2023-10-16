@@ -34,7 +34,7 @@ class Othello:
         self.player_white = Player.white(settings.to_player_settings())
         self.rounds_played = 0
         self.games_played = 0
-        self.game_log = dict()
+        self.game_log = []
 
     def play(self):
         """Play one full game of Othello."""
@@ -56,13 +56,13 @@ class Othello:
             self.player_white.reset()
             self.rounds_played = 0
 
-        if self.settings.quick_start:
-            # Default: play as black against white computer player
-            self.player_white.set_human(False)
-        elif self.settings.autoplay_mode:
+        if self.settings.autoplay_mode:
             # Computer plays both
             self.player_white.set_human(False)
             self.player_black.set_human(False)
+        elif self.settings.quick_start:
+            # Default: play as black against white computer player
+            self.player_white.set_human(False)
         elif self.get_answer("Would you like to play against the computer"):
             if self.get_answer("Would you like to play as black or white", yes="b", no="w"):
                 self.player_white.set_human(False)
@@ -80,20 +80,19 @@ class Othello:
             for player in (self.player_black, self.player_white):
                 result = player.play_one_move(self.board)
                 if result:
-                    self.game_log.setdefault(self.games_played, []).append(
-                        f"{result};{self.board.to_log_entry()}"
-                    )
+                    self.game_log.append(f"{result};{self.board.to_log_entry()}")
                 print("-------------------------------")
 
         self.games_played += 1
 
     def _print_log(self):
         """Print game log which shows all moves made and the game board state after each move."""
-        log = self.game_log.get(self.games_played - 1)
-        formatted_log = "\n".join(f"{index:02}: {line}" for index, line in enumerate(log, start=1))
+        formatted_log = "\n".join(
+            f"{index:02}: {line}" for index, line in enumerate(self.game_log, start=1)
+        )
         hex_hash = hashlib.sha256(formatted_log.encode()).hexdigest()
 
-        print_bold("Game log:")
+        print_bold("Game log:", Color.yellow)
         print(formatted_log)
         print(hex_hash)
 

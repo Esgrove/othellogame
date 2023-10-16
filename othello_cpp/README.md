@@ -11,6 +11,15 @@
     choco install cmake
     ```
 
+* OpenSSL
+
+    ```shell
+    # Mac
+    brew install openssl
+    # Windows
+    choco install openssl
+    ```
+
 * A C++ compiler in PATH :grinning:
 
 Optional:
@@ -18,10 +27,11 @@ Optional:
 * [ccache](https://ccache.dev/)
 * [Ninja](https://github.com/ninja-build/ninja)
 
-CMake will pull required C++ libraries automatically:
+CMake will fetch the required C++ libraries automatically:
 
-* [fmt](https://github.com/fmtlib/fmt)
-* [Googletest](https://github.com/google/googletest)
+* [fmt](https://github.com/fmtlib/fmt) for string formatting, printing, and terminal colours.
+* [cxxopts](https://github.com/jarro2783/cxxopts) for command line argument parsing.
+* [Googletest](https://github.com/google/googletest) for unit tests.
 
 ## Build
 
@@ -37,7 +47,6 @@ Add `C:\Program Files\Git\bin` to the system PATH environment variable.
 
 :warning: The build script expects to find Visual Studio 2022 on Windows,
 and [Ninja](https://ninja-build.org/) on Mac and Linux.
-Other generators could of course be used, or let CMake decide by not specifying anything...
 
 ## TODO
 
