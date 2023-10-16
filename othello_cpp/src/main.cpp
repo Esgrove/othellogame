@@ -75,10 +75,10 @@ int main(int argc, const char* argv[])
 
         othello::Othello game {settings};
         game.play();
-        return 0;
     } catch (const cxxopts::exceptions::exception& e) {
         // TODO: print to cerr
         print_error(e.what());
         return 1;
     }
+    return 0;
 }
