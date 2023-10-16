@@ -85,11 +85,6 @@ impl Board {
         }
     }
 
-    /// Get board status string for game log.
-    pub fn to_log_status(&self) -> String {
-        self.board.iter().map(|&d| d.board_char()).collect()
-    }
-
     /// Returns a list of possible moves for the given player.
     pub fn possible_moves(&self, disk: Disk) -> Vec<Move> {
         let mut moves = Vec::<Move>::new();
@@ -182,6 +177,11 @@ impl Board {
             Ordering::Less => Disk::Black,
             Ordering::Equal => Disk::Empty,
         }
+    }
+
+    /// Get board status string for game log.
+    pub fn to_log_entry(&self) -> String {
+        self.board.iter().map(|&d| d.board_char()).collect()
     }
 
     /// Check that the given coordinates are valid (inside the board).

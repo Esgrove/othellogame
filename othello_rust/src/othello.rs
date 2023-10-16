@@ -9,9 +9,7 @@
 extern crate colored;
 
 use std::collections::HashMap;
-
-use std::fmt::Write as FmtWrite;
-use std::io::{self, Write as IoWrite};
+use std::io::{self, Write};
 
 use colored::Colorize;
 use sha2::{Digest, Sha256};
@@ -107,7 +105,7 @@ impl Othello {
                     self.game_log
                         .entry(self.games_played)
                         .or_default()
-                        .push(format!("{};{}", result, self.board.to_log_status()));
+                        .push(format!("{};{}", result, self.board.to_log_entry()));
                 }
                 println!("--------------------------------");
             }
@@ -115,20 +113,22 @@ impl Othello {
         self.games_played += 1;
     }
 
+    /// Print game log which shows all moves made and the game board state after each move.
     fn print_log(&self) {
         let log = self.game_log.get(&(self.games_played - 1)).unwrap();
-        let formatted_log: String =
-            log.iter()
-                .enumerate()
-                .fold(String::new(), |mut output, (index, line)| {
-                    let _ = writeln!(output, "{:02}{}", index + 1, line);
-                    output
-                });
+        let formatted_log: String = log
+            .iter()
+            .enumerate()
+            .fold(String::new(), |text, (index, line)| {
+                text + &format!("{:02}: {}\n", index + 1, line)
+            })
+            .trim()
+            .to_string();
         let hash = Sha256::digest(formatted_log.as_bytes());
         let hex_hash = base16ct::lower::encode_string(&hash);
 
         println!("{}", "Game log:".bold());
-        println!("{}", formatted_log.trim());
+        println!("{}", formatted_log);
         println!("{}", hex_hash);
     }
 
