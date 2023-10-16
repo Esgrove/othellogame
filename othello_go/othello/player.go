@@ -20,33 +20,33 @@ type Player struct {
 	color        Disk
 	human        bool
 	roundsPlayed int
-	showHelpers  bool
+	settings     PlayerSettings
 }
 
-func NewPlayer(color Disk) *Player {
+func NewPlayer(color Disk, settings PlayerSettings) *Player {
 	return &Player{
-		color:       color,
-		human:       true,
-		CanPlay:     true,
-		showHelpers: true,
+		color:    color,
+		human:    true,
+		CanPlay:  true,
+		settings: settings,
 	}
 }
 
-func BlackPlayer() *Player {
-	return NewPlayer(Black)
+func BlackPlayer(settings PlayerSettings) *Player {
+	return NewPlayer(Black, settings)
 }
 
-func WhitePlayer() *Player {
-	return NewPlayer(White)
+func WhitePlayer(settings PlayerSettings) *Player {
+	return NewPlayer(White, settings)
 }
 
 // PlayOneMove Play one round as this player.
-func (p *Player) PlayOneMove(board *Board) {
+func (p *Player) PlayOneMove(board *Board) *string {
 	fmt.Printf("Turn: %s\n", p.color.DiskString())
 	moves := board.PossibleMoves(p.color)
 	if len(moves) > 0 {
 		p.CanPlay = true
-		if p.human && p.showHelpers {
+		if p.human && p.settings.ShowHelpers {
 			board.printPossibleMoves(moves)
 		}
 		var chosenMove Move
@@ -58,20 +58,30 @@ func (p *Player) PlayOneMove(board *Board) {
 		board.PlaceDisk(&chosenMove)
 		board.PrintScore()
 		p.roundsPlayed++
-		time.Sleep(time.Second)
-	} else {
-		p.CanPlay = false
-		fmt.Println("  No moves available...")
+		if !p.settings.TestMode {
+			time.Sleep(time.Second)
+		}
+		logEntry := chosenMove.ToLogEntry()
+		return &logEntry
 	}
+	p.CanPlay = false
+	fmt.Println("  No moves available...")
+	return nil
 }
 
 // Return move chosen by computer.
 func (p *Player) getComputerMove(moves []Move) Move {
 	fmt.Println("  Computer plays...")
-	// Wait a bit and pick a random move
-	time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)+1000))
-	chosenMove := moves[rand.Intn(len(moves))]
-	fmt.Printf("  %s -> %s\n", chosenMove.Square, chosenMove.Value)
+	var chosenMove Move
+	if p.settings.TestMode {
+		chosenMove = moves[0]
+	} else {
+		// Wait a bit and pick a random move
+		time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)+1000))
+		chosenMove = moves[rand.Intn(len(moves))]
+	}
+
+	fmt.Printf("  %s -> %d\n", chosenMove.Square, chosenMove.Value)
 	return chosenMove
 }
 

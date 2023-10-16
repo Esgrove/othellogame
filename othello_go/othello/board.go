@@ -152,7 +152,7 @@ func (b *Board) printPossibleMoves(moves []Move) {
 	// Convert board from Disk enums to strings
 	formattedBoard := make([]string, len(b.board))
 	for i, disk := range b.board {
-		formattedBoard[i] = disk.BoardChar()
+		formattedBoard[i] = disk.BoardCharWithColor()
 	}
 	// Add possible moves to board
 	for _, possibleMove := range moves {
@@ -177,6 +177,7 @@ func (b *Board) printPossibleMoves(moves []Move) {
 // PrintScore Print current score for both players.
 func (b *Board) PrintScore() {
 	black, white := b.playerScores()
+	fmt.Println()
 	fmt.Println(b)
 	fmt.Printf("Score: %d | %d\n", aurora.Magenta(black), aurora.Cyan(white))
 }
@@ -192,6 +193,14 @@ func (b *Board) Result() Disk {
 	default:
 		return Empty
 	}
+}
+
+func (b *Board) ToLogEntry() string {
+	result := ""
+	for _, disk := range b.board {
+		result += disk.BoardChar()
+	}
+	return result
 }
 
 // Check that the given coordinates are valid (inside the board).
@@ -262,7 +271,7 @@ func (b *Board) String() string {
 		// Row values
 		for _, x := range b.indices {
 			disk := b.board[y*b.size+x]
-			text += fmt.Sprintf(" %s", disk.BoardChar())
+			text += fmt.Sprintf(" %s", disk.BoardCharWithColor())
 		}
 	}
 	return text

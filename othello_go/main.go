@@ -13,49 +13,131 @@ package main
 import (
 	"fmt"
 	"os"
-	"othello_go/othello"
-	"slices"
 	"strconv"
 
 	// https://github.com/logrusorgru/aurora
 	"github.com/logrusorgru/aurora/v4"
+	// https://github.com/urfave/cli/
+	"github.com/urfave/cli/v2"
+
+	"othello_go/othello"
 )
 
 func main() {
 	fmt.Println(aurora.Green("OTHELLO GAME - GO").Bold())
-	args := os.Args[1:]
-	var boardSize int
-	if len(args) > 0 {
-		// Handle 'help' and 'version' arguments
-		if slices.Contains(args, "--help") || slices.Contains(args, "-h") {
-			fmt.Println(othello.VersionInfo())
-			fmt.Println("\nUSAGE: othello_go [board size]")
-			fmt.Println("Optional arguments:")
-			fmt.Println("    -h | --help          Print usage and exit")
-			fmt.Println("    -v | --version       Print version info and exit")
-			os.Exit(1)
-		}
-		if slices.Contains(args, "--version") || slices.Contains(args, "-v") {
-			fmt.Println(othello.VersionInfo())
-			os.Exit(0)
-		}
-		// Try to read board size from command line args
-		size, err := strconv.Atoi(args[0])
-		if err != nil {
-			othello.PrintError("Invalid board size")
-			boardSize = othello.GetBoardSize()
-		} else if size < othello.MinBoardSize || size > othello.MaxBoardSize {
-			othello.PrintError("Unsupported board size: %d", size)
-			boardSize = othello.GetBoardSize()
-		} else {
-			boardSize = size
-			fmt.Printf("Using board size: %d\n", boardSize)
-		}
-	} else {
-		// Otherwise ask user for board size
-		boardSize = othello.GetBoardSize()
+
+	// This `urfave/cli` lib is quite annoying to use,
+	// but the Go standard lib `flags` is even more horrible.
+	cli.HelpFlag = &cli.BoolFlag{
+		Name:               "help",
+		Aliases:            []string{"h"},
+		Usage:              "Print help and exit",
+		DisableDefaultText: true,
 	}
 
-	game := othello.InitOthello(boardSize)
-	game.Play()
+	app := &cli.App{
+		Name:  "othello_go",
+		Usage: "A simple Othello CLI game implementation.",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:               "autoplay",
+				Aliases:            []string{"a"},
+				Usage:              "Enable autoplay mode",
+				DisableDefaultText: true,
+			},
+			&cli.BoolFlag{
+				Name:               "default",
+				Aliases:            []string{"d"},
+				Usage:              "Play with default settings",
+				DisableDefaultText: true,
+			},
+			&cli.BoolFlag{
+				Name:               "log",
+				Aliases:            []string{"l"},
+				Usage:              "Show log after a game",
+				DisableDefaultText: true,
+			},
+			&cli.BoolFlag{
+				Name:               "no-helpers",
+				Aliases:            []string{"n"},
+				Usage:              "Hide disk placement hints",
+				DisableDefaultText: true,
+			},
+			&cli.BoolFlag{
+				Name:               "test",
+				Aliases:            []string{"t"},
+				Usage:              "Enable test mode",
+				DisableDefaultText: true,
+			},
+			&cli.BoolFlag{
+				Name:               "version",
+				Aliases:            []string{"v"},
+				Usage:              "Print version and exit",
+				DisableDefaultText: true,
+			},
+		},
+		CustomAppHelpTemplate: `{{.Usage}}
+
+USAGE:
+    {{.HelpName}} [OPTIONS] [SIZE]
+
+ARGUMENTS:
+    [SIZE]    Optional board size
+
+OPTIONS:
+    {{range .VisibleFlags}}{{.}}
+    {{end}}
+`,
+		Action: func(c *cli.Context) error {
+			autoplay := c.Bool("autoplay")
+			defaultOpt := c.Bool("default")
+			log := c.Bool("log")
+			noHelpers := c.Bool("no-helpers")
+			test := c.Bool("test")
+			version := c.Bool("version")
+
+			if version {
+				fmt.Printf("Othello Go %s\n", othello.VersionInfo())
+				os.Exit(0)
+			}
+
+			if c.NArg() > 1 {
+				fmt.Println("Too many positional arguments.")
+				_ = cli.ShowAppHelp(c)
+				os.Exit(1)
+			}
+
+			var boardSize int
+			if c.NArg() == 1 {
+				arg := c.Args().Get(0)
+				size, err := strconv.Atoi(arg)
+				if err != nil {
+					othello.PrintError("Invalid board size")
+					os.Exit(1)
+				} else if size < othello.MinBoardSize || size > othello.MaxBoardSize {
+					othello.PrintError("Unsupported board size: %d", size)
+					os.Exit(1)
+				} else {
+					boardSize = size
+					fmt.Printf("Using board size: %d\n", boardSize)
+				}
+			} else if autoplay || defaultOpt {
+				boardSize = othello.DefaultBoardSize
+			} else {
+				boardSize = othello.GetBoardSize()
+			}
+
+			settings := othello.NewSettings(boardSize, autoplay, defaultOpt, !noHelpers, log, test)
+
+			game := othello.InitOthello(settings)
+			game.Play()
+
+			return nil
+		},
+	}
+
+	err := app.Run(os.Args)
+	if err != nil {
+		othello.PrintError(err.Error())
+	}
 }

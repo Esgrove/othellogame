@@ -16,21 +16,22 @@ import (
 
 // Othello Gameplay loop and main logic.
 type Othello struct {
-	boardSize    int
 	board        Board
+	settings     Settings
 	gamesPlayed  int
 	playerBlack  Player
 	playerWhite  Player
 	roundsPlayed int
+	gameLog      []string
 }
 
 // InitOthello Initialize Othello game.
-func InitOthello(size int) Othello {
+func InitOthello(settings Settings) Othello {
 	return Othello{
-		board:        NewBoard(size),
-		boardSize:    size,
-		playerBlack:  *BlackPlayer(),
-		playerWhite:  *WhitePlayer(),
+		board:        NewBoard(settings.BoardSize),
+		settings:     settings,
+		playerBlack:  *BlackPlayer(settings.ToPlayerSettings()),
+		playerWhite:  *WhitePlayer(settings.ToPlayerSettings()),
 		roundsPlayed: 0,
 		gamesPlayed:  0,
 	}
@@ -42,7 +43,10 @@ func (o *Othello) Play() {
 		o.initGame()
 		o.gameLoop()
 		o.printResult()
-		if !GetAnswer("\nWould you like to play again", "y", "n") {
+		if o.settings.ShowLog {
+			o.printLog()
+		}
+		if o.settings.AutoplayMode || !GetAnswer("Would you like to play again", "y", "n") {
 			break
 		}
 	}
@@ -51,32 +55,61 @@ func (o *Othello) Play() {
 // Initialize game board and players for a new game.
 func (o *Othello) initGame() {
 	if o.gamesPlayed > 0 {
-		o.board = NewBoard(o.boardSize)
+		o.board = NewBoard(o.settings.BoardSize)
 		o.playerBlack.Reset()
 		o.playerWhite.Reset()
 		o.roundsPlayed = 0
 	}
 
-	if GetAnswer("Would you like to play against the computer", "y", "n") {
+	if o.settings.AutoplayMode {
+		// Computer plays both
+		o.playerBlack.SetHuman(false)
+		o.playerWhite.SetHuman(false)
+	} else if o.settings.QuickStart {
+		// Default: play as black against white computer player
+		o.playerWhite.SetHuman(false)
+	} else if GetAnswer("Would you like to play against the computer", "y", "n") {
 		if GetAnswer("Would you like to play as black or white", "b", "w") {
 			o.playerWhite.SetHuman(false)
 		} else {
 			o.playerBlack.SetHuman(false)
 		}
 	}
+
 	PrintBold("\nPlayers:")
 	o.printStatus()
 }
 
 // Keep making moves until both players can't make a move any more.
 func (o *Othello) gameLoop() {
+	players := []*Player{&o.playerBlack, &o.playerWhite}
 	for o.board.CanPlay() && (o.playerBlack.CanPlay || o.playerWhite.CanPlay) {
 		o.roundsPlayed++
 		PrintBold("\n=========== ROUND: %d ===========", o.roundsPlayed)
-		o.playerBlack.PlayOneMove(&o.board)
-		fmt.Println("--------------------------------")
-		o.playerWhite.PlayOneMove(&o.board)
+		for _, player := range players {
+			result := player.PlayOneMove(&o.board)
+			if result != nil {
+				o.gameLog = append(o.gameLog, fmt.Sprintf("%s;%s", *result, o.board.ToLogEntry()))
+			}
+			fmt.Println("--------------------------------")
+		}
 	}
+}
+
+// Print ending status and winner info.
+func (o *Othello) printLog() {
+	formattedLog := ""
+	for index, line := range o.gameLog {
+		formattedLog += fmt.Sprintf("%02d: %s", index+1, line)
+		if index < len(o.gameLog)-1 {
+			formattedLog += "\n"
+		}
+	}
+	hexHash := calculateSHA256(formattedLog)
+
+	fmt.Println(aurora.Yellow("Game log:").Bold())
+	fmt.Println(formattedLog)
+	fmt.Println(hexHash)
 }
 
 // Print ending status and winner info.
@@ -89,9 +122,9 @@ func (o *Othello) printResult() {
 
 	winner := o.board.Result()
 	if winner == Empty {
-		fmt.Println("The game ended in a tie...")
+		fmt.Print("The game ended in a tie...\n\n")
 	} else {
-		fmt.Printf("The winner is %s!\n", winner.DiskString())
+		fmt.Printf("The winner is %s!\n\n", winner.DiskString())
 	}
 }
 
