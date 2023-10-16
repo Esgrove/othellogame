@@ -75,6 +75,7 @@ add_executable(othello_cpp
     src/othello.hpp
     src/player.cpp
     src/player.hpp
+    src/utils.cpp
     src/utils.hpp
     src/version.hpp
 )

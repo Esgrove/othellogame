@@ -69,9 +69,7 @@ struct Square {
         y += other.y;
         return *this;
     }
-
     Square operator+(const Step& other) const { return {x + other.x, y + other.y}; }
-
     Square& operator+=(const Step& other)
     {
         x += other.x;
@@ -81,6 +79,63 @@ struct Square {
 
     int x;
     int y;
+};
+
+/// Player settings.
+struct PlayerSettings {
+    PlayerSettings(bool show_helpers, bool test_mode)
+        : show_helpers(show_helpers)
+        , test_mode(test_mode)
+    {}
+
+    PlayerSettings() : show_helpers(true), test_mode(false) {}
+
+    bool show_helpers;
+    bool test_mode;
+};
+
+/// Game settings.
+struct Settings {
+    Settings(
+        size_t board_size,
+        bool autoplay_mode,
+        bool quick_start,
+        bool show_helpers,
+        bool show_log,
+        bool test_mode)
+        : board_size(board_size)
+        , autoplay_mode(autoplay_mode)
+        , quick_start(quick_start)
+        , show_helpers(show_helpers)
+        , show_log(show_log)
+        , test_mode(test_mode)
+    {}
+
+    Settings()
+        : board_size(8)
+
+        , autoplay_mode(false)
+        , quick_start(false)
+        , show_helpers(true)
+        , show_log(false)
+        , test_mode(false)
+    {}
+
+    /// Get player setting values from overall game settings.
+    [[nodiscard]] PlayerSettings to_player_settings() const
+    {
+        PlayerSettings player_settings;
+        player_settings.show_helpers = show_helpers;
+        player_settings.test_mode = test_mode;
+        return player_settings;
+    }
+
+    size_t board_size;
+    bool autoplay_mode;
+    bool quick_start;
+    bool show_helpers;
+    bool show_log;
+    bool test_mode;
 };
 }  // namespace othello
 
@@ -102,6 +157,8 @@ struct Move {
         , directions(std::move(directions))
     {}
 
+    std::string to_log_entry();
+
     friend std::ostream& operator<<(std::ostream& out, const Move& move)
     {
         return out << fmt::format("Square: {} -> value: {}", move.square, move.value);
@@ -109,7 +166,7 @@ struct Move {
 
     bool operator<(const Move& other) const
     {
-        // biggest value with the smallest coordinates first
+        // Largest value with the smallest coordinates first
         return value > other.value || (value == other.value && square < other.square);
     }
 
@@ -120,54 +177,16 @@ struct Move {
 };
 
 /// Returns the print colour for the given Disk.
-inline fmt::terminal_color disk_color(const Disk& disk)
-{
-    using enum fmt::terminal_color;
-    if (disk == Disk::empty) {
-        return white;
-    }
-    return disk == Disk::white ? cyan : magenta;
-}
+fmt::terminal_color disk_color(const Disk& disk);
 
 /// Returns string character representing board status (black, white, empty).
-inline std::string board_char(const Disk& disk)
-{
-    if (disk == Disk::empty) {
-        return "_";
-    }
-    return get_color(disk == Disk::white ? "W" : "B", disk_color(disk));
-}
+std::string board_char(const Disk& disk, bool color = true);
 
 /// Returns the disk formatted as a coloured string.
-inline std::string disk_string(const Disk& disk)
-{
-    auto color = disk_color(disk);
-    switch (disk) {
-        case Disk::empty:
-            return get_color("EMPTY", color);
-        case Disk::black:
-            return get_color("BLACK", color);
-        case Disk::white:
-            return get_color("WHITE", color);
-        default:
-            return "UNKNOWN";
-    }
-}
+std::string disk_string(const Disk& disk);
 
 /// Returns the opposing disk colour.
-inline Disk opponent(const Disk& disk)
-{
-    switch (disk) {
-        case Disk::white:
-            return Disk::black;
-        case Disk::black:
-            return Disk::white;
-        case Disk::empty:
-            [[fallthrough]];
-        default:
-            return Disk::empty;
-    }
-}
+Disk opponent(const Disk& disk);
 
 inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
 {
