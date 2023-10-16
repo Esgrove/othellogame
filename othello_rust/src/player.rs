@@ -28,6 +28,7 @@ pub struct Player {
     settings: PlayerSettings,
 }
 
+/// Player settings.
 #[derive(Debug, Copy, Clone)]
 pub struct PlayerSettings {
     pub show_helpers: bool,

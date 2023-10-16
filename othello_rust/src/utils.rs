@@ -60,6 +60,7 @@ pub struct Settings {
 }
 
 impl Settings {
+    /// Get player setting values from overall game settings.
     pub fn to_player_settings(self) -> PlayerSettings {
         PlayerSettings {
             show_helpers: self.show_helpers,

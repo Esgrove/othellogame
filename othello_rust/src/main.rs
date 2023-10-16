@@ -42,7 +42,7 @@ shadow!(build);
     disable_version_flag = true
 )]
 struct Args {
-    /// Optional Othello board size
+    /// Optional board size
     size: Option<usize>,
 
     /// Enable autoplay mode with both player controlled by computer

@@ -87,7 +87,7 @@ std::vector<othello::Move> othello::Board::possible_moves(Disk disk) const
                 ++num_steps;
                 pos += step;
             }
-            // valid move only if a line of opponents disks ends in own disk
+            // Valid move only if a line of opposing disks ends in own disk
             if (get_square(pos) == disk) {
                 value += num_steps;
                 directions.emplace_back(step);

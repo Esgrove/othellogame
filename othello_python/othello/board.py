@@ -84,7 +84,7 @@ class Board:
                 while self._get_square(pos) == disk.opponent():
                     steps += 1
                     pos += step
-                # Valid move only if a line of opponents disks ends in own disk
+                # Valid move only if a line of opposing disks ends in own disk
                 if self._get_square(pos) == disk:
                     value += steps
                     directions.append(step)
