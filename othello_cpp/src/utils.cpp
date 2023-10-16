@@ -61,7 +61,7 @@ Disk opponent(const Disk& disk)
     }
 }
 
-std::string sha256(const std::string& text)
+std::string calculate_sha256(const std::string& text)
 {
     // Code adapted from:
     // https://stackoverflow.com/questions/2262386/generate-sha256-with-openssl-and-c

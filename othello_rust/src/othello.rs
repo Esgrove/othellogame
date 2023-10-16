@@ -11,11 +11,11 @@ extern crate colored;
 use std::io::{self, Write};
 
 use colored::Colorize;
-use sha2::{Digest, Sha256};
 
 use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::player::Player;
+use crate::utils;
 use crate::utils::{Disk, Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 /// Gameplay loop and main logic.
@@ -120,8 +120,8 @@ impl Othello {
             })
             .trim()
             .to_string();
-        let hash = Sha256::digest(formatted_log.as_bytes());
-        let hex_hash = base16ct::lower::encode_string(&hash);
+
+        let hex_hash = utils::calculate_sha256(&formatted_log);
 
         println!("{}", "Game log:".yellow().bold());
         println!("{}", formatted_log);

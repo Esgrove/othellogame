@@ -98,7 +98,7 @@ void Othello::print_log() const
         }
     }
 
-    auto hex_hash = sha256(formatted_log);
+    auto hex_hash = calculate_sha256(formatted_log);
 
     print_bold("Game log:\n", fmt::terminal_color::yellow);
     print(formatted_log);

@@ -212,8 +212,8 @@ template<typename T> inline std::string to_string(const T& object)
     return stream.str();
 }
 
-/// Calculate SHA256 hash using OpenSSL library.
-std::string sha256(const std::string& text);
+/// Calculate SHA256 hash for the given string.
+std::string calculate_sha256(const std::string& text);
 
 }  // namespace othello
 

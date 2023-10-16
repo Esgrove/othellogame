@@ -6,6 +6,7 @@
 //==========================================================
 
 use colored::{Color, ColoredString, Colorize};
+use sha2::{Digest, Sha256};
 use std::cmp::Ordering;
 use std::fmt;
 use std::hash::{Hash, Hasher};
@@ -240,6 +241,12 @@ impl PartialOrd for Move {
         // This uses `Ord` so no need to re-implement same comparison twice
         Some(self.cmp(other))
     }
+}
+
+/// Calculate SHA256 hash for the given string.
+pub fn calculate_sha256(formatted_log: &String) -> String {
+    let hash = Sha256::digest(formatted_log.as_bytes());
+    base16ct::lower::encode_string(&hash)
 }
 
 #[cfg(test)]
