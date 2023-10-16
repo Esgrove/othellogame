@@ -25,7 +25,7 @@ int main(int argc, const char* argv[])
         "a,autoplay", "Enable autoplay mode", cxxopts::value<bool>())(
         "d,default", "Play with default settings", cxxopts::value<bool>())(
         "l,log", "Show log after a game", cxxopts::value<bool>())(
-        "n,no_helpers", "Hide disk placement hints", cxxopts::value<bool>())(
+        "n,no-helpers", "Hide disk placement hints", cxxopts::value<bool>())(
         "t,test", "Enable test mode", cxxopts::value<bool>())(
         "v,version", "Print version and exit", cxxopts::value<bool>());
 
@@ -52,7 +52,7 @@ int main(int argc, const char* argv[])
 
         bool autoplay = result["autoplay"].as<bool>();
         bool quick_start = result["default"].as<bool>();
-        bool show_helpers = !result["no_helpers"].as<bool>();
+        bool show_helpers = !result["no-helpers"].as<bool>();
         bool show_log = result["log"].as<bool>();
         bool test_mode = result["test"].as<bool>();
 

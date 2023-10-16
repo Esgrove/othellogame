@@ -147,7 +147,12 @@ if __name__ == "__main__":
         add_help=False,
     )
     # Optional positional argument for the board size
-    parser.add_argument("size", nargs="?", type=int, help="Optional board size")
+    parser.add_argument(
+        "size",
+        nargs="?",
+        type=int,
+        help=f"Optional board size ({MIN_BOARD_SIZE}..{MAX_BOARD_SIZE})",
+    )
     parser.add_argument(
         "-h",
         "--help",
@@ -178,7 +183,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-n",
-        "--no_helpers",
+        "--no-helpers",
         action="store_true",
         help="Hide disk placement hints",
     )
