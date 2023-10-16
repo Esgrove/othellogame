@@ -29,12 +29,12 @@ class Disk(IntEnum):
     EMPTY = 0
     WHITE = 1
 
-    def board_char(self) -> str:
+    def board_char(self, color=True) -> str:
         """Returns a single character identifier string for the given disk."""
         if self.value == self.EMPTY:
             return "_"
 
-        return get_color(self.name[0], self.color())
+        return get_color(self.name[0], self.color()) if color else self.name[0]
 
     def color(self) -> Color:
         """Return the associated colour for this disk."""
@@ -240,6 +240,9 @@ class Move:
         self.value: int = value
         self.directions: list[Step] = directions
 
+    def to_log_entry(self) -> str:
+        return f"{self.disk.board_char(color=False)}:{self.square},{self.value}"
+
     def __eq__(self, other) -> bool:
         return (self.square, self.value) == (other.square, other.value)
 
@@ -264,6 +267,53 @@ class Move:
 
     def __str__(self) -> str:
         return f"Square: {self.square} -> value: {self.value}"
+
+
+class PlayerSettings:
+    """Player settings."""
+
+    def __init__(self, show_helpers: bool, test_mode: bool):
+        self.show_helpers: bool = show_helpers
+        self.test_mode: bool = test_mode
+
+    @classmethod
+    def default(cls) -> Self:
+        return PlayerSettings(test_mode=False, show_helpers=True)
+
+
+class Settings:
+    """Game settings."""
+
+    def __init__(
+        self,
+        board_size: int,
+        test_mode: bool,
+        autoplay_mode: bool,
+        quick_start: bool,
+        show_helpers: bool,
+        show_log: bool,
+    ):
+        self.board_size: int = board_size
+        self.test_mode: bool = test_mode
+        self.autoplay_mode: bool = autoplay_mode
+        self.quick_start: bool = quick_start
+        self.show_helpers: bool = show_helpers
+        self.show_log: bool = show_log
+
+    @classmethod
+    def default(cls) -> Self:
+        return Settings(
+            board_size=8,
+            test_mode=False,
+            autoplay_mode=False,
+            quick_start=False,
+            show_helpers=True,
+            show_log=False,
+        )
+
+    def to_player_settings(self) -> PlayerSettings:
+        """Get player setting values from overall game settings."""
+        return PlayerSettings(show_helpers=self.show_helpers, test_mode=self.test_mode)
 
 
 def clamp(value: float, minimum: float, maximum: float) -> int | float:

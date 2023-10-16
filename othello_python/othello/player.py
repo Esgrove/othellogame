@@ -10,37 +10,37 @@ from typing import Self
 
 from board import Board
 from colorprint import Color, print_color, print_error
-from utils import Disk, Move, Square
+from utils import Disk, Move, PlayerSettings, Square
 
 
 class Player:
     """Defines one player that can be either human or computer controlled."""
 
-    def __init__(self, disk: Disk, human=True, show_helpers=True):
+    def __init__(self, disk: Disk, settings=PlayerSettings.default(), is_human=True):
         self.can_play: bool = True
         self._disk: Disk = disk
-        self._human: bool = human
+        self._human: bool = is_human
         self._rounds_played: int = 0
-        self._show_helpers: bool = show_helpers
+        self._settings: PlayerSettings = settings
 
     @classmethod
-    def black(cls) -> Self:
+    def black(cls, settings: PlayerSettings) -> Self:
         """Shorthand to initialize a new player for black disks."""
-        return Player(Disk.BLACK)
+        return Player(Disk.BLACK, settings)
 
     @classmethod
-    def white(cls) -> Self:
+    def white(cls, settings: PlayerSettings) -> Self:
         """Shorthand to initialize a new player for white disks."""
-        return Player(Disk.WHITE)
+        return Player(Disk.WHITE, settings)
 
-    def play_one_move(self, board: Board) -> None:
+    def play_one_move(self, board: Board) -> str | None:
         """Play one round as this player."""
         print(f"Turn: {str(self._disk)}")
         moves = board.possible_moves(self._disk)
         if moves:
             self.can_play = True
-            if self._human and self._show_helpers:
-                board.print_moves(moves)
+            if self._human and self._settings.show_helpers:
+                board.print_possible_moves(moves)
 
             chosen_move = (
                 self._get_human_move(moves) if self._human else self._get_computer_move(moves)
@@ -48,10 +48,14 @@ class Player:
             board.place_disk(chosen_move)
             board.print_score()
             self._rounds_played += 1
-            time.sleep(1)
-        else:
-            self.can_play = False
-            print_color("  No moves available...", Color.yellow)
+            if not self._settings.test_mode:
+                time.sleep(1)
+
+            return chosen_move.to_log_entry()
+
+        self.can_play = False
+        print_color("  No moves available...", Color.yellow)
+        return None
 
     def reset(self) -> None:
         """Reset player status for a new game."""
@@ -62,13 +66,16 @@ class Player:
         """Set the player as human or computer controlled."""
         self._human = is_human
 
-    @staticmethod
-    def _get_computer_move(moves: list[Move]) -> Move:
+    def _get_computer_move(self, moves: list[Move]) -> Move:
         """Return move chosen by computer."""
         print("  Computer plays...")
-        # Wait a bit and pick a random move
-        time.sleep(random.uniform(1.0, 2.0))
-        chosen_move = random.choice(moves)
+        if self._settings.test_mode:
+            chosen_move = moves[0]
+        else:
+            # Wait a bit and pick a random move
+            time.sleep(random.uniform(1.0, 2.0))
+            chosen_move = random.choice(moves)
+
         print(f"  {chosen_move.square} -> {chosen_move.value}")
         return chosen_move
 

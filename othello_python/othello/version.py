@@ -4,7 +4,7 @@ Version information definitions
 Akseli Lukkarila
 2019-2023
 """
-BRANCH = "kotlin"
-COMMIT = "6db5228"
-DATE = "2023-10-12_1452"
-VERSION_NUMBER = "2.1.0"
+BRANCH = "python-cli"
+COMMIT = "5891a49"
+DATE = "2023-10-16_1605"
+VERSION_NUMBER = "2.2.0"
