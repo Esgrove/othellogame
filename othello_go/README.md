@@ -13,7 +13,7 @@ go run .
 Manually:
 
 ```shell
-go build -race -v
+go build -v
 ```
 
 Or using script:

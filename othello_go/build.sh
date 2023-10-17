@@ -51,7 +51,7 @@ build_project() {
 
     pushd "$PROJECT_PATH" > /dev/null
     rm -f "$EXECUTABLE"
-    time go build -race -v
+    time go build -v
 
     file "$EXECUTABLE"
     ./"$EXECUTABLE" --version
