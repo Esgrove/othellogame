@@ -44,7 +44,7 @@ namespace Othello
             return new Player(Disk.White, settings);
         }
 
-        #nullable enable
+#nullable enable
         /// Play one round as this player.
         public string? PlayOneMove(Board board)
         {
@@ -72,7 +72,7 @@ namespace Othello
             ColorPrint.WriteLine("  No moves available...", Color.Yellow);
             return null;
         }
-        #nullable disable
+#nullable disable
 
         /// Set player to be controlled by human or computer.
         public void SetHuman(bool isHuman)
