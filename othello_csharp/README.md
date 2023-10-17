@@ -1,5 +1,12 @@
 # Othello C\#
 
+## Dependencies
+
+* [System.CommandLine](https://github.com/dotnet/command-line-api)
+* [Pastel](https://github.com/silkfire/Pastel)
+
+## Building
+
 Using [.NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/):
 
 ```shell
