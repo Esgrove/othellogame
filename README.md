@@ -85,7 +85,7 @@ Code formatting with [CSharpier](https://github.com/belav/csharpier).
 * Othello.cs
 * Board.cs
 * Player.cs
-* Util.cs (*'Utils.cs'* does not work with VS syntax highlight for me :man_shrugging:)
+* Utils.cs
 * ColorPrint.cs
 * Version.cs
 
