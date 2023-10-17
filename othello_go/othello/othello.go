@@ -59,6 +59,7 @@ func (o *Othello) initGame() {
 		o.playerBlack.Reset()
 		o.playerWhite.Reset()
 		o.roundsPlayed = 0
+		o.gameLog = []string{}
 	}
 
 	if o.settings.AutoplayMode {
