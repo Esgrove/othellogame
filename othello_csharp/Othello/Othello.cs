@@ -10,10 +10,7 @@ using Pastel;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 
 namespace Othello
 {
@@ -27,12 +24,12 @@ namespace Othello
             public static int DEFAULT_BOARD_SIZE = 8;
 
             private Board _board;
-            private Player _playerBlack;
-            private Player _playerWhite;
+            private readonly Player _playerBlack;
+            private readonly Player _playerWhite;
             private int _roundsPlayed;
             private int _gamesPlayed;
             private readonly Settings _settings;
-            private List<string> _gameLog = new();
+            private readonly List<string> _gameLog = new();
 
             private Othello(Settings settings)
             {
