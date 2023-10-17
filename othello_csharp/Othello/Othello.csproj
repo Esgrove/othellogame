@@ -9,7 +9,19 @@
     <RuntimeIdentifiers>win10-x64;osx.10.13-x64;osx.11.0-arm64;linux-x64</RuntimeIdentifiers>
     <SelfContained>false</SelfContained>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>2.2.0</Version>
+    <Version>2.3.0</Version>
+    <StartupObject></StartupObject>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Esgrove/othellogame</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +29,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pastel" Version="4.1.0" />
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pastel" Version="4.2.0" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
   </ItemGroup>
 
 </Project>

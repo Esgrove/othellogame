@@ -8,6 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Othello
 {
@@ -22,6 +24,9 @@ namespace Othello
     /// Represents one step direction on the board.
     public readonly struct Step
     {
+        public readonly int X;
+        public readonly int Y;
+
         public Step(int x, int y)
         {
             X = x;
@@ -59,9 +64,6 @@ namespace Othello
             y = Y;
         }
 
-        public readonly int X;
-        public readonly int Y;
-
         public static bool operator ==(Step left, Step right)
         {
             return left.Equals(right);
@@ -76,6 +78,9 @@ namespace Othello
     /// Represents one square location on the board.
     public readonly struct Square
     {
+        public readonly int X;
+        public readonly int Y;
+
         public Square(int x, int y)
         {
             X = x;
@@ -142,20 +147,26 @@ namespace Othello
         {
             return left.X > right.X || (left.X >= right.X && left.Y > right.Y);
         }
-
-        public readonly int X;
-        public readonly int Y;
     }
 
     /// Represents one possible disk placement for the given disk color.
     public readonly struct Move
     {
+        public readonly Square Square;
+        public readonly int Value;
+        public readonly Disk Disk;
+        public readonly List<Step> Directions;
+
         public Move(Square square, int value, Disk disk, List<Step> directions)
         {
             Square = square;
             Value = value;
             Disk = disk;
             Directions = directions;
+        }
+        public string ToLogEntry()
+        {
+            return $"{Disk.BoardChar(false)}:{Square},{Value}";
         }
 
         public override string ToString()
@@ -174,11 +185,43 @@ namespace Othello
             return left.Value < right.Value
                 || (left.Value == right.Value && left.Square > right.Square);
         }
+    }
 
-        public readonly Square Square;
-        public readonly int Value;
-        public readonly Disk Disk;
-        public readonly List<Step> Directions;
+    public readonly struct PlayerSettings
+    {
+        public bool ShowHelpers { get; }
+        public bool TestMode { get; }
+
+        public PlayerSettings(bool showHelpers, bool testMode)
+        {
+            ShowHelpers = showHelpers;
+            TestMode = testMode;
+        }
+    }
+
+    public readonly struct Settings
+    {
+        public int BoardSize { get; }
+        public bool AutoplayMode { get; }
+        public bool QuickStart { get; }
+        public bool ShowHelpers { get; }
+        public bool ShowLog { get; }
+        public bool TestMode { get; }
+
+        public Settings(int boardSize, bool autoplayMode, bool quickStart, bool showHelpers, bool showLog, bool testMode)
+        {
+            BoardSize = boardSize;
+            AutoplayMode = autoplayMode;
+            QuickStart = quickStart;
+            ShowHelpers = showHelpers;
+            ShowLog = showLog;
+            TestMode = testMode;
+        }
+
+        public PlayerSettings ToPlayerSettings()
+        {
+            return new PlayerSettings(ShowHelpers, TestMode);
+        }
     }
 
     public static class Extensions
@@ -206,13 +249,45 @@ namespace Othello
             return ColorPrint.Get(disk.ToString().ToUpper(), disk.DiskColor());
         }
 
-        public static string BoardChar(this Disk disk)
+        public static string BoardChar(this Disk disk, bool color = true)
         {
             if (disk == Disk.Empty)
             {
                 return "_";
             }
-            return ColorPrint.Get(disk == Disk.White ? "W" : "B", disk.DiskColor());
+
+            string diskChar = disk == Disk.White ? "W" : "B";
+            if (color)
+            {
+                return ColorPrint.Get(diskChar, disk.DiskColor());
+            }
+            else
+            {
+                return diskChar;
+            }
+        }
+    }
+
+    // Can't have a function without a class :(
+    public static class Utils
+    {
+        public static string CalculateSHA256(string input)
+        {
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            byte[] hashBytes = SHA256.HashData(inputBytes);
+
+            StringBuilder builder = new();
+            foreach (byte b in hashBytes)
+            {
+                builder.Append(b.ToString("x2"));
+            }
+
+            return builder.ToString();
+        }
+
+        public static string VersionInfo()
+        {
+            return $"{Version.VersionNumber} {Version.BuildTime} {Version.GitCommit} {Version.GitBranch}";
         }
     }
 }

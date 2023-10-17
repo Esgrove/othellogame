@@ -5,11 +5,11 @@
 // 2019-2023
 //==========================================================
 
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 
 namespace Othello
 {
@@ -192,6 +192,14 @@ namespace Othello
                 return Disk.Empty;
             }
             return sum > 0 ? Disk.White : Disk.Black;
+        }
+
+        public string ToLogEntry()
+        {
+            return _board.Aggregate(
+                new StringBuilder(),
+                (accumulator, disk) => accumulator.Append(disk.BoardChar(false)),
+                accumulator => accumulator.ToString());
         }
 
         /// Check that the given coordinates are inside the board.

@@ -21,26 +21,39 @@ namespace Othello
         private int _roundsPlayed;
         private readonly Disk _disk;
         private readonly Random _random;
-        private readonly bool _showHelpers;
+        private readonly PlayerSettings _settings;
 
-        public Player(Disk color)
+        public Player(Disk color, PlayerSettings settings)
         {
+            canPlay = true;
             _disk = color;
             _isHuman = true;
             _random = new Random();
-            _showHelpers = true;
-            canPlay = true;
+            _settings = settings;
         }
 
+        /// Shorthand to initialize a new player for black disks.
+        public static Player Black(PlayerSettings settings)
+        {
+            return new Player(Disk.Black, settings);
+        }
+
+        /// Shorthand to initialize a new player for white disks.
+        public static Player White(PlayerSettings settings)
+        {
+            return new Player(Disk.White, settings);
+        }
+
+#nullable enable
         /// Play one round as this player.
-        public void PlayOneMove(Board board)
+        public string? PlayOneMove(Board board)
         {
             Console.WriteLine($"Turn: {_disk.Name()}");
             var moves = board.PossibleMoves(_disk);
             if (moves.Any())
             {
                 canPlay = true;
-                if (_isHuman && _showHelpers)
+                if (_isHuman && _settings.ShowHelpers)
                 {
                     board.printPossibleMoves(moves);
                 }
@@ -48,14 +61,18 @@ namespace Othello
                 board.PlaceDisc(chosenMove);
                 board.PrintScore();
                 ++_roundsPlayed;
-                Thread.Sleep(1000);
+                if (!_settings.TestMode)
+                {
+                    Thread.Sleep(1000);
+                }
+                return chosenMove.ToLogEntry();
             }
-            else
-            {
-                canPlay = false;
-                ColorPrint.WriteLine("  No moves available...", Color.Yellow);
-            }
+
+            canPlay = false;
+            ColorPrint.WriteLine("  No moves available...", Color.Yellow);
+            return null;
         }
+#nullable disable
 
         /// Set player to be controlled by human or computer.
         public void SetHuman(bool isHuman)
@@ -74,9 +91,17 @@ namespace Othello
         private Move GetComputerMove(IReadOnlyList<Move> moves)
         {
             Console.WriteLine("  Computer plays...");
-            // Wait a bit and pick a random move
-            Thread.Sleep(_random.Next(1000, 2000));
-            var chosenMove = moves[_random.Next(moves.Count)];
+            Move chosenMove;
+            if (_settings.TestMode)
+            {
+                chosenMove = moves[0];
+            }
+            else
+            {
+                // Wait a bit and pick a random move
+                Thread.Sleep(_random.Next(1000, 2000));
+                chosenMove = moves[_random.Next(moves.Count)];
+            }
             Console.WriteLine($"  {chosenMove.Square} -> {chosenMove.Value}");
             return chosenMove;
         }
