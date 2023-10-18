@@ -6,7 +6,7 @@
 //==========================================================
 
 import ColorizeSwift
-import CryptoKit
+import Crypto
 import Foundation
 
 import BuildInfo
