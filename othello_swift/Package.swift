@@ -7,7 +7,7 @@ let package = Package(
     name: "othello_swift",
     dependencies: [
         .package(url: "https://github.com/mtynior/ColorizeSwift.git", from: "1.6.0"),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.3"),
     ],
     targets: [
         .target(
