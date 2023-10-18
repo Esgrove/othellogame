@@ -72,6 +72,7 @@ namespace Othello
             ColorPrint.WriteLine("  No moves available...", Color.Yellow);
             return null;
         }
+
 #nullable disable
 
         /// Set player to be controlled by human or computer.

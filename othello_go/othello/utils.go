@@ -56,7 +56,7 @@ type MovesDescending []Move
 type Settings struct {
 	BoardSize    int
 	AutoplayMode bool
-	useDefaults   bool
+	useDefaults  bool
 	ShowHelpers  bool
 	ShowLog      bool
 	TestMode     bool
@@ -79,7 +79,7 @@ func NewSettings(boardSize int, autoplayMode, useDefaults, showHelpers, showLog,
 	return Settings{
 		BoardSize:    boardSize,
 		AutoplayMode: autoplayMode,
-		useDefaults:   useDefaults,
+		useDefaults:  useDefaults,
 		ShowHelpers:  showHelpers,
 		ShowLog:      showLog,
 		TestMode:     testMode,

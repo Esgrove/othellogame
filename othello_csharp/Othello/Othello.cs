@@ -183,7 +183,9 @@ namespace Othello
                 {
                     if (boardSize < Othello.MIN_BOARD_SIZE || boardSize > Othello.MAX_BOARD_SIZE)
                     {
-                        ColorPrint.Warn($"Limiting board size to valid range {Othello.MIN_BOARD_SIZE}...{Othello.MAX_BOARD_SIZE}");
+                        ColorPrint.Warn(
+                            $"Limiting board size to valid range {Othello.MIN_BOARD_SIZE}...{Othello.MAX_BOARD_SIZE}"
+                        );
                     }
                     return Math.Max(
                         Othello.MIN_BOARD_SIZE,
@@ -196,39 +198,37 @@ namespace Othello
 
             public static int Main(string[] args)
             {
-                var size = new Argument<int?>
-                    (name: "size",
+                var size = new Argument<int?>(
+                    name: "size",
                     description: "Optional board size",
-                    getDefaultValue: () => null);
+                    getDefaultValue: () => null
+                );
 
                 var autoplay = new Option<bool>(
-                   name: "--autoplay",
-                   description: "Enable autoplay mode");
+                    name: "--autoplay",
+                    description: "Enable autoplay mode"
+                );
                 autoplay.AddAlias("-a");
 
                 var useDefaultSettings = new Option<bool>(
-                   name: "--default",
-                   description: "Play with default settings");
+                    name: "--default",
+                    description: "Play with default settings"
+                );
                 useDefaultSettings.AddAlias("-d");
 
-                var showLog = new Option<bool>(
-                   name: "--log",
-                   description: "Show log after a game");
+                var showLog = new Option<bool>(name: "--log", description: "Show log after a game");
                 showLog.AddAlias("-l");
 
                 var hideHelpers = new Option<bool>(
-                   name: "--no-helpers",
-                   description: "Hide disk placement hints");
+                    name: "--no-helpers",
+                    description: "Hide disk placement hints"
+                );
                 hideHelpers.AddAlias("-n");
 
-                var testMode = new Option<bool>(
-                   name: "--test",
-                   description: "Enable test mode");
+                var testMode = new Option<bool>(name: "--test", description: "Enable test mode");
                 testMode.AddAlias("-t");
 
-                var version = new Option<bool>(
-                   name: "-v",
-                   description: "Print version and exit");
+                var version = new Option<bool>(name: "-v", description: "Print version and exit");
 
                 var rootCommand = new RootCommand("A simple Othello CLI game implementation")
                 {
@@ -243,7 +243,8 @@ namespace Othello
 
                 ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
 
-                rootCommand.SetHandler((size, autoplay, useDefaultSettings, showLog, hideHelpers, testMode, version) =>
+                rootCommand.SetHandler(
+                    (size, autoplay, useDefaultSettings, showLog, hideHelpers, testMode, version) =>
                     {
                         if (version)
                         {
@@ -255,13 +256,15 @@ namespace Othello
                         if (size != null)
                         {
                             boardSize = size.Value;
-                            if (boardSize < Othello.MIN_BOARD_SIZE || boardSize > Othello.MAX_BOARD_SIZE)
+                            if (
+                                boardSize < Othello.MIN_BOARD_SIZE
+                                || boardSize > Othello.MAX_BOARD_SIZE
+                            )
                             {
                                 ColorPrint.Error($"Unsupported board size: {boardSize}");
                                 Environment.Exit(1);
                             }
                             Console.WriteLine($"Using board size: {boardSize}");
-
                         }
                         else if (autoplay || useDefaultSettings)
                         {
@@ -273,12 +276,27 @@ namespace Othello
                             boardSize = GetBoardSize();
                         }
 
-                        Settings settings = new(boardSize, autoplay, useDefaultSettings, showLog, !hideHelpers, testMode);
+                        Settings settings =
+                            new(
+                                boardSize,
+                                autoplay,
+                                useDefaultSettings,
+                                showLog,
+                                !hideHelpers,
+                                testMode
+                            );
 
                         var game = new Othello(settings);
                         game.Play();
                     },
-                    size, autoplay, useDefaultSettings, showLog, hideHelpers, testMode, version);
+                    size,
+                    autoplay,
+                    useDefaultSettings,
+                    showLog,
+                    hideHelpers,
+                    testMode,
+                    version
+                );
 
                 try
                 {

@@ -164,6 +164,7 @@ namespace Othello
             Disk = disk;
             Directions = directions;
         }
+
         public string ToLogEntry()
         {
             return $"{Disk.BoardChar(false)}:{Square},{Value}";
@@ -208,7 +209,14 @@ namespace Othello
         public bool ShowLog { get; }
         public bool TestMode { get; }
 
-        public Settings(int boardSize, bool autoplayMode, bool useDefaults, bool showHelpers, bool showLog, bool testMode)
+        public Settings(
+            int boardSize,
+            bool autoplayMode,
+            bool useDefaults,
+            bool showHelpers,
+            bool showLog,
+            bool testMode
+        )
         {
             BoardSize = boardSize;
             AutoplayMode = autoplayMode;

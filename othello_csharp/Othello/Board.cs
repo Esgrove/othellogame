@@ -199,7 +199,8 @@ namespace Othello
             return _board.Aggregate(
                 new StringBuilder(),
                 (accumulator, disk) => accumulator.Append(disk.BoardChar(false)),
-                accumulator => accumulator.ToString());
+                accumulator => accumulator.ToString()
+            );
         }
 
         /// Check that the given coordinates are inside the board.
