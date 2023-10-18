@@ -4,31 +4,43 @@ import java.awt.Color
 import java.util.Random
 
 /** Defines one player that can be either human or computer controlled.*/
-class Player(private val disk: Disk) {
+class Player(private val disk: Disk, private val settings: PlayerSettings) {
     var canPlay = true
     private var isHuman = true
     private var roundsPlayed = 0
     private val random = Random()
-    private val showHelpers = true
+
+    companion object {
+        fun black(settings: PlayerSettings): Player {
+            return Player(Disk.Black, settings)
+        }
+
+        fun white(settings: PlayerSettings): Player {
+            return Player(Disk.White, settings)
+        }
+    }
 
     /** Play one round as this player.*/
-    fun playOneMove(board: Board) {
+    fun playOneMove(board: Board): String? {
         println("Turn: ${disk.name()}")
         val moves = board.possibleMoves(disk)
         if (moves.isNotEmpty()) {
             canPlay = true
-            if (isHuman && showHelpers) {
+            if (isHuman && settings.showHelpers) {
                 board.printPossibleMoves(moves)
             }
             val chosenMove = if (isHuman) getHumanMove(moves) else getComputerMove(moves)
             board.placeDisk(chosenMove)
             board.printScore()
             roundsPlayed++
-            Thread.sleep(1000)
-        } else {
-            canPlay = false
-            printColor("  No moves available...", Color.YELLOW)
+            if (!settings.testMode) {
+                Thread.sleep(1000)
+            }
+            return chosenMove.toLogEntry()
         }
+        canPlay = false
+        printColor("  No moves available...", Color.YELLOW)
+        return null
     }
 
     /** Reset player status for a new game.*/
@@ -45,8 +57,13 @@ class Player(private val disk: Disk) {
     /** Return move chosen by computer.*/
     private fun getComputerMove(moves: List<Move>): Move {
         println("  Computer plays...")
-        Thread.sleep((random.nextInt(1000) + 1000).toLong())
-        val chosenMove = moves[random.nextInt(moves.size)]
+        val chosenMove = if (settings.testMode) {
+            moves[0]
+        } else {
+            Thread.sleep((random.nextInt(1000) + 1000).toLong())
+            moves[random.nextInt(moves.size)]
+        }
+
         println("  ${chosenMove.square} -> ${chosenMove.value}")
         return chosenMove
     }

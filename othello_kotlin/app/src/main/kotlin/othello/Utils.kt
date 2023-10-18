@@ -1,6 +1,7 @@
 package othello
 
 import java.awt.Color
+import java.security.MessageDigest
 import java.util.*
 
 const val MIN_BOARD_SIZE = 4
@@ -91,9 +92,36 @@ data class Move(
         }
     }
 
+    fun toLogEntry(): String {
+        return "$disk:$square,$value"
+    }
+
     override fun toString(): String {
         return "Square: $square -> value: $value"
     }
+}
+
+/** Game settings.*/
+data class Settings(
+    val boardSize: Int,
+    val autoplayMode: Boolean,
+    val quickStart: Boolean,
+    val showHelpers: Boolean,
+    val showLog: Boolean,
+    val testMode: Boolean
+)
+
+/** Player settings.*/
+data class PlayerSettings(
+    val showHelpers: Boolean,
+    val testMode: Boolean
+)
+
+fun Settings.toPlayerSettings(): PlayerSettings {
+    return PlayerSettings(
+        showHelpers = this.showHelpers,
+        testMode = this.testMode
+    )
 }
 
 /** Returns the print colour for the given Disk.*/
@@ -106,11 +134,11 @@ fun Disk.diskColor(): Color {
 }
 
 /** Returns string character representing board status (black, white, empty).*/
-fun Disk.boardChar(): String {
+fun Disk.boardChar(color: Boolean = true): String {
     return when (this) {
         Disk.Empty -> "_"
-        Disk.White -> getColor("W", this.diskColor())
-        Disk.Black -> getColor("B", this.diskColor())
+        Disk.White -> if (color) getColor("W", this.diskColor()) else "W"
+        Disk.Black -> if (color) getColor("B", this.diskColor()) else "B"
     }
 }
 
@@ -126,6 +154,19 @@ fun Disk.opponent(): Disk {
         Disk.White -> Disk.Black
         Disk.Black -> Disk.White
     }
+}
+
+fun calculateSha256(text: String): String {
+    val messageDigest = MessageDigest.getInstance("SHA-256")
+    val bytes = messageDigest.digest(text.toByteArray())
+
+    val hexStringBuilder = StringBuilder()
+    for (byte in bytes) {
+        val hex = String.format("%02x", byte)
+        hexStringBuilder.append(hex)
+    }
+
+    return hexStringBuilder.toString()
 }
 
 object BuildInfo {

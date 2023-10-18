@@ -155,6 +155,10 @@ class Board(private val size: Int) {
         }
     }
 
+    fun toLogEntry(): String {
+        return board.joinToString("") { it.boardChar(color = false) }
+    }
+
     /** Check that the given coordinates are inside the board.*/
     private fun checkCoordinates(x: Int, y: Int): Boolean {
         return x in 0..<size && y in 0..<size

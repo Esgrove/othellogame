@@ -4,12 +4,13 @@ import java.awt.Color
 import kotlin.system.exitProcess
 
 /** Gameplay loop and main logic.*/
-class Othello(private val boardSize: Int) {
-    private var board = Board(boardSize)
-    private val playerBlack = Player(Disk.Black)
-    private val playerWhite = Player(Disk.White)
+class Othello(private val settings: Settings) {
+    private var board = Board(settings.boardSize)
+    private val playerBlack = Player.black(settings.toPlayerSettings())
+    private val playerWhite = Player.white(settings.toPlayerSettings())
     private var roundsPlayed = 0
     private var gamesPlayed = 0
+    private var gameLog = mutableListOf<String>()
 
     /** Play one full game of Othello.*/
     fun play() {
@@ -17,7 +18,10 @@ class Othello(private val boardSize: Int) {
             initGame()
             gameLoop()
             printResult()
-            if (!getAnswer("\nWould you like to play again")) {
+            if (settings.showLog) {
+                printLog()
+            }
+            if (settings.autoplayMode || !getAnswer("Would you like to play again")) {
                 break
             }
         }
@@ -26,13 +30,21 @@ class Othello(private val boardSize: Int) {
     /** Initialize game board and players for a new game.*/
     private fun initGame() {
         if (gamesPlayed > 0) {
-            board = Board(boardSize)
+            board = Board(settings.boardSize)
             playerBlack.reset()
             playerWhite.reset()
             roundsPlayed = 0
+            gameLog.clear()
         }
 
-        if (getAnswer("Would you like to play against the computer")) {
+        if (settings.autoplayMode) {
+            // Computer plays both
+            playerBlack.setHuman(false)
+            playerWhite.setHuman(false)
+        } else if (settings.quickStart) {
+            // Default: play as black against white computer player
+            playerWhite.setHuman(false)
+        } else if (getAnswer("Would you like to play against the computer")) {
             if (getAnswer("Would you like to play as black or white", "b", "w")) {
                 playerWhite.setHuman(false)
             } else {
@@ -49,11 +61,19 @@ class Othello(private val boardSize: Int) {
         while (board.canPlay() && (playerBlack.canPlay || playerWhite.canPlay)) {
             roundsPlayed++
             printBold("\n=========== ROUND: $roundsPlayed ===========")
-            playerBlack.playOneMove(board)
+            for (player in listOf(playerBlack, playerWhite)) {
+                val result = player.playOneMove(board)
+                if (result != null) {
+                    gameLog.add("$result;${board.toLogEntry()}")
+                }
+            }
             println("--------------------------------")
-            playerWhite.playOneMove(board)
         }
         gamesPlayed++
+    }
+
+    private fun printLog() {
+        printBold("Game log:")
     }
 
     /** Print ending status and winner info.*/
@@ -66,9 +86,9 @@ class Othello(private val boardSize: Int) {
 
         val winner = board.result()
         if (winner == Disk.Empty) {
-            printBold("The game ended in a tie...")
+            printBold("The game ended in a tie...\n")
         } else {
-            printBold("The winner is ${winner.name()}!")
+            printBold("The winner is ${winner.name()}!\n")
         }
     }
 
@@ -116,7 +136,16 @@ fun main(args: Array<String>) {
         size
     }
 
-    val game = Othello(boardSize)
+    val settings = Settings(
+            boardSize,
+            autoplayMode = true,
+            quickStart = false,
+            showHelpers = true,
+            showLog = true,
+            testMode = true,
+    )
+
+    val game = Othello(settings)
     game.play()
 }
 
