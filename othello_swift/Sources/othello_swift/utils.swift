@@ -24,7 +24,11 @@ enum Disk: Int, CustomStringConvertible {
     /// Returns a single character identifier string for the given disk.
     func boardChar(color: Bool = true) -> String {
         let character = (self == .empty) ? "_" : (self == .black ? "B" : "W")
-        return character.foregroundColor(color ? self.color() : TerminalColor.white)
+        if color {
+            return character.foregroundColor(self.color())
+        } else {
+            return character
+        }
     }
 
     /// Return the associated color for this disk.
