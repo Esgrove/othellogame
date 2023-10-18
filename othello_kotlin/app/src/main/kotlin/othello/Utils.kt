@@ -93,7 +93,7 @@ data class Move(
     }
 
     fun toLogEntry(): String {
-        return "$disk:$square,$value"
+        return "${disk.boardChar(color = false)}:$square,$value"
     }
 
     override fun toString(): String {
@@ -108,19 +108,19 @@ data class Settings(
     val quickStart: Boolean,
     val showHelpers: Boolean,
     val showLog: Boolean,
-    val testMode: Boolean
+    val testMode: Boolean,
 )
 
 /** Player settings.*/
 data class PlayerSettings(
     val showHelpers: Boolean,
-    val testMode: Boolean
+    val testMode: Boolean,
 )
 
 fun Settings.toPlayerSettings(): PlayerSettings {
     return PlayerSettings(
         showHelpers = this.showHelpers,
-        testMode = this.testMode
+        testMode = this.testMode,
     )
 }
 

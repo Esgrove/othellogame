@@ -73,7 +73,15 @@ class Othello(private val settings: Settings) {
     }
 
     private fun printLog() {
-        printBold("Game log:")
+        val formattedLog = gameLog
+            .mapIndexed { index, line -> String.format("%02d: %s", index + 1, line) }
+            .joinToString("\n")
+
+        val hexHash = calculateSha256(formattedLog)
+
+        printBold("Game log:", Color.YELLOW)
+        println(formattedLog)
+        println(hexHash)
     }
 
     /** Print ending status and winner info.*/
@@ -137,12 +145,12 @@ fun main(args: Array<String>) {
     }
 
     val settings = Settings(
-            boardSize,
-            autoplayMode = true,
-            quickStart = false,
-            showHelpers = true,
-            showLog = true,
-            testMode = true,
+        boardSize,
+        autoplayMode = true,
+        quickStart = false,
+        showHelpers = true,
+        showLog = true,
+        testMode = true,
     )
 
     val game = Othello(settings)
