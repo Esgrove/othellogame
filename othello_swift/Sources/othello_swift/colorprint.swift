@@ -8,13 +8,18 @@
 import ColorizeSwift
 
 /// Format string with colour.
-func getColor<T>(_ message: T, _ color: TerminalColor) -> String {
-    "\(message)".foregroundColor(color)
+func getColor<T>(_ message: T, _ color: TerminalColor, bold: Bool = false) -> String {
+    bold ? "\(message)".foregroundColor(color).bold() : "\(message)".foregroundColor(color)
 }
 
 /// Print text with specified colour.
-func printColor<T>(_ message: T, _ color: TerminalColor) {
-    print(getColor(message, color))
+func printColor<T>(_ message: T, _ color: TerminalColor, bold: Bool = false) {
+    print(getColor(message, color, bold: bold))
+}
+
+/// Print bold text with specified colour.
+func printBold<T>(_ message: T, color: TerminalColor = TerminalColor.white) {
+    print(getColor(message, color, bold: true))
 }
 
 /// Print error message with red colour.

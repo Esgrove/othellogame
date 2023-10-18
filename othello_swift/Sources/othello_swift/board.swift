@@ -135,6 +135,12 @@ class Board {
         )
     }
 
+    /// Get board status string for game log.
+    func toLogEntry() -> String {
+        let logChars = self.board.map { $0.boardChar(color: false) }
+        return logChars.joined()
+    }
+
     /// Check that the given coordinates are inside the board.
     private func checkCoordinates(_ x: Int, _ y: Int) -> Bool {
         x >= 0 && x < self.size && y >= 0 && y < self.size
@@ -142,19 +148,17 @@ class Board {
 
     /// Count and return the number of black and white disks.
     private func playerScores() -> (black: Int, white: Int) {
-        var black = 0
-        var white = 0
-        for disk in self.board {
+        let counts = self.board.reduce(into: (black: 0, white: 0)) { result, disk in
             switch disk {
                 case .white:
-                    white += 1
+                    result.white += 1
                 case .black:
-                    black += 1
+                    result.black += 1
                 case .empty:
                     break
             }
         }
-        return (black, white)
+        return counts
     }
 
     /// Returns the total score.

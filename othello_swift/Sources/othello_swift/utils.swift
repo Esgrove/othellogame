@@ -6,6 +6,7 @@
 //==========================================================
 
 import ColorizeSwift
+import CryptoKit
 import Foundation
 
 import BuildInfo
@@ -14,6 +15,7 @@ let MIN_BOARD_SIZE: Int = 4
 let MAX_BOARD_SIZE: Int = 10
 let DEFAULT_BOARD_SIZE: Int = 8
 
+/// Represents one game piece or lack of one.
 enum Disk: Int, CustomStringConvertible {
     case black = -1
     case empty = 0
@@ -90,6 +92,34 @@ struct Move {
         self.value = value
         self.directions = directions
     }
+
+    func toLogEntry() -> String {
+        return "\(self.disk.boardChar(color: false)):\(self.square),\(self.value)"
+    }
+}
+
+/// Game settings
+struct Settings {
+    var boardSize: Int
+    var autoplayMode: Bool
+    var quickStart: Bool
+    var showHelpers: Bool
+    var showLog: Bool
+    var testMode: Bool
+
+    // Get player setting values from overall game settings.
+    func toPlayerSettings() -> PlayerSettings {
+        return PlayerSettings(
+            showHelpers: self.showHelpers,
+            testMode: self.testMode
+        )
+    }
+}
+
+/// Player settings.
+struct PlayerSettings {
+    var showHelpers: Bool
+    var testMode: Bool
 }
 
 extension Square: CustomStringConvertible {
@@ -151,6 +181,15 @@ extension Move: Comparable {
     }
 }
 
+/// Calculate SHA256 hash for the given string.
+func calculateSHA256(_ text: String) -> String {
+    let data = text.data(using: .utf8)!
+    let hash = SHA256.hash(data: data)
+
+    return hash.map { String(format: "%02x", $0) }.joined()
+}
+
+/// Return formatted build version information.
 func versionInfo() -> String {
     let versionNumber = VERSION
     let buildTime = BUILD_TIME

@@ -12,39 +12,44 @@ class Player {
     var disk: Disk
     var isHuman: Bool = true
     var roundsPlayed: Int = 0
-    var showHelpers: Bool = true
+    var settings: PlayerSettings
 
-    init(_ disk: Disk) {
+    init(_ disk: Disk, _ settings: PlayerSettings) {
         self.disk = disk
+        self.settings = settings
     }
 
     /// Shorthand to initialize a new player for black disks.
-    func black() -> Player {
-        return Player(Disk.black)
+    static func black(_ settings: PlayerSettings) -> Player {
+        return Player(Disk.black, settings)
     }
 
     /// Shorthand to initialize a new player for white disks.
-    func white() -> Player {
-        return Player(Disk.white)
+    static func white(_ settings: PlayerSettings) -> Player {
+        return Player(Disk.white, settings)
     }
 
     /// Play one round as this player.
-    func playOneMove(board: inout Board) {
+    func playOneMove(board: inout Board) -> String? {
         print("Turn: \(self.disk)")
         let moves = board.possibleMoves(disk: self.disk)
         if !moves.isEmpty {
             self.canPlay = true
-            if self.isHuman && self.showHelpers {
+            if self.isHuman && self.settings.showHelpers {
                 board.printPossibleMoves(moves)
             }
             let chosenMove = self.isHuman ? self.getHumanMove(moves) : self.getComputerMove(moves)
             board.placeDisk(move: chosenMove)
             board.printScore()
             self.roundsPlayed += 1
-        } else {
-            self.canPlay = false
-            print("  No moves available...".yellow())
+            if !self.settings.testMode {
+                Thread.sleep(forTimeInterval: 1)
+            }
+            return chosenMove.toLogEntry()
         }
+        self.canPlay = false
+        print("  No moves available...".yellow())
+        return nil
     }
 
     /// Reset player status for a new game.
@@ -61,9 +66,15 @@ class Player {
     /// Return move chosen by computer.
     func getComputerMove(_ moves: [Move]) -> Move {
         print("  Computer plays...")
-        let seconds = Double.random(in: 1 ... 2)
-        Thread.sleep(forTimeInterval: seconds)
-        let move = moves.randomElement()!
+        let move: Move
+        if self.settings.testMode {
+            move = moves[0]
+        } else {
+            let seconds = Double.random(in: 1 ... 2)
+            Thread.sleep(forTimeInterval: seconds)
+            move = moves.randomElement()!
+        }
+
         print("  \(move.square) -> \(move.value)")
         return move
     }

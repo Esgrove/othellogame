@@ -333,4 +333,5 @@ def python_version() -> str:
 
 
 def version_info() -> str:
+    """Return formatted build version information."""
     return f"{VERSION_NUMBER} {DATE} {BRANCH} {COMMIT}"

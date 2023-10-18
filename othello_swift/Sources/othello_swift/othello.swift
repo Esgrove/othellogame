@@ -6,18 +6,23 @@
 // 2019-2023
 //==========================================================
 
+import ColorizeSwift
+
 /// Gameplay loop and main logic.
 class Othello {
-    var boardSize: Int = 0
     var board: Board
-    var playerBlack: Player = .init(Disk.black)
-    var playerWhite: Player = .init(Disk.white)
+    var settings: Settings
+    var playerBlack: Player
+    var playerWhite: Player
     var roundsPlayed: Int = 0
     var gamesPlayed: Int = 0
+    var gameLog: [String] = []
 
-    init(size: Int) {
-        self.boardSize = size
-        self.board = Board(size: self.boardSize)
+    init(_ settings: Settings) {
+        self.board = Board(size: settings.boardSize)
+        self.settings = settings
+        self.playerBlack = Player.black(settings.toPlayerSettings())
+        self.playerWhite = Player.white(settings.toPlayerSettings())
     }
 
     /// Play one full game of Othello.
@@ -26,7 +31,10 @@ class Othello {
             self.initGame()
             self.gameLoop()
             self.printResult()
-            if !self.getAnswer("\nWould you like to play again") {
+            if self.settings.showLog {
+                self.printLog()
+            }
+            if self.settings.autoplayMode || !self.getAnswer("Would you like to play again") {
                 break
             }
         }
@@ -35,19 +43,27 @@ class Othello {
     /// Initialize game board and players for a new game.
     func initGame() {
         if self.gamesPlayed > 0 {
-            self.board = Board(size: self.boardSize)
+            self.board = Board(size: self.settings.boardSize)
             self.playerBlack.reset()
             self.playerWhite.reset()
             self.roundsPlayed = 0
         }
 
-        if self.getAnswer("Would you like to play against the computer") {
+        if self.settings.autoplayMode {
+            // Computer plays both
+            self.playerWhite.setHuman(false)
+            self.playerBlack.setHuman(false)
+        } else if self.settings.quickStart {
+            // Default: play as black against white computer player
+            self.playerWhite.setHuman(false)
+        } else if self.getAnswer("Would you like to play against the computer") {
             if self.getAnswer("Would you like to play as black or white", yes: "b", no: "w") {
                 self.playerWhite.setHuman(false)
             } else {
                 self.playerBlack.setHuman(false)
             }
         }
+
         print("\nPlayers:".bold())
         self.printStatus()
     }
@@ -56,11 +72,33 @@ class Othello {
     func gameLoop() {
         while self.board.canPlay() && (self.playerBlack.canPlay || self.playerWhite.canPlay) {
             self.roundsPlayed += 1
-            print("\n=========== ROUND: \(self.roundsPlayed) ===========".bold())
-            self.playerBlack.playOneMove(board: &self.board)
+            printBold("\n=========== ROUND: \(self.roundsPlayed) ===========")
+            for player in [self.playerBlack, self.playerWhite] {
+                if let result = player.playOneMove(board: &self.board) {
+                    self.gameLog.append("\(result);\(self.board.toLogEntry())")
+                }
+            }
             print("-------------------------------")
-            self.playerWhite.playOneMove(board: &self.board)
         }
+    }
+
+    /// Print game log which shows all moves made and the game board state after each move.
+    func printLog() {
+        var formattedLog = ""
+        var index = 1
+        for line in self.gameLog {
+            formattedLog += String(format: "%02d: %@", index, line)
+            if index < self.gameLog.count {
+                formattedLog += "\n"
+            }
+            index += 1
+        }
+
+        let hexHash = calculateSHA256(formattedLog)
+
+        printBold("Game log:", color: TerminalColor.yellow)
+        print(formattedLog)
+        print(hexHash)
     }
 
     /// Print ending status and winner info.
@@ -74,9 +112,9 @@ class Othello {
         let winner = self.board.result()
         switch winner {
             case Disk.empty:
-                print("The game ended in a tie...")
+                print("The game ended in a tie...\n")
             default:
-                print("The winner is \(winner)!")
+                print("The winner is \(winner)!\n")
         }
     }
 

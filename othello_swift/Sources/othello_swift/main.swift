@@ -39,7 +39,7 @@ for arg in CommandLine.arguments {
 var boardSize: Int = CommandLine.argc >= 2 ? (Int(CommandLine.arguments[1]) ?? 0) : 0
 if boardSize > 0 {
     if boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE {
-        print("Error: unsupported board size: \(boardSize)")
+        printError("Unsupported board size: \(boardSize)")
         exit(1)
     }
     print("Using board size: \(boardSize)")
@@ -48,5 +48,14 @@ if boardSize > 0 {
     boardSize = Othello.getBoardSize()
 }
 
-let game = Othello(size: boardSize)
+let settings = Settings(
+    boardSize: boardSize,
+    autoplayMode: true,
+    quickStart: false,
+    showHelpers: true,
+    showLog: true,
+    testMode: true
+)
+
+let game = Othello(settings)
 game.play()

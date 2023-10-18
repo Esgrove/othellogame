@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "othello_swift",
+    platforms: [
+        // Minimum macOS version required by SHA256 hash method
+        .macOS(.v10_15),
+    ],
     dependencies: [
         .package(url: "https://github.com/mtynior/ColorizeSwift.git", from: "1.6.0"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.3"),
