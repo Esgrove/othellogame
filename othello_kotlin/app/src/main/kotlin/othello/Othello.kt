@@ -41,7 +41,7 @@ class Othello(private val settings: Settings) {
             // Computer plays both
             playerBlack.setHuman(false)
             playerWhite.setHuman(false)
-        } else if (settings.quickStart) {
+        } else if (settings.useDefaults) {
             // Default: play as black against white computer player
             playerWhite.setHuman(false)
         } else if (getAnswer("Would you like to play against the computer")) {
@@ -66,12 +66,13 @@ class Othello(private val settings: Settings) {
                 if (result != null) {
                     gameLog.add("$result;${board.toLogEntry()}")
                 }
+                println("--------------------------------")
             }
-            println("--------------------------------")
         }
         gamesPlayed++
     }
 
+    /** Print game log which shows all moves made and the game board state after each move.*/
     private fun printLog() {
         val formattedLog = gameLog
             .mapIndexed { index, line -> String.format("%02d: %s", index + 1, line) }
@@ -147,7 +148,7 @@ fun main(args: Array<String>) {
     val settings = Settings(
         boardSize,
         autoplayMode = true,
-        quickStart = false,
+        useDefaults = false,
         showHelpers = true,
         showLog = true,
         testMode = true,

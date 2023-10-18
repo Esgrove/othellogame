@@ -203,16 +203,16 @@ namespace Othello
     {
         public int BoardSize { get; }
         public bool AutoplayMode { get; }
-        public bool QuickStart { get; }
+        public bool useDefaults { get; }
         public bool ShowHelpers { get; }
         public bool ShowLog { get; }
         public bool TestMode { get; }
 
-        public Settings(int boardSize, bool autoplayMode, bool quickStart, bool showHelpers, bool showLog, bool testMode)
+        public Settings(int boardSize, bool autoplayMode, bool useDefaults, bool showHelpers, bool showLog, bool testMode)
         {
             BoardSize = boardSize;
             AutoplayMode = autoplayMode;
-            QuickStart = quickStart;
+            useDefaults = useDefaults;
             ShowHelpers = showHelpers;
             ShowLog = showLog;
             TestMode = testMode;

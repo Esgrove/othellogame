@@ -56,7 +56,7 @@ type MovesDescending []Move
 type Settings struct {
 	BoardSize    int
 	AutoplayMode bool
-	QuickStart   bool
+	useDefaults   bool
 	ShowHelpers  bool
 	ShowLog      bool
 	TestMode     bool
@@ -75,11 +75,11 @@ func NewPlayerSettings(showHelpers, testMode bool) PlayerSettings {
 	}
 }
 
-func NewSettings(boardSize int, autoplayMode, quickStart, showHelpers, showLog, testMode bool) Settings {
+func NewSettings(boardSize int, autoplayMode, useDefaults, showHelpers, showLog, testMode bool) Settings {
 	return Settings{
 		BoardSize:    boardSize,
 		AutoplayMode: autoplayMode,
-		QuickStart:   quickStart,
+		useDefaults:   useDefaults,
 		ShowHelpers:  showHelpers,
 		ShowLog:      showLog,
 		TestMode:     testMode,
@@ -99,8 +99,8 @@ func (s Settings) ToPlayerSettings() PlayerSettings {
 
 func (s Settings) String() string {
 	return fmt.Sprintf(
-		"Settings{BoardSize: %d, AutoplayMode: %t, QuickStart: %t, ShowHelpers: %t, ShowLog: %t, TestMode: %t}",
-		s.BoardSize, s.AutoplayMode, s.QuickStart, s.ShowHelpers, s.ShowLog, s.TestMode,
+		"Settings{BoardSize: %d, AutoplayMode: %t, useDefaults: %t, ShowHelpers: %t, ShowLog: %t, TestMode: %t}",
+		s.BoardSize, s.AutoplayMode, s.useDefaults, s.ShowHelpers, s.ShowLog, s.TestMode,
 	)
 }
 

@@ -53,7 +53,7 @@ class Othello {
             // Computer plays both
             self.playerWhite.setHuman(false)
             self.playerBlack.setHuman(false)
-        } else if self.settings.quickStart {
+        } else if self.settings.useDefaults {
             // Default: play as black against white computer player
             self.playerWhite.setHuman(false)
         } else if self.getAnswer("Would you like to play against the computer") {

@@ -99,13 +99,13 @@ struct Settings {
     Settings(
         size_t board_size,
         bool autoplay_mode,
-        bool quick_start,
+        bool use_defaults,
         bool show_helpers,
         bool show_log,
         bool test_mode)
         : board_size(board_size)
         , autoplay_mode(autoplay_mode)
-        , quick_start(quick_start)
+        , use_defaults(use_defaults)
         , show_helpers(show_helpers)
         , show_log(show_log)
         , test_mode(test_mode)
@@ -115,7 +115,7 @@ struct Settings {
         : board_size(8)
 
         , autoplay_mode(false)
-        , quick_start(false)
+        , use_defaults(false)
         , show_helpers(true)
         , show_log(false)
         , test_mode(false)
@@ -132,7 +132,7 @@ struct Settings {
 
     size_t board_size;
     bool autoplay_mode;
-    bool quick_start;
+    bool use_defaults;
     bool show_helpers;
     bool show_log;
     bool test_mode;

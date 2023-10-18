@@ -78,7 +78,7 @@ namespace Othello
                     _playerWhite.SetHuman(false);
                     _playerBlack.SetHuman(false);
                 }
-                else if (_settings.QuickStart)
+                else if (_settings.useDefaults)
                 {
                     // Default: play as black against white computer player
                     _playerWhite.SetHuman(false);

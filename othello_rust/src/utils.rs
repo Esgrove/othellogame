@@ -55,7 +55,7 @@ pub struct Settings {
     pub board_size: usize,
     pub test_mode: bool,
     pub autoplay_mode: bool,
-    pub quick_start: bool,
+    pub use_defaults: bool,
     pub show_helpers: bool,
     pub show_log: bool,
 }
@@ -76,7 +76,7 @@ impl Default for Settings {
             board_size: 8,
             test_mode: false,
             autoplay_mode: false,
-            quick_start: false,
+            use_defaults: false,
             show_helpers: true,
             show_log: false,
         }

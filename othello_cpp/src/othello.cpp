@@ -55,7 +55,7 @@ void Othello::init_game()
         // Computer plays both
         player_black.set_human(false);
         player_white.set_human(false);
-    } else if (this->settings.quick_start) {
+    } else if (this->settings.use_defaults) {
         // Default: play as black against white computer player
         player_white.set_human(false);
     } else if (get_answer("Would you like to play against the computer")) {

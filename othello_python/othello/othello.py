@@ -60,7 +60,7 @@ class Othello:
             # Computer plays both
             self.player_white.set_human(False)
             self.player_black.set_human(False)
-        elif self.settings.quick_start:
+        elif self.settings.use_defaults:
             # Default: play as black against white computer player
             self.player_white.set_human(False)
         elif self.get_answer("Would you like to play against the computer"):
@@ -221,7 +221,7 @@ if __name__ == "__main__":
         settings = Settings(
             board_size=board_size,
             autoplay_mode=args.autoplay,
-            quick_start=args.default,
+            use_defaults=args.default,
             show_helpers=not args.no_helpers,
             show_log=args.log,
             test_mode=args.test,

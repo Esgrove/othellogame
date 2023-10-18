@@ -114,7 +114,7 @@ fn main() -> Result<()> {
     let settings = Settings {
         board_size,
         autoplay_mode: args.autoplay,
-        quick_start: args.default,
+        use_defaults: args.default,
         show_helpers: !args.no_helpers,
         show_log: args.log,
         test_mode: args.test,

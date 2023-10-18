@@ -75,7 +75,7 @@ impl Othello {
             // Computer plays both
             self.player_white.set_human(false);
             self.player_black.set_human(false);
-        } else if self.settings.quick_start {
+        } else if self.settings.use_defaults {
             // Default: play as black against white computer player
             self.player_white.set_human(false);
         } else if Othello::get_answer("Would you like to play against the computer", "y", "n") {

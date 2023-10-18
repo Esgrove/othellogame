@@ -106,7 +106,7 @@ struct Move {
 struct Settings {
     var boardSize: Int
     var autoplayMode: Bool
-    var quickStart: Bool
+    var useDefaults: Bool
     var showHelpers: Bool
     var showLog: Bool
     var testMode: Bool

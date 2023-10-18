@@ -51,7 +51,7 @@ int main(int argc, const char* argv[])
         }
 
         bool autoplay = result["autoplay"].as<bool>();
-        bool quick_start = result["default"].as<bool>();
+        bool use_defaults = result["default"].as<bool>();
         bool show_helpers = !result["no-helpers"].as<bool>();
         bool show_log = result["log"].as<bool>();
         bool test_mode = result["test"].as<bool>();
@@ -64,14 +64,14 @@ int main(int argc, const char* argv[])
                 return 1;
             }
             fmt::println("Using board size: {}", board_size);
-        } else if (autoplay || quick_start) {
+        } else if (autoplay || use_defaults) {
             board_size = othello::DEFAULT_BOARD_SIZE;
         } else {
             board_size = othello::Othello::get_board_size();
         }
 
         othello::Settings settings(
-            board_size, autoplay, quick_start, show_helpers, show_log, test_mode);
+            board_size, autoplay, use_defaults, show_helpers, show_log, test_mode);
 
         othello::Othello game {settings};
         game.play();

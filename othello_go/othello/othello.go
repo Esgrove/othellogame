@@ -66,7 +66,7 @@ func (o *Othello) initGame() {
 		// Computer plays both
 		o.playerBlack.SetHuman(false)
 		o.playerWhite.SetHuman(false)
-	} else if o.settings.QuickStart {
+	} else if o.settings.useDefaults {
 		// Default: play as black against white computer player
 		o.playerWhite.SetHuman(false)
 	} else if GetAnswer("Would you like to play against the computer", "y", "n") {

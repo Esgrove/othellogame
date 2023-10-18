@@ -105,7 +105,7 @@ data class Move(
 data class Settings(
     val boardSize: Int,
     val autoplayMode: Boolean,
-    val quickStart: Boolean,
+    val useDefaults: Boolean,
     val showHelpers: Boolean,
     val showLog: Boolean,
     val testMode: Boolean,
@@ -117,6 +117,7 @@ data class PlayerSettings(
     val testMode: Boolean,
 )
 
+/** Get player setting values from overall game settings.*/
 fun Settings.toPlayerSettings(): PlayerSettings {
     return PlayerSettings(
         showHelpers = this.showHelpers,
@@ -156,6 +157,7 @@ fun Disk.opponent(): Disk {
     }
 }
 
+/** Calculate SHA256 hash for the given string.*/
 fun calculateSha256(text: String): String {
     val messageDigest = MessageDigest.getInstance("SHA-256")
     val bytes = messageDigest.digest(text.toByteArray())

@@ -287,28 +287,28 @@ class Settings:
     def __init__(
         self,
         board_size: int,
-        test_mode: bool,
         autoplay_mode: bool,
-        quick_start: bool,
+        use_defaults: bool,
         show_helpers: bool,
         show_log: bool,
+        test_mode: bool,
     ):
         self.board_size: int = board_size
-        self.test_mode: bool = test_mode
         self.autoplay_mode: bool = autoplay_mode
-        self.quick_start: bool = quick_start
+        self.use_defaults: bool = use_defaults
         self.show_helpers: bool = show_helpers
         self.show_log: bool = show_log
+        self.test_mode: bool = test_mode
 
     @classmethod
     def default(cls) -> Self:
         return Settings(
             board_size=8,
-            test_mode=False,
             autoplay_mode=False,
-            quick_start=False,
+            use_defaults=False,
             show_helpers=True,
             show_log=False,
+            test_mode=False,
         )
 
     def to_player_settings(self) -> PlayerSettings:
