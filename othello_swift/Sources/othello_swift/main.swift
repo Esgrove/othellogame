@@ -8,54 +8,71 @@
 // 2019-2023
 //==========================================================
 
+import ArgumentParser
 import ColorizeSwift
 import Foundation
 
-// `main.swift`is automatically used as the entry point,
-// without needing to call a main() function explicitly.
+struct OthelloSwift: ParsableCommand {
+    static var configuration = CommandConfiguration(
+        abstract: "A simple Othello CLI game implementation.",
+        usage: "othello_swift [options] [size]"
+    )
 
-print("OTHELLO GAME - SWIFT".bold().green())
+    @Argument(help: "Optional board size (\(MIN_BOARD_SIZE)..\(MAX_BOARD_SIZE))")
+    var size: Int?
 
-// Handle 'help' and 'version' arguments
-for arg in CommandLine.arguments {
-    switch arg {
-        case "--version", "-v":
-            // TODO: add version info
+    @Flag(name: .shortAndLong, help: "Enable autoplay mode")
+    var autoplay: Bool = false
+
+    @Flag(name: [.short, .customLong("default")], help: "Play with default settings")
+    var useDefaultSettings: Bool = false
+
+    @Flag(name: .shortAndLong, help: "Show log after a game")
+    var log: Bool = false
+
+    @Flag(name: .shortAndLong, help: "Hide disk placement hints")
+    var noHelpers: Bool = false
+
+    @Flag(name: .shortAndLong, help: "Enable test mode")
+    var test: Bool = false
+
+    @Flag(name: .shortAndLong, help: "Print version and exit")
+    var version: Bool = false
+
+    mutating func run() throws {
+        print("OTHELLO GAME - SWIFT".bold().green())
+        if self.version {
             print("Othello Swift \(versionInfo())")
-            exit(0)
-        case "--help", "-h":
-            print("Othello Swift \(versionInfo())\n")
-            print("USAGE: othello_swift [board size]")
-            print("Optional arguments:")
-            print("    -h | --help          Print usage and exit")
-            print("    -v | --version       Print version info and exit")
-            exit(1)
-        default:
-            break
+            Self.exit(withError: ExitCode.success)
+        }
+
+        // Try to read board size from command line args
+        var boardSize: Int = self.size ?? 0
+        if boardSize != 0 {
+            if boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE {
+                printError("Unsupported board size: \(boardSize)")
+                Self.exit(withError: ExitCode.failure)
+            }
+            print("Using board size: \(boardSize)")
+        } else if self.autoplay || self.useDefaultSettings {
+            boardSize = DEFAULT_BOARD_SIZE
+        } else {
+            // Otherwise ask user for board size
+            boardSize = Othello.getBoardSize()
+        }
+
+        let settings = Settings(
+            boardSize: boardSize,
+            autoplayMode: autoplay,
+            quickStart: useDefaultSettings,
+            showHelpers: !self.noHelpers,
+            showLog: self.log,
+            testMode: self.test
+        )
+
+        let game = Othello(settings)
+        game.play()
     }
 }
 
-// Try to read board size from command line args
-var boardSize: Int = CommandLine.argc >= 2 ? (Int(CommandLine.arguments[1]) ?? 0) : 0
-if boardSize > 0 {
-    if boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE {
-        printError("Unsupported board size: \(boardSize)")
-        exit(1)
-    }
-    print("Using board size: \(boardSize)")
-} else {
-    // Otherwise ask user for board size
-    boardSize = Othello.getBoardSize()
-}
-
-let settings = Settings(
-    boardSize: boardSize,
-    autoplayMode: true,
-    quickStart: false,
-    showHelpers: true,
-    showLog: true,
-    testMode: true
-)
-
-let game = Othello(settings)
-game.play()
+OthelloSwift.main()
