@@ -2,7 +2,9 @@
 
 Requires Gradle.
 
-Build and run:
+Uses [Clikt](https://github.com/ajalt/clikt) for the CLI.
+
+## Build and run
 
 ```shell
 ./gradlew build
@@ -10,13 +12,13 @@ Build and run:
 ./gradlew run
 ```
 
-Or with shell script:
+With shell script:
 
 ```shell
 ./build.sh
 ```
 
-Build script will produce a standalone jar using [Shadow](https://github.com/johnrengelman/shadow)
+The build script will produce a standalone jar using [Shadow](https://github.com/johnrengelman/shadow)
 that can then be run with:
 
 ```shell
