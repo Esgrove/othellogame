@@ -1,7 +1,6 @@
 package othello
 
 import java.awt.Color
-import kotlin.system.exitProcess
 
 /** Gameplay loop and main logic.*/
 class Othello(private val settings: Settings) {
@@ -116,50 +115,8 @@ class Othello(private val settings: Settings) {
     }
 }
 
-fun main(args: Array<String>) {
-    printBold("OTHELLO GAME - KOTLIN", Color.GREEN)
-
-    if (args.contains("--help") || args.contains("-h")) {
-        println("Othello Kotlin ${versionInfo()}\n")
-        println("USAGE: java -jar othello_kotlin.jar [board size]\n")
-        println("Optional arguments:")
-        println("    -h | --help          Print usage and exit")
-        println("    -v | --version       Print version info and exit")
-        exitProcess(1)
-    }
-
-    if (args.contains("--version") || args.contains("-v")) {
-        println("Othello Kotlin ${versionInfo()}")
-        exitProcess(0)
-    }
-
-    // Try to read board size from command line args
-    val boardSize = if (args.isEmpty() || args[0].toIntOrNull() == null) {
-        getBoardSize()
-    } else {
-        val size = args[0].toInt()
-        if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
-            printError("Unsupported board size: $size")
-        }
-        println("Using board size: $size")
-        size
-    }
-
-    val settings = Settings(
-        boardSize,
-        autoplayMode = true,
-        useDefaults = false,
-        showHelpers = true,
-        showLog = true,
-        testMode = true,
-    )
-
-    val game = Othello(settings)
-    game.play()
-}
-
 /** Ask and return the desired board size.*/
-private fun getBoardSize(): Int {
+fun getBoardSize(): Int {
     print("Choose board size (default is $DEFAULT_BOARD_SIZE): ")
     val input = readlnOrNull()
     if (input != null) {

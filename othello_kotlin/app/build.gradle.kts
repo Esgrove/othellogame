@@ -29,6 +29,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.github.ajalt.clikt:clikt:4.2.1")
 }
 
 sourceSets {
@@ -58,7 +59,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("othello.OthelloKt")
+    mainClass.set("othello.MainKt")
 }
 
 tasks.jar {
