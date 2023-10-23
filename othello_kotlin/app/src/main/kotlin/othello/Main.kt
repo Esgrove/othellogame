@@ -21,6 +21,7 @@ class OthelloKotlin : CliktCommand(
     private val noHelpers by option("-n", "--no-helpers", help = "Hide disk placement hints").flag()
     private val test by option("-t", "--test", help = "Enable test mode").flag()
     private val version by option("-v", "--version", help = "Print version and exit").flag()
+
     override fun run() {
         if (version) {
             println("Othello Kotlin ${versionInfo()}")
