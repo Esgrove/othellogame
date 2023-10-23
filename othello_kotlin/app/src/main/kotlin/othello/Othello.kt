@@ -1,7 +1,5 @@
 package othello
 
-import java.awt.Color
-
 /** Gameplay loop and main logic.*/
 class Othello(private val settings: Settings) {
     private var board = Board(settings.boardSize)
@@ -79,7 +77,7 @@ class Othello(private val settings: Settings) {
 
         val hexHash = calculateSha256(formattedLog)
 
-        printBold("Game log:", Color.YELLOW)
+        printBold("Game log:", AnsiColor.YELLOW)
         println(formattedLog)
         println(hexHash)
     }
@@ -87,7 +85,7 @@ class Othello(private val settings: Settings) {
     /** Print ending status and winner info.*/
     private fun printResult() {
         printBold("\n================================")
-        printColor("The game is finished!", Color.GREEN)
+        printColor("The game is finished!", AnsiColor.GREEN)
         printBold("Result:")
         printStatus()
         println()

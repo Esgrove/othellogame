@@ -6,7 +6,6 @@ import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
-import java.awt.Color
 import kotlin.system.exitProcess
 
 class OthelloKotlin : CliktCommand(
@@ -57,6 +56,6 @@ class OthelloKotlin : CliktCommand(
 }
 
 fun main(args: Array<String>) {
-    printBold("OTHELLO GAME - KOTLIN", Color.GREEN)
+    printBold("OTHELLO GAME - KOTLIN", AnsiColor.GREEN)
     OthelloKotlin().main(args)
 }

@@ -1,6 +1,5 @@
 package othello
 
-import java.awt.Color
 import java.util.Random
 
 /** Defines one player that can be either human or computer controlled.*/
@@ -39,7 +38,7 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
             return chosenMove.toLogEntry()
         }
         canPlay = false
-        printColor("  No moves available...", Color.YELLOW)
+        printColor("  No moves available...", AnsiColor.YELLOW)
         return null
     }
 

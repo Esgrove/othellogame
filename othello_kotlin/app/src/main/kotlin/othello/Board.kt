@@ -1,6 +1,5 @@
 package othello
 
-import java.awt.Color
 import java.lang.IllegalArgumentException
 
 /** Handles game board state and logic.*/
@@ -111,7 +110,7 @@ class Board(private val size: Int) {
 
     /** Print board with available move coordinates and the resulting points gained.*/
     fun printPossibleMoves(moves: Collection<Move>) {
-        printColor("  Possible moves (${moves.size}):", Color.YELLOW)
+        printColor("  Possible moves (${moves.size}):", AnsiColor.YELLOW)
         // Convert board from Disk enums to strings
         val formattedBoard = ArrayList<String>(board.size)
         formattedBoard.addAll(board.map { it.boardChar() })
@@ -119,7 +118,7 @@ class Board(private val size: Int) {
         for (move in moves) {
             println("  $move")
             val (x, y) = move.square
-            formattedBoard[y * size + x] = getColor(move.value.toString(), Color.YELLOW)
+            formattedBoard[y * size + x] = getColor(move.value.toString(), AnsiColor.YELLOW)
         }
         // print board with move positions
         print("   ")

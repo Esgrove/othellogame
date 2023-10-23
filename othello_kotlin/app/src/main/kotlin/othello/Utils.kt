@@ -1,6 +1,5 @@
 package othello
 
-import java.awt.Color
 import java.security.MessageDigest
 import java.util.*
 
@@ -126,11 +125,11 @@ fun Settings.toPlayerSettings(): PlayerSettings {
 }
 
 /** Returns the print colour for the given Disk.*/
-fun Disk.diskColor(): Color {
+fun Disk.diskColor(): AnsiColor {
     return when (this) {
-        Disk.Empty -> Color.WHITE
-        Disk.White -> Color.CYAN
-        Disk.Black -> Color.MAGENTA
+        Disk.Empty -> AnsiColor.WHITE
+        Disk.White -> AnsiColor.CYAN
+        Disk.Black -> AnsiColor.MAGENTA
     }
 }
 

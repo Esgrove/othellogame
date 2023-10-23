@@ -1,48 +1,53 @@
 package othello
 
-import java.awt.Color
+enum class AnsiColor(private val code: String) {
+    CYAN("\u001B[36m"),
+    GREEN("\u001B[32m"),
+    MAGENTA("\u001B[35m"),
+    RED("\u001B[31m"),
+    WHITE("\u001B[37m"),
+    YELLOW("\u001B[33m"),
+    BOLD("\u001B[1m"),
+    RESET("\u001B[0m"),
+    ;
+
+    override fun toString(): String {
+        return code
+    }
+}
 
 /** Format string with colour.*/
-fun getColor(text: String, color: Color, bold: Boolean = false): String {
-    val resetColor = "\u001B[0m"
-    val ansiColor = when (color) {
-        Color.CYAN -> "\u001B[36m"
-        Color.GREEN -> "\u001B[32m"
-        Color.MAGENTA -> "\u001B[35m"
-        Color.RED -> "\u001B[31m"
-        Color.WHITE -> "\u001B[37m"
-        Color.YELLOW -> "\u001B[33m"
-        else -> resetColor
+fun getColor(text: String, color: AnsiColor, bold: Boolean = false): String {
+    // Check if the text contains a reset code already
+    val coloredText = text.replace(AnsiColor.RESET.toString(), "${AnsiColor.RESET}$color")
+
+    if (bold) {
+        return "$color${AnsiColor.BOLD}$coloredText${AnsiColor.RESET}"
     }
 
-    val boldCode = if (bold) "\u001B[1m" else "\u001B[22m"
-
-    // Check if the text contains a reset code already
-    val coloredText = text.replace(resetColor, "$resetColor$ansiColor$boldCode")
-
-    return "$ansiColor$boldCode$coloredText$resetColor"
+    return "$color$coloredText${AnsiColor.RESET}"
 }
 
 /** Print text with specified colour.*/
-fun printColor(text: String, color: Color) {
+fun printColor(text: String, color: AnsiColor) {
     println(getColor(text, color))
 }
 
 /** Print bold text with optional colour.*/
-fun printBold(text: String, color: Color = Color.WHITE) {
+fun printBold(text: String, color: AnsiColor = AnsiColor.WHITE) {
     println(getColor(text, color, bold = true))
 }
 
 /** Print error message with red colour.*/
 fun printError(message: String) {
     val (indent, text) = splitLeadingWhitespace(message)
-    println("$indent${getColor("Error: $text", Color.RED)}")
+    println("$indent${getColor("Error: $text", AnsiColor.RED)}")
 }
 
 /** Print warning message with yellow colour.*/
 fun printWarn(message: String) {
     val (indent, text) = splitLeadingWhitespace(message)
-    println("$indent${getColor("Warning: $text", Color.YELLOW)}")
+    println("$indent${getColor("Warning: $text", AnsiColor.YELLOW)}")
 }
 
 /** Split a string into the leading whitespace and the rest of the string.*/
