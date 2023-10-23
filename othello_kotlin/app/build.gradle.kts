@@ -9,7 +9,7 @@
 
 import java.io.ByteArrayOutputStream
 
-version = "1.2.0"
+version = "1.3.0"
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
