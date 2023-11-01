@@ -1,6 +1,8 @@
 package othello
 
-import java.security.MessageDigest
+import okio.Buffer
+import okio.HashingSink
+import okio.buffer
 import java.util.*
 
 const val MIN_BOARD_SIZE = 4
@@ -157,17 +159,16 @@ fun Disk.opponent(): Disk {
 }
 
 /** Calculate SHA256 hash for the given string.*/
-fun calculateSha256(text: String): String {
-    val messageDigest = MessageDigest.getInstance("SHA-256")
-    val bytes = messageDigest.digest(text.toByteArray())
+fun calculateSha256(input: String): String {
+    val buffer = Buffer()
+    val hashingSink = HashingSink.sha256(buffer)
+    val bufferedSink = hashingSink.buffer()
 
-    val hexStringBuilder = StringBuilder()
-    for (byte in bytes) {
-        val hex = String.format("%02x", byte)
-        hexStringBuilder.append(hex)
+    bufferedSink.use { sink ->
+        sink.writeUtf8(input)
     }
 
-    return hexStringBuilder.toString()
+    return hashingSink.hash.hex()
 }
 
 object BuildInfo {
