@@ -1,7 +1,5 @@
 package othello
 
-import java.lang.IllegalArgumentException
-
 /** Handles game board state and logic.*/
 class Board(private val size: Int) {
 
@@ -59,7 +57,7 @@ class Board(private val size: Int) {
     fun placeDisk(move: Move) {
         val start = move.square
         if (getSquare(start) != Disk.Empty) {
-            throw IllegalArgumentException("Trying to place disk to an occupied square $start!")
+            throw Error("Trying to place disk to an occupied square $start!")
         }
         setSquare(start, move.disk)
         emptySquares.remove(start)
@@ -199,7 +197,7 @@ class Board(private val size: Int) {
     private fun setSquare(square: Square, disk: Disk) {
         val (x, y) = square
         if (!checkCoordinates(x, y)) {
-            throw IllegalArgumentException("Invalid coordinates ($x,$y)!")
+            throw Error("Invalid coordinates ($x,$y)!")
         }
         board[y * size + x] = disk
     }

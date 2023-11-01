@@ -1,13 +1,13 @@
 package othello
 
-import java.util.Random
+import kotlin.random.Random
 
 /** Defines one player that can be either human or computer controlled.*/
 class Player(private val disk: Disk, private val settings: PlayerSettings) {
     var canPlay = true
     private var isHuman = true
     private var roundsPlayed = 0
-    private val random = Random()
+    private val random = Random
 
     companion object {
         fun black(settings: PlayerSettings): Player {
