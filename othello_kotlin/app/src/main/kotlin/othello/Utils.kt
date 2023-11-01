@@ -19,14 +19,15 @@ enum class Disk(val value: Int) {
 /** Represents a step direction on the board.*/
 data class Step(val x: Int, val y: Int) {
     override fun hashCode(): Int {
-        return Objects.hash(x, y)
+        var result = 17
+        result = 31 * result + x.hashCode()
+        result = 31 * result + y.hashCode()
+        return result
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Step
+        if (other !is Step) return false
 
         if (x != other.x) return false
         if (y != other.y) return false
@@ -42,7 +43,10 @@ data class Step(val x: Int, val y: Int) {
 /** Represents one square location on the board.*/
 data class Square(val x: Int, val y: Int) : Comparable<Square> {
     override fun hashCode(): Int {
-        return Objects.hash(x, y)
+        var result = 17
+        result = 31 * result + x.hashCode()
+        result = 31 * result + y.hashCode()
+        return result
     }
 
     operator fun plus(step: Step): Square {
@@ -63,9 +67,7 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Square
+        if (other !is Square) return false
 
         if (x != other.x) return false
         if (y != other.y) return false
