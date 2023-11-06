@@ -17,110 +17,84 @@ import (
 
 	// https://github.com/logrusorgru/aurora
 	"github.com/logrusorgru/aurora/v4"
-	// https://github.com/urfave/cli/
-	"github.com/urfave/cli/v2"
+
+	// https://github.com/spf13/cobra
+	"github.com/spf13/cobra"
 
 	"othello_go/othello"
+)
+
+// CLI flags
+var (
+	autoplay   bool
+	defaultOpt bool
+	log        bool
+	noHelpers  bool
+	test       bool
+	version    bool
 )
 
 func main() {
 	fmt.Println(aurora.Green("OTHELLO GAME - GO").Bold())
 
-	// This `urfave/cli` lib is quite annoying to use,
-	// but the Go standard lib `flags` is even more horrible.
-	cli.HelpFlag = &cli.BoolFlag{
-		Name:               "help",
-		Aliases:            []string{"h"},
-		Usage:              "Print help and exit",
-		DisableDefaultText: true,
-	}
+	// Override usage template so can have positional argument info there
+	customUsageTemplate := fmt.Sprintf(`Usage:{{if .Runnable}}
+  {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
+  {{.CommandPath}} [command]{{end}}{{if gt (len .Aliases) 0}}
 
-	app := &cli.App{
-		Name:  "othello_go",
-		Usage: "A simple Othello CLI game implementation.",
-		Flags: []cli.Flag{
-			&cli.BoolFlag{
-				Name:               "autoplay",
-				Aliases:            []string{"a"},
-				Usage:              "Enable autoplay mode",
-				DisableDefaultText: true,
-			},
-			&cli.BoolFlag{
-				Name:               "default",
-				Aliases:            []string{"d"},
-				Usage:              "Play with default settings",
-				DisableDefaultText: true,
-			},
-			&cli.BoolFlag{
-				Name:               "log",
-				Aliases:            []string{"l"},
-				Usage:              "Show log after a game",
-				DisableDefaultText: true,
-			},
-			&cli.BoolFlag{
-				Name:               "no-helpers",
-				Aliases:            []string{"n"},
-				Usage:              "Hide disk placement hints",
-				DisableDefaultText: true,
-			},
-			&cli.BoolFlag{
-				Name:               "test",
-				Aliases:            []string{"t"},
-				Usage:              "Enable test mode",
-				DisableDefaultText: true,
-			},
-			&cli.BoolFlag{
-				Name:               "version",
-				Aliases:            []string{"v"},
-				Usage:              "Print version and exit",
-				DisableDefaultText: true,
-			},
-		},
-		CustomAppHelpTemplate: `{{.Usage}}
+Aliases:
+  {{.NameAndAliases}}{{end}}{{if .HasExample}}
 
-USAGE:
-    {{.HelpName}} [OPTIONS] [SIZE]
+Examples:
+{{.Example}}{{end}}{{if .HasAvailableSubCommands}}{{$cmds := .Commands}}{{if eq (len .Groups) 0}}
 
-ARGUMENTS:
-    [SIZE]    Optional board size
+Available Commands:{{range $cmds}}{{if (or .IsAvailableCommand (eq .Name "help"))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{else}}{{range $group := .Groups}}
 
-OPTIONS:
-    {{range .VisibleFlags}}{{.}}
-    {{end}}
-`,
-		Action: func(c *cli.Context) error {
-			autoplay := c.Bool("autoplay")
-			defaultOpt := c.Bool("default")
-			log := c.Bool("log")
-			noHelpers := c.Bool("no-helpers")
-			test := c.Bool("test")
-			version := c.Bool("version")
+{{.Title}}{{range $cmds}}{{if (and (eq .GroupID $group.ID) (or .IsAvailableCommand (eq .Name "help")))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{if not .AllChildCommandsHaveGroup}}
 
+Additional Commands:{{range $cmds}}{{if (and (eq .GroupID "") (or .IsAvailableCommand (eq .Name "help")))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{end}}{{end}}{{if .HasAvailableLocalFlags}}
+
+Arguments:
+  [SIZE]             Optional board size (%d..%d)
+
+Flags:
+{{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasAvailableInheritedFlags}}
+
+Global Flags:
+{{.InheritedFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasHelpSubCommands}}
+
+Additional help topics:{{range .Commands}}{{if .IsAdditionalHelpTopicCommand}}
+  {{rpad .CommandPath .CommandPathPadding}} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
+
+Use "{{.CommandPath}} [command] --help" for more information about a command.{{end}}
+`, othello.MinBoardSize, othello.MaxBoardSize)
+
+	var rootCmd = &cobra.Command{
+		Use:   "othello_go [SIZE]",
+		Short: "A simple Othello CLI game implementation.",
+		Long:  "A simple Othello CLI game implementation.",
+		Args:  cobra.MaximumNArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
 			if version {
 				fmt.Printf("Othello Go %s\n", othello.VersionInfo())
 				os.Exit(0)
 			}
 
-			if c.NArg() > 1 {
-				fmt.Println("Too many positional arguments.")
-				_ = cli.ShowAppHelp(c)
-				os.Exit(1)
-			}
-
 			var boardSize int
-			if c.NArg() == 1 {
-				arg := c.Args().Get(0)
-				size, err := strconv.Atoi(arg)
+			if len(args) == 1 {
+				size, err := strconv.Atoi(args[0])
 				if err != nil {
 					othello.PrintError("Invalid board size")
 					os.Exit(1)
 				} else if size < othello.MinBoardSize || size > othello.MaxBoardSize {
 					othello.PrintError("Unsupported board size: %d", size)
 					os.Exit(1)
-				} else {
-					boardSize = size
-					fmt.Printf("Using board size: %d\n", boardSize)
 				}
+				boardSize = size
+				fmt.Printf("Using board size: %d\n", boardSize)
 			} else if autoplay || defaultOpt {
 				boardSize = othello.DefaultBoardSize
 			} else {
@@ -131,13 +105,20 @@ OPTIONS:
 
 			game := othello.InitOthello(settings)
 			game.Play()
-
-			return nil
 		},
 	}
 
-	err := app.Run(os.Args)
-	if err != nil {
+	rootCmd.SetUsageTemplate(customUsageTemplate)
+
+	rootCmd.Flags().BoolVarP(&autoplay, "autoplay", "a", false, "Enable autoplay mode")
+	rootCmd.Flags().BoolVarP(&defaultOpt, "default", "d", false, "Play with default settings")
+	rootCmd.Flags().BoolVarP(&log, "log", "l", false, "Show log after a game")
+	rootCmd.Flags().BoolVarP(&noHelpers, "no-helpers", "n", false, "Hide disk placement hints")
+	rootCmd.Flags().BoolVarP(&test, "test", "t", false, "Enable test mode")
+	rootCmd.Flags().BoolVarP(&version, "version", "v", false, "Print version and exit")
+
+	if err := rootCmd.Execute(); err != nil {
 		othello.PrintError(err.Error())
+		os.Exit(1)
 	}
 }
