@@ -30,7 +30,13 @@ repos:
       - id: ruff
         name: Python ruff
         files: ^othello_python/
-        args: [--fix, --exit-non-zero-on-fix, --config, othello_python/pyproject.toml]
+        args:
+          [
+            --fix,
+            --exit-non-zero-on-fix,
+            --config,
+            othello_python/pyproject.toml,
+          ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 23.10.1
@@ -69,8 +75,8 @@ repos:
       - id: gofmt
         name: go format
         description: Run gofmt on files included in the commit.
-        entry: bash -c 'cd othello_go && gofmt -s -w'
-        pass_filenames: true
+        entry: bash -c 'cd othello_go && gofmt -s -w .'
+        pass_filenames: false
         types: [file, go]
         language: system
         files: ^othello_go/
