@@ -26,7 +26,7 @@ enum class Disk { black = -1, empty = 0, white = 1 };
 
 /// Represents one step direction on the board.
 struct Step {
-    Step(int x, int y) : x(x), y(y) {}
+    Step(const int x, const int y) : x(x), y(y) {}
 
     friend std::ostream& operator<<(std::ostream& out, const Step& step)
     {
@@ -50,7 +50,7 @@ struct Step {
 /// Represents one square location on the board.
 struct Square {
     Square() : x(0), y(0) {}
-    Square(int x, int y) : x(x), y(y) {}
+    Square(const int x, const int y) : x(x), y(y) {}
 
     friend std::ostream& operator<<(std::ostream& out, const Square& square)
     {
@@ -83,7 +83,7 @@ struct Square {
 
 /// Player settings.
 struct PlayerSettings {
-    PlayerSettings(bool show_helpers, bool test_mode)
+    PlayerSettings(const bool show_helpers, const bool test_mode)
         : show_helpers(show_helpers)
         , test_mode(test_mode)
     {}
@@ -97,12 +97,12 @@ struct PlayerSettings {
 /// Game settings.
 struct Settings {
     Settings(
-        size_t board_size,
-        bool autoplay_mode,
-        bool use_defaults,
-        bool show_helpers,
-        bool show_log,
-        bool test_mode)
+        const size_t board_size,
+        const bool autoplay_mode,
+        const bool use_defaults,
+        const bool show_helpers,
+        const bool show_log,
+        const bool test_mode)
         : board_size(board_size)
         , autoplay_mode(autoplay_mode)
         , use_defaults(use_defaults)
@@ -150,7 +150,11 @@ namespace othello
 /// Represents one possible disk placement for the given disk color.
 struct Move {
     Move() : square(0, 0), disk(Disk::empty), value(0) {}
-    Move(Square square, Disk disk, unsigned int value, std::vector<Step> directions)
+    Move(
+        const Square square,
+        const Disk disk,
+        const unsigned int value,
+        std::vector<Step> directions)
         : square(square)
         , disk(disk)
         , value(value)
@@ -194,7 +198,7 @@ inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
 }
 
 /// Print an object to stream (default is std::cout).
-template<typename T> inline void print(T object, bool newline = true, std::ostream& out = std::cout)
+template<typename T> void print(T object, const bool newline = true, std::ostream& out = std::cout)
 {
     out << object;
     if (newline) {
@@ -205,7 +209,7 @@ template<typename T> inline void print(T object, bool newline = true, std::ostre
 /// Convert object to string using a stringstream.
 /// Requires that the stream insertion operator `<<` has been implemented for the given object.
 /// Workaround for custom types without formatter specialization for fmt.
-template<typename T> inline std::string to_string(const T& object)
+template<typename T> std::string to_string(const T& object)
 {
     std::ostringstream stream;
     stream << object;

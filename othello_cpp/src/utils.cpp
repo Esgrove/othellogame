@@ -23,7 +23,7 @@ fmt::terminal_color disk_color(const Disk& disk)
     return disk == Disk::white ? cyan : magenta;
 }
 
-std::string board_char(const Disk& disk, bool color)
+std::string board_char(const Disk& disk, const bool color)
 {
     if (disk == Disk::empty) {
         return "_";
@@ -34,7 +34,7 @@ std::string board_char(const Disk& disk, bool color)
 
 std::string disk_string(const Disk& disk)
 {
-    auto color = disk_color(disk);
+    const auto color = disk_color(disk);
     switch (disk) {
         case Disk::empty:
             return get_color("EMPTY", color);

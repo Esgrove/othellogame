@@ -18,7 +18,7 @@
 namespace othello
 {
 
-Othello::Othello(Settings settings)
+Othello::Othello(const Settings settings)
     : board(Board(settings.board_size))
     , settings(settings)
     , player_black(Player::black(settings.to_player_settings()))
@@ -77,8 +77,7 @@ void Othello::game_loop()
         fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
 
         for (Player* player : {&player_black, &player_white}) {
-            auto result = player->play_one_move(board);
-            if (result.has_value()) {
+            if (auto result = player->play_one_move(board); result.has_value()) {
                 game_log.push_back(fmt::format("{};{}", result.value(), board.to_log_entry()));
             }
             fmt::print("--------------------------------\n");
@@ -98,7 +97,7 @@ void Othello::print_log() const
         }
     }
 
-    auto hex_hash = calculate_sha256(formatted_log);
+    const auto hex_hash = calculate_sha256(formatted_log);
 
     print_bold("Game log:\n", fmt::terminal_color::yellow);
     print(formatted_log);
@@ -114,8 +113,7 @@ void Othello::print_result() const
     print_status();
     print("");
 
-    Disk winner = board.result();
-    if (winner == Disk::empty) {
+    if (const Disk winner = board.result(); winner == Disk::empty) {
         print("The game ended in a tie...\n");
     } else {
         print(fmt::format("The winner is {}!\n", disk_string(winner)));
@@ -152,7 +150,7 @@ size_t Othello::get_board_size()
     std::string input;
     std::cin >> input;
     try {
-        size_t size = std::stoi(input);
+        const size_t size = std::stoi(input);
         if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
             print_warn(fmt::format(
                 "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE));

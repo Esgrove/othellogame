@@ -12,7 +12,7 @@
 #include "utils.hpp"
 #include "version.hpp"
 
-int main(int argc, const char* argv[])
+int main(const int argc, const char* argv[])
 {
     print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
 
@@ -32,7 +32,7 @@ int main(int argc, const char* argv[])
     options.parse_positional({"size"});
 
     try {
-        auto result = options.parse(argc, argv);
+        const auto result = options.parse(argc, argv);
 
         if (result["help"].as<bool>()) {
             std::cout << options.help() << std::endl;
@@ -50,11 +50,11 @@ int main(int argc, const char* argv[])
             return 0;
         }
 
-        bool autoplay = result["autoplay"].as<bool>();
-        bool use_defaults = result["default"].as<bool>();
-        bool show_helpers = !result["no-helpers"].as<bool>();
-        bool show_log = result["log"].as<bool>();
-        bool test_mode = result["test"].as<bool>();
+        const bool autoplay = result["autoplay"].as<bool>();
+        const bool use_defaults = result["default"].as<bool>();
+        const bool show_helpers = !result["no-helpers"].as<bool>();
+        const bool show_log = result["log"].as<bool>();
+        const bool test_mode = result["test"].as<bool>();
 
         size_t board_size;
         if (result.count("size") > 0) {
@@ -70,13 +70,12 @@ int main(int argc, const char* argv[])
             board_size = othello::Othello::get_board_size();
         }
 
-        othello::Settings settings(
+        const othello::Settings settings(
             board_size, autoplay, use_defaults, show_helpers, show_log, test_mode);
 
         othello::Othello game {settings};
         game.play();
     } catch (const cxxopts::exceptions::exception& e) {
-        // TODO: print to cerr
         print_error(e.what());
         return 1;
     }

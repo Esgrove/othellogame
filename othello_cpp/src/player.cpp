@@ -18,11 +18,10 @@
 namespace othello
 {
 /// Play one round as this player.
-std::optional<std::string> othello::Player::play_one_move(Board& board)
+std::optional<std::string> Player::play_one_move(Board& board)
 {
     print("Turn: " + disk_string(disk));
-    auto moves = board.possible_moves(disk);
-    if (!moves.empty()) {
+    if (const auto moves = board.possible_moves(disk); !moves.empty()) {
         can_play = true;
         if (this->human && this->settings.show_helpers) {
             board.print_possible_moves(moves);
@@ -42,20 +41,20 @@ std::optional<std::string> othello::Player::play_one_move(Board& board)
 }
 
 /// Set player to be controlled by human or computer.
-void othello::Player::set_human(bool is_human)
+void Player::set_human(const bool is_human)
 {
     this->human = is_human;
 }
 
 /// Reset player status for a new game.
-void othello::Player::reset()
+void Player::reset()
 {
     this->rounds_played = 0;
     this->can_play = true;
 }
 
 /// Return move chosen by computer.
-othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
+Move Player::get_computer_move(const std::vector<Move>& moves)
 {
     print("  Computer plays...");
     Move chosen_move;
@@ -63,8 +62,8 @@ othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
         chosen_move = moves[0];
     } else {
         // Wait a bit and pick a random move
-        std::uniform_int_distribution<int> rand_time(1000, 2000);
-        auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen));
+        std::uniform_int_distribution rand_time(1000, 2000);
+        const auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen));
         std::this_thread::sleep_for(sleep_duration);
 
         std::uniform_int_distribution<size_t> rand_item(0, moves.size() - 1);
@@ -76,7 +75,7 @@ othello::Move othello::Player::get_computer_move(const std::vector<Move>& moves)
 }
 
 /// Return move chosen by a human player.
-othello::Move othello::Player::get_human_move(const std::vector<Move>& moves)
+Move Player::get_human_move(const std::vector<Move>& moves) const
 {
     while (true) {
         auto square = get_square();
@@ -94,7 +93,7 @@ othello::Move othello::Player::get_human_move(const std::vector<Move>& moves)
 }
 
 /// Ask human player for square coordinates.
-othello::Square othello::Player::get_square()
+Square Player::get_square()
 {
     std::string input;
     while (true) {

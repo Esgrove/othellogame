@@ -21,28 +21,28 @@ inline std::pair<std::string, std::string> split_leading_whitespace(const std::s
 {
     // Find the index of the first non-whitespace character.
     size_t indent_size = 0;
-    while (indent_size < message.length() && (std::isspace(message[indent_size]) != 0)) {
+    while (indent_size < message.length() && std::isspace(message[indent_size]) != 0) {
         ++indent_size;
     }
     return {message.substr(0, indent_size), message.substr(indent_size)};
 }
 
 /// Format string with colour using fmt.
-template<typename T> inline std::string get_color(const T& object, fmt::terminal_color color)
+template<typename T> std::string get_color(const T& object, const fmt::terminal_color color)
 {
     return fmt::format(fmt::fg(color), "{}", object);
 }
 
 /// Print text with colour.
 template<typename T>
-inline void print_color(const T& object, fmt::terminal_color color = fmt::terminal_color::white)
+void print_color(const T& object, const fmt::terminal_color color = fmt::terminal_color::white)
 {
     fmt::print(fmt::fg(color), object);
 }
 
 /// Print bold text.
 template<typename T>
-inline void print_bold(const T& object, fmt::terminal_color color = fmt::terminal_color::white)
+void print_bold(const T& object, const fmt::terminal_color color = fmt::terminal_color::white)
 {
     fmt::print(fmt::emphasis::bold | fmt::fg(color), object);
 }
@@ -51,7 +51,9 @@ inline void print_bold(const T& object, fmt::terminal_color color = fmt::termina
 inline void print_error(const std::string& message)
 {
     auto [indent, text] = split_leading_whitespace(message);
-    fmt::print(fmt::fg(fmt::terminal_color::red), "{}Error: {}\n", indent, text);
+    const auto error_message
+        = fmt::format(fmt::fg(fmt::terminal_color::red), "{}Error: {}\n", indent, text);
+    std::cerr << error_message;
 }
 
 /// Print warning message with yellow colour.

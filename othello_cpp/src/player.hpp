@@ -41,7 +41,7 @@ private:
     static Square get_square();
 
     Move get_computer_move(const std::vector<Move>& moves);
-    Move get_human_move(const std::vector<Move>& moves);
+    Move get_human_move(const std::vector<Move>& moves) const;
 
     Disk disk;
     bool human {true};

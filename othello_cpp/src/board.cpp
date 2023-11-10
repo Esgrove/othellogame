@@ -15,14 +15,14 @@
 
 namespace othello
 {
-Board::Board(size_t size) : indices(size), size(size)
+Board::Board(const size_t size) : indices(size), size(size)
 {
     // init game board with empty disks.
     board.resize(size * size, Disk::empty);
 
     // set starting positions
-    auto row = size % 2 == 0 ? (size - 1) / 2 : (size - 1) / 2 - 1;
-    auto col = size / 2;
+    const auto row = size % 2 == 0 ? (size - 1) / 2 : (size - 1) / 2 - 1;
+    const auto col = size / 2;
     board[row * size + row] = Disk::white;
     board[row * size + col] = Disk::black;
     board[col * size + row] = Disk::black;
@@ -32,8 +32,8 @@ Board::Board(size_t size) : indices(size), size(size)
     std::iota(indices.begin(), indices.end(), 0);
 
     // keep track of empty squares on board to avoid checking already filled positions
-    for (auto y : indices) {
-        for (auto x : indices) {
+    for (const auto y : indices) {
+        for (const auto x : indices) {
             if (board[y * size + x] == Disk::empty) {
                 empty_squares.emplace(static_cast<int>(x), static_cast<int>(y));
             }
@@ -72,7 +72,7 @@ void Board::place_disk(const Move& move)
 std::vector<Move> Board::possible_moves(Disk disk) const
 {
     std::vector<Move> moves;
-    Disk opposing_disk = opponent(disk);
+    const Disk opposing_disk = opponent(disk);
     for (const Square& square : empty_squares) {
         int value {0};
         std::vector<Step> directions;
@@ -150,7 +150,7 @@ void Board::print_score() const
 Disk Board::result() const
 {
     using enum Disk;
-    int sum = score();
+    const int sum = score();
     if (sum == 0) {
         return empty;
     }
@@ -201,7 +201,7 @@ int Board::score() const
 {
     // enum class prevents implicit conversion from Disk to int,
     // need to use lambda to cast Disk values to int
-    return std::accumulate(board.begin(), board.end(), 0, [](int sum, Disk disk) {
+    return std::accumulate(board.begin(), board.end(), 0, [](const int sum, Disk disk) {
         return sum + static_cast<int>(disk);
     });
 }
@@ -209,13 +209,12 @@ int Board::score() const
 /// Returns the state of the board (empty, white, black) at the given coordinates.
 std::optional<Disk> Board::get_square(const Square& square) const
 {
-    return check_coordinates(square.x, square.y)
-        ? std::optional<Disk> {board[square.y * size + square.x]}
-        : std::nullopt;
+    return check_coordinates(square.x, square.y) ? std::optional {board[square.y * size + square.x]}
+                                                 : std::nullopt;
 }
 
 /// Sets the given square to given value.
-void Board::set_square(const Square& square, Disk disk)
+void Board::set_square(const Square& square, const Disk disk)
 {
     if (!check_coordinates(square.x, square.y)) {
         throw std::invalid_argument(fmt::format("Invalid coordinates: {}!", square));

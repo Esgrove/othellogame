@@ -35,7 +35,7 @@ public:
 private:
     [[nodiscard]] bool check_coordinates(const int& x, const int& y) const;
     [[nodiscard]] int score() const;
-    [[nodiscard]] std::optional<othello::Disk> get_square(const Square& square) const;
+    [[nodiscard]] std::optional<Disk> get_square(const Square& square) const;
     [[nodiscard]] std::tuple<int, int> player_scores() const;
     void set_square(const Square& square, Disk disk);
 
