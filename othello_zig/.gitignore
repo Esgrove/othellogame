@@ -1,0 +1,10 @@
+/build-*/
+/build/
+/debug/
+/docgen_tmp/
+/release/
+zig-cache/
+zig-out/
+
+# Binary
+/othello_zig
