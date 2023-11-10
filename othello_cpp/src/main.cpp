@@ -18,10 +18,18 @@ int main(const int argc, const char* argv[])
 
     cxxopts::Options options("othello_cpp", "A simple Othello CLI game implementation.");
     options.custom_help("[OPTIONS]");
-    options.positional_help("[SIZE]");
+    options.positional_help(fmt::format(
+        "[SIZE]\n\nArguments:\n  [SIZE]            Optional board size ({}..{})",
+        othello::MIN_BOARD_SIZE,
+        othello::MAX_BOARD_SIZE));
 
-    options.add_options()("size", "Optional board size", cxxopts::value<size_t>())(
-        "h,help", "Print help and exit", cxxopts::value<bool>())(
+    options.add_options("Positional")(
+        "size",
+        fmt::format(
+            "Optional board size ({}..{})", othello::MIN_BOARD_SIZE, othello::MAX_BOARD_SIZE),
+        cxxopts::value<size_t>());
+
+    options.add_options("Optional")("h,help", "Print help and exit", cxxopts::value<bool>())(
         "a,autoplay", "Enable autoplay mode", cxxopts::value<bool>())(
         "d,default", "Play with default settings", cxxopts::value<bool>())(
         "l,log", "Show log after a game", cxxopts::value<bool>())(
@@ -35,7 +43,7 @@ int main(const int argc, const char* argv[])
         const auto result = options.parse(argc, argv);
 
         if (result["help"].as<bool>()) {
-            std::cout << options.help() << std::endl;
+            std::cout << options.help({"Optional"}) << std::endl;
             return 1;
         }
 
