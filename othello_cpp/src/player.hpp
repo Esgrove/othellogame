@@ -16,13 +16,14 @@ namespace othello
 class Player
 {
 public:
-    explicit Player(Disk disk, PlayerSettings settings) : disk(disk), settings(settings) {};
+    explicit Player(const Disk disk, const PlayerSettings settings) : disk(disk), settings(settings)
+    {}
 
     /// Shorthand to initialize a new player for black disks.
-    static Player black(PlayerSettings settings) { return Player(Disk::black, settings); }
+    static Player black(const PlayerSettings settings) { return Player(Disk::black, settings); }
 
     /// Shorthand to initialize a new player for white disks.
-    static Player white(PlayerSettings settings) { return Player(Disk::white, settings); }
+    static Player white(const PlayerSettings settings) { return Player(Disk::white, settings); }
 
     // nodiscard -> compiler should warn if value returned by function call is not used
     [[nodiscard]] std::string type_string() const { return this->human ? "Human   " : "Computer"; }
@@ -40,8 +41,8 @@ public:
 private:
     static Square get_square();
 
-    Move get_computer_move(const std::vector<Move>& moves);
-    Move get_human_move(const std::vector<Move>& moves) const;
+    [[nodiscard]] Move get_computer_move(const std::vector<Move>& moves);
+    [[nodiscard]] Move get_human_move(const std::vector<Move>& moves) const;
 
     Disk disk;
     bool human {true};

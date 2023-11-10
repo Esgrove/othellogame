@@ -73,10 +73,10 @@ std::string calculate_sha256(const std::string& text)
             if (EVP_DigestUpdate(context, text.c_str(), text.length()) != 0) {
                 unsigned char hash[EVP_MAX_MD_SIZE];
                 unsigned int hash_length = 0;
-
                 if (EVP_DigestFinal_ex(context, hash, &hash_length) != 0) {
                     for (unsigned int i = 0; i < hash_length; ++i) {
-                        stream << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
+                        stream << std::hex << std::setw(2) << std::setfill('0')
+                               << static_cast<int>(hash[i]);
                     }
                 }
             }
