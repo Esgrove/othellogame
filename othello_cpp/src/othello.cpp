@@ -10,10 +10,10 @@
 
 #include "colorprint.hpp"
 #include "utils.hpp"
-#include "version.hpp"
 
 #include <algorithm>  // clamp, transform
 #include <iostream>
+#include <ranges>
 
 namespace othello
 {
@@ -140,8 +140,8 @@ bool Othello::get_answer(const std::string& question, const std::string& yes, co
     fmt::print("{} ({}/{})? ", question, yes, no);
     std::string input;
     std::cin >> input;
-    // TODO: replace with std::ranges:transform
-    std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+    std::ranges::transform(
+        input, input.begin(), [](const unsigned char c) { return std::tolower(c); });
     return input == yes;
 }
 

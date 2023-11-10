@@ -9,9 +9,9 @@
 
 #include "colorprint.hpp"
 
-#include <algorithm>  // sort, transform
 #include <chrono>
-#include <optional>   // std::optional
+#include <optional>  // std::optional
+#include <ranges>
 #include <stdexcept>  // exceptions
 #include <thread>     // sleep_for
 
@@ -80,14 +80,12 @@ othello::Move othello::Player::get_human_move(const std::vector<Move>& moves)
 {
     while (true) {
         auto square = get_square();
-        // check if given square is one of the possible moves
-        if (auto move = std::find_if(
-                moves.begin(),
-                moves.end(),
-                [&square](const Move& move) { return move.square == square; });
+        // Check if given square is one of the possible moves
+        if (auto move
+            = std::ranges::find_if(moves, [&square](const Move& m) { return m.square == square; });
             move != moves.end())
         {
-            // dereference iterator to get value
+            // Dereference iterator to get value
             return *move;
         }
         print_error(

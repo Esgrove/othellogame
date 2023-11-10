@@ -11,6 +11,7 @@
 
 #include <algorithm>  // std::remove, std::transform
 #include <numeric>    // std::accumulate, std::iota
+#include <ranges>     // std::ranges::transform (requires C++20)
 
 namespace othello
 {
@@ -111,10 +112,8 @@ void Board::print_possible_moves(const std::vector<Move>& moves)
         fmt::terminal_color::yellow);
     // Convert board from Disk enums to strings
     std::vector<std::string> formatted_board(board.size());
-    std::transform(
-        board.begin(), board.end(), formatted_board.begin(), [&](Disk disk) -> std::string {
-            return board_char(disk);
-        });
+    std::ranges::transform(
+        board, formatted_board.begin(), [&](const Disk& disk) { return board_char(disk); });
     // Add possible moves
     for (const Move& move : moves) {
         formatted_board[move.square.y * size + move.square.x]
