@@ -74,7 +74,7 @@ executable othello_haskell
 
     -- Other library packages from which modules are imported.
     build-depends:
-        base ^>=4.18.0.0,
+        base ^>=4.19.0.0,
         split,
         optparse-applicative ^>=0.18.1.0,
         ansi-terminal ^>=1.0
