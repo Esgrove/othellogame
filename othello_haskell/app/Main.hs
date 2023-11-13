@@ -8,6 +8,15 @@ import Options.Applicative
 import Paths_othello (version)
 import System.Console.ANSI
 
+minBoardSize :: Int
+minBoardSize = 4
+
+maxBoardSize :: Int
+maxBoardSize = 10
+
+defaultBoardSize :: Int
+defaultBoardSize = 8
+
 data Options = Options
   { size :: Maybe Int,
     autoplay :: Bool,
@@ -23,7 +32,7 @@ options =
     <$> optional
       ( argument
           auto
-          (metavar "SIZE" <> help "Optional board size (MIN_BOARD_SIZE..MAX_BOARD_SIZE)")
+          (metavar "SIZE" <> help "Optional board size (" ++ show minBoardSize ++ ".." ++ show maxBoardSize ++ ")")
       )
     <*> switch (long "autoplay" <> short 'a' <> help "Enable autoplay mode")
     <*> switch (long "default" <> short 'd' <> help "Play with default settings")
