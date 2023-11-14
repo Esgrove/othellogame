@@ -26,10 +26,9 @@ else
     executable="othello_haskell"
 fi
 
-rm -f "$executable"
-
 cabal build
 
+cp "$(find dist-newstyle/build -type f -name "othello_haskell" -print -quit)" "$executable"
 file "$executable"
 ./"$executable" --version
 ./"$executable" -h
