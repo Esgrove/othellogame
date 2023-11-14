@@ -34,3 +34,7 @@ brew install ktlint
 
 ktlint --format
 ```
+
+## Todo
+
+- Use [Arrow](https://arrow-kt.io) for Rust style error handling
