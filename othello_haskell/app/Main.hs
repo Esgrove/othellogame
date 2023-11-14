@@ -7,6 +7,7 @@ import Options.Applicative
 -- Import version from Cabal package
 import Paths_othello (version)
 import System.Console.ANSI
+import Text.Printf
 
 minBoardSize :: Int
 minBoardSize = 4
@@ -26,13 +27,16 @@ data Options = Options
     test :: Bool
   }
 
+sizeHelpMessage :: String
+sizeHelpMessage = printf "Optional board size (%d..%d)" minBoardSize maxBoardSize
+
 options :: Parser Options
 options =
   Options
     <$> optional
       ( argument
           auto
-          (metavar "SIZE" <> help "Optional board size (" ++ show minBoardSize ++ ".." ++ show maxBoardSize ++ ")")
+          (metavar "SIZE" <> help sizeHelpMessage)
       )
     <*> switch (long "autoplay" <> short 'a' <> help "Enable autoplay mode")
     <*> switch (long "default" <> short 'd' <> help "Play with default settings")
@@ -50,7 +54,6 @@ main = do
         (helper <*> versionOption <*> options)
         ( fullDesc
             <> progDesc "A simple Othello CLI game implementation."
-            <> header "Othello Haskell"
         )
     versionOption =
       infoOption
