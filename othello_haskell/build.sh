@@ -32,4 +32,5 @@ cabal build
 
 file "$executable"
 ./"$executable" --version
+./"$executable" -h
 popd > /dev/null
