@@ -113,7 +113,8 @@ build_project() {
         mv "$(find "$BUILD_DIR" -type f -name Othello)" $EXECUTABLE
     fi
     file "$EXECUTABLE"
-    ./"$EXECUTABLE" -v
+    ./"$EXECUTABLE" --version
+    ./"$EXECUTABLE" -h
 }
 
 init_options "$@"

@@ -55,6 +55,7 @@ build_project() {
 
     file "$EXECUTABLE"
     ./"$EXECUTABLE" --version
+    ./"$EXECUTABLE" -h
     popd > /dev/null
 }
 

@@ -136,6 +136,7 @@ move_exe_to_root() {
     file "$executable"
     # Run executable to check it works and print the version info
     ./"$executable" --version
+    ./"$executable" -h
     popd > /dev/null
 }
 

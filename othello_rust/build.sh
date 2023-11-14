@@ -31,4 +31,5 @@ rm -f "$executable"
 mv ./target/release/"$executable" "$executable"
 file "$executable"
 ./"$executable" --version
+./"$executable" -h
 popd > /dev/null

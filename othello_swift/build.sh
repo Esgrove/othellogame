@@ -45,4 +45,5 @@ rm -f "$executable"
 mv "$(find .build -type d -name release -print -quit)/$executable" "$executable"
 file "$executable"
 ./"$executable" --version
+./"$executable" -h
 popd > /dev/null
