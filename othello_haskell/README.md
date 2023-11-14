@@ -22,5 +22,5 @@ cabal install ormolu
 ```
 
 ```bash
-ormolu --mode inplace **/*.sh
+ormolu --mode inplace **/*.hs
 ```
