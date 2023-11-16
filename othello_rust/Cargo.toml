@@ -1,3 +1,5 @@
+# https://doc.rust-lang.org/cargo/reference/manifest.html
+
 [package]
 authors = ["Esgrove <esgrove@outlook.com>"]
 description = "A simple Othello CLI game implementation."
@@ -26,3 +28,9 @@ shadow-rs = "0.24.1"
 [[bin]]
 name = "othello_rust"
 path = "src/main.rs"
+
+[profile.release]
+lto = true
+incremental = true
+# https://doc.rust-lang.org/rustc/codegen-options/index.html#codegen-units
+codegen-units = 1
