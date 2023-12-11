@@ -8,12 +8,14 @@ on:
       - main
     paths:
       - "**.py"
+      - ".github/workflows/ruff.yml"
   pull_request:
     branches:
       - master
       - main
     paths:
       - "**.py"
+      - ".github/workflows/ruff.yml"
 
 # https://github.com/chartboost/ruff-action
 jobs:

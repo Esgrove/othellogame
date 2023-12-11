@@ -10,6 +10,7 @@ on:
       - "**.rs"
       - "othello_rust/Cargo.lock"
       - "othello_rust/Cargo.toml"
+      - ".github/workflows/cargo.yml"
   pull_request:
     branches:
       - master
@@ -18,7 +19,7 @@ on:
       - "**.rs"
       - "othello_rust/Cargo.lock"
       - "othello_rust/Cargo.toml"
-
+      - ".github/workflows/cargo.yml"
 
 # https://github.com/actions-rs/cargo
 jobs:

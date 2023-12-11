@@ -7,13 +7,15 @@ on:
       - master
       - main
     paths:
-      - '**.py'
+      - "**.py"
+      - ".github/workflows/black.yml"
   pull_request:
     branches:
       - master
       - main
     paths:
-      - '**.py'
+      - "**.py"
+      - ".github/workflows/black.yml"
 
 # https://black.readthedocs.io/en/stable/integrations/github_actions.html
 jobs:
@@ -29,7 +31,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v40
         with:
-          files: '**/*.py'
+          files: "**/*.py"
 
       - name: List all changed files
         if: steps.changed-files.outputs.any_changed == 'true'
@@ -42,7 +44,7 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Black
         if: steps.changed-files.outputs.any_changed == 'true'
