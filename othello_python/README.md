@@ -36,7 +36,7 @@ python3 othello/othello.py
 # through poetry
 poetry run python othello/othello.py
 # or with helper script
-./othello.sh
+./othello_python.sh
 # executing directly also works in a unix shell
 ./othello/othello.py
 ```

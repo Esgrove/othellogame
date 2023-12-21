@@ -8,5 +8,5 @@ echo ""
 ./othello_go/othello_go --version
 ./othello_rust/othello_rust --version
 ./othello_swift/othello_swift --version
-./othello_python/othello.sh --version
+./othello_python/othello_python.sh --version
 java -jar othello_kotlin/othello_kotlin.jar --version
