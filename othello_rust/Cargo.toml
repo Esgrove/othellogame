@@ -8,7 +8,7 @@ license = "MIT"
 name = "othello_rust"
 readme = "README.md"
 repository = "https://github.com/Esgrove/othellogame"
-version = "1.5.0"
+version = "1.6.0"
 build = "build.rs"
 
 [dependencies]
