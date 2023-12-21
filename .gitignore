@@ -86,3 +86,6 @@ dmypy.json
 # Other
 *.ods
 *.exe
+
+# Check files
+/othello_*.txt
