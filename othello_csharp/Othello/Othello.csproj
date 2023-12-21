@@ -6,9 +6,9 @@
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
-    <RuntimeIdentifiers>win10-x64;osx.10.13-x64;osx.11.0-arm64;linux-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;osx-x64;osx-arm64;linux-x64</RuntimeIdentifiers>
     <SelfContained>false</SelfContained>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Version>2.3.0</Version>
     <StartupObject></StartupObject>
     <PackageReadmeFile>README.md</PackageReadmeFile>
