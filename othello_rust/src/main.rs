@@ -49,6 +49,10 @@ struct Args {
     #[arg(short, long, help = "Enable autoplay mode", conflicts_with = "default")]
     autoplay: bool,
 
+    /// Only print hash to check result (implies `autoplay` and `test`)
+    #[arg(short, long)]
+    check: bool,
+
     /// Quick start to play with default settings
     #[arg(short, long, help = "Play with default settings")]
     default: bool,
@@ -113,11 +117,12 @@ fn main() -> Result<()> {
 
     let settings = Settings {
         board_size,
-        autoplay_mode: args.autoplay,
+        check_mode: args.check,
+        test_mode: args.test || args.check,
+        autoplay_mode: args.autoplay || args.check,
         use_defaults: args.default,
         show_helpers: !args.no_helpers,
         show_log: args.log,
-        test_mode: args.test,
     };
 
     let mut game = Othello::init(settings);

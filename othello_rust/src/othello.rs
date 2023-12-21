@@ -50,7 +50,7 @@ impl Othello {
             self.init_game();
             self.game_loop();
             self.print_result();
-            if self.settings.show_log {
+            if self.settings.show_log || self.settings.check_mode {
                 self.print_log();
             }
             if self.settings.autoplay_mode
@@ -85,28 +85,39 @@ impl Othello {
                 self.player_black.set_human(false);
             }
         }
-
-        println!("{}", "\nPlayers:".bold());
-        self.print_status();
+        if !self.settings.check_mode {
+            println!("{}", "\nPlayers:".bold());
+            self.print_status();
+        }
     }
 
     /// Keep making moves until both players can't make a move any more.
     fn game_loop(&mut self) {
         while self.board.can_play() && (self.player_black.can_play || self.player_white.can_play) {
             self.rounds_played += 1;
-            println!(
-                "{}",
-                format!("\n=========== ROUND: {} ===========", self.rounds_played).bold()
-            );
+            if !self.settings.check_mode {
+                println!(
+                    "{}",
+                    format!("\n=========== ROUND: {} ===========", self.rounds_played).bold()
+                );
+            }
             for player in [&mut self.player_black, &mut self.player_white].iter_mut() {
-                if let Some(result) = player.play_one_move(&mut self.board) {
+                if let Some(result) =
+                    player.play_one_move(&mut self.board, &self.settings.check_mode)
+                {
                     self.game_log
                         .push(format!("{};{}", result, self.board.to_log_entry()));
                 }
-                println!("--------------------------------");
+                if !self.settings.check_mode {
+                    println!("--------------------------------");
+                }
             }
         }
         self.games_played += 1;
+        if !self.settings.check_mode {
+            println!("{}", "\n================================".bold());
+            println!("{}", "The game is finished!\n".green().bold());
+        }
     }
 
     /// Print game log which shows all moves made and the game board state after each move.
@@ -123,15 +134,15 @@ impl Othello {
 
         let hex_hash = utils::calculate_sha256(&formatted_log);
 
-        println!("{}", "Game log:".yellow().bold());
-        println!("{}", formatted_log);
+        if !self.settings.check_mode {
+            println!("{}", "Game log:".yellow().bold());
+            println!("{}", formatted_log);
+        }
         println!("{}", hex_hash);
     }
 
     /// Print ending status and winner info.
     fn print_result(&self) {
-        println!("{}", "\n================================".bold());
-        println!("{}", "The game is finished!\n".green().bold());
         println!("{}", "Result:".bold());
         self.print_status();
         println!();

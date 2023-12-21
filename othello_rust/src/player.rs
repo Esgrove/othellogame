@@ -67,8 +67,10 @@ impl Player {
     }
 
     /// Play one round as this player.
-    pub fn play_one_move(&mut self, board: &mut Board) -> Option<String> {
-        println!("Turn: {}", self.disk);
+    pub fn play_one_move(&mut self, board: &mut Board, disable_prints: &bool) -> Option<String> {
+        if !disable_prints {
+            println!("Turn: {}", self.disk);
+        }
         let moves = board.possible_moves(self.disk);
         if !moves.is_empty() {
             self.can_play = true;
@@ -78,10 +80,12 @@ impl Player {
             let chosen_move = if self.human {
                 self.get_human_move(&moves)
             } else {
-                self.get_computer_move(&moves)
+                self.get_computer_move(&moves, disable_prints)
             };
             board.place_disk(&chosen_move);
-            board.print_score();
+            if !disable_prints {
+                board.print_score();
+            }
             self.rounds_played += 1;
             if !self.settings.test_mode {
                 thread::sleep(Duration::from_secs(1));
@@ -89,7 +93,9 @@ impl Player {
             Some(chosen_move.to_log_entry())
         } else {
             self.can_play = false;
-            println!("{}", "  No moves available...".yellow());
+            if !disable_prints {
+                println!("{}", "  No moves available...".yellow());
+            }
             None
         }
     }
@@ -106,8 +112,10 @@ impl Player {
     }
 
     /// Return move chosen by computer.
-    fn get_computer_move(&self, moves: &Vec<Move>) -> Move {
-        println!("  Computer plays...");
+    fn get_computer_move(&self, moves: &Vec<Move>, disable_prints: &bool) -> Move {
+        if !disable_prints {
+            println!("  Computer plays...");
+        }
         let chosen_move = if self.settings.test_mode {
             moves[0].clone()
         } else {
@@ -117,7 +125,9 @@ impl Player {
             ));
             moves[rand::thread_rng().gen_range(0..moves.len())].clone()
         };
-        println!("  {} -> {}", chosen_move.square, chosen_move.value);
+        if !disable_prints {
+            println!("  {} -> {}", chosen_move.square, chosen_move.value);
+        }
         chosen_move
     }
 

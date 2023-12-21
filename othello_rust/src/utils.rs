@@ -53,6 +53,7 @@ pub struct Move {
 #[derive(Debug, Copy, Clone)]
 pub struct Settings {
     pub board_size: usize,
+    pub check_mode: bool,
     pub test_mode: bool,
     pub autoplay_mode: bool,
     pub use_defaults: bool,
@@ -74,6 +75,7 @@ impl Default for Settings {
     fn default() -> Self {
         Settings {
             board_size: 8,
+            check_mode: false,
             test_mode: false,
             autoplay_mode: false,
             use_defaults: false,
