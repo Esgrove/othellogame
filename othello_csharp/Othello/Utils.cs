@@ -212,7 +212,7 @@ namespace Othello
         public Settings(
             int boardSize,
             bool autoplayMode,
-            bool useDefaults,
+            bool useDefaultOptions,
             bool showHelpers,
             bool showLog,
             bool testMode
@@ -220,7 +220,7 @@ namespace Othello
         {
             BoardSize = boardSize;
             AutoplayMode = autoplayMode;
-            useDefaults = useDefaults;
+            useDefaults = useDefaultOptions;
             ShowHelpers = showHelpers;
             ShowLog = showLog;
             TestMode = testMode;
