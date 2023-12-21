@@ -76,7 +76,7 @@ Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFor
 
 ### C\#
 
-.NET 7 and C# 11.
+.NET 8 and C# 11.
 Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal.
 Follows the [C# style guide](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) (*PascalCase*),
 but with line length limit of 100.
