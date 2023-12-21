@@ -76,7 +76,7 @@ namespace Othello
     }
 
     /// Represents one square location on the board.
-    public readonly struct Square
+    public readonly struct Square : IComparable<Square>
     {
         public readonly int X;
         public readonly int Y;
@@ -123,6 +123,16 @@ namespace Othello
             y = Y;
         }
 
+        public int CompareTo(Square other)
+        {
+            if (X == other.X)
+            {
+                return Y.CompareTo(other.Y);
+            }
+
+            return X.CompareTo(other.X);
+        }
+
         public static Square operator +(Square left, Square right)
         {
             return new Square(left.X + right.X, left.Y + right.Y);
@@ -150,7 +160,7 @@ namespace Othello
     }
 
     /// Represents one possible disk placement for the given disk color.
-    public readonly struct Move
+    public readonly struct Move : IComparable<Move>
     {
         public readonly Square Square;
         public readonly int Value;
@@ -173,6 +183,12 @@ namespace Othello
         public override string ToString()
         {
             return $"Square: {Square} -> value: {Value}";
+        }
+
+        public int CompareTo(Move other)
+        {
+            var value = other.Value.CompareTo(Value);
+            return value == 0 ? Square.CompareTo(other.Square) : value;
         }
 
         public static bool operator <(Move left, Move right)

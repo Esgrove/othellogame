@@ -129,15 +129,9 @@ namespace Othello
                     moves.Add(new Move(square, value, color, directions));
                 }
             }
-            if (moves.Any())
+            if (moves.Count != 0)
             {
-                moves.Sort(
-                    delegate (Move left, Move right)
-                    {
-                        var value = right.Value.CompareTo(left.Value);
-                        return value == 0 ? left.Square.X.CompareTo(right.Square.X) : value;
-                    }
-                );
+                moves.Sort();
             }
             return moves;
         }
