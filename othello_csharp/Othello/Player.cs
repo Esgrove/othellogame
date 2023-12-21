@@ -50,7 +50,7 @@ namespace Othello
         {
             Console.WriteLine($"Turn: {_disk.Name()}");
             var moves = board.PossibleMoves(_disk);
-            if (moves.Any())
+            if (moves.Count != 0)
             {
                 canPlay = true;
                 if (_isHuman && _settings.ShowHelpers)

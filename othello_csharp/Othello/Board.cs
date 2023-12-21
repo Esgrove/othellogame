@@ -67,7 +67,7 @@ namespace Othello
         /// -> still possible to make a move.
         public bool CanPlay()
         {
-            return _emptySquares.Any();
+            return _emptySquares.Count != 0;
         }
 
         /// Update board for given disk placement.
