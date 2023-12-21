@@ -43,15 +43,15 @@ init_options() {
         "Darwin")
             PLATFORM="mac"
             if [ "$(uname -m)" = arm64 ]; then
-                RUNTIME="osx.11.0-arm64"
+                RUNTIME="osx-arm64"
             else
-                RUNTIME="osx.10.15-x64"
+                RUNTIME="osx-x64"
             fi
             EXECUTABLE="othello_csharp"
             ;;
         "MINGW"*)
             PLATFORM="windows"
-            RUNTIME="win10-x64"
+            RUNTIME="win-x64"
             EXECUTABLE="othello_csharp.exe"
             ;;
         *)
