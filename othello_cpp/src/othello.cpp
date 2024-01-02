@@ -156,7 +156,7 @@ size_t Othello::get_board_size()
                 "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE));
         }
         return std::clamp(size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
-    } catch (const std::exception& e) {
+    } catch (const std::exception&) {
         print_warn(fmt::format("Invalid size, defaulting to {}...\n", DEFAULT_BOARD_SIZE));
     }
     return DEFAULT_BOARD_SIZE;
