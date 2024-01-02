@@ -10,7 +10,7 @@ packages = [{ include = "othello" }]
 [tool.poetry.dependencies]
 python = "^3.11"
 colorama = "^0.4.6"
-pytest = "^7.4.2"
+pytest = "^7.4.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
