@@ -99,7 +99,7 @@ target_compile_definitions(othello_cpp PRIVATE
 message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 10.2.0
+    GIT_TAG 10.2.1
 )
 FetchContent_MakeAvailable(fmt)
 
@@ -135,7 +135,7 @@ target_link_libraries(othello_cpp
     OpenSSL::Crypto
 )
 
-if (MSVC)
+if(MSVC)
     # https://docs.microsoft.com/en-us/cpp/build/reference/permissive-standards-conformance
     target_compile_options(othello_cpp PRIVATE
         /W4 /permissive-
