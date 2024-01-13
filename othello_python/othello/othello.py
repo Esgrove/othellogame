@@ -231,4 +231,4 @@ if __name__ == "__main__":
         game.play()
     except KeyboardInterrupt:
         # Catches CTRL-C
-        sys.exit("\naborted...")
+        sys.exit("\ncancelled...")
