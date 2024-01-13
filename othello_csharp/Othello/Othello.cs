@@ -78,7 +78,7 @@ namespace Othello
                     _playerWhite.SetHuman(false);
                     _playerBlack.SetHuman(false);
                 }
-                else if (_settings.useDefaults)
+                else if (_settings.UseDefaults)
                 {
                     // Default: play as black against white computer player
                     _playerWhite.SetHuman(false);
@@ -304,7 +304,7 @@ namespace Othello
                 }
                 catch (OperationCanceledException)
                 {
-                    Console.WriteLine("\naborted...");
+                    Console.WriteLine("\ncancelled...");
                     return 1;
                 }
                 catch (Exception ex)

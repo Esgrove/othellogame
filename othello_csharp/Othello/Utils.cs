@@ -220,7 +220,7 @@ namespace Othello
     {
         public int BoardSize { get; }
         public bool AutoplayMode { get; }
-        public bool useDefaults { get; }
+        public bool UseDefaults { get; }
         public bool ShowHelpers { get; }
         public bool ShowLog { get; }
         public bool TestMode { get; }
@@ -236,7 +236,7 @@ namespace Othello
         {
             BoardSize = boardSize;
             AutoplayMode = autoplayMode;
-            useDefaults = useDefaultOptions;
+            UseDefaults = useDefaultOptions;
             ShowHelpers = showHelpers;
             ShowLog = showLog;
             TestMode = testMode;
