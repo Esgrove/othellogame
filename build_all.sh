@@ -1,12 +1,30 @@
 #!/bin/bash
 set -eo pipefail
 
-find . -name "build.sh" -maxdepth 2 -print -exec {} \;
+# Import common functions
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=./common.sh
+source "$DIR/common.sh"
+
+cd "$DIR" > /dev/null
+
+find . -maxdepth 2 -name "build.sh" -print -exec {} \;
+
 echo ""
-./cpp/othello_cpp --version
-./csharp/othello_csharp --version
-./go/othello_go --version
+print_magenta "Checking versions:"
+if [ "$PLATFORM" = windows ]; then
+    ./cpp/othello_cpp.exe --version
+    ./csharp/othello_csharp.exe --version
+    ./go/othello_go.exe --version
+    ./rust/othello_rust.exe --version
+    #./swift/othello_swift.exe --version
+else
+    ./cpp/othello_cpp --version
+    ./csharp/othello_csharp --version
+    ./go/othello_go --version
+    ./rust/othello_rust --version
+    ./swift/othello_swift --version
+fi
+
 ./python/othello_python.sh --version
-./rust/othello_rust --version
-./swift/othello_swift --version
 java -jar kotlin/othello_kotlin.jar --version

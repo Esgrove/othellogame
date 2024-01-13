@@ -5,6 +5,6 @@ Akseli Lukkarila
 2019-2023
 """
 BRANCH = "main"
-COMMIT = "769dba8"
-DATE = "2023-12-21_1611"
+COMMIT = "b17969e"
+DATE = "2024-01-13_1934"
 VERSION_NUMBER = "2.2.0"

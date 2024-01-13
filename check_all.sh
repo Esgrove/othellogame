@@ -8,15 +8,27 @@ source "$DIR/common.sh"
 
 cd "$DIR" > /dev/null
 
-executables=(
-    cpp/othello_cpp
-    csharp/othello_csharp
-    go/othello_go
-    kotlin/othello_kotlin.sh
-    python/othello_python.sh
-    rust/othello_rust
-    swift/othello_swift
-)
+if [ "$PLATFORM" = windows ]; then
+    executables=(
+        cpp/othello_cpp.exe
+        csharp/othello_csharp.exe
+        go/othello_go.exe
+        kotlin/othello_kotlin.sh
+        python/othello_python.sh
+        rust/othello_rust.exe
+        #swift/othello_swift.exe
+    )
+else
+    executables=(
+        cpp/othello_cpp
+        csharp/othello_csharp
+        go/othello_go
+        kotlin/othello_kotlin.sh
+        python/othello_python.sh
+        rust/othello_rust
+        swift/othello_swift
+    )
+fi
 
 output_files=()
 
