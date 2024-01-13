@@ -8,7 +8,7 @@ source "$DIR/../common.sh"
 
 # Get absolute path to repo root
 REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
-PROJECT_PATH="$REPO_ROOT/othello_rust"
+PROJECT_PATH="$REPO_ROOT/rust"
 
 print_magenta "Building Othello Rust..."
 

@@ -61,7 +61,7 @@ init_options() {
             ;;
     esac
 
-    PROJECT_PATH="$REPO_ROOT/othello_csharp"
+    PROJECT_PATH="$REPO_ROOT/csharp"
     BUILD_DIR="$PROJECT_PATH/dotnet-build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
     VERSION_FILE="$PROJECT_PATH/Othello/Version.cs"
 }

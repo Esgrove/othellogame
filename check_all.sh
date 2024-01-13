@@ -9,13 +9,13 @@ source "$DIR/common.sh"
 cd "$DIR" > /dev/null
 
 executables=(
-    othello_cpp/othello_cpp
-    othello_csharp/othello_csharp
-    othello_go/othello_go
-    othello_rust/othello_rust
-    othello_swift/othello_swift
-    othello_python/othello_python.sh
-    othello_kotlin/othello_kotlin.sh
+    cpp/othello_cpp
+    csharp/othello_csharp
+    go/othello_go
+    kotlin/othello_kotlin.sh
+    python/othello_python.sh
+    rust/othello_rust
+    swift/othello_swift
 )
 
 output_files=()

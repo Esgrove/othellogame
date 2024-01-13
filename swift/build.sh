@@ -8,7 +8,7 @@ source "$DIR/../common.sh"
 
 # Get absolute path to repo root
 REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
-PROJECT_PATH="$REPO_ROOT/othello_swift"
+PROJECT_PATH="$REPO_ROOT/swift"
 VERSION_HEADER="$PROJECT_PATH/Sources/BuildInfo/include/version.h"
 
 # Define poject version number here since Swift Package Manager does not provide a way...

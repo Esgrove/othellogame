@@ -31,7 +31,7 @@ init_options() {
 
     # Get absolute path to repo root
     REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
-    PROJECT_PATH="$REPO_ROOT/othello_go"
+    PROJECT_PATH="$REPO_ROOT/go"
 
     if [ "$PLATFORM" = windows ]; then
         EXECUTABLE="othello_go.exe"

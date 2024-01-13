@@ -8,8 +8,8 @@ on:
       - main
     paths:
       - "**.rs"
-      - "othello_rust/Cargo.lock"
-      - "othello_rust/Cargo.toml"
+      - "rust/Cargo.lock"
+      - "rust/Cargo.toml"
       - ".github/workflows/cargo.yml"
   pull_request:
     branches:
@@ -17,8 +17,8 @@ on:
       - main
     paths:
       - "**.rs"
-      - "othello_rust/Cargo.lock"
-      - "othello_rust/Cargo.toml"
+      - "rust/Cargo.lock"
+      - "rust/Cargo.toml"
       - ".github/workflows/cargo.yml"
 
 # https://github.com/actions-rs/cargo
@@ -35,14 +35,14 @@ jobs:
           toolchain: stable
 
       - name: fmt
-        working-directory: othello_rust
+        working-directory: rust
         # workaround for color output
         env:
           TERM: xterm-256color
         run: cargo fmt --check --verbose
 
       - name: clippy
-        working-directory: othello_rust
+        working-directory: rust
         # workaround for color output
         env:
           TERM: xterm-256color

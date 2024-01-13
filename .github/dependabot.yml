@@ -13,18 +13,18 @@ updates:
 
   # Python
   - package-ecosystem: "pip"
-    directory: "/othello_python"
+    directory: "/python"
     schedule:
       interval: "weekly"
 
   # Rust
   - package-ecosystem: "cargo"
-    directory: "/othello_rust"
+    directory: "/rust"
     schedule:
       interval: "weekly"
 
   # Go
   - package-ecosystem: "gomod"
-    directory: "/othello_go"
+    directory: "/go"
     schedule:
       interval: "weekly"

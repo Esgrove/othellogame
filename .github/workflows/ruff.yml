@@ -34,4 +34,4 @@ jobs:
       - name: ruff
         uses: chartboost/ruff-action@v1
         with:
-          src: "./othello_python"
+          src: "./python"

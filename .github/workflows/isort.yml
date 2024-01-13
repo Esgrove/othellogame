@@ -33,5 +33,5 @@ jobs:
       - name: isort
         uses: isort/isort-action@v1.1.0
         with:
-          requirements-files: "othello_python/requirements.txt"
-          sort-paths: othello_python
+          requirements-files: "python/requirements.txt"
+          sort-paths: python

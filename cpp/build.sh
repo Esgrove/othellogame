@@ -54,7 +54,7 @@ init_options() {
         shift
     done
 
-    PROJECT_PATH="$REPO_ROOT/othello_cpp"
+    PROJECT_PATH="$REPO_ROOT/cpp"
     CMAKE_BUILD_DIR="$PROJECT_PATH/cmake-build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
 }
 

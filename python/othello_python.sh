@@ -6,7 +6,7 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
-PROJECT_PATH="$REPO_ROOT/othello_python"
+PROJECT_PATH="$REPO_ROOT/python"
 VERSION_FILE="$PROJECT_PATH/othello/version.py"
 
 check_and_set_python() {

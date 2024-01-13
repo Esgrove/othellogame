@@ -29,13 +29,13 @@ repos:
     hooks:
       - id: ruff
         name: Python ruff
-        files: ^othello_python/
+        files: ^python/
         args:
           [
             --fix,
             --exit-non-zero-on-fix,
             --config,
-            othello_python/pyproject.toml,
+            python/pyproject.toml,
           ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
@@ -44,23 +44,23 @@ repos:
       - id: black
         name: Python black
         language_version: python3.11
-        files: ^othello_python/
-        args: [--config, othello_python/pyproject.toml]
+        files: ^python/
+        args: [--config, python/pyproject.toml]
 
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
       - id: isort
         name: Python isort
-        files: ^othello_python/
-        args: [--settings-path, othello_python/pyproject.toml]
+        files: ^python/
+        args: [--settings-path, python/pyproject.toml]
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.15.0
     hooks:
       - id: pyupgrade
         name: Python pyupgrade
-        files: ^othello_python/
+        files: ^python/
         args: [--py39-plus]
 
   - repo: https://github.com/pre-commit/mirrors-clang-format
@@ -68,40 +68,40 @@ repos:
     hooks:
       - id: clang-format
         name: C++ Clang-format
-        files: ^othello_cpp/
+        files: ^cpp/
 
   - repo: local
     hooks:
       - id: gofmt
         name: go format
         description: Run gofmt on files included in the commit.
-        entry: bash -c 'cd othello_go && gofmt -s -w .'
+        entry: bash -c 'cd go && gofmt -s -w .'
         pass_filenames: false
         types: [file, go]
         language: system
-        files: ^othello_go/
+        files: ^go/
 
       - id: rust-fmt
         name: rust format
         description: Run cargo fmt on files included in the commit.
-        entry: bash -c 'cd othello_rust && cargo fmt'
+        entry: bash -c 'cd rust && cargo fmt'
         pass_filenames: true
         types: [file, rust]
         language: system
-        files: ^othello_rust/
+        files: ^rust/
 
       - id: rust-clippy
         name: rust lint
         description: Run cargo clippy on files included in the commit.
-        entry: bash -c 'cd othello_rust && cargo clippy'
+        entry: bash -c 'cd rust && cargo clippy'
         pass_filenames: false
         types: [file, rust]
         language: system
-        files: ^othello_rust/
+        files: ^rust/
 
       - id: swiftformat
         name: swift format
         description: Run swiftformat on files included in the commit.
-        entry: bash -c 'cd othello_swift && swiftformat --lint .'
+        entry: bash -c 'cd swift && swiftformat --lint .'
         language: system
-        files: ^othello_swift/
+        files: ^swift/
