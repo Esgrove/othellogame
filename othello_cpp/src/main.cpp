@@ -14,8 +14,6 @@
 
 int main(const int argc, const char* argv[])
 {
-    print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
-
     cxxopts::Options options("othello_cpp", "A simple Othello CLI game implementation.");
     options.custom_help("[OPTIONS]");
     options.positional_help(fmt::format(
@@ -42,10 +40,7 @@ int main(const int argc, const char* argv[])
     try {
         const auto result = options.parse(argc, argv);
 
-        if (result["help"].as<bool>()) {
-            std::cout << options.help({"Optional"}) << std::endl;
-            return 1;
-        }
+        print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
 
         if (result["version"].as<bool>()) {
             fmt::print(
@@ -56,6 +51,11 @@ int main(const int argc, const char* argv[])
                 version::BRANCH,
                 version::COMMIT);
             return 0;
+        }
+
+        if (result["help"].as<bool>()) {
+            std::cout << options.help({"Optional"}) << std::endl;
+            return 1;
         }
 
         const bool autoplay = result["autoplay"].as<bool>();
