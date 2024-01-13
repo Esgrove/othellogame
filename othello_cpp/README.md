@@ -9,6 +9,8 @@
     brew install cmake
     # Windows
     choco install cmake
+    # Debian
+    sudo apt install cmake
     ```
 
 * OpenSSL
@@ -18,6 +20,8 @@
     brew install openssl
     # Windows
     choco install openssl
+    # Debian
+    sudo apt install libssl-dev
     ```
 
 * A C++ compiler in PATH :grinning:
