@@ -6,6 +6,9 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
+# Define project version here, normally would use git tags for this...
+PROJECT_VERSION="1.4.0"
+
 USAGE="Usage: $(basename "$0") [OPTIONS]
 
 OPTIONS: All options are optional
@@ -51,7 +54,11 @@ build_project() {
 
     pushd "$PROJECT_PATH" > /dev/null
     rm -f "$EXECUTABLE"
-    time go build -v
+    time go build -v \
+        -ldflags "-X othello_go/othello.GitBranch=$GIT_BRANCH \
+                  -X othello_go/othello.GitHash=$GIT_HASH \
+                  -X othello_go/othello.Timestamp=$BUILD_TIME \
+                  -X othello_go/othello.VersionNumber=$PROJECT_VERSION"
 
     file "$EXECUTABLE"
     ./"$EXECUTABLE" --version
@@ -60,19 +67,22 @@ build_project() {
 }
 
 update_version_file() {
-    set_version_info
     VERSION_FILE="$PROJECT_PATH/othello/version.go"
-    CURRENT_VERSION="$(grep "const VersionNumber =" "$VERSION_FILE" | cut -d\" -f 2)"
     {
         echo "package othello"
         echo ""
         echo "// Generated automatically; DO NOT EDIT MANUALLY."
         echo ""
-        echo "const VersionNumber = \"$CURRENT_VERSION\""
+        echo "const VersionNumber = \"$PROJECT_VERSION\""
         echo "const GitBranch = \"$GIT_BRANCH\""
+        echo "const GitHash = \"$GIT_HASH\""
+        echo "const Timestamp = \"$BUILD_TIME\""
+
     } > "$VERSION_FILE"
 }
 
 init_options "$@"
-update_version_file
+set_version_info
+# Using variables set during compile time instead of hardcoded version file
+# update_version_file
 build_project

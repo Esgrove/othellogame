@@ -16,6 +16,12 @@ import (
 	"runtime/debug"
 )
 
+// Set at build time
+var GitBranch string
+var GitHash string
+var Timestamp string
+var VersionNumber string
+
 const MinBoardSize int = 4
 const MaxBoardSize int = 10
 const DefaultBoardSize int = 8
@@ -203,21 +209,13 @@ func calculateSHA256(input string) string {
 func VersionInfo() string {
 	if info, ok := debug.ReadBuildInfo(); ok {
 		goVersion := info.GoVersion
-		commit := ""
-		timestamp := ""
 		arch := ""
 		for _, setting := range info.Settings {
-			if setting.Key == "vcs.revision" {
-				commit = setting.Value
-			}
-			if setting.Key == "vcs.time" {
-				timestamp = setting.Value
-			}
 			if setting.Key == "GOARCH" {
 				arch = setting.Value
 			}
 		}
-		return fmt.Sprintf("%s %s %s %s %s %s", VersionNumber, timestamp, GitBranch, commit, goVersion, arch)
+		return fmt.Sprintf("%s %s %s %s %s %s", VersionNumber, Timestamp, GitBranch, GitHash, goVersion, arch)
 	}
 	return ""
 }
