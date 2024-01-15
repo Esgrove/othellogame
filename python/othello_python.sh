@@ -19,8 +19,6 @@ check_and_set_python() {
         print_error_and_exit "Python not found in path"
     fi
 
-    echo "$($PYTHON --version) from $PYTHON"
-
     if ! $PYTHON -c 'import sys; sys.exit(1) if sys.version_info < (3, 11) else sys.exit(0)'; then
         print_error_and_exit "Python 3.11+ required"
     fi
@@ -36,7 +34,6 @@ get_pyproject_version_number() {
 }
 
 update_version_information() {
-    print_yellow "Updating version file: $VERSION_FILE"
     set_version_info
     VERSION_NUMBER="$(get_pyproject_version_number)"
     {
