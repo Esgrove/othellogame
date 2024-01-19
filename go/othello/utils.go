@@ -209,7 +209,7 @@ func calculateSHA256(input string) string {
 func VersionInfo() string {
 	if info, ok := debug.ReadBuildInfo(); ok {
 		goVersion := info.GoVersion
-		arch := ""
+		arch := "unknown"
 		for _, setting := range info.Settings {
 			if setting.Key == "GOARCH" {
 				arch = setting.Value
@@ -217,7 +217,7 @@ func VersionInfo() string {
 		}
 		return fmt.Sprintf("%s %s %s %s %s %s", VersionNumber, Timestamp, GitBranch, GitHash, goVersion, arch)
 	}
-	return ""
+	return fmt.Sprintf("%s %s %s %s", VersionNumber, Timestamp, GitBranch, GitHash)
 }
 
 // Clamp a value to the given range.
