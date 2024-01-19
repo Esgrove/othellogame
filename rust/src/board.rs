@@ -263,3 +263,85 @@ impl fmt::Display for Board {
         write!(f, "{}", text)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_board_initialization() {
+        let board_size = 8;
+        let board = Board::new(board_size);
+        assert_eq!(board.size, board_size);
+        // Check initial disk positions
+        assert_eq!(
+            board.get_square(&Square { x: 3, y: 3 }).unwrap(),
+            Disk::White
+        );
+        assert_eq!(
+            board.get_square(&Square { x: 4, y: 4 }).unwrap(),
+            Disk::White
+        );
+        assert_eq!(
+            board.get_square(&Square { x: 3, y: 4 }).unwrap(),
+            Disk::Black
+        );
+        assert_eq!(
+            board.get_square(&Square { x: 4, y: 3 }).unwrap(),
+            Disk::Black
+        );
+        // Rest of the board should be empty
+        assert_eq!(
+            board.get_square(&Square { x: 0, y: 0 }).unwrap(),
+            Disk::Empty
+        );
+    }
+
+    #[test]
+    fn test_can_play() {
+        let board = Board::new(8);
+        assert!(board.can_play());
+        // TODO: Fill the board and test again
+    }
+
+    #[test]
+    fn test_scoring() {
+        let board = Board::new(8);
+        let (black_score, white_score) = board.player_scores();
+        assert_eq!(black_score, 2);
+        assert_eq!(white_score, 2);
+        assert_eq!(board.score(), 0);
+    }
+
+    #[test]
+    fn test_game_result() {
+        let mut board = Board::new(8);
+        let mut result = board.result();
+        assert_eq!(result, Disk::Empty);
+
+        let moves = board.possible_moves(Disk::Black);
+        board.place_disk(&moves[0]);
+
+        result = board.result();
+        assert_eq!(result, Disk::Black);
+    }
+
+    #[test]
+    fn test_to_log_entry() {
+        let board = Board::new(8);
+        let log_entry = board.to_log_entry();
+        assert_eq!(
+            log_entry,
+            "___________________________WB______BW___________________________"
+        );
+
+        let mut board = Board::new(4);
+        let log_entry = board.to_log_entry();
+        assert_eq!(log_entry, "_____WB__BW_____");
+
+        let moves = board.possible_moves(Disk::Black);
+        board.place_disk(&moves[0]);
+        let log_entry = board.to_log_entry();
+        assert_eq!(log_entry, "____BBB__BW_____");
+    }
+}

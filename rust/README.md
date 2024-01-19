@@ -4,18 +4,26 @@ Othello [Rust](https://www.rust-lang.org/) implementation.
 
 ## Build
 
+Using script:
+
+```shell
+./build.sh
+```
+
+Manually:
+
 ```shell
 cargo build
 cargo build --release
 
-cargo run
+cargo run -- --help
 cargo run --release
 ```
 
-Or using script:
+## Tests
 
 ```shell
-./build.sh
+cargo test
 ```
 
 ## Format code

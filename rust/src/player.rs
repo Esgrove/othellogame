@@ -29,7 +29,7 @@ pub struct Player {
 }
 
 /// Player settings.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct PlayerSettings {
     pub show_helpers: bool,
     pub test_mode: bool,
@@ -185,5 +185,48 @@ impl fmt::Display for Player {
             self.type_string(),
             self.rounds_played
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_new_player() {
+        let settings = PlayerSettings::default();
+        let player = Player::new(Disk::Black, settings);
+        assert_eq!(player.disk, Disk::Black);
+        assert!(player.human);
+        assert!(player.can_play);
+        assert_eq!(player.rounds_played, 0);
+        assert_eq!(player.settings, settings);
+    }
+
+    #[test]
+    fn test_reset_player() {
+        let mut player = Player::new(Disk::White, PlayerSettings::default());
+        player.can_play = false;
+        player.rounds_played = 10;
+        player.reset();
+        assert!(player.can_play);
+        assert_eq!(player.rounds_played, 0);
+    }
+
+    #[test]
+    fn test_set_human() {
+        let mut player = Player::new(Disk::Black, PlayerSettings::default());
+        player.set_human(false);
+        assert!(!player.human);
+    }
+
+    #[test]
+    fn test_player_type_string() {
+        let human_player = Player::new(Disk::Black, PlayerSettings::default());
+        assert_eq!(human_player.type_string(), "Human   ");
+
+        let mut computer_player = human_player;
+        computer_player.set_human(false);
+        assert_eq!(computer_player.type_string(), "Computer");
     }
 }

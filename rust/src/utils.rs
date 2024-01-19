@@ -41,7 +41,7 @@ pub struct Square {
 }
 
 /// Represents one possible disk placement for the given disk color.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Move {
     pub square: Square,
     pub disk: Disk,
@@ -284,6 +284,9 @@ mod tests {
         result += Square { x: 0, y: 0 };
         assert_eq!(result, Square { x: 3, y: 5 });
 
+        let another = Square { x: -3, y: -2 } + Square { x: 2, y: 3 };
+        assert_eq!(another, Square { x: -1, y: 1 });
+
         result += Step { x: -1, y: -1 };
         assert_eq!(result, Square { x: 2, y: 4 });
 
@@ -301,5 +304,79 @@ mod tests {
 
         result += Step { x: -1, y: -1 };
         assert_eq!(result, Square { x: -1, y: -1 });
+    }
+
+    #[test]
+    fn test_step_directions() {
+        let origin = Square { x: 1, y: 1 };
+        let step_directions = [
+            Step { x: -1, y: -1 },
+            Step { x: -1, y: 0 },
+            Step { x: -1, y: 1 },
+            Step { x: 0, y: -1 },
+            Step { x: 0, y: 1 },
+            Step { x: 1, y: -1 },
+            Step { x: 1, y: 0 },
+            Step { x: 1, y: 1 },
+        ];
+
+        let expected_results = [
+            Square { x: 0, y: 0 },
+            Square { x: 0, y: 1 },
+            Square { x: 0, y: 2 },
+            Square { x: 1, y: 0 },
+            Square { x: 1, y: 2 },
+            Square { x: 2, y: 0 },
+            Square { x: 2, y: 1 },
+            Square { x: 2, y: 2 },
+        ];
+
+        for (i, step) in step_directions.iter().enumerate() {
+            let result = origin + *step;
+            assert_eq!(result, expected_results[i], "Step direction: {:?}", step);
+        }
+    }
+
+    #[test]
+    fn disk_board_char() {
+        assert_eq!(Disk::Black.board_char(), "B");
+        assert_eq!(Disk::Empty.board_char(), "_");
+        assert_eq!(Disk::White.board_char(), "W");
+    }
+
+    #[test]
+    fn disk_opponent() {
+        assert_eq!(Disk::Black.opponent(), Disk::White);
+        assert_eq!(Disk::Empty.opponent(), Disk::Empty);
+        assert_eq!(Disk::White.opponent(), Disk::Black);
+    }
+
+    #[test]
+    fn move_to_log_entry() {
+        let b = Move {
+            square: Square { x: 3, y: 2 },
+            disk: Disk::Black,
+            value: 10,
+            directions: vec![Step { x: 1, y: 0 }],
+        };
+        assert_eq!(b.to_log_entry(), "B:(3,2),10");
+
+        let w = Move {
+            square: Square { x: 0, y: 0 },
+            disk: Disk::White,
+            value: 1,
+            directions: vec![Step { x: 1, y: 0 }],
+        };
+        assert_eq!(w.to_log_entry(), "W:(0,0),1");
+    }
+
+    #[test]
+    fn test_calculate_sha256() {
+        let test_string = String::from("test");
+        let hash = calculate_sha256(&test_string);
+        assert_eq!(
+            hash,
+            "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+        );
     }
 }
