@@ -8,10 +8,14 @@ on:
       - main
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/ruff.yml"
   pull_request:
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/ruff.yml"
 
 # https://github.com/chartboost/ruff-action

@@ -8,10 +8,14 @@ on:
       - main
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/isort.yml"
   pull_request:
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/isort.yml"
 
 # https://github.com/marketplace/actions/python-isort

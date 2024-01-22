@@ -7,10 +7,14 @@ on:
       - main
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/black.yml"
   pull_request:
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/black.yml"
 
 # https://black.readthedocs.io/en/stable/integrations/github_actions.html
