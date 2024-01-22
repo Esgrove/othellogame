@@ -33,4 +33,4 @@ jobs:
 
       - name: Build
         working-directory: swift
-        run: swift build
+        run: chmod +x build.sh && ./build.sh

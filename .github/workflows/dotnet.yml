@@ -36,4 +36,4 @@ jobs:
 
       - name: Build
         working-directory: csharp
-        run: dotnet build --no-restore
+        run: chmod +x build.sh && ./build.sh

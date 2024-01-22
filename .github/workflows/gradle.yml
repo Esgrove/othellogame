@@ -29,4 +29,4 @@ jobs:
 
       - name: Build with Gradle
         working-directory: kotlin
-        run: chmod +x gradlew && ./gradlew build
+        run: chmod +x build.sh && ./build.sh

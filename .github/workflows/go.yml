@@ -30,7 +30,7 @@ jobs:
 
       - name: Build
         working-directory: go
-        run: go build -v
+        run: chmod +x build.sh && ./build.sh
 
       - name: Format
         working-directory: ./go
