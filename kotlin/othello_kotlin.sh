@@ -8,7 +8,7 @@ source "$DIR/../common.sh"
 
 PROJECT_PATH="$REPO_ROOT/kotlin"
 
-cd "$PROJECT_PATH" > /dev/null
+cd "$PROJECT_PATH"
 
 # Pass arguments to program
 java -jar "$PROJECT_PATH/othello_kotlin.jar" "$@"
