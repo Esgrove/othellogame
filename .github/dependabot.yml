@@ -28,3 +28,21 @@ updates:
     directory: "/go"
     schedule:
       interval: "weekly"
+
+  # Kotlin
+  - package-ecosystem: "gradle"
+    directory: "/kotlin"
+    schedule:
+      interval: "weekly"
+
+  # Swift
+  - package-ecosystem: "swift"
+    directory: "/swift"
+    schedule:
+      interval: "weekly"
+
+  # C#
+  - package-ecosystem: "nuget"
+    directory: "/csharp"
+    schedule:
+      interval: "weekly"
