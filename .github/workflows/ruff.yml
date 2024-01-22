@@ -8,22 +8,22 @@ on:
       - main
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/ruff.yml"
   pull_request:
-    branches:
-      - master
-      - main
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/ruff.yml"
 
 # https://github.com/chartboost/ruff-action
 jobs:
   lint:
     runs-on: ubuntu-latest
-    name: ruff
     steps:
-      - name: Check out source repository
+      - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Set up Python environment
@@ -31,7 +31,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: ruff
+      - name: Ruff lint
         uses: chartboost/ruff-action@v1
         with:
           src: "./python"
+          args: check --verbose
+
+      - name: Ruff format
+        uses: chartboost/ruff-action@v1
+        with:
+          src: "./python"
+          args: format --check --verbose

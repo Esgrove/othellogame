@@ -1,0 +1,35 @@
+name: C++
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "cpp/**"
+      - ".github/workflows/dotnet.yml"
+  pull_request:
+    paths:
+      - "cpp/**"
+      - ".github/workflows/dotnet.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ ninja-build libssl-dev
+
+      - name: Build
+        working-directory: cpp
+        run: chmod +x build.sh && ./build.sh
+        shell: bash

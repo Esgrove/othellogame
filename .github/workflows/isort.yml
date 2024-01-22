@@ -8,13 +8,14 @@ on:
       - main
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/isort.yml"
   pull_request:
-    branches:
-      - master
-      - main
     paths:
       - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
       - ".github/workflows/isort.yml"
 
 # https://github.com/marketplace/actions/python-isort
@@ -22,7 +23,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out source repository
+      - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Set up Python environment

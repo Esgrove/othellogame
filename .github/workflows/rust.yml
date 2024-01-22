@@ -1,0 +1,70 @@
+name: Rust
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "**.rs"
+      - "rust/Cargo.lock"
+      - "rust/Cargo.toml"
+      - ".github/workflows/rust.yml"
+  pull_request:
+    paths:
+      - "**.rs"
+      - "rust/Cargo.lock"
+      - "rust/Cargo.toml"
+      - ".github/workflows/rust.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build
+        working-directory: rust
+        run: cargo build --verbose
+
+      - name: Run tests
+        working-directory: rust
+        run: cargo test
+
+      - name: Check formatting
+        working-directory: rust
+        run: cargo fmt --check --verbose
+
+      - name: Lint
+        working-directory: rust
+        # exit non-zero if there are any warnings
+        # https://doc.rust-lang.org/stable/clippy/usage.html
+        run: cargo clippy -- -Dwarnings

@@ -1,0 +1,41 @@
+name: Swift
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "swift/**.swift"
+      - ".github/workflows/swift.yml"
+  pull_request:
+    paths:
+      - "swift/**.swift"
+      - ".github/workflows/swift.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "5.9"
+
+      - name: Check Swift version
+        run: swift --version
+
+      - name: Build
+        working-directory: swift
+        run: chmod +x build.sh && ./build.sh
+        shell: bash

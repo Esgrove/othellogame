@@ -1,0 +1,44 @@
+name: .NET
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "csharp/**"
+      - ".github/workflows/dotnet.yml"
+  pull_request:
+    paths:
+      - "csharp/**"
+      - ".github/workflows/dotnet.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+      - name: Restore dependencies
+        working-directory: csharp
+        run: dotnet restore
+
+      - name: Build
+        working-directory: csharp
+        run: chmod +x build.sh && ./build.sh
+        shell: bash

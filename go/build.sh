@@ -52,7 +52,7 @@ build_project() {
         go version
     fi
 
-    pushd "$PROJECT_PATH" > /dev/null
+    cd "$PROJECT_PATH"
     rm -f "$EXECUTABLE"
     time go build -v \
         -ldflags "-X othello_go/othello.GitBranch=$GIT_BRANCH \
@@ -62,8 +62,7 @@ build_project() {
 
     file "$EXECUTABLE"
     ./"$EXECUTABLE" --version
-    ./"$EXECUTABLE" -h
-    popd > /dev/null
+    ./"$EXECUTABLE" -h || :
 }
 
 update_version_file() {

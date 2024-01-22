@@ -91,7 +91,7 @@ generate_ninja_project() {
 }
 
 build_project() {
-    pushd "$PROJECT_PATH" > /dev/null
+    cd "$PROJECT_PATH"
     if [ "$CLEAN" = true ]; then
         rm -rf "$CMAKE_BUILD_DIR"
     fi
@@ -121,11 +121,10 @@ build_project() {
         ccache_show_stats
     fi
     print_green "Build successful"
-    popd > /dev/null
 }
 
 move_exe_to_root() {
-    pushd "$PROJECT_PATH" > /dev/null
+    cd "$PROJECT_PATH"
     if [ "$PLATFORM" = windows ]; then
         executable="othello_cpp.exe"
     else
@@ -136,8 +135,7 @@ move_exe_to_root() {
     file "$executable"
     # Run executable to check it works and print the version info
     ./"$executable" --version
-    ./"$executable" -h
-    popd > /dev/null
+    ./"$executable" -h || :
 }
 
 init_options "$@"

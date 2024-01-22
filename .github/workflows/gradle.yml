@@ -1,0 +1,37 @@
+name: Kotlin
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "kotlin/**"
+      - ".github/workflows/gradle.yml"
+  pull_request:
+    paths:
+      - "kotlin/**"
+      - ".github/workflows/gradle.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Build with Gradle
+        working-directory: kotlin
+        run: chmod +x build.sh && ./build.sh
+        shell: bash
