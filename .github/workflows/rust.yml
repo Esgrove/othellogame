@@ -29,7 +29,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Check out source repository
+      - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Set up Rust toolchain
@@ -48,9 +48,11 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Build
+        working-directory: rust
         run: cargo build --verbose
 
       - name: Run tests
+        working-directory: rust
         run: cargo test
 
       - name: Check formatting

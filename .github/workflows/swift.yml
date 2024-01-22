@@ -16,10 +16,10 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-
     steps:
-    - uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    - name: Build
-      working-directory: swift
-      run: swift build
+      - name: Build
+        working-directory: swift
+        run: swift build
