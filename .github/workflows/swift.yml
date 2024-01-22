@@ -1,0 +1,25 @@
+name: Swift Build
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "swift/**.swift"
+      - ".github/workflows/swift.yml"
+  pull_request:
+    paths:
+      - "swift/**.swift"
+      - ".github/workflows/swift.yml"
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build
+      working-directory: swift
+      run: swift build

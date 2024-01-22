@@ -1,0 +1,39 @@
+name: Go Build
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "go/**"
+      - ".github/workflows/go.yml"
+  pull_request:
+    paths:
+      - "go/**"
+      - ".github/workflows/go.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        check-latest: true
+
+    - name: Build
+      working-directory: go
+      run: go build -v
+
+    - name: Format
+      working-directory: ./go
+      run: |
+        if [ -n "$(gofmt -l .)" ]; then
+          echo "Code is not formatted with gofmt. Please format your code."
+          gofmt -d .
+          exit 1
+        fi

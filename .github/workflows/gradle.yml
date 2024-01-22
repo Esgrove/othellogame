@@ -1,0 +1,32 @@
+name: Kotlin Gradle Build
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "kotlin/**"
+      - ".github/workflows/gradle.yml"
+  pull_request:
+    paths:
+      - "kotlin/**"
+      - ".github/workflows/gradle.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - name: Build with Gradle
+      working-directory: ./kotlin
+      run: ./gradlew build
