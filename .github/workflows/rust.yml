@@ -1,6 +1,5 @@
 name: Rust cargo
 
-# Run either when pushing directly to main/master or in a PR targeting main/master
 on:
   push:
     branches:
@@ -10,21 +9,25 @@ on:
       - "**.rs"
       - "rust/Cargo.lock"
       - "rust/Cargo.toml"
-      - ".github/workflows/cargo.yml"
+      - ".github/workflows/rust.yml"
   pull_request:
-    branches:
-      - master
-      - main
     paths:
       - "**.rs"
       - "rust/Cargo.lock"
       - "rust/Cargo.toml"
-      - ".github/workflows/cargo.yml"
+      - ".github/workflows/rust.yml"
 
-# https://github.com/actions-rs/cargo
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
-  cargo:
-    runs-on: ubuntu-latest
+  rust:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -33,19 +36,29 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          override: true
 
-      - name: fmt
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build
+        run: cargo build --verbose
+
+      - name: Run tests
+        run: cargo test
+
+      - name: Check formatting
         working-directory: rust
-        # workaround for color output
-        env:
-          TERM: xterm-256color
         run: cargo fmt --check --verbose
 
-      - name: clippy
+      - name: Lint
         working-directory: rust
-        # workaround for color output
-        env:
-          TERM: xterm-256color
         # exit non-zero if there are any warnings
         # https://doc.rust-lang.org/stable/clippy/usage.html
         run: cargo clippy -- -Dwarnings
