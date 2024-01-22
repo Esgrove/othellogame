@@ -28,3 +28,4 @@ jobs:
       - name: Build
         working-directory: cpp
         run: chmod +x build.sh && ./build.sh
+        shell: bash

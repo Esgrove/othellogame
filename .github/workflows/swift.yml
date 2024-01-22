@@ -34,3 +34,4 @@ jobs:
       - name: Build
         working-directory: swift
         run: chmod +x build.sh && ./build.sh
+        shell: bash

@@ -37,3 +37,4 @@ jobs:
       - name: Build
         working-directory: csharp
         run: chmod +x build.sh && ./build.sh
+        shell: bash
