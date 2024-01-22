@@ -1,4 +1,4 @@
-name: Kotlin Gradle Build
+name: Kotlin
 
 on:
   push:

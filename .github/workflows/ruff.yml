@@ -22,7 +22,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    name: ruff
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
