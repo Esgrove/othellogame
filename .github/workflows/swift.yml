@@ -7,10 +7,12 @@ on:
       - main
     paths:
       - "swift/**.swift"
+      - "swift/Package.resolved"
       - ".github/workflows/swift.yml"
   pull_request:
     paths:
       - "swift/**.swift"
+      - "swift/Package.resolved"
       - ".github/workflows/swift.yml"
 
 concurrency:
