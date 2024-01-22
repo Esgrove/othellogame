@@ -114,7 +114,7 @@ build_project() {
     fi
     file "$EXECUTABLE"
     ./"$EXECUTABLE" --version
-    ./"$EXECUTABLE" -h
+    ./"$EXECUTABLE" -h || :
 }
 
 init_options "$@"

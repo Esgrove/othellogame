@@ -18,7 +18,8 @@ else
     cargo --version
 fi
 
-pushd "$PROJECT_PATH" > /dev/null
+cd "$PROJECT_PATH"
+
 cargo build --release
 
 if [ "$PLATFORM" = windows ]; then
@@ -31,5 +32,4 @@ rm -f "$executable"
 mv ./target/release/"$executable" "$executable"
 file "$executable"
 ./"$executable" --version
-./"$executable" -h
-popd > /dev/null
+./"$executable" -h || :

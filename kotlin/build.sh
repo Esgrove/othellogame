@@ -18,12 +18,12 @@ else
     gradle --version
 fi
 
-pushd "$PROJECT_PATH" > /dev/null
+cd "$PROJECT_PATH"
+
 gradle shadowJar
 
 executable="othello_kotlin.jar"
 rm -f "$executable"
 mv "$(find app/build -iname "app-*-all.jar" -print -quit)" "$executable"
 file "$executable"
-java -jar "$executable" --version
-popd > /dev/null
+java -jar "$executable" --version  || :
