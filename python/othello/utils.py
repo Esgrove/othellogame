@@ -4,6 +4,7 @@ Helper utilities for Othello game
 Akseli Lukkarila
 2019-2023
 """
+
 import sys
 from enum import IntEnum
 

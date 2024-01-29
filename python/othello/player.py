@@ -4,6 +4,7 @@ Defines one player for Othello
 Akseli Lukkarila
 2019-2023
 """
+
 import random
 import time
 from typing import Self
