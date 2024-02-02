@@ -7,16 +7,11 @@ Akseli Lukkarila
 
 import sys
 from enum import IntEnum
+# Python 3.11+
+from typing import Self
 
-from version import BRANCH, COMMIT, DATE, VERSION_NUMBER
-
-try:
-    # Python 3.11+
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self  # noqa: F401, UP035
-
-from colorprint import Color, get_color
+from othello.colorprint import Color, get_color
+from othello.version import BRANCH, COMMIT, DATE, VERSION_NUMBER
 
 MIN_BOARD_SIZE: int = 4
 MAX_BOARD_SIZE: int = 10

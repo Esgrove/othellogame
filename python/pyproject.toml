@@ -4,6 +4,7 @@ version = "2.2.0"
 description = "A simple Othello CLI game implementation."
 authors = ["Akseli Lukkarila <esgrove@outlook.com>"]
 readme = "README.md"
+license = "MIT"
 repository = "https://github.com/Esgrove/othellogame"
 packages = [{ include = "othello" }]
 
@@ -16,6 +17,11 @@ pytest = "^8.0.0"
 black = "^24.1.1"
 isort = "^5.13.2"
 ruff = "^0.2.0"
+
+
+[tool.poetry.group.test.dependencies]
+pytest-cov = "^4.1.0"
+pytest = "^8.0.0"
 
 [build-system]
 requires = ["poetry-core"]

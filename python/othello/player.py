@@ -9,9 +9,9 @@ import random
 import time
 from typing import Self
 
-from board import Board
-from colorprint import Color, print_color, print_error
-from utils import Disk, Move, PlayerSettings, Square
+from othello.board import Board
+from othello.colorprint import Color, print_color, print_error
+from othello.utils import Disk, Move, PlayerSettings, Square
 
 
 class Player:
