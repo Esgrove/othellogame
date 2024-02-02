@@ -7,11 +7,16 @@ Akseli Lukkarila
 
 import sys
 from enum import IntEnum
+
 # Python 3.11+
 from typing import Self
 
-from othello.colorprint import Color, get_color
-from othello.version import BRANCH, COMMIT, DATE, VERSION_NUMBER
+try:
+    from othello.colorprint import Color, get_color
+    from othello.version import BRANCH, COMMIT, DATE, VERSION_NUMBER
+except ModuleNotFoundError:
+    from colorprint import Color, get_color
+    from version import BRANCH, COMMIT, DATE, VERSION_NUMBER
 
 MIN_BOARD_SIZE: int = 4
 MAX_BOARD_SIZE: int = 10

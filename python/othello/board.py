@@ -5,8 +5,12 @@ Akseli Lukkarila
 2019-2023
 """
 
-from othello.colorprint import Color, get_color, print_color
-from othello.utils import Disk, Move, Square, Step
+try:
+    from othello.colorprint import Color, get_color, print_color
+    from othello.utils import Disk, Move, Square, Step
+except ModuleNotFoundError:
+    from colorprint import Color, get_color, print_color
+    from utils import Disk, Move, Square, Step
 
 
 class Board:
