@@ -112,7 +112,7 @@ impl Player {
     }
 
     /// Return move chosen by computer.
-    fn get_computer_move(&self, moves: &Vec<Move>, disable_prints: &bool) -> Move {
+    fn get_computer_move(&self, moves: &[Move], disable_prints: &bool) -> Move {
         if !disable_prints {
             println!("  Computer plays...");
         }
