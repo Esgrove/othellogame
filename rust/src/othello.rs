@@ -22,10 +22,10 @@ use crate::utils::{Disk, Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD
 pub struct Othello {
     board: Board,
     settings: Settings,
-    games_played: u32,
+    games_played: usize,
     player_black: Player,
     player_white: Player,
-    rounds_played: u32,
+    rounds_played: usize,
     game_log: Vec<String>,
 }
 

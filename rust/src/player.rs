@@ -24,7 +24,7 @@ pub struct Player {
     pub can_play: bool,
     disk: Disk,
     human: bool,
-    rounds_played: u32,
+    rounds_played: usize,
     settings: PlayerSettings,
 }
 

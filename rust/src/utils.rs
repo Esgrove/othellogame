@@ -46,8 +46,8 @@ pub struct Square {
 pub struct Move {
     pub square: Square,
     pub disk: Disk,
-    pub value: u32,
-    pub directions: Vec<Step>,
+    pub value: usize,
+    pub directions: Vec<(Step, usize)>,
 }
 
 /// Game settings
@@ -132,6 +132,27 @@ impl Disk {
 impl Move {
     pub fn to_log_entry(&self) -> String {
         format!("{}:{},{}", self.disk.board_char(), self.square, self.value)
+    }
+
+    /// Get all the squares playing this move will change
+    pub fn affected_squares(&self) -> Vec<Square> {
+        let mut paths: Vec<Square> = Vec::new();
+        for &(step, num) in self.directions.iter() {
+            let mut pos: Square = self.square + step;
+            for _ in 0..num {
+                paths.push(pos);
+                pos += step;
+            }
+        }
+        paths.sort();
+        paths
+    }
+}
+
+impl Square {
+    /// Get the index of this square on the board
+    pub fn board_index(&self, board_size: usize) -> usize {
+        self.y as usize * board_size + self.x as usize
     }
 }
 
@@ -358,7 +379,7 @@ mod tests {
             square: Square { x: 3, y: 2 },
             disk: Disk::Black,
             value: 10,
-            directions: vec![Step { x: 1, y: 0 }],
+            directions: vec![(Step { x: 1, y: 0 }, 10)],
         };
         assert_eq!(b.to_log_entry(), "B:(3,2),10");
 
@@ -366,7 +387,7 @@ mod tests {
             square: Square { x: 0, y: 0 },
             disk: Disk::White,
             value: 1,
-            directions: vec![Step { x: 1, y: 0 }],
+            directions: vec![(Step { x: 1, y: 0 }, 1)],
         };
         assert_eq!(w.to_log_entry(), "W:(0,0),1");
     }

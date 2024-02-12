@@ -79,29 +79,25 @@ impl Board {
         }
         self.set_square(&start, &player_move.disk);
         self.empty_squares.remove(&start);
-        for step in &player_move.directions {
-            let mut pos = start + *step;
-            while self.get_square(&pos).unwrap_or(Disk::Empty) == player_move.disk.opponent() {
-                self.set_square(&pos, &player_move.disk);
-                pos += *step;
-            }
+        for square in player_move.affected_squares().iter() {
+            self.set_square(square, &player_move.disk);
         }
     }
 
     /// Returns a list of possible moves for the given player.
     pub fn possible_moves(&self, disk: Disk) -> Vec<Move> {
-        let mut moves = Vec::<Move>::new();
+        let mut moves: Vec<Move> = Vec::new();
         let opposing_disk = disk.opponent();
         for square in &self.empty_squares {
-            let mut value: u32 = 0;
-            let mut directions = Vec::<Step>::new();
+            let mut value: usize = 0;
+            let mut directions: Vec<(Step, usize)> = Vec::new();
             for step in self.step_directions.iter() {
                 let mut pos = *square + *step;
                 // Next square in this direction needs to be the opposing disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) != opposing_disk {
                     continue;
                 }
-                let mut num_steps: u32 = 0;
+                let mut num_steps: usize = 0;
                 // Keep stepping over opponents disks
                 while self.get_square(&pos).unwrap_or(Disk::Empty) == opposing_disk {
                     num_steps += 1;
@@ -109,8 +105,8 @@ impl Board {
                 }
                 // Valid move only if a line of opposing disks ends in own disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) == disk {
+                    directions.push((*step, num_steps));
                     value += num_steps;
-                    directions.push(*step);
                 }
             }
             if value > 0 {
@@ -140,10 +136,10 @@ impl Board {
             .iter()
             .map(|&d| d.board_char_with_color())
             .collect();
+
         // Add possible moves to board
         for possible_move in moves {
-            let index =
-                possible_move.square.y as usize * self.size + possible_move.square.x as usize;
+            let index = possible_move.square.board_index(self.size);
             formatted_board[index] = possible_move.value.to_string().yellow();
             println!("  {}", possible_move);
         }
@@ -188,14 +184,23 @@ impl Board {
     }
 
     /// Check that the given coordinates are valid (inside the board).
+    #[allow(dead_code)]
     fn check_coordinates(&self, x: isize, y: isize) -> bool {
         x >= 0 && x < self.size as isize && y >= 0 && y < self.size as isize
     }
 
+    /// Check that the given square is valid (inside the board).
+    fn check_square(&self, square: &Square) -> bool {
+        square.x >= 0
+            && square.x < self.size as isize
+            && square.y >= 0
+            && square.y < self.size as isize
+    }
+
     /// Returns the state of the board (empty, white, black) at the given square.
     fn get_square(&self, square: &Square) -> Option<Disk> {
-        if self.check_coordinates(square.x, square.y) {
-            let disk = self.board[square.y as usize * self.size + square.x as usize];
+        if self.check_square(square) {
+            let disk = self.board[square.board_index(self.size)];
             Some(disk)
         } else {
             None
@@ -203,9 +208,9 @@ impl Board {
     }
 
     /// Count and return the number of black and white disks.
-    fn player_scores(&self) -> (u32, u32) {
-        let mut black: u32 = 0;
-        let mut white: u32 = 0;
+    fn player_scores(&self) -> (usize, usize) {
+        let mut black: usize = 0;
+        let mut white: usize = 0;
         for disk in self.board.iter() {
             match disk {
                 Disk::Black => black += 1,
@@ -224,10 +229,10 @@ impl Board {
 
     /// Sets the given square to the given value.
     fn set_square(&mut self, square: &Square, disk: &Disk) {
-        if !self.check_coordinates(square.x, square.y) {
+        if !self.check_square(square) {
             panic!("Invalid coordinates: {}", square);
         }
-        self.board[square.y as usize * self.size + square.x as usize] = *disk;
+        self.board[square.board_index(self.size)] = *disk;
     }
 
     /// Initialize game board with starting disk positions.
