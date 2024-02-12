@@ -4,13 +4,13 @@ A simple [Othello (Reversi)](https://en.wikipedia.org/wiki/Reversi) CLI game imp
 
 I originally did this in Python many years ago for my university basic programming course assignment,
 and then a few years later implemented it in C++ for learning purposes.
-Since then, I figured that this could actually be a useful project to:
+Since then, I figured that this could actually be a useful personal project to:
 
 1. try out and learn new languages by re-implementing it,
 2. compare different languages easily with each other, and
 3. be a practical syntax, formatting, and tooling reference for each language.
 
-I have since cleaned up and improved both my old implementations in Python and C++,
+I have cleaned up and improved both my old implementations in Python and C++,
 the two languages I have been using the most.
 For each language, I try to make the program structure and all the functions match as close as possible,
 while also trying to follow the best practices and guidelines for each language.
@@ -132,8 +132,7 @@ Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 
 ### Kotlin
 
-Kotlin 1.9+.
-Uses [Gradle](https://gradle.org/kotlin/) 8.4.
+Kotlin 1.9+ and [Gradle](https://gradle.org/kotlin/).
 
 * Othello.kt
 * Board.kt
