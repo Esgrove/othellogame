@@ -150,11 +150,16 @@ impl Player {
     fn get_square() -> Square {
         loop {
             print!("  Give disk position (x,y): ");
+            // Flush to ensure the message is displayed before reading input.
+            io::stdout().flush().expect("Failed to flush stdout.");
+
             let mut input = String::new();
-            io::stdout().flush().unwrap();
-            io::stdin().read_line(&mut input).expect("Input failed");
+            if io::stdin().read_line(&mut input).is_err() {
+                print_error("  Input failed. Please try again.");
+                continue;
+            }
+
             let values: Vec<&str> = input.trim().split(',').collect();
-            // TODO: nicer error handling
             if values.len() == 2 {
                 let x: isize = values[0].parse().unwrap_or(-1);
                 let y: isize = values[1].parse().unwrap_or(-1);
@@ -169,9 +174,9 @@ impl Player {
     /// Return player type description string.
     pub fn type_string(&self) -> String {
         if self.human {
-            "Human   ".to_owned()
+            "Human   ".to_string()
         } else {
-            "Computer".to_owned()
+            "Computer".to_string()
         }
     }
 }

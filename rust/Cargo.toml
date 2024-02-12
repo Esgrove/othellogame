@@ -2,7 +2,7 @@
 
 [package]
 name = "othello_rust"
-version = "1.6.0"
+version = "1.6.1"
 authors = ["Esgrove <esgrove@outlook.com>"]
 description = "A simple Othello CLI game implementation."
 edition = "2021"

@@ -7,6 +7,7 @@
 
 use colored::{Color, ColoredString, Colorize};
 use sha2::{Digest, Sha256};
+
 use std::cmp::Ordering;
 use std::fmt;
 use std::hash::{Hash, Hasher};

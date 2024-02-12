@@ -122,7 +122,7 @@ impl Othello {
 
     /// Print game log which shows all moves made and the game board state after each move.
     fn print_log(&self) {
-        let formatted_log: String = self
+        let formatted_log = self
             .game_log
             .iter()
             .enumerate()
@@ -166,8 +166,9 @@ impl Othello {
     // Associated aka static function (no self parameter)
     fn get_answer(question: &str, yes: &str, no: &str) -> bool {
         print!("{} ({}/{})? ", question, yes, no);
+        io::stdout().flush().expect("Failed to flush stdout.");
+
         let mut input = String::new();
-        io::stdout().flush().unwrap();
         io::stdin().read_line(&mut input).expect("Input failed");
         return input.trim().to_lowercase() == *yes;
     }

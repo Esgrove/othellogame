@@ -29,18 +29,21 @@ impl Board {
         // Index list (0...size) to avoid repeating same range in loops.
         // Not really needed in Rust but kept here to more closely match other implementations...
         let indices = Vec::from_iter(0..size);
+
         // Keep track of empty squares on board to avoid checking already filled positions.
-        let mut empty_squares = HashSet::<Square>::new();
-        for y in indices.iter() {
-            for x in indices.iter() {
-                if board[y * size + x] == Disk::Empty {
-                    empty_squares.insert(Square {
-                        x: *x as isize,
-                        y: *y as isize,
-                    });
+        let empty_squares: HashSet<Square> = (0..size * size)
+            .filter_map(|i| {
+                if board[i] == Disk::Empty {
+                    Some(Square {
+                        x: (i % size) as isize,
+                        y: (i / size) as isize,
+                    })
+                } else {
+                    None
                 }
-            }
-        }
+            })
+            .collect();
+
         Board {
             board,
             size,
@@ -251,7 +254,8 @@ impl fmt::Display for Board {
         // Horizontal indices
         let column_indices: Vec<String> = self.indices.iter().map(|&i| i.to_string()).collect();
         let mut text: String = format!("  {}", column_indices.join(" ").bold());
-        for y in 0..self.size {
+        // Could just use `0..self.size` here
+        for y in self.indices.iter() {
             // Vertical index
             text += &*format!("\n{}", y.to_string().bold());
             // Row values

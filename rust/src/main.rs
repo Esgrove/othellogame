@@ -13,7 +13,6 @@ use anyhow::Result;
 use clap::{arg, Parser};
 use colored::Colorize;
 use shadow_rs::shadow;
-
 use std::env;
 
 use crate::othello::Othello;
@@ -45,7 +44,7 @@ struct Args {
     /// Optional board size
     size: Option<usize>,
 
-    /// Enable autoplay mode with both player controlled by computer
+    /// Enable autoplay mode with both players controlled by computer
     #[arg(short, long, help = "Enable autoplay mode", conflicts_with = "default")]
     autoplay: bool,
 
@@ -53,20 +52,20 @@ struct Args {
     #[arg(short, long)]
     check: bool,
 
-    /// Quick start to play with default settings
-    #[arg(short, long, help = "Play with default settings")]
+    /// Play with default settings
+    #[arg(short, long)]
     default: bool,
 
     /// Show game log at the end of a game
-    #[arg(short, long, help = "Show log after a game")]
+    #[arg(short, long)]
     log: bool,
 
-    /// Hide disk placement hints for human players
-    #[arg(short, long, help = "Hide disk placement hints")]
+    /// Hide disk placement hints
+    #[arg(short, long)]
     no_helpers: bool,
 
-    /// Enable testing mode with deterministic computer move selection
-    #[arg(short, long, help = "Enable test mode")]
+    /// Enable test mode with deterministic computer move selection
+    #[arg(short, long)]
     test: bool,
 
     /// Custom version flag instead of clap default
@@ -75,16 +74,14 @@ struct Args {
 }
 
 fn main() -> Result<()> {
-    // Uncomment to display backtrace in case of a panic
-    env::set_var("RUST_BACKTRACE", "1");
+    // Set to 1 to display backtraces for panics for debugging
+    env::set_var("RUST_BACKTRACE", "0");
     env_logger::init();
 
     println!("{}", "OTHELLO GAME - RUST".green().bold());
 
     // Parse command line arguments using clap
     let args = Args::parse();
-    // Without clap:
-    // let args: Vec<String> = env::args().collect();
 
     if args.version {
         println!(

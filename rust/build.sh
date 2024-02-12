@@ -15,7 +15,8 @@ print_magenta "Building Othello Rust..."
 if [ -z "$(command -v cargo)" ]; then
     print_error_and_exit "Cargo not found in path. Maybe install rustup?"
 else
-    cargo --version
+    echo "$(cargo --version) from $(which cargo)"
+    echo "$(rustc --version) from $(which rustc)"
 fi
 
 cd "$PROJECT_PATH"
