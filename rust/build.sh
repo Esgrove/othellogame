@@ -6,10 +6,6 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
-# Get absolute path to repo root
-REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
-PROJECT_PATH="$REPO_ROOT/rust"
-
 print_magenta "Building Othello Rust..."
 
 if [ -z "$(command -v cargo)" ]; then
@@ -19,7 +15,7 @@ else
     echo "$(rustc --version) from $(which rustc)"
 fi
 
-cd "$PROJECT_PATH"
+cd "$REPO_ROOT/rust"
 
 cargo build --release
 
