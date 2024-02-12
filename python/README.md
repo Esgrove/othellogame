@@ -51,5 +51,11 @@ There is a Batch script [othello.bat](./othello.bat) for easily running it on Wi
 ```shell
 poetry run pytest -v
 # with coverage
-poetry run pytest --cov=othello test
+poetry run pytest --cov=othello tests
+```
+
+Shortcut:
+
+```shell
+./test.sh
 ```

@@ -16,6 +16,23 @@ case "$(uname -s)" in
         PLATFORM="linux"
         ;;
 esac
+export PLATFORM
+
+check_and_set_python() {
+    # Check Python is found on path and set PYTHON variable to it
+    if [ -n "$(command -v python3)" ]; then
+        PYTHON=$(which python3)
+    elif [ -n "$(command -v python)" ]; then
+        PYTHON=$(which python)
+    else
+        print_error_and_exit "Python not found in path"
+    fi
+
+    if ! $PYTHON -c 'import sys; sys.exit(1) if sys.version_info < (3, 11) else sys.exit(0)'; then
+        print_error_and_exit "Python 3.11+ required"
+    fi
+    export PYTHON
+}
 
 # Set variables BUILD_TIME, GIT_HASH, and GIT_BRANCH
 set_version_info() {

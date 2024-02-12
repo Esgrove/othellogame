@@ -9,25 +9,10 @@ source "$DIR/../common.sh"
 PROJECT_PATH="$REPO_ROOT/python"
 VERSION_FILE="$PROJECT_PATH/othello/version.py"
 
-check_and_set_python() {
-    # Check Python is found on path and set PYTHON variable to it
-    if [ -n "$(command -v python3)" ]; then
-        PYTHON=$(which python3)
-    elif [ -n "$(command -v python)" ]; then
-        PYTHON=$(which python)
-    else
-        print_error_and_exit "Python not found in path"
-    fi
-
-    if ! $PYTHON -c 'import sys; sys.exit(1) if sys.version_info < (3, 11) else sys.exit(0)'; then
-        print_error_and_exit "Python 3.11+ required"
-    fi
-}
-
 # Read Python project version number from pyproject.toml
 get_pyproject_version_number() {
     # note: `tomllib` requires Python 3.11+
-    python -c 'with open("pyproject.toml", "rb") as f: \
+    $PYTHON -c 'with open("pyproject.toml", "rb") as f: \
                 import tomllib; \
                 project = tomllib.load(f); \
                 print(project["tool"]["poetry"]["version"])'
@@ -51,10 +36,14 @@ update_version_information() {
     } > "$VERSION_FILE"
 }
 
-cd "$PROJECT_PATH" > /dev/null
+cd "$PROJECT_PATH"
+
+if [ -z "$(command -v poetry)" ]; then
+    print_error_and_exit "poetry not found in path"
+fi
 
 check_and_set_python
 update_version_information
 
 # Pass arguments to program
-$PYTHON "$PROJECT_PATH/othello/othello.py" "$@"
+poetry run othello/othello.py "$@"
