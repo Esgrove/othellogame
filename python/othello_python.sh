@@ -46,4 +46,4 @@ check_and_set_python
 update_version_information
 
 # Pass arguments to program
-poetry run othello/othello.py "$@"
+poetry run python othello/othello.py "$@"
