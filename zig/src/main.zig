@@ -20,16 +20,9 @@ pub fn main() !void {
 
     try bw.flush(); // don't forget to flush!
 
-    ColorPrint.printColor("This is a standard message.", AnsiColor.white);
+    ColorPrint.printColor("This is a standard message", AnsiColor.white);
     ColorPrint.printColor("Hello in Cyan", AnsiColor.cyan);
     ColorPrint.printBold("Hello in Bold Red", AnsiColor.red);
-    ColorPrint.printError("This is an error message.");
-    ColorPrint.printWarn("This is a warning message.");
-}
-
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+    ColorPrint.printError("This is an error message");
+    ColorPrint.printWarn("This is a warning message");
 }
