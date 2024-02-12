@@ -43,6 +43,7 @@ update_version_information() {
         echo 'Akseli Lukkarila'
         echo '2019-2023'
         echo '"""'
+        echo ""
         echo "BRANCH = \"$GIT_BRANCH\""
         echo "COMMIT = \"$GIT_HASH\""
         echo "DATE = \"$BUILD_TIME\""
