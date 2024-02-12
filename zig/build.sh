@@ -6,6 +6,10 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
+PROJECT_PATH="$REPO_ROOT/zig"
+
+cd "$PROJECT_PATH"
+
 print_magenta "Building Othello Zig..."
 
 if [ -z "$(command -v zig)" ]; then
@@ -14,15 +18,17 @@ else
     echo "Zig $(zig version) from $(which zig)"
 fi
 
-cd "$REPO_ROOT/zig"
+VERSION_NUMBER=$(grep '.version' "$PROJECT_PATH/build.zig.zon" | awk -F'"' '{ print $2 }')
+VERSION_FILE="$PROJECT_PATH/src/version.zig"
 
-VERSION=$(grep '.version' "build.zig.zon" | awk -F'"' '{ print $2 }')
-
-# Path to the version.zig file
-VERSION_FILE="src/version.zig"
-
-# Write the version constant to version.zig
-echo "pub const version = \"${VERSION}\";" > "${VERSION_FILE}"
+set_version_info
+{
+    echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
+    echo "pub const BUILD_TIME = \"${BUILD_TIME}\";"
+    echo "pub const GIT_HASH = \"${GIT_HASH}\";"
+    echo "pub const GIT_BRANCH = \"${GIT_BRANCH}\";"
+    echo "pub const VERSION = \"${VERSION_NUMBER}\";"
+} > "$VERSION_FILE"
 
 zig build -Doptimize=ReleaseFast
 

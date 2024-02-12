@@ -7,7 +7,10 @@ const clap = @import("clap");
 const debug = std.debug;
 const io = std.io;
 
-const version = @import("version.zig").version;
+const version = @import("version.zig").VERSION;
+const git_hash = @import("version.zig").GIT_HASH;
+const git_branch = @import("version.zig").GIT_BRANCH;
+const build_time = @import("version.zig").BUILD_TIME;
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -42,13 +45,18 @@ pub fn main() !void {
     if (res.args.help != 0) {
         debug.print("A simple Othello CLI game implementation.\n\n", .{});
         debug.print("Usage: othello_zig [OPTIONS] [SIZE]\n\n", .{});
-        debug.print("Arguments:\n", .{});
-        debug.print("[SIZE]  Optional board size\n\n", .{});
-        debug.print("Options:\n", .{});
+        ColorPrint.printBold("Arguments:", AnsiColor.white);
+        debug.print("    [SIZE]  Optional board size\n\n", .{});
+        ColorPrint.printBold("Options:", AnsiColor.white);
         return clap.help(std.io.getStdErr().writer(), clap.Help, &params, .{});
     }
     if (res.args.version != 0) {
-        debug.print("Othello Zig {s}\n", .{version});
+        debug.print("Othello Zig {s} {s} {s} {s}\n", .{
+            version,
+            build_time,
+            git_hash,
+            git_branch,
+        });
         std.os.exit(0);
     }
     if (res.args.number) |n|
