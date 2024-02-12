@@ -46,7 +46,7 @@ struct Args {
     size: Option<usize>,
 
     /// Enable autoplay mode with both players controlled by computer
-    #[arg(short, long, help = "Enable autoplay mode", conflicts_with = "default")]
+    #[arg(short, long, conflicts_with = "default")]
     autoplay: bool,
 
     /// Only print hash to check result (implies `autoplay` and `test`)
@@ -57,7 +57,7 @@ struct Args {
     #[arg(short, long)]
     default: bool,
 
-    /// Show game log at the end of a game
+    /// Show game log at the end
     #[arg(short, long)]
     log: bool,
 

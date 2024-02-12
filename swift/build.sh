@@ -6,8 +6,6 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
-# Get absolute path to repo root
-REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
 PROJECT_PATH="$REPO_ROOT/swift"
 VERSION_HEADER="$PROJECT_PATH/Sources/BuildInfo/include/version.h"
 
@@ -19,7 +17,7 @@ print_magenta "Building Othello Swift..."
 echo "Writing version information..."
 set_version_info
 {
-    echo "// Generated automatically; DO NOT EDIT MANUALLY."
+    echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
     echo "#define BUILD_TIME \"${BUILD_TIME}\""
     echo "#define GIT_HASH \"${GIT_HASH}\""
     echo "#define GIT_BRANCH \"${GIT_BRANCH}\""
