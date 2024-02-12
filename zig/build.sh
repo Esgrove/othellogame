@@ -16,6 +16,14 @@ fi
 
 cd "$REPO_ROOT/zig"
 
+VERSION=$(grep '.version' "build.zig.zon" | awk -F'"' '{ print $2 }')
+
+# Path to the version.zig file
+VERSION_FILE="src/version.zig"
+
+# Write the version constant to version.zig
+echo "pub const version = \"${VERSION}\";" > "${VERSION_FILE}"
+
 zig build -Doptimize=ReleaseFast
 
 if [ "$PLATFORM" = windows ]; then
