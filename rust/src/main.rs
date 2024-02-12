@@ -13,6 +13,7 @@ use anyhow::Result;
 use clap::{arg, Parser};
 use colored::Colorize;
 use shadow_rs::shadow;
+
 use std::env;
 
 use crate::othello::Othello;
