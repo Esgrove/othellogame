@@ -30,13 +30,7 @@ repos:
       - id: ruff
         name: Python ruff
         files: ^python/
-        args:
-          [
-            --fix,
-            --exit-non-zero-on-fix,
-            --config,
-            python/pyproject.toml,
-          ]
+        args: [--fix, --exit-non-zero-on-fix, --config, python/pyproject.toml]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 24.1.1
@@ -54,14 +48,6 @@ repos:
         name: Python isort
         files: ^python/
         args: [--settings-path, python/pyproject.toml]
-
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.0
-    hooks:
-      - id: pyupgrade
-        name: Python pyupgrade
-        files: ^python/
-        args: [--py39-plus]
 
   - repo: https://github.com/pre-commit/mirrors-clang-format
     rev: v17.0.6
@@ -85,7 +71,7 @@ repos:
         name: rust format
         description: Run cargo fmt on files included in the commit.
         entry: bash -c 'cd rust && cargo fmt'
-        pass_filenames: true
+        pass_filenames: false
         types: [file, rust]
         language: system
         files: ^rust/
