@@ -38,6 +38,11 @@ jobs:
         working-directory: csharp
         run: dotnet restore
 
+      - name: Check formatting
+        working-directory: csharp
+        run: dotnet format --verify-no-changes --verbosity detailed
+        shell: bash
+
       - name: Build
         working-directory: csharp
         run: chmod +x build.sh && ./build.sh

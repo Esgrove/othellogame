@@ -67,6 +67,15 @@ repos:
         language: system
         files: ^go/
 
+      - id: dotnet
+        name: dotnet format
+        description: Run dotnet format on files included in the commit.
+        entry: bash -c 'cd csharp && dotnet format'
+        pass_filenames: false
+        types: [file]
+        language: system
+        files: ^csharp/
+
       - id: rust-fmt
         name: rust format
         description: Run cargo fmt on files included in the commit.
