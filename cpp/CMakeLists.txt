@@ -1,6 +1,6 @@
 # Othello C++
 # Akseli Lukkarila
-# 2019 - 2023
+# 2019 - 2024
 cmake_minimum_required(VERSION 3.18)
 
 project("Othello C++"

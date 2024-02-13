@@ -2,7 +2,7 @@
 // Board
 // Defines the game board
 // Akseli Lukkarila
-// 2019-2023
+// 2019-2024
 //==========================================================
 
 package othello

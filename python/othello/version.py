@@ -2,7 +2,7 @@
 Version
 Version information definitions
 Akseli Lukkarila
-2019-2023
+2019-2024
 """
 
 BRANCH = "main"

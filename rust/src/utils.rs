@@ -2,7 +2,7 @@
 // Utils
 // Helper utilities for Othello game
 // Akseli Lukkarila
-// 2019-2023
+// 2019-2024
 //==========================================================
 
 use colored::{Color, ColoredString, Colorize};

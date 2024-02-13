@@ -3,7 +3,7 @@
 // Othello (Reversi) game
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
-// 2019-2023
+// 2019-2024
 //==========================================================
 
 #pragma once

@@ -26,7 +26,7 @@ update_version_information() {
         echo 'Version'
         echo 'Version information definitions'
         echo 'Akseli Lukkarila'
-        echo '2019-2023'
+        echo '2019-2024'
         echo '"""'
         echo ""
         echo "BRANCH = \"$GIT_BRANCH\""

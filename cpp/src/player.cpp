@@ -2,7 +2,7 @@
 // Class Player source
 // Defines one player for Othello
 // Akseli Lukkarila
-// 2019-2023
+// 2019-2024
 //==========================================================
 
 #include "player.hpp"
