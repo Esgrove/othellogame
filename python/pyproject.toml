@@ -14,10 +14,9 @@ colorama = "^0.4.6"
 pytest = "^8.0.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.1.1"
+black = "^24.2.0"
 isort = "^5.13.2"
-ruff = "^0.2.0"
-
+ruff = "^0.2.1"
 
 [tool.poetry.group.test.dependencies]
 pytest-cov = "^4.1.0"
