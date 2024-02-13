@@ -37,10 +37,10 @@ namespace Othello
         {
             _size = size;
             var numSquares = _size * _size;
-            // init game board with empty disks
+            // Init game board with empty disks
             _board = Enumerable.Repeat(Disk.Empty, numSquares).ToList();
 
-            // set starting positions
+            // Set starting positions
             var row = _size % 2 == 0 ? (_size - 1) / 2 : (_size - 1) / 2 - 1;
             var col = _size / 2;
             _board[row * _size + row] = Disk.White;
@@ -48,10 +48,10 @@ namespace Othello
             _board[col * _size + row] = Disk.Black;
             _board[col * _size + col] = Disk.White;
 
-            // index list (0...size) to avoid repeating same range in for loops
+            // Index list (0...size) to avoid repeating same range in for loops
             _indices = Enumerable.Range(0, _size).ToList();
 
-            // keep track of empty squares on board to avoid checking already filled positions
+            // Keep track of empty squares on board to avoid checking already filled positions
             _emptySquares = new List<Square>(numSquares);
             foreach (
                 var square in _indices
@@ -91,7 +91,7 @@ namespace Othello
             }
         }
 
-        /// Returns a list of possible moves for given player.
+        /// Returns a list of possible moves for the given player.
         public List<Move> PossibleMoves(Disk color)
         {
             var moves = new List<Move>();
@@ -136,11 +136,11 @@ namespace Othello
             return moves;
         }
 
-        /// Print available move coordinates and resulting points gained.
-        public void printPossibleMoves(IReadOnlyCollection<Move> moves)
+        /// Print board with available move coordinates and the resulting points gained.
+        public void PrintPossibleMoves(IReadOnlyCollection<Move> moves)
         {
             ColorPrint.WriteLine($"  Possible moves ({moves.Count}):", Color.Yellow);
-            // convert board from Disk enums to strings
+            // Convert board from Disk enums to strings
             var formattedBoard = new List<string>(_board.Count);
             formattedBoard.AddRange(_board.Select(disk => disk.BoardChar()));
             foreach (var move in moves)
@@ -149,7 +149,7 @@ namespace Othello
                 var (x, y) = move.Square;
                 formattedBoard[y * _size + x] = ColorPrint.Get(move.Value, Color.Yellow);
             }
-            // print board with move positions
+            // Print board with move positions
             Console.Write("   ");
             foreach (var i in _indices)
             {
