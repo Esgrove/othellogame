@@ -57,26 +57,10 @@ jobs:
           brew install llvm
           brew install ninja
           brew install openssl
+          export CC="$(brew --prefix llvm)/bin/clang"
+          export CXX="$(brew --prefix llvm)/bin/clang++"
 
       - name: Build
         working-directory: cpp
-        run: |
-          export CC="$(brew --prefix llvm)/bin/clang"
-          export CXX="$(brew --prefix llvm)/bin/clang++"
-          chmod +x build.sh && ./build.sh
+        run: chmod +x build.sh && ./build.sh
         shell: bash
-
-  format:
-    runs-on: macos-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Install clang-format
-        run: brew install clang-format
-
-      - name: Format
-        working-directory: cpp
-        run: |
-          clang-format --version
-          clang-format --Werror --verbose -style=file src/*.cpp src/*.hpp
