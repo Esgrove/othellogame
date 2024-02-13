@@ -62,7 +62,7 @@ if(CCACHE_EXECUTABLE)
 endif(CCACHE_EXECUTABLE)
 
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0")
     # Create universal binary.
     # Disabled due to OpenSSL being arch specific by default...
     # set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
