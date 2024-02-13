@@ -38,28 +38,19 @@ init_options() {
         shift
     done
 
-    # Check platform
-    case "$(uname -s)" in
-        "Darwin")
-            PLATFORM="mac"
-            if [ "$(uname -m)" = arm64 ]; then
-                RUNTIME="osx-arm64"
-            else
-                RUNTIME="osx-x64"
-            fi
-            EXECUTABLE="othello_csharp"
-            ;;
-        "MINGW"*)
-            PLATFORM="windows"
-            RUNTIME="win-x64"
-            EXECUTABLE="othello_csharp.exe"
-            ;;
-        *)
-            PLATFORM="linux"
-            RUNTIME="linux-x64"
-            EXECUTABLE="othello_csharp"
-            ;;
-    esac
+    EXECUTABLE="othello_csharp"
+    if [ $PLATFORM = "mac" ]; then
+        if [ "$(uname -m)" = arm64 ]; then
+            RUNTIME="osx-arm64"
+        else
+            RUNTIME="osx-x64"
+        fi
+    elif [ $PLATFORM = "windows" ]; then
+        RUNTIME="win-x64"
+        EXECUTABLE="othello_csharp.exe"
+    else
+        RUNTIME="linux-x64"
+    fi
 
     PROJECT_PATH="$REPO_ROOT/csharp"
     BUILD_DIR="$PROJECT_PATH/dotnet-build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"

@@ -16,7 +16,6 @@ case "$(uname -s)" in
         PLATFORM="linux"
         ;;
 esac
-export PLATFORM
 
 check_and_set_python() {
     # Check Python is found on path and set PYTHON variable to it
