@@ -6,12 +6,16 @@ on:
       - master
       - main
     paths:
-      - "cpp/**"
-      - ".github/workflows/dotnet.yml"
+      - 'cpp/**.cpp'
+      - 'cpp/**.hpp'
+      - 'cpp/CMakeLists.txt'
+      - ".github/workflows/cmake.yml"
   pull_request:
     paths:
-      - "cpp/**"
-      - ".github/workflows/dotnet.yml"
+      - 'cpp/**.cpp'
+      - 'cpp/**.hpp'
+      - 'cpp/CMakeLists.txt'
+      - ".github/workflows/cmake.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
@@ -19,17 +23,47 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Install build dependencies
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y cmake g++ libssl-dev ninja-build
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake g++ ninja-build libssl-dev
+          choco install openssl
+          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+        shell: powershell
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install openssl
+          brew install cmake
+          brew install ninja
 
       - name: Build
         working-directory: cpp
         run: chmod +x build.sh && ./build.sh
         shell: bash
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: sudo apt-get install -y clang-format
+
+      - name: Format
+        working-directory: cpp
+        run: clang-format --Werror --verbose -style=file src/*.cpp src/*.hpp
