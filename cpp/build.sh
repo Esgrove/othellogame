@@ -125,10 +125,9 @@ build_project() {
 
 move_exe_to_root() {
     cd "$PROJECT_PATH"
+    local executable="othello_cpp"
     if [ "$PLATFORM" = windows ]; then
         executable="othello_cpp.exe"
-    else
-        executable="othello_cpp"
     fi
     # Move executable from build dir to project root
     mv "$(find "$CMAKE_BUILD_DIR" -type f -name "$executable")" "$executable"

@@ -26,6 +26,10 @@
 
 * A C++ compiler in PATH :grinning:
 
+> [!NOTE]
+> The build script expects to find Visual Studio 2022 on Windows,
+> and [Ninja](https://ninja-build.org/) on Mac and Linux for CMake.
+
 Optional:
 
 * [ccache](https://ccache.dev/)
@@ -48,9 +52,6 @@ Use the provided script to automatically build the app using CMake:
 On Windows, use Git Bash provided by [Git For Windows](https://gitforwindows.org/) to run the script :wink:
 You will also need to have `bash` in PATH on Windows for the version info generation to work fully.
 Add `C:\Program Files\Git\bin` to the system PATH environment variable.
-
-:warning: The build script expects to find Visual Studio 2022 on Windows,
-and [Ninja](https://ninja-build.org/) on Mac and Linux.
 
 ## TODO
 
