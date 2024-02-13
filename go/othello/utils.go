@@ -193,7 +193,7 @@ func (m Move) String() string {
 	return fmt.Sprintf("Square: %s -> value: %d", m.Square, m.Value)
 }
 
-func (m Move) ToLogEntry() string {
+func (m Move) LogEntry() string {
 	return fmt.Sprintf("%s:%s,%d", m.Disk.BoardChar(), m.Square, m.Value)
 }
 

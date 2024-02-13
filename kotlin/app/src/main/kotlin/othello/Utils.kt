@@ -95,7 +95,7 @@ data class Move(
         }
     }
 
-    fun toLogEntry(): String {
+    fun logEntry(): String {
         return "${disk.boardChar(color = false)}:$square,$value"
     }
 

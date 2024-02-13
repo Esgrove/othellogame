@@ -195,7 +195,7 @@ func (b *Board) Result() Disk {
 	}
 }
 
-func (b *Board) ToLogEntry() string {
+func (b *Board) LogEntry() string {
 	result := ""
 	for _, disk := range b.board {
 		result += disk.BoardChar()

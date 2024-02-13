@@ -177,6 +177,16 @@ namespace Othello
             );
         }
 
+        /// Get board status string for game log.
+        public string LogEntry()
+        {
+            return _board.Aggregate(
+                new StringBuilder(),
+                (accumulator, disk) => accumulator.Append(disk.BoardChar(false)),
+                accumulator => accumulator.ToString()
+            );
+        }
+
         /// Calculates the final score and returns the winning player.
         public Disk Result()
         {
@@ -186,15 +196,6 @@ namespace Othello
                 return Disk.Empty;
             }
             return sum > 0 ? Disk.White : Disk.Black;
-        }
-
-        public string ToLogEntry()
-        {
-            return _board.Aggregate(
-                new StringBuilder(),
-                (accumulator, disk) => accumulator.Append(disk.BoardChar(false)),
-                accumulator => accumulator.ToString()
-            );
         }
 
         /// Check that the given coordinates are inside the board.

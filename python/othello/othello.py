@@ -94,7 +94,7 @@ class Othello:
             for player in (self.player_black, self.player_white):
                 result = player.play_one_move(self.board)
                 if result:
-                    self.game_log.append(f"{result};{self.board.to_log_entry()}")
+                    self.game_log.append(f"{result};{self.board.log_entry()}")
                 print("-------------------------------")
 
         self.games_played += 1

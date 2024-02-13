@@ -27,7 +27,7 @@ public:
 
     [[nodiscard]] bool can_play() const;
     [[nodiscard]] Disk result() const;
-    [[nodiscard]] std::string to_log_entry() const;
+    [[nodiscard]] std::string log_entry() const;
     [[nodiscard]] std::vector<Move> possible_moves(Disk disk) const;
 
     friend std::ostream& operator<<(std::ostream& out, const Board& board);

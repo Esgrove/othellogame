@@ -134,7 +134,7 @@ class Board:
 
         return Disk.WHITE if total_score > 0 else Disk.BLACK
 
-    def to_log_entry(self) -> str:
+    def log_entry(self) -> str:
         """Get board status string for game log."""
         return "".join(d.board_char(color=False) for row in self._board for d in row)
 

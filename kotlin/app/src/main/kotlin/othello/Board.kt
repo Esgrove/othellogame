@@ -152,7 +152,7 @@ class Board(private val size: Int) {
         }
     }
 
-    fun toLogEntry(): String {
+    fun logEntry(): String {
         return board.joinToString("") { it.boardChar(color = false) }
     }
 

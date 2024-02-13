@@ -61,7 +61,7 @@ class Othello(private val settings: Settings) {
             for (player in listOf(playerBlack, playerWhite)) {
                 val result = player.playOneMove(board)
                 if (result != null) {
-                    gameLog.add("$result;${board.toLogEntry()}")
+                    gameLog.add("$result;${board.logEntry()}")
                 }
                 println("--------------------------------")
             }

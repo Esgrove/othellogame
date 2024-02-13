@@ -175,7 +175,7 @@ namespace Othello
             Directions = directions;
         }
 
-        public string ToLogEntry()
+        public string LogEntry()
         {
             return $"{Disk.BoardChar(false)}:{Square},{Value}";
         }

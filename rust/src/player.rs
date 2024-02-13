@@ -90,7 +90,7 @@ impl Player {
             if !self.settings.test_mode {
                 thread::sleep(Duration::from_secs(1));
             }
-            Some(chosen_move.to_log_entry())
+            Some(chosen_move.log_entry())
         } else {
             self.can_play = false;
             if !disable_prints {

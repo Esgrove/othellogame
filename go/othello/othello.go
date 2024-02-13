@@ -90,7 +90,7 @@ func (o *Othello) gameLoop() {
 		for _, player := range players {
 			result := player.PlayOneMove(&o.board)
 			if result != nil {
-				o.gameLog = append(o.gameLog, fmt.Sprintf("%s;%s", *result, o.board.ToLogEntry()))
+				o.gameLog = append(o.gameLog, fmt.Sprintf("%s;%s", *result, o.board.LogEntry()))
 			}
 			fmt.Println("--------------------------------")
 		}

@@ -57,7 +57,7 @@ class Player:
             if not self._settings.test_mode:
                 time.sleep(1)
 
-            return chosen_move.to_log_entry()
+            return chosen_move.log_entry()
 
         self.can_play = False
         print_color("  No moves available...", Color.yellow)

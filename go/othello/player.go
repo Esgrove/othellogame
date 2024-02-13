@@ -61,7 +61,7 @@ func (p *Player) PlayOneMove(board *Board) *string {
 		if !p.settings.TestMode {
 			time.Sleep(time.Second)
 		}
-		logEntry := chosenMove.ToLogEntry()
+		logEntry := chosenMove.LogEntry()
 		return &logEntry
 	}
 	p.CanPlay = false

@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace Othello
 {
-    /// Defines one player (human or computer).
+    /// Defines one player that can be either human or computer controlled.
     internal class Player
     {
         public bool canPlay;
@@ -55,7 +55,7 @@ namespace Othello
                 canPlay = true;
                 if (_isHuman && _settings.ShowHelpers)
                 {
-                    board.printPossibleMoves(moves);
+                    board.PrintPossibleMoves(moves);
                 }
                 var chosenMove = _isHuman ? GetHumanMove(moves) : GetComputerMove(moves);
                 board.PlaceDisc(chosenMove);
@@ -65,14 +65,13 @@ namespace Othello
                 {
                     Thread.Sleep(1000);
                 }
-                return chosenMove.ToLogEntry();
+                return chosenMove.LogEntry();
             }
 
             canPlay = false;
             ColorPrint.WriteLine("  No moves available...", Color.Yellow);
             return null;
         }
-
 #nullable disable
 
         /// Set player to be controlled by human or computer.

@@ -246,7 +246,7 @@ class Move:
         self.value: int = value
         self.directions: list[Step] = directions
 
-    def to_log_entry(self) -> str:
+    def log_entry(self) -> str:
         return f"{self.disk.board_char(color=False)}:{self.square},{self.value}"
 
     def __eq__(self, other) -> bool:

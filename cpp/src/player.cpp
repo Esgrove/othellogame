@@ -33,7 +33,7 @@ std::optional<std::string> Player::play_one_move(Board& board)
         if (!this->settings.test_mode) {
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
-        return chosen_move.to_log_entry();
+        return chosen_move.log_entry();
     }
     can_play = false;
     print_color("  No moves available...\n", fmt::terminal_color::yellow);

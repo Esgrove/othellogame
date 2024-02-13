@@ -130,7 +130,7 @@ impl Disk {
 }
 
 impl Move {
-    pub fn to_log_entry(&self) -> String {
+    pub fn log_entry(&self) -> String {
         format!("{}:{},{}", self.disk.board_char(), self.square, self.value)
     }
 
@@ -374,14 +374,14 @@ mod tests {
     }
 
     #[test]
-    fn move_to_log_entry() {
+    fn move_log_entry() {
         let b = Move {
             square: Square { x: 3, y: 2 },
             disk: Disk::Black,
             value: 10,
             directions: vec![(Step { x: 1, y: 0 }, 10)],
         };
-        assert_eq!(b.to_log_entry(), "B:(3,2),10");
+        assert_eq!(b.log_entry(), "B:(3,2),10");
 
         let w = Move {
             square: Square { x: 0, y: 0 },
@@ -389,7 +389,7 @@ mod tests {
             value: 1,
             directions: vec![(Step { x: 1, y: 0 }, 1)],
         };
-        assert_eq!(w.to_log_entry(), "W:(0,0),1");
+        assert_eq!(w.log_entry(), "W:(0,0),1");
     }
 
     #[test]

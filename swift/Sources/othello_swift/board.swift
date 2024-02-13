@@ -136,7 +136,7 @@ class Board {
     }
 
     /// Get board status string for game log.
-    func toLogEntry() -> String {
+    func logEntry() -> String {
         let logChars = self.board.map { $0.boardChar(color: false) }
         return logChars.joined()
     }

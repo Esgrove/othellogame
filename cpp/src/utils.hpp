@@ -161,7 +161,7 @@ struct Move {
         , directions(std::move(directions))
     {}
 
-    std::string to_log_entry();
+    std::string log_entry();
 
     friend std::ostream& operator<<(std::ostream& out, const Move& move)
     {

@@ -179,7 +179,7 @@ impl Board {
     }
 
     /// Get board status string for game log.
-    pub fn to_log_entry(&self) -> String {
+    pub fn log_entry(&self) -> String {
         self.board.iter().map(|&d| d.board_char()).collect()
     }
 
@@ -336,21 +336,21 @@ mod tests {
     }
 
     #[test]
-    fn test_to_log_entry() {
+    fn test_log_entry() {
         let board = Board::new(8);
-        let log_entry = board.to_log_entry();
+        let log_entry = board.log_entry();
         assert_eq!(
             log_entry,
             "___________________________WB______BW___________________________"
         );
 
         let mut board = Board::new(4);
-        let log_entry = board.to_log_entry();
+        let log_entry = board.log_entry();
         assert_eq!(log_entry, "_____WB__BW_____");
 
         let moves = board.possible_moves(Disk::Black);
         board.place_disk(&moves[0]);
-        let log_entry = board.to_log_entry();
+        let log_entry = board.log_entry();
         assert_eq!(log_entry, "____BBB__BW_____");
     }
 }

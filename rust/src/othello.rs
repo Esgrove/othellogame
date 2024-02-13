@@ -106,7 +106,7 @@ impl Othello {
                     player.play_one_move(&mut self.board, &self.settings.check_mode)
                 {
                     self.game_log
-                        .push(format!("{};{}", result, self.board.to_log_entry()));
+                        .push(format!("{};{}", result, self.board.log_entry()));
                 }
                 if !self.settings.check_mode {
                     println!("--------------------------------");

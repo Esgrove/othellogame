@@ -35,7 +35,7 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
             if (!settings.testMode) {
                 Thread.sleep(1000)
             }
-            return chosenMove.toLogEntry()
+            return chosenMove.logEntry()
         }
         canPlay = false
         printColor("  No moves available...", AnsiColor.YELLOW)

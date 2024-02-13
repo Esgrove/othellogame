@@ -158,7 +158,7 @@ Disk Board::result() const
 }
 
 /// Get board status string for game log.
-std::string Board::to_log_entry() const
+std::string Board::log_entry() const
 {
     return std::accumulate(
         board.begin(),

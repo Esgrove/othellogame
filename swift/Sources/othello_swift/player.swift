@@ -45,7 +45,7 @@ class Player {
             if !self.settings.testMode {
                 Thread.sleep(forTimeInterval: 1)
             }
-            return chosenMove.toLogEntry()
+            return chosenMove.logEntry()
         }
         self.canPlay = false
         print("  No moves available...".yellow())

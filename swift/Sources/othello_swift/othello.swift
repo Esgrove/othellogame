@@ -75,7 +75,7 @@ class Othello {
             printBold("\n=========== ROUND: \(self.roundsPlayed) ===========")
             for player in [self.playerBlack, self.playerWhite] {
                 if let result = player.playOneMove(board: &self.board) {
-                    self.gameLog.append("\(result);\(self.board.toLogEntry())")
+                    self.gameLog.append("\(result);\(self.board.logEntry())")
                 }
             }
             print("-------------------------------")

@@ -97,7 +97,7 @@ struct Move {
         self.directions = directions
     }
 
-    func toLogEntry() -> String {
+    func logEntry() -> String {
         return "\(self.disk.boardChar(color: false)):\(self.square),\(self.value)"
     }
 }

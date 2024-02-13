@@ -78,7 +78,7 @@ void Othello::game_loop()
 
         for (Player* player : {&player_black, &player_white}) {
             if (auto result = player->play_one_move(board); result.has_value()) {
-                game_log.push_back(fmt::format("{};{}", result.value(), board.to_log_entry()));
+                game_log.push_back(fmt::format("{};{}", result.value(), board.log_entry()));
             }
             fmt::print("--------------------------------\n");
         }

@@ -9,7 +9,7 @@
 
 namespace othello
 {
-std::string Move::to_log_entry()
+std::string Move::log_entry()
 {
     return fmt::format("{}:{},{}", board_char(this->disk, false), this->square, this->value);
 }

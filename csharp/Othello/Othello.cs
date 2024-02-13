@@ -111,7 +111,7 @@ namespace Othello
                         var result = player.PlayOneMove(_board);
                         if (result != null)
                         {
-                            _gameLog.Add($"{result};{_board.ToLogEntry()}");
+                            _gameLog.Add($"{result};{_board.LogEntry()}");
                         }
                         Console.WriteLine("--------------------------------");
                     }
