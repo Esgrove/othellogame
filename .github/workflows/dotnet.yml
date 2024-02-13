@@ -38,12 +38,24 @@ jobs:
         working-directory: csharp
         run: dotnet restore
 
-      - name: Check formatting
-        working-directory: csharp
-        run: dotnet format --verify-no-changes --verbosity detailed
-        shell: bash
-
       - name: Build
         working-directory: csharp
         run: chmod +x build.sh && ./build.sh
         shell: bash
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+      - name: Install CSharpier
+        run: dotnet tool install --global CSharpier
+
+      - name: Check code formatting
+        run: dotnet csharpier --check csharp
