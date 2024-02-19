@@ -1,0 +1,69 @@
+name: Python
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
+      - ".github/workflows/python.yml"
+  pull_request:
+    paths:
+      - "**.py"
+      - "python/pyproject.toml"
+      - "python/poetry.lock"
+      - ".github/workflows/python.yml"
+
+# Cancel previous runs for PRs but not pushes to main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Black
+        uses: psf/black@stable
+        with:
+          options: "--check --verbose --diff --color"
+          src: "./python"
+
+      - name: isort
+        uses: isort/isort-action@v1
+        with:
+          requirements-files: "python/requirements.txt"
+          sort-paths: python
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Ruff lint
+        uses: chartboost/ruff-action@v1
+        with:
+          src: "./python"
+          args: check --verbose
+
+      - name: Ruff format
+        uses: chartboost/ruff-action@v1
+        with:
+          src: "./python"
+          args: format --check --verbose
