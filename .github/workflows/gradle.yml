@@ -3,7 +3,6 @@ name: Kotlin
 on:
   push:
     branches:
-      - master
       - main
     paths:
       - "kotlin/**"
@@ -13,6 +12,7 @@ on:
       - "kotlin/**"
       - ".github/workflows/gradle.yml"
 
+# Cancel previous runs for PRs but not pushes to main
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true

@@ -3,7 +3,6 @@ name: Swift
 on:
   push:
     branches:
-      - master
       - main
     paths:
       - "swift/**.swift"
@@ -15,6 +14,7 @@ on:
       - "swift/Package.resolved"
       - ".github/workflows/swift.yml"
 
+# Cancel previous runs for PRs but not pushes to main
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true

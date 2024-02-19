@@ -3,7 +3,6 @@ name: C++
 on:
   push:
     branches:
-      - master
       - main
     paths:
       - 'cpp/**.cpp'
@@ -17,6 +16,7 @@ on:
       - 'cpp/CMakeLists.txt'
       - ".github/workflows/cmake.yml"
 
+# Cancel previous runs for PRs but not pushes to main
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
