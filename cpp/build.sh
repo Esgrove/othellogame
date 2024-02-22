@@ -131,11 +131,13 @@ build_project() {
 move_exe_to_root() {
     cd "$PROJECT_PATH"
     local executable="othello_cpp"
+    local build_dir="$CMAKE_BUILD_DIR"
     if [ "$PLATFORM" = windows ]; then
         executable="othello_cpp.exe"
+        build_dir="$build_dir/$BUILD_TYPE"
     fi
     # Move executable from build dir to project root
-    mv "$(find "$CMAKE_BUILD_DIR/$BUILD_TYPE" -type f -name "$executable")" "$executable"
+    find "$build_dir" -type f -name "$executable" | head -n 1 | xargs -I {} mv {} "$executable"
     file "$executable"
     # Run executable to check it works and print the version info
     ./"$executable" --version
