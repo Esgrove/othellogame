@@ -86,8 +86,10 @@ generate_msvc_project() {
 generate_ninja_project() {
     # Use brew Clang which typically is more recent than Xcode's
     if [ $PLATFORM = "mac" ] && brew ls --versions llvm > /dev/null; then
-        export CC="$(brew --prefix llvm)/bin/clang"
-        export CXX="$(brew --prefix llvm)/bin/clang++"
+        CC="$(brew --prefix llvm)/bin/clang"
+        CXX="$(brew --prefix llvm)/bin/clang++"
+        export CC
+        export CXX
     fi
     cmake -B "$CMAKE_BUILD_DIR" \
         -G Ninja \

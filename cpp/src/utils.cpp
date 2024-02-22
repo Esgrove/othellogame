@@ -1,3 +1,10 @@
+//==========================================================
+// Utils source
+// Helper utilities for Othello game
+// Akseli Lukkarila
+// 2019-2024
+//==========================================================
+
 #include "utils.hpp"
 
 #include <openssl/evp.h>
