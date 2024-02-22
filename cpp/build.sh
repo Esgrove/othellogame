@@ -104,6 +104,8 @@ build_project() {
     fi
     mkdir -p "$CMAKE_BUILD_DIR"
 
+    export CCACHE_DIR="$CMAKE_BUILD_DIR/ccache"
+
     print_magenta "Building Othello C++..."
 
     if [ "$PLATFORM" = windows ] && [ "$USE_NINJA_ON_WINDOWS" != true ]; then

@@ -59,6 +59,16 @@ jobs:
           brew install llvm
           brew install ninja
 
+      - name: Cache CMake
+        uses: actions/cache@v4
+        with:
+          path: |
+            cpp/cmake-build-linux-release
+            cpp/cmake-build-mac-release
+            cpp/cmake-build-windows-release
+          key: ${{ runner.os }}-cmake-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-cmake-
+
       - name: Build
         working-directory: cpp
         run: chmod +x build.sh && ./build.sh
