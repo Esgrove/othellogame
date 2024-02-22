@@ -34,7 +34,7 @@ cd "$PROJECT_PATH"
 
 swift build --configuration release
 
-if [ "$PLATFORM" = windows ]; then
+if [ "$BASH_PLATFORM" = windows ]; then
     executable="othello_swift.exe"
 else
     executable="othello_swift"

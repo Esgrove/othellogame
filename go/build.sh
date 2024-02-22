@@ -36,7 +36,7 @@ init_options() {
     REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
     PROJECT_PATH="$REPO_ROOT/go"
 
-    if [ "$PLATFORM" = windows ]; then
+    if [ "$BASH_PLATFORM" = windows ]; then
         EXECUTABLE="othello_go.exe"
     else
         EXECUTABLE="othello_go"

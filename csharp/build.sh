@@ -39,13 +39,13 @@ init_options() {
     done
 
     EXECUTABLE="othello_csharp"
-    if [ $PLATFORM = "mac" ]; then
+    if [ $BASH_PLATFORM = "mac" ]; then
         if [ "$(uname -m)" = arm64 ]; then
             RUNTIME="osx-arm64"
         else
             RUNTIME="osx-x64"
         fi
-    elif [ $PLATFORM = "windows" ]; then
+    elif [ $BASH_PLATFORM = "windows" ]; then
         RUNTIME="win-x64"
         EXECUTABLE="othello_csharp.exe"
     else
@@ -53,7 +53,7 @@ init_options() {
     fi
 
     PROJECT_PATH="$REPO_ROOT/csharp"
-    BUILD_DIR="$PROJECT_PATH/dotnet-build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
+    BUILD_DIR="$PROJECT_PATH/dotnet-build-$BASH_PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
     VERSION_FILE="$PROJECT_PATH/Othello/Version.cs"
 }
 
@@ -98,7 +98,7 @@ build_project() {
         --verbosity minimal
 
     # Move executable from build dir to project root
-    if [ "$PLATFORM" = windows ]; then
+    if [ "$BASH_PLATFORM" = windows ]; then
         mv "$(find "$BUILD_DIR" -type f -name Othello.exe)" $EXECUTABLE
     else
         mv "$(find "$BUILD_DIR" -type f -name Othello)" $EXECUTABLE

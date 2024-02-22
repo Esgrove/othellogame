@@ -8,7 +8,7 @@ source "$DIR/common.sh"
 
 cd "$DIR" > /dev/null
 
-if [ "$PLATFORM" = windows ]; then
+if [ "$BASH_PLATFORM" = windows ]; then
     executables=(
         cpp/othello_cpp.exe
         csharp/othello_csharp.exe

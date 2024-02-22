@@ -12,7 +12,7 @@ find . -maxdepth 2 -name "build.sh" -print -exec {} \;
 
 echo ""
 print_magenta "Checking versions:"
-if [ "$PLATFORM" = windows ]; then
+if [ "$BASH_PLATFORM" = windows ]; then
     ./cpp/othello_cpp.exe --version
     ./csharp/othello_csharp.exe --version
     ./go/othello_go.exe --version

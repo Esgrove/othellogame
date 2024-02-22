@@ -7,13 +7,13 @@ export REPO_ROOT
 # Check platform
 case "$(uname -s)" in
     "Darwin")
-        PLATFORM="mac"
+        BASH_PLATFORM="mac"
         ;;
     "MINGW"*)
-        PLATFORM="windows"
+        BASH_PLATFORM="windows"
         ;;
     *)
-        PLATFORM="linux"
+        BASH_PLATFORM="linux"
         ;;
 esac
 

@@ -55,7 +55,7 @@ init_options() {
     done
 
     PROJECT_PATH="$REPO_ROOT/cpp"
-    CMAKE_BUILD_DIR="$PROJECT_PATH/cmake-build-$PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
+    CMAKE_BUILD_DIR="$PROJECT_PATH/cmake-build-$BASH_PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
 }
 
 ccache_zero_stats() {
@@ -85,7 +85,7 @@ generate_msvc_project() {
 
 generate_ninja_project() {
     # Use brew Clang which typically is more recent than Xcode's
-    if [ $PLATFORM = "mac" ] && brew ls --versions llvm > /dev/null; then
+    if [ "$BASH_PLATFORM" = "mac" ] && brew ls --versions llvm > /dev/null; then
         CC="$(brew --prefix llvm)/bin/clang"
         CXX="$(brew --prefix llvm)/bin/clang++"
         export CC
@@ -108,7 +108,7 @@ build_project() {
 
     print_magenta "Building Othello C++..."
 
-    if [ "$PLATFORM" = windows ] && [ "$USE_NINJA_ON_WINDOWS" != true ]; then
+    if [ "$BASH_PLATFORM" = windows ] && [ "$USE_NINJA_ON_WINDOWS" != true ]; then
         echo "Generating Visual Studio project..."
         if ! generate_msvc_project; then
             print_yellow "CMake failed, removing existing cache and trying again..."
@@ -135,13 +135,11 @@ build_project() {
 move_exe_to_root() {
     cd "$PROJECT_PATH"
     local executable="othello_cpp"
-    local build_dir="$CMAKE_BUILD_DIR"
-    if [ "$PLATFORM" = windows ]; then
+    if [ "$BASH_PLATFORM" = windows ]; then
         executable="othello_cpp.exe"
-        build_dir="$build_dir/$BUILD_TYPE"
     fi
     # Move executable from build dir to project root
-    find "$build_dir" -type f -name "$executable" | head -n 1 | xargs -I {} mv {} "$executable"
+    find "$CMAKE_BUILD_DIR" -type f -name "$executable" | head -n 1 | xargs -I {} mv {} "$executable"
     file "$executable"
     # Run executable to check it works and print the version info
     ./"$executable" --version
