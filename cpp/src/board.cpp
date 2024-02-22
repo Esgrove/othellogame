@@ -221,13 +221,9 @@ void Board::set_square(const Square& square, const Disk disk)
 /// Format game board to string
 std::ostream& operator<<(std::ostream& out, const Board& board)
 {
-    out << " ";
     // Horizontal header indices
-    // TODO: use fmt::join here
-    for (const auto i : board.indices) {
-        out << " " << i;
-    }
-    for (const auto y : board.indices) {
+    out << " " << fmt::format(" {}", fmt::join(board.indices, " "));
+    for (const auto& y : board.indices) {
         // Vertical header index
         out << "\n" << y;
         // Output row

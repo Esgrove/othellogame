@@ -2,6 +2,7 @@
 
 #include <openssl/evp.h>
 
+#include <array>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -20,7 +21,7 @@ std::vector<Square> Move::affected_squares() const
     paths.reserve(directions.size());
     for (const auto& [step, num] : directions) {
         Square pos = square + step;
-        for (auto i = 0; i < num; ++i) {
+        for (size_t i = 0; i < num; ++i) {
             paths.push_back(pos);
             pos += step;
         }
@@ -72,9 +73,9 @@ std::string calculate_sha256(const std::string& text)
     if (context != nullptr) {
         if (EVP_DigestInit_ex(context, EVP_sha256(), nullptr) != 0) {
             if (EVP_DigestUpdate(context, text.c_str(), text.length()) != 0) {
-                unsigned char hash[EVP_MAX_MD_SIZE];
+                std::array<unsigned char, EVP_MAX_MD_SIZE> hash;
                 unsigned int hash_length = 0;
-                if (EVP_DigestFinal_ex(context, hash, &hash_length) != 0) {
+                if (EVP_DigestFinal_ex(context, hash.data(), &hash_length) != 0) {
                     for (unsigned int i = 0; i < hash_length; ++i) {
                         stream << std::hex << std::setw(2) << std::setfill('0')
                                << static_cast<int>(hash[i]);
