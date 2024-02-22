@@ -50,12 +50,13 @@ message(STATUS "Build name: ${APP_BUILD_NAME}")
 find_program(CCACHE_EXECUTABLE ccache)
 if(CCACHE_EXECUTABLE)
     message(STATUS "ccache found: ${CCACHE_EXECUTABLE}")
-    # print version with nice formatting
+    # print ccache version with nice formatting
     execute_process(
-        COMMAND bash -c "${CCACHE_EXECUTABLE} --version | sed '1q;d'"
-        OUTPUT_VARIABLE CCACHE_VERSION
+        COMMAND ${CCACHE_EXECUTABLE} --version
+        OUTPUT_VARIABLE CCACHE_VERSION_INFO
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
+    string(REGEX MATCH "^[^\n]*" CCACHE_VERSION "${CCACHE_VERSION_INFO}")
     message(STATUS "${CCACHE_VERSION}")
     set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_EXECUTABLE})
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_EXECUTABLE})
