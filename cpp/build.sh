@@ -135,7 +135,7 @@ move_exe_to_root() {
         executable="othello_cpp.exe"
     fi
     # Move executable from build dir to project root
-    mv "$(find "$CMAKE_BUILD_DIR" -type f -name "$executable")" "$executable"
+    mv "$(find "$CMAKE_BUILD_DIR/$BUILD_TYPE" -type f -name "$executable")" "$executable"
     file "$executable"
     # Run executable to check it works and print the version info
     ./"$executable" --version
