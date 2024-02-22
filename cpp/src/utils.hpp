@@ -12,7 +12,7 @@
 #include <iostream>   // cout, cin
 #include <sstream>
 #include <string>   // string
-#include <utility>  // move
+#include <utility>  // move, pair
 #include <vector>
 
 namespace othello
@@ -83,7 +83,7 @@ struct Square {
 
 /// Player settings.
 struct PlayerSettings {
-    PlayerSettings(const bool show_helpers, const bool test_mode)
+    explicit PlayerSettings(const bool show_helpers, const bool test_mode)
         : show_helpers(show_helpers)
         , test_mode(test_mode)
     {}
@@ -141,7 +141,7 @@ struct Settings {
 
 // Formatter specialization:
 // For some reason MSVC needs to have this here before fmt::format is called below in Move.
-// Having it at the end of the file works fine on Clang like it should.
+// Having it at the end of the file works fine with Clang like it should.
 // Bug in fmt lib with C++20 maybe? ¯\_(ツ)_/¯
 template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
 
@@ -154,14 +154,17 @@ struct Move {
         const Square square,
         const Disk disk,
         const unsigned int value,
-        std::vector<Step> directions)
+        std::vector<std::pair<Step, size_t>> directions)
         : square(square)
         , disk(disk)
         , value(value)
         , directions(std::move(directions))
     {}
 
-    std::string log_entry();
+    std::string log_entry() const;
+
+    /// Get all the squares playing this move will change
+    std::vector<Square> affected_squares() const;
 
     friend std::ostream& operator<<(std::ostream& out, const Move& move)
     {
@@ -177,7 +180,7 @@ struct Move {
     Square square;
     Disk disk;
     unsigned int value;
-    std::vector<Step> directions;
+    std::vector<std::pair<Step, size_t>> directions;
 };
 
 /// Returns the print colour for the given Disk.
@@ -190,7 +193,19 @@ std::string board_char(const Disk& disk, bool color = true);
 std::string disk_string(const Disk& disk);
 
 /// Returns the opposing disk colour.
-Disk opponent(const Disk& disk);
+inline Disk opponent(const Disk& disk)
+{
+    switch (disk) {
+        case Disk::white:
+            return Disk::black;
+        case Disk::black:
+            return Disk::white;
+        case Disk::empty:
+            [[fallthrough]];
+        default:
+            return Disk::empty;
+    }
+}
 
 inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
 {

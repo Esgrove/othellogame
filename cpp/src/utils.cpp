@@ -9,9 +9,24 @@
 
 namespace othello
 {
-std::string Move::log_entry()
+std::string Move::log_entry() const
 {
     return fmt::format("{}:{},{}", board_char(this->disk, false), this->square, this->value);
+}
+
+std::vector<Square> Move::affected_squares() const
+{
+    std::vector<Square> paths;
+    paths.reserve(directions.size());
+    for (const auto& [step, num] : directions) {
+        Square pos = square + step;
+        for (auto i = 0; i < num; ++i) {
+            paths.push_back(pos);
+            pos += step;
+        }
+    }
+    std::sort(paths.begin(), paths.end());
+    return paths;
 }
 
 fmt::terminal_color disk_color(const Disk& disk)
@@ -44,20 +59,6 @@ std::string disk_string(const Disk& disk)
             return get_color("WHITE", color);
         default:
             return "UNKNOWN";
-    }
-}
-
-Disk opponent(const Disk& disk)
-{
-    switch (disk) {
-        case Disk::white:
-            return Disk::black;
-        case Disk::black:
-            return Disk::white;
-        case Disk::empty:
-            [[fallthrough]];
-        default:
-            return Disk::empty;
     }
 }
 

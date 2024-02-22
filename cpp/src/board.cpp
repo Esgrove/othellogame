@@ -59,12 +59,8 @@ void Board::place_disk(const Move& move)
     }
     set_square(start, move.disk);
     empty_squares.erase(start);
-    for (const auto& step : move.directions) {
-        Square pos = start + step;
-        while (get_square(pos) == opponent(move.disk)) {
-            set_square(pos, move.disk);
-            pos += step;
-        }
+    for (const auto& square : move.affected_squares()) {
+        set_square(square, move.disk);
     }
 }
 
@@ -75,7 +71,7 @@ std::vector<Move> Board::possible_moves(Disk disk) const
     const Disk opposing_disk = opponent(disk);
     for (const Square& square : empty_squares) {
         int value {0};
-        std::vector<Step> directions;
+        std::vector<std::pair<Step, size_t>> directions;
         for (const auto& step : step_directions) {
             Square pos {square + step};
             // Next square in this direction needs to be the opposing disk
@@ -91,7 +87,7 @@ std::vector<Move> Board::possible_moves(Disk disk) const
             // Valid move only if a line of opposing disks ends in own disk
             if (get_square(pos) == disk) {
                 value += num_steps;
-                directions.emplace_back(step);
+                directions.emplace_back(step, num_steps);
             }
         }
         if (value > 0) {
