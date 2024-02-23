@@ -41,7 +41,7 @@ shadow!(build);
     disable_version_flag = true
 )]
 struct Args {
-    /// Optional board size
+    /// Optional board size (4..10)
     size: Option<usize>,
 
     /// Enable autoplay mode with both players controlled by computer
