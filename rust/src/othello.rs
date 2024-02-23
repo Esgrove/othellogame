@@ -8,15 +8,15 @@
 
 extern crate colored;
 
-use std::io::{self, Write};
-
-use colored::Colorize;
-
 use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::player::Player;
 use crate::utils;
 use crate::utils::{Disk, Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+
+use colored::Colorize;
+
+use std::io::{self, Write};
 
 /// Gameplay loop and main logic.
 pub struct Othello {

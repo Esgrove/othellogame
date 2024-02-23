@@ -5,6 +5,8 @@
 // 2019-2024
 //==========================================================
 
+use crate::player::PlayerSettings;
+
 use colored::{Color, ColoredString, Colorize};
 use sha2::{Digest, Sha256};
 
@@ -12,8 +14,6 @@ use std::cmp::Ordering;
 use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::ops::{Add, AddAssign};
-
-use crate::player::PlayerSettings;
 
 pub const MIN_BOARD_SIZE: usize = 4;
 pub const MAX_BOARD_SIZE: usize = 10;

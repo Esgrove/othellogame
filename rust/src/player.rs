@@ -7,16 +7,16 @@
 
 extern crate colored;
 
+use crate::board::Board;
+use crate::colorprint::print_error;
+use crate::utils::{Disk, Move, Square};
+
 use colored::Colorize;
 use rand::{self, Rng};
 
 use std::io::Write;
 use std::{fmt, io};
 use std::{thread, time::Duration};
-
-use crate::board::Board;
-use crate::colorprint::print_error;
-use crate::utils::{Disk, Move, Square};
 
 /// Defines one player that can be either human or computer controlled.
 #[derive(Debug)]

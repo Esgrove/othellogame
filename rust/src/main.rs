@@ -7,7 +7,6 @@
 //==========================================================
 
 extern crate colored;
-extern crate log;
 
 use anyhow::Result;
 use clap::{arg, Parser};
@@ -77,7 +76,6 @@ struct Args {
 fn main() -> Result<()> {
     // Set to 1 to display backtraces for panics for debugging
     env::set_var("RUST_BACKTRACE", "0");
-    env_logger::init();
 
     println!("{}", "OTHELLO GAME - RUST".green().bold());
 
