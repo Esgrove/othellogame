@@ -3,7 +3,7 @@
 A simple [Othello (Reversi)](https://en.wikipedia.org/wiki/Reversi) CLI game implementation in different programming languages.
 
 I originally did this in Python many years ago for my university basic programming course assignment,
-and then a few years later implemented it in C++ for learning purposes.
+and then a few years later re-implemented it in C++ for learning purposes.
 Since then, I figured that this could actually be a useful personal project to:
 
 1. try out and learn new languages by re-implementing it,
@@ -27,7 +27,7 @@ I might still do a few other (modern) languages that interest me and/or have som
 such as *Zig* and *Ruby*.
 
 In the meantime, there's probably still room to improve in the current implementations,
-especially in the languages that I haven't been actively using.
+especially in the languages that I haven't been actively using so much.
 
 ## Program structure
 
@@ -61,7 +61,7 @@ linting with [ruff](https://github.com/astral-sh/ruff).
 ### C++
 
 C++20. Uses [CMake](https://cmake.org/) as the build system,
-and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text (stringstreams :unamused:).
+and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text.
 Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rl-camel) recommended naming style (*snake_case*),
 which sadly not that many C++ codebases seem to be using (in my experience).
 Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html).
