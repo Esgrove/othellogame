@@ -10,17 +10,19 @@ go run .
 
 ## Build
 
+Using script:
+
+```shell
+./build.sh
+```
+
 Manually:
 
 ```shell
 go build -v
 ```
 
-Or using script:
-
-```shell
-./build.sh
-```
+Note that version information only works when building with script since that sets the required variables.
 
 ## Install
 
