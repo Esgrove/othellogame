@@ -84,7 +84,7 @@ generate_msvc_project() {
 }
 
 generate_ninja_project() {
-    # Use brew Clang which typically is more recent than Xcode's
+    # Use brew Clang which is typically more recent than Xcode's
     if [ "$BASH_PLATFORM" = "mac" ] && brew ls --versions llvm > /dev/null; then
         CC="$(brew --prefix llvm)/bin/clang"
         CXX="$(brew --prefix llvm)/bin/clang++"
