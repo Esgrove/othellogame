@@ -26,7 +26,7 @@ std::optional<std::string> Player::play_one_move(Board& board)
         if (this->human && this->settings.show_helpers) {
             board.print_possible_moves(moves);
         }
-        auto chosen_move = human ? get_human_move(moves) : get_computer_move(moves);
+        const auto chosen_move = human ? get_human_move(moves) : get_computer_move(moves);
         board.place_disk(chosen_move);
         board.print_score();
         ++rounds_played;

@@ -90,7 +90,7 @@ namespace ansi
 [[maybe_unused]] static constexpr auto ANSI_RESET = "\033[0m";
 
 // Stream manipulators for easy ANSI color usage with stringstreams.
-// Example usage: std::cout << ansi::red << "example" << ansi::reset << std::endl;
+// Example usage: std::cout << ansi::red << "example" << ansi::reset << "\n";
 
 template<class T, class Traits>
 constexpr std::basic_ostream<T, Traits>& reset(std::basic_ostream<T, Traits>& stream)

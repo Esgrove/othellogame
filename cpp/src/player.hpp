@@ -27,7 +27,6 @@ public:
 
     // nodiscard -> compiler should warn if value returned by function call is not used
     [[nodiscard]] std::string type_string() const { return this->human ? "Human   " : "Computer"; }
-
     [[nodiscard]] std::optional<std::string> play_one_move(Board& board);
 
     void set_human(bool is_human);
