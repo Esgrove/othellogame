@@ -210,7 +210,7 @@ impl Board {
     #[allow(dead_code)]
     /// Map square to index on board.
     fn square_index(&self, square: &Square) -> usize {
-        square.x as usize * self.size + square.x as usize
+        square.y as usize * self.size + square.x as usize
     }
 
     /// Count and return the number of black and white disks.
