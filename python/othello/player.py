@@ -42,8 +42,7 @@ class Player:
     def play_one_move(self, board: Board) -> str | None:
         """Play one round as this player."""
         print(f"Turn: {str(self._disk)}")
-        moves = board.possible_moves(self._disk)
-        if moves:
+        if moves := board.possible_moves(self._disk):
             self.can_play = True
             if self._human and self._settings.show_helpers:
                 board.print_possible_moves(moves)

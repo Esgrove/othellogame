@@ -130,11 +130,12 @@ impl Disk {
 }
 
 impl Move {
+    /// Format move for log entry
     pub fn log_entry(&self) -> String {
         format!("{}:{},{}", self.disk.board_char(), self.square, self.value)
     }
 
-    /// Get all the squares playing this move will change
+    /// Get all the squares playing this move will change.
     pub fn affected_squares(&self) -> Vec<Square> {
         let mut paths: Vec<Square> = Vec::new();
         for &(step, num) in self.directions.iter() {

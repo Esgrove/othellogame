@@ -6,6 +6,6 @@ Akseli Lukkarila
 """
 
 BRANCH = "main"
-COMMIT = "499f907"
-DATE = "2024-02-13_1028"
+COMMIT = "88ee667"
+DATE = "2024-02-23_1900"
 VERSION_NUMBER = "2.2.0"

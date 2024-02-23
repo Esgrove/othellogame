@@ -64,9 +64,9 @@ class Board:
         ), f"Trying to place disk to an occupied square {start}!"
         self._set_square(start, player_move.disk)
         self._empty_squares.remove(start)
-        for step in player_move.directions:
+        for step, count in player_move.directions:
             pos = start + step
-            while self._get_square(pos) == player_move.disk.opponent():
+            for _ in range(count):
                 self._set_square(pos, player_move.disk)
                 pos += step
 
@@ -83,15 +83,15 @@ class Board:
                 # Next square in this direction needs to be the opposing disk
                 if self._get_square(pos) != opposing_disk:
                     continue
-                steps = 0
+                num_steps = 0
                 # Keep stepping over opponents disks
                 while self._get_square(pos) == disk.opponent():
-                    steps += 1
+                    num_steps += 1
                     pos += step
                 # Valid move only if a line of opposing disks ends in own disk
                 if self._get_square(pos) == disk:
-                    value += steps
-                    directions.append(step)
+                    value += num_steps
+                    directions.append((step, num_steps))
 
             if value:
                 moves.append(Move(square, disk, value, directions))

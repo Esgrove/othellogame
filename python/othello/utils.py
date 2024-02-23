@@ -244,10 +244,22 @@ class Move:
         self.square: Square = square
         self.disk: Disk = disk
         self.value: int = value
-        self.directions: list[Step] = directions
+        self.directions: list[tuple[Step, int]] = directions
 
     def log_entry(self) -> str:
+        """Format move for log entry."""
         return f"{self.disk.board_char(color=False)}:{self.square},{self.value}"
+
+    def affected_squares(self) -> list[Square]:
+        """Get all the squares playing this move will change."""
+        paths = []
+        for step, count in self.directions:
+            pos = self.square + step
+            for _ in range(count):
+                paths.append(pos)
+                pos += step
+
+        return sorted(paths)
 
     def __eq__(self, other) -> bool:
         return (self.square, self.value) == (other.square, other.value)
