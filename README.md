@@ -24,7 +24,7 @@ especially since it is possible to compare side-by-side with the other implement
 
 So far, I have added *C#*, *Swift*, *Rust*, *Go*, and *Kotlin* implementations.
 I might still do a few other (modern) languages that interest me and/or have some hype around them,
-such as *Zig* and *Ruby*.
+such as *[Zig](https://ziglang.org/)*, *[Mojo](https://www.modular.com/max/mojo)*, and *[Ruby](https://www.ruby-lang.org/)*.
 
 In the meantime, there's probably still room to improve in the current implementations,
 especially in the languages that I haven't been actively using so much.
