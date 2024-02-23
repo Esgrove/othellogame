@@ -12,8 +12,10 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/logrusorgru/aurora/v4"
 	"runtime/debug"
+	"sort"
+
+	"github.com/logrusorgru/aurora/v4"
 )
 
 // Set at build time
@@ -52,7 +54,16 @@ type Move struct {
 	Square     Square
 	Disk       Disk
 	Value      int
-	Directions []Step
+	Directions []StepCount
+}
+
+// Squares implements sort.Interface for a slice of Square objects
+type Squares []Square
+
+// Hold Step and number of steps since Go lacks a tuple / pair construct
+type StepCount struct {
+	Step  Step
+	Count int
 }
 
 // MovesDescending implements sort.Interface with custom sort order.
@@ -120,6 +131,10 @@ func (m MovesDescending) Less(i, j int) bool {
 	}
 	return false
 }
+
+func (s Squares) Len() int           { return len(s) }
+func (s Squares) Less(i, j int) bool { return s[i].IsLessThan(s[j]) }
+func (s Squares) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 
 // BoardChar Returns a single character identifier string for the given disk.
 func (d Disk) BoardChar() string {
@@ -195,6 +210,20 @@ func (m Move) String() string {
 
 func (m Move) LogEntry() string {
 	return fmt.Sprintf("%s:%s,%d", m.Disk.BoardChar(), m.Square, m.Value)
+}
+
+// Get all the squares playing this move will change
+func (m Move) AffectedSquares() []Square {
+	var paths Squares
+	for _, direction := range m.Directions {
+		pos := m.Square.Add(direction.Step)
+		for i := 0; i < int(direction.Count); i++ {
+			paths = append(paths, pos)
+			pos = pos.Add(direction.Step)
+		}
+	}
+	sort.Sort(paths)
+	return paths
 }
 
 // Calculate SHA256 hash for the given string.

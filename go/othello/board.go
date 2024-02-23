@@ -10,9 +10,10 @@ package othello
 import (
 	"errors"
 	"fmt"
+	"sort"
+
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/logrusorgru/aurora/v4"
-	"sort"
 )
 
 // Board Handles game board state and logic.
@@ -98,11 +99,11 @@ func (b *Board) PlaceDisk(playerMove *Move) {
 	}
 	b.setSquare(&start, playerMove.Disk)
 	b.emptySquares.Remove(start)
-	for _, step := range playerMove.Directions {
-		pos := start.Add(step)
-		for b.getSquare(&pos) == playerMove.Disk.Opponent() {
+	for _, direction := range playerMove.Directions {
+		pos := start.Add(direction.Step)
+		for i := 0; i < direction.Count; i++ {
 			b.setSquare(&pos, playerMove.Disk)
-			pos = pos.Add(step)
+			pos = pos.Add(direction.Step)
 		}
 	}
 }
@@ -113,7 +114,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 	opposingDisk := disk.Opponent()
 	for square := range b.emptySquares.Iter() {
 		var value int
-		var directions []Step
+		var directions []StepCount
 		for _, step := range b.directions {
 			pos := square.Add(step)
 			// Next square in this direction needs to be the opposing disk
@@ -128,7 +129,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 			// Valid move only if a line of opposing disks ends in own disk
 			if b.getSquare(&pos) == disk {
 				value += numSteps
-				directions = append(directions, step)
+				directions = append(directions, StepCount{step, numSteps})
 			}
 		}
 		if value > 0 {
@@ -156,7 +157,7 @@ func (b *Board) printPossibleMoves(moves []Move) {
 	}
 	// Add possible moves to board
 	for _, possibleMove := range moves {
-		index := possibleMove.Square.Y*b.size + possibleMove.Square.X
+		index := b.squareIndex(&possibleMove.Square)
 		formattedBoard[index] = aurora.Yellow(fmt.Sprintf("%d", possibleMove.Value)).String()
 		fmt.Printf("  %s\n", possibleMove)
 	}
@@ -219,11 +220,17 @@ func (b *Board) get(x, y int) (Disk, error) {
 // Returns the state of the board (empty, white, black) at the given square.
 func (b *Board) getSquare(square *Square) Disk {
 	if b.checkCoordinates(square.X, square.Y) {
-		return b.board[square.Y*b.size+square.X]
+		index := b.squareIndex(square)
+		return b.board[index]
 	}
 	// Square is out of bounds.
 	// This probably should return a (Disk, error) instead but that makes using this quite cumbersome...
 	return Empty
+}
+
+// Get all the squares playing this move will change
+func (b *Board) squareIndex(square *Square) int {
+	return square.Y*b.size + square.X
 }
 
 // Count and return the number of black and white disks.
@@ -255,7 +262,8 @@ func (b *Board) setSquare(square *Square, disk Disk) {
 	if !b.checkCoordinates(square.X, square.Y) {
 		panic("Invalid coordinates")
 	}
-	b.board[square.Y*b.size+square.X] = disk
+	index := b.squareIndex(square)
+	b.board[index] = disk
 }
 
 // Format game board to string

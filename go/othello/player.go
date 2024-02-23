@@ -9,9 +9,10 @@ package othello
 
 import (
 	"fmt"
-	"github.com/logrusorgru/aurora/v4"
 	"math/rand"
 	"time"
+
+	"github.com/logrusorgru/aurora/v4"
 )
 
 // Player Defines one player (human or computer).
