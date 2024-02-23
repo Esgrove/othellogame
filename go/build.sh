@@ -65,23 +65,6 @@ build_project() {
     ./"$EXECUTABLE" -h || :
 }
 
-update_version_file() {
-    VERSION_FILE="$PROJECT_PATH/othello/version.go"
-    {
-        echo "package othello"
-        echo ""
-        echo "// Generated automatically; DO NOT EDIT MANUALLY."
-        echo ""
-        echo "const VersionNumber = \"$PROJECT_VERSION\""
-        echo "const GitBranch = \"$GIT_BRANCH\""
-        echo "const GitHash = \"$GIT_HASH\""
-        echo "const Timestamp = \"$BUILD_TIME\""
-
-    } > "$VERSION_FILE"
-}
-
 init_options "$@"
 set_version_info
-# Using variables set during compile time instead of hardcoded version file
-# update_version_file
 build_project
