@@ -21,7 +21,7 @@ class Board
 public:
     explicit Board(size_t size);
 
-    void place_disk(const Move& move);
+    void place_disk(const Move& player_move);
     void print_score() const;
     void print_possible_moves(const std::vector<Move>& moves);
 
@@ -37,6 +37,7 @@ private:
     [[nodiscard]] int score() const;
     [[nodiscard]] std::optional<Disk> get_square(const Square& square) const;
     [[nodiscard]] std::tuple<int, int> player_scores() const;
+    [[nodiscard]] size_t square_index(const Square& square) const;
     void set_square(const Square& square, Disk disk);
 
     std::set<Square> empty_squares;

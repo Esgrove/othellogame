@@ -22,6 +22,7 @@ std::string Move::log_entry() const
     return fmt::format("{}:{},{}", board_char(this->disk, false), this->square, this->value);
 }
 
+/// Get all the squares playing this move will change.
 std::vector<Square> Move::affected_squares() const
 {
     std::vector<Square> paths;
@@ -75,12 +76,10 @@ std::string calculate_sha256(const std::string& text)
     // Code adapted from:
     // https://stackoverflow.com/questions/2262386/generate-sha256-with-openssl-and-c
     std::stringstream stream;
-    EVP_MD_CTX* context = EVP_MD_CTX_new();
-
-    if (context != nullptr) {
+    if (EVP_MD_CTX* context = EVP_MD_CTX_new(); context != nullptr) {
         if (EVP_DigestInit_ex(context, EVP_sha256(), nullptr) != 0) {
             if (EVP_DigestUpdate(context, text.c_str(), text.length()) != 0) {
-                std::array<unsigned char, EVP_MAX_MD_SIZE> hash;
+                std::array<unsigned char, EVP_MAX_MD_SIZE> hash {};
                 unsigned int hash_length = 0;
                 if (EVP_DigestFinal_ex(context, hash.data(), &hash_length) != 0) {
                     for (unsigned int i = 0; i < hash_length; ++i) {
@@ -90,7 +89,6 @@ std::string calculate_sha256(const std::string& text)
                 }
             }
         }
-
         EVP_MD_CTX_free(context);
     }
 

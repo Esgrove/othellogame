@@ -153,7 +153,7 @@ struct Move {
     Move(
         const Square square,
         const Disk disk,
-        const unsigned int value,
+        const size_t value,
         std::vector<std::pair<Step, size_t>> directions)
         : square(square)
         , disk(disk)
@@ -161,10 +161,8 @@ struct Move {
         , directions(std::move(directions))
     {}
 
-    std::string log_entry() const;
-
-    /// Get all the squares playing this move will change
-    std::vector<Square> affected_squares() const;
+    [[nodiscard]] std::string log_entry() const;
+    [[nodiscard]] std::vector<Square> affected_squares() const;
 
     friend std::ostream& operator<<(std::ostream& out, const Move& move)
     {
@@ -179,7 +177,7 @@ struct Move {
 
     Square square;
     Disk disk;
-    unsigned int value;
+    size_t value;
     std::vector<std::pair<Step, size_t>> directions;
 };
 
