@@ -150,7 +150,8 @@ impl Move {
 }
 
 impl Square {
-    /// Get the index of this square on the board
+    #[allow(dead_code)]
+    /// Get the index of this square on the board.
     pub fn board_index(&self, board_size: usize) -> usize {
         self.y as usize * board_size + self.x as usize
     }

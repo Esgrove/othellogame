@@ -139,7 +139,7 @@ impl Board {
 
         // Add possible moves to board
         for possible_move in moves {
-            let index = possible_move.square.board_index(self.size);
+            let index = self.square_index(&possible_move.square);
             formatted_board[index] = possible_move.value.to_string().yellow();
             println!("  {}", possible_move);
         }
@@ -183,8 +183,8 @@ impl Board {
         self.board.iter().map(|&d| d.board_char()).collect()
     }
 
-    /// Check that the given coordinates are valid (inside the board).
     #[allow(dead_code)]
+    /// Check that the given coordinates are valid (inside the board).
     fn check_coordinates(&self, x: isize, y: isize) -> bool {
         x >= 0 && x < self.size as isize && y >= 0 && y < self.size as isize
     }
@@ -200,11 +200,17 @@ impl Board {
     /// Returns the state of the board (empty, white, black) at the given square.
     fn get_square(&self, square: &Square) -> Option<Disk> {
         if self.check_square(square) {
-            let disk = self.board[square.board_index(self.size)];
-            Some(disk)
+            let index = self.square_index(square);
+            Some(self.board[index])
         } else {
             None
         }
+    }
+
+    #[allow(dead_code)]
+    /// Map square to index on board.
+    fn square_index(&self, square: &Square) -> usize {
+        square.x as usize * self.size + square.x as usize
     }
 
     /// Count and return the number of black and white disks.
@@ -232,7 +238,8 @@ impl Board {
         if !self.check_square(square) {
             panic!("Invalid coordinates: {}", square);
         }
-        self.board[square.board_index(self.size)] = *disk;
+        let index = self.square_index(square);
+        self.board[index] = *disk;
     }
 
     /// Initialize game board with starting disk positions.
