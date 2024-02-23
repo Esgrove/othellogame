@@ -200,7 +200,7 @@ namespace Othello
             {
                 var size = new Argument<int?>(
                     name: "size",
-                    description: "Optional board size",
+                    description: $"Optional board size ({Othello.MIN_BOARD_SIZE}..{Othello.MAX_BOARD_SIZE})",
                     getDefaultValue: () => null
                 );
 

@@ -165,9 +165,9 @@ namespace Othello
         public readonly Square Square;
         public readonly int Value;
         public readonly Disk Disk;
-        public readonly List<Step> Directions;
+        public readonly List<(Step step, int count)> Directions;
 
-        public Move(Square square, int value, Disk disk, List<Step> directions)
+        public Move(Square square, int value, Disk disk, List<(Step, int)> directions)
         {
             Square = square;
             Value = value;
@@ -175,9 +175,27 @@ namespace Othello
             Directions = directions;
         }
 
+        /// Format move for log entry
         public string LogEntry()
         {
             return $"{Disk.BoardChar(false)}:{Square},{Value}";
+        }
+
+        /// Get all the squares playing this move will change.
+        public List<Square> AffectedSquares()
+        {
+            List<Square> paths = new();
+            foreach (var (step, num) in this.Directions)
+            {
+                Square pos = this.Square + step;
+                for (int i = 0; i < num; i++)
+                {
+                    paths.Add(pos);
+                    pos += step;
+                }
+            }
+            paths.Sort();
+            return paths;
         }
 
         public override string ToString()

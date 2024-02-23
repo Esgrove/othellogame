@@ -32,7 +32,7 @@ namespace Othello
         public static void Error(string message)
         {
             var (indent, text) = SplitLeadingWhitespace(message);
-            Console.WriteLine($"{indent}Error: {message}".Pastel(Color.Red));
+            Console.WriteLine($"{indent}Error: {text}".Pastel(Color.Red));
         }
 
         /// Print warning message with yellow colour.

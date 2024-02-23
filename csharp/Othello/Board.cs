@@ -48,7 +48,7 @@ namespace Othello
             _board[col * _size + row] = Disk.Black;
             _board[col * _size + col] = Disk.White;
 
-            // Index list (0...size) to avoid repeating same range in for loops
+            // Index list (0..size) to avoid repeating same range in for loops
             _indices = Enumerable.Range(0, _size).ToList();
 
             // Keep track of empty squares on board to avoid checking already filled positions
@@ -64,7 +64,6 @@ namespace Othello
         }
 
         /// Return true if board contains empty squares.
-        /// -> still possible to make a move.
         public bool CanPlay()
         {
             return _emptySquares.Count != 0;
@@ -80,13 +79,13 @@ namespace Othello
             }
             SetSquare(start, move.Disk);
             _emptySquares.Remove(start);
-            foreach (var dir in move.Directions)
+            foreach (var (step, count) in move.Directions)
             {
-                var pos = start + dir;
-                while (GetSquare(pos) == move.Disk.Opponent())
+                var pos = start + step;
+                foreach (var _ in Enumerable.Range(0, count))
                 {
                     SetSquare(pos, move.Disk);
-                    pos += dir;
+                    pos += step;
                 }
             }
         }
@@ -99,30 +98,30 @@ namespace Othello
             foreach (var square in _emptySquares)
             {
                 var value = 0;
-                var directions = new List<Step>();
+                var directions = new List<(Step, int)>();
                 foreach (var dir in StepDirections)
                 {
                     var step = new Square(dir.X, dir.Y);
                     var pos = square + step;
-                    // next square in this directions needs to be opponents disk
+                    // Next square in this directions needs to be opponents disk
                     if (GetSquare(pos) != other)
                     {
                         continue;
                     }
-                    var steps = 0;
-                    // keep stepping forward while opponents disks are found
+                    var num_steps = 0;
+                    // Keep stepping forward while opponents disks are found
                     while (GetSquare(pos) == other)
                     {
-                        ++steps;
+                        ++num_steps;
                         pos += step;
                     }
-                    // valid move if a line of opponents disks ends in own disk
+                    // Valid move if a line of opponents disks ends in own disk
                     if (GetSquare(pos) != color)
                     {
                         continue;
                     }
-                    value += steps;
-                    directions.Add(dir);
+                    value += num_steps;
+                    directions.Add((dir, num_steps));
                 }
                 if (value > 0)
                 {
