@@ -313,6 +313,7 @@ namespace Othello
     // Can't have a function without a class :(
     public static class Utils
     {
+        /// Calculate SHA256 hash for the given string.
         public static string CalculateSHA256(string input)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(input);

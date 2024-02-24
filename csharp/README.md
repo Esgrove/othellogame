@@ -5,7 +5,7 @@
 * [System.CommandLine](https://github.com/dotnet/command-line-api)
 * [Pastel](https://github.com/silkfire/Pastel)
 
-## Building
+## Build
 
 Using [.NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/):
 
@@ -20,6 +20,14 @@ and copy it to project root:
 
 ```shell
 ./build.sh
+```
+
+## Tests
+
+Tests use [xUnit](https://xunit.net/)
+
+```shell
+dotnet test
 ```
 
 ## Code formatting
