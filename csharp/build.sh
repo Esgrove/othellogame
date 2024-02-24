@@ -91,6 +91,7 @@ build_project() {
 
     print_magenta "Building Othello C# $BUILD_TYPE for $RUNTIME"
     time dotnet publish \
+        Othello/Othello.csproj \
         --configuration "$BUILD_TYPE" \
         --property:PublishDir="$BUILD_DIR" \
         --runtime "$RUNTIME" \
