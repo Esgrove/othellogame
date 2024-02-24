@@ -243,7 +243,6 @@ impl Hash for Move {
         self.square.hash(state);
         self.value.hash(state);
         self.disk.hash(state);
-        self.directions.hash(state);
     }
 }
 
@@ -258,7 +257,7 @@ impl Ord for Move {
 
 impl PartialEq for Move {
     fn eq(&self, other: &Self) -> bool {
-        self.square == other.square && self.value == other.value
+        self.square == other.square && self.value == other.value && self.disk == other.disk
     }
 }
 
