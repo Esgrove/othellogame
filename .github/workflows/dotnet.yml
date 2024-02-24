@@ -34,6 +34,16 @@ jobs:
         with:
           dotnet-version: '8.0'
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            !~/.nuget/packages/*/contentFiles
+            !~/.nuget/packages/*/analyzers
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
       - name: Restore dependencies
         working-directory: csharp
         run: dotnet restore
@@ -42,6 +52,10 @@ jobs:
         working-directory: csharp
         run: chmod +x build.sh && ./build.sh
         shell: bash
+
+      - name: Run tests
+        working-directory: csharp
+        run: dotnet test
 
   format:
     runs-on: ubuntu-latest
