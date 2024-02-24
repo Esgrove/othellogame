@@ -49,7 +49,7 @@ init_options() {
     done
 
     PROJECT_PATH="$REPO_ROOT/cpp"
-    CMAKE_BUILD_DIR="$PROJECT_PATH/cmake-build-$BASH_PLATFORM-test"
+    CMAKE_BUILD_DIR="$PROJECT_PATH/cmake-build-$BASH_PLATFORM-ninja-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
 }
 
 generate_ninja_project() {

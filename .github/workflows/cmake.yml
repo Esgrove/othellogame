@@ -62,9 +62,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            cpp/cmake-build-linux-release
-            cpp/cmake-build-mac-release
-            cpp/cmake-build-windows-release
+            cpp/cmake-build-linux-ninja-release
+            cpp/cmake-build-mac-ninja-release
+            cpp/cmake-build-windows-ninja-release
           key: ${{ runner.os }}-cmake-${{ github.sha }}
           restore-keys: ${{ runner.os }}-cmake-
 
