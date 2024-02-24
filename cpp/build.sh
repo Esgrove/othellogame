@@ -80,7 +80,8 @@ generate_msvc_project() {
         -G "Visual Studio 17 2022" \
         -A x64 \
         -S "$PROJECT_PATH" \
-        -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+        -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+        -DBUILD_TESTS=OFF
 }
 
 generate_ninja_project() {
@@ -94,7 +95,8 @@ generate_ninja_project() {
     cmake -B "$CMAKE_BUILD_DIR" \
         -G Ninja \
         -S "$PROJECT_PATH" \
-        -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+        -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+        -DBUILD_TESTS=OFF
 }
 
 build_project() {

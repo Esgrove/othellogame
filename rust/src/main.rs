@@ -48,7 +48,7 @@ struct Args {
     #[arg(short, long, conflicts_with = "default")]
     autoplay: bool,
 
-    /// Only print hash to check result (implies `autoplay` and `test`)
+    /// Only print hash to check the result (implies `autoplay` and `test`)
     #[arg(short, long)]
     check: bool,
 

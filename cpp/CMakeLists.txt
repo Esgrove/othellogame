@@ -18,6 +18,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Note: only works with makefile and ninja generators
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(BUILD_TESTS "Build the tests" ON)
+
 # https://cmake.org/cmake/help/latest/module/FetchContent.html
 include(FetchContent)
 
@@ -45,6 +47,19 @@ set(APP_BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_HASH}_${TIMESTAMP
 
 message(STATUS "Build name: ${APP_BUILD_NAME}")
 
+if(WIN32)
+    set(OPENSSL_ROOT_DIR "C:/Program Files/OpenSSL-Win64")
+endif()
+
+# OpenSSL
+find_package(OpenSSL REQUIRED)
+if(OPENSSL_FOUND)
+    message(STATUS "OpenSSL found: ${OPENSSL_INCLUDE_DIR}")
+    message(STATUS "Using OpenSSL version: ${OPENSSL_VERSION}")
+else()
+    message(FATAL_ERROR "OpenSSL not found")
+endif()
+
 # ccache
 # https://ccache.dev/
 find_program(CCACHE_EXECUTABLE ccache)
@@ -70,6 +85,10 @@ if(APPLE)
 endif()
 
 include_directories(src)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
 add_executable(othello_cpp
     src/board.cpp
@@ -107,17 +126,6 @@ FetchContent_Declare(fmt
 )
 FetchContent_MakeAvailable(fmt)
 
-# https://github.com/google/googletest
-message(STATUS "Fetching GoogleTest library")
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest
-    GIT_TAG main
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
 message(STATUS "Fetching cxxopts library")
 FetchContent_Declare(cxxopts
     GIT_REPOSITORY https://github.com/jarro2783/cxxopts
@@ -125,17 +133,9 @@ FetchContent_Declare(cxxopts
 )
 FetchContent_MakeAvailable(cxxopts)
 
-find_package(OpenSSL REQUIRED)
-if(OPENSSL_FOUND)
-    message(STATUS "Using OpenSSL version ${OPENSSL_VERSION}")
-else()
-    message(FATAL_ERROR "OpenSSL not found")
-endif()
-
 target_link_libraries(othello_cpp
     cxxopts
     fmt::fmt
-    GTest::gtest_main
     OpenSSL::Crypto
 )
 
