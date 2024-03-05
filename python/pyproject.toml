@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "othello_python"
-version = "2.2.0"
+version = "2.2.1"
 description = "A simple Othello CLI game implementation."
 authors = ["Akseli Lukkarila <esgrove@outlook.com>"]
 readme = "README.md"
@@ -14,9 +14,8 @@ colorama = "^0.4.6"
 pytest = "^8.0.2"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.2.0"
 isort = "^5.13.2"
-ruff = "^0.2.2"
+ruff = "^0.3.0"
 
 [tool.poetry.group.test.dependencies]
 pytest-cov = "^4.1.0"

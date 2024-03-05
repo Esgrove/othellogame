@@ -5,16 +5,16 @@ on:
     branches:
       - main
     paths:
-      - "**.py"
-      - "python/pyproject.toml"
-      - "python/poetry.lock"
       - ".github/workflows/python.yml"
+      - "**.py"
+      - "python/poetry.lock"
+      - "python/pyproject.toml"
   pull_request:
     paths:
-      - "**.py"
-      - "python/pyproject.toml"
-      - "python/poetry.lock"
       - ".github/workflows/python.yml"
+      - "**.py"
+      - "python/poetry.lock"
+      - "python/pyproject.toml"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:
@@ -33,37 +33,20 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Black
-        uses: psf/black@stable
-        with:
-          options: "--check --verbose --diff --color"
-          src: "./python"
-
       - name: isort
         uses: isort/isort-action@v1
         with:
           requirements-files: "python/requirements.txt"
           sort-paths: python
 
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python environment
-        uses: actions/setup-python@v5
+      - name: Ruff format
+        uses: chartboost/ruff-action@v1
         with:
-          python-version: "3.11"
+          src: "./python"
+          args: format --check --verbose
 
       - name: Ruff lint
         uses: chartboost/ruff-action@v1
         with:
           src: "./python"
           args: check --verbose
-
-      - name: Ruff format
-        uses: chartboost/ruff-action@v1
-        with:
-          src: "./python"
-          args: format --check --verbose
