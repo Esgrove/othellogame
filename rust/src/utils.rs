@@ -138,9 +138,9 @@ impl Move {
     /// Get all the squares playing this move will change.
     pub fn affected_squares(&self) -> Vec<Square> {
         let mut paths: Vec<Square> = Vec::new();
-        for &(step, num) in self.directions.iter() {
+        for &(step, count) in self.directions.iter() {
             let mut pos: Square = self.square + step;
-            for _ in 0..num {
+            for _ in 0..count {
                 paths.push(pos);
                 pos += step;
             }
