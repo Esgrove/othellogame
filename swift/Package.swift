@@ -7,12 +7,12 @@ let package = Package(
     name: "othello_swift",
     platforms: [
         // Minimum macOS version
-        .macOS(.v10_15),
+        .macOS(.v12),
     ],
     dependencies: [
         .package(url: "https://github.com/mtynior/ColorizeSwift.git", from: "1.6.0"),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.3"),
-        .package(url: "https://github.com/apple/swift-crypto.git", from: "3.1.0"),
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
+        .package(url: "https://github.com/apple/swift-crypto.git", from: "3.2.0"),
     ],
     targets: [
         .target(
