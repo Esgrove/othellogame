@@ -137,7 +137,9 @@ impl Move {
 
     /// Get all the squares playing this move will change.
     pub fn affected_squares(&self) -> Vec<Square> {
-        let mut paths: Vec<Square> = Vec::new();
+        // Calculate the required size for the vector
+        let total_size: usize = self.directions.iter().map(|(_, size)| size).sum();
+        let mut paths: Vec<Square> = Vec::with_capacity(total_size);
         for &(step, count) in self.directions.iter() {
             let mut pos: Square = self.square + step;
             for _ in 0..count {

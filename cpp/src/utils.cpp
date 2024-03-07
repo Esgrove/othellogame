@@ -11,6 +11,7 @@
 
 #include <array>
 #include <iomanip>
+#include <numeric>  // std::accumulate
 #include <ranges>
 #include <sstream>
 #include <string>
@@ -25,8 +26,13 @@ std::string Move::log_entry() const
 /// Get all the squares playing this move will change.
 std::vector<Square> Move::affected_squares() const
 {
+    // Calculate the required size for the vector
+    const size_t total_size = std::accumulate(
+        directions.begin(), directions.end(), 0, [](size_t sum, const auto& direction) {
+            return sum + direction.second;
+        });
     std::vector<Square> paths;
-    paths.reserve(directions.size());
+    paths.reserve(total_size);
     for (const auto& [step, count] : directions) {
         Square pos = square + step;
         for (auto i : std::ranges::iota_view {0u, count}) {
