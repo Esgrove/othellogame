@@ -11,6 +11,7 @@
 
 #include <array>
 #include <iomanip>
+#include <ranges>
 #include <sstream>
 #include <string>
 
@@ -26,9 +27,9 @@ std::vector<Square> Move::affected_squares() const
 {
     std::vector<Square> paths;
     paths.reserve(directions.size());
-    for (const auto& [step, num] : directions) {
+    for (const auto& [step, count] : directions) {
         Square pos = square + step;
-        for (size_t i = 0; i < num; ++i) {
+        for (auto i : std::ranges::iota_view {0u, count}) {
             paths.push_back(pos);
             pos += step;
         }
