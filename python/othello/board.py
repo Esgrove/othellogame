@@ -121,9 +121,7 @@ class Board:
         black, white = self._player_scores()
         print(f"\n{self}")
         print(
-            "Score: {} | {}".format(
-                get_color(str(black), Disk.BLACK.color()), get_color(str(white), Disk.WHITE.color())
-            )
+            f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}"
         )
 
     def result(self) -> Disk:
