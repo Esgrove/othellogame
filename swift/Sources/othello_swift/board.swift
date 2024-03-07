@@ -46,12 +46,8 @@ class Board {
         let start = move.square
         self.setSquare(start, move.disk)
         self.emptySquares.remove(start)
-        for step in move.directions {
-            var pos = start + step
-            while self.getSquare(pos) == move.disk.opponent() {
-                self.setSquare(pos, move.disk)
-                pos += step
-            }
+        for square in move.affectedSquares() {
+            self.setSquare(square, move.disk)
         }
     }
 
@@ -61,26 +57,26 @@ class Board {
         let other: Disk = disk.opponent()
         for square in self.emptySquares {
             var value = 0
-            var directions = [Square]()
+            var directions = [(Square, Int)]()
             for dir in self.stepDirections {
                 let step = Square(dir[0], dir[1])
                 var pos = square + step
-                // next square in this directions needs to be opponents disk
+                // Next square in this directions needs to be opponents disk
                 if self.getSquare(pos) != other {
                     continue
                 }
-                var steps = 0
-                // keep stepping forward while opponents disks are found
+                var num_steps = 0
+                // Keep stepping forward while opponents disks are found
                 while self.getSquare(pos) == other {
-                    steps += 1
+                    num_steps += 1
                     pos += step
                 }
-                // valid move if a line of opponents disks ends in own disk
+                // Valid move if a line of opponents disks ends in own disk
                 if self.getSquare(pos) != disk {
                     continue
                 }
-                value += steps
-                directions.append(step)
+                directions.append((step, num_steps))
+                value += num_steps
             }
             if value > 0 {
                 moves.append(Move(square, value, disk, directions))

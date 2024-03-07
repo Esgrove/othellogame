@@ -70,8 +70,7 @@ struct OthelloSwift: ParsableCommand {
             testMode: self.test
         )
 
-        let game = Othello(settings)
-        game.play()
+        Othello(settings).play()
     }
 }
 

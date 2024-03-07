@@ -88,17 +88,32 @@ struct Move {
     var square: Square
     var disk: Disk
     var value: Int
-    var directions: [Square]
+    var directions: [(square: Square, count: Int)]
 
-    init(_ square: Square, _ value: Int, _ disk: Disk, _ directions: [Square]) {
+    init(_ square: Square, _ value: Int, _ disk: Disk, _ directions: [(Square, Int)]) {
         self.square = square
         self.disk = disk
         self.value = value
         self.directions = directions
     }
 
+    /// Format move for log entry
     func logEntry() -> String {
         return "\(self.disk.boardChar(color: false)):\(self.square),\(self.value)"
+    }
+
+    /// Get all the squares playing this move will change.
+    func affectedSquares() -> [Square] {
+        var paths: [Square] = []
+        for (step, count) in self.directions {
+            var pos: Square = self.square + step
+            for _ in 0 ..< count {
+                paths.append(pos)
+                pos += step
+            }
+        }
+        paths.sort()
+        return paths
     }
 }
 
