@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 project("Othello C++"
-    VERSION 2.8.0
+    VERSION 2.8.1
     DESCRIPTION "A simple Othello CLI game implementation."
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -139,8 +139,18 @@ target_link_libraries(othello_cpp
     OpenSSL::Crypto
 )
 
+# Enable LTO for release builds
+include(CheckIPOSupported)
+check_ipo_supported(RESULT result OUTPUT output)
+if(result)
+    message(STATUS "Using LTO")
+    set_target_properties(othello_cpp PROPERTIES INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
+else()
+    message(WARNING "IPO is not supported: ${output}")
+endif()
+
 if(MSVC)
-    # https://docs.microsoft.com/en-us/cpp/build/reference/permissive-standards-conformance
+    # https://learn.microsoft.com/en-us/cpp/build/reference/permissive-standards-conformance?view=msvc-170
     target_compile_options(othello_cpp PRIVATE
         /W4 /permissive-
     )
