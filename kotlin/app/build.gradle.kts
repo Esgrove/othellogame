@@ -30,7 +30,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:33.1.0-jre")
     implementation("com.github.ajalt.clikt:clikt:4.2.2")
-    implementation("com.squareup.okio:okio:3.8.0")
+    implementation("com.squareup.okio:okio:3.9.0")
 }
 
 sourceSets {
