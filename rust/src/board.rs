@@ -5,15 +5,13 @@
 // 2019-2024
 //==========================================================
 
-extern crate colored;
-
-use crate::utils::{Disk, Move, Square, Step};
-
-use colored::{ColoredString, Colorize};
-
 use std::cmp::Ordering;
 use std::collections::HashSet;
 use std::fmt;
+
+use colored::{ColoredString, Colorize};
+
+use crate::utils::{Disk, Move, Square, Step};
 
 /// Handles game board state and logic.
 pub struct Board {

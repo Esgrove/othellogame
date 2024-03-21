@@ -6,14 +6,12 @@
 // 2019-2024
 //==========================================================
 
-extern crate colored;
+use std::env;
 
 use anyhow::Result;
 use clap::{arg, Parser};
 use colored::Colorize;
 use shadow_rs::shadow;
-
-use std::env;
 
 use crate::othello::Othello;
 use crate::utils::{Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};

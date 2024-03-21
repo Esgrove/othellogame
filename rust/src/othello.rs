@@ -6,17 +6,15 @@
 // 2019-2024
 //==========================================================
 
-extern crate colored;
+use std::io::{self, Write};
+
+use colored::Colorize;
 
 use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::player::Player;
 use crate::utils;
 use crate::utils::{Disk, Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
-
-use colored::Colorize;
-
-use std::io::{self, Write};
 
 /// Gameplay loop and main logic.
 pub struct Othello {
@@ -31,7 +29,7 @@ pub struct Othello {
 
 impl Othello {
     /// Initialize Othello game.
-    // Typically this would be called `new` but using `init` to match other implementations
+    // Typically this would be called `new` but using `init` to match other implementations.
     pub fn init(settings: Settings) -> Othello {
         Othello {
             board: Board::new(settings.board_size),
