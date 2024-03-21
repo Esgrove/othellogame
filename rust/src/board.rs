@@ -229,7 +229,7 @@ impl Board {
     /// Returns the total score.
     /// Positive value means more white disks and negative means more black disks.
     fn score(&self) -> i32 {
-        self.board.iter().map(|d| *d as i32).sum()
+        self.board.iter().map(|disk| *disk as i32).sum()
     }
 
     /// Sets the given square to the given value.
@@ -268,11 +268,11 @@ impl fmt::Display for Board {
         // Could just use `0..self.size` here
         for y in self.indices.iter() {
             // Vertical index
-            text += &*format!("\n{}", y.to_string().bold());
+            text += &format!("\n{}", y.to_string().bold());
             // Row values
             let row = &self.board[(y * self.size)..(y * self.size + self.size)];
             for disk in row {
-                text += &*format!(" {}", disk.board_char_with_color());
+                text += &format!(" {}", disk.board_char_with_color());
             }
         }
         write!(f, "{}", text)
