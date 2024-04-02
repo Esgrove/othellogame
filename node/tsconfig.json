@@ -3,6 +3,7 @@
     "target": "ES2021",
     "module": "Node16",
     "rootDir": "./",
+    "outDir": "./",
     "moduleResolution": "node16",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
