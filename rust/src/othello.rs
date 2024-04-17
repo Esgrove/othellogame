@@ -124,11 +124,9 @@ impl Othello {
             .game_log
             .iter()
             .enumerate()
-            .fold(String::new(), |text, (index, line)| {
-                text + &format!("{:02}: {}\n", index + 1, line)
-            })
-            .trim()
-            .to_string();
+            .map(|(index, line)| format!("{:02}: {}", index + 1, line))
+            .collect::<Vec<_>>()
+            .join("\n");
 
         let hex_hash = utils::calculate_sha256(&formatted_log);
 
