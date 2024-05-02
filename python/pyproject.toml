@@ -15,7 +15,7 @@ pytest = "^8.2.0"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
-ruff = "^0.4.1"
+ruff = "^0.4.2"
 
 [tool.poetry.group.test.dependencies]
 pytest-cov = "^5.0.0"
