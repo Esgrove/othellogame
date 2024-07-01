@@ -7,9 +7,13 @@
 
 #pragma once
 
+#include <fmt/base.h>
+#include <fmt/chrono.h>
 #include <fmt/color.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
+#include <fmt/ranges.h>
+#include <fmt/std.h>
 
 #include <cctype>    // std::isspace
 #include <iostream>  // std::cout
@@ -37,14 +41,14 @@ template<typename T> std::string get_color(const T& object, const fmt::terminal_
 template<typename T>
 void print_color(const T& object, const fmt::terminal_color color = fmt::terminal_color::white)
 {
-    fmt::print(fmt::fg(color), object);
+    fmt::print(fmt::fg(color), "{}", object);
 }
 
 /// Print bold text.
 template<typename T>
 void print_bold(const T& object, const fmt::terminal_color color = fmt::terminal_color::white)
 {
-    fmt::print(fmt::emphasis::bold | fmt::fg(color), object);
+    fmt::print(fmt::emphasis::bold | fmt::fg(color), "{}", object);
 }
 
 /// Print error message with red colour.
