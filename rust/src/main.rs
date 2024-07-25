@@ -6,6 +6,12 @@
 // 2019-2024
 //==========================================================
 
+mod board;
+mod colorprint;
+mod othello;
+mod player;
+mod utils;
+
 use std::env;
 
 use anyhow::Result;
@@ -15,12 +21,6 @@ use shadow_rs::shadow;
 
 use crate::othello::Othello;
 use crate::utils::{Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
-
-mod board;
-mod colorprint;
-mod othello;
-mod player;
-mod utils;
 
 // Get build information
 shadow!(build);
