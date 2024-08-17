@@ -9,40 +9,40 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
   # Python
   - package-ecosystem: "pip"
     directory: "/python"
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
   # Rust
   - package-ecosystem: "cargo"
     directory: "/rust"
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
   # Go
   - package-ecosystem: "gomod"
     directory: "/go"
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
   # Kotlin
   - package-ecosystem: "gradle"
     directory: "/kotlin"
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
   # Swift
   - package-ecosystem: "swift"
     directory: "/swift"
     schedule:
-      interval: "weekly"
+      interval: "daily"
 
   # C#
   - package-ecosystem: "nuget"
     directory: "/csharp"
     schedule:
-      interval: "weekly"
+      interval: "daily"
