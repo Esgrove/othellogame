@@ -18,7 +18,7 @@ namespace Othello
     {
         Black = -1,
         Empty = 0,
-        White = 1
+        White = 1,
     }
 
     /// Represents one step direction on the board.

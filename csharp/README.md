@@ -35,5 +35,7 @@ dotnet test
 Using [CSharpier](https://github.com/belav/csharpier)
 
 ```shell
+dotnet tool install --global csharpier
+
 dotnet csharpier .
 ```

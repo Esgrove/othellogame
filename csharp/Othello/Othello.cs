@@ -238,7 +238,7 @@ namespace Othello
                     showLog,
                     hideHelpers,
                     testMode,
-                    version
+                    version,
                 };
 
                 ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);

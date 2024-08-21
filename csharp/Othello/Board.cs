@@ -30,7 +30,7 @@ namespace Othello
             new(0, 1),
             new(1, -1),
             new(1, 0),
-            new(1, 1)
+            new(1, 1),
         };
 
         public Board(int size)
