@@ -159,14 +159,14 @@ impl Othello {
     }
 
     /// Ask a question with two options, and return bool from user answer.
-    // Associated aka static function (no self parameter)
+    // Associated aka static function (no self parameter).
     fn get_answer(question: &str, yes: &str, no: &str) -> bool {
         print!("{question} ({yes}/{no})? ");
         io::stdout().flush().expect("Failed to flush stdout.");
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Input failed");
-        return input.trim().to_lowercase() == *yes;
+        return input.trim().to_lowercase().as_str() == yes;
     }
 
     /// Ask and return the desired board size.
