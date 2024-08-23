@@ -31,9 +31,12 @@ path = "src/main.rs"
 incremental = true
 
 [profile.release]
-lto = true
+# Enabling LTO increases compile times by a lot,
+# so disabling for this project but leaving these here as an example.
+# Enable full LTO with "true" and setting codegen units to 1.
+lto = false
 # https://doc.rust-lang.org/rustc/codegen-options/index.html#codegen-units
-codegen-units = 1
+codegen-units = 16
 
 [lints.rust]
 unsafe_code = "forbid"
