@@ -15,6 +15,19 @@
 
 namespace othello
 {
+
+/// All possible step directions for a square on the board.
+static const std::array<Step, 8> STEP_DIRECTIONS {{
+    {-1, -1},
+    {-1, 0},
+    {-1, 1},
+    {0, -1},
+    {0, 1},
+    {1, -1},
+    {1, 0},
+    {1, 1},
+}};
+
 /// Handles game board state and logic.
 class Board
 {
@@ -44,16 +57,6 @@ private:
     std::vector<Disk> board;
     std::vector<size_t> indices;
     size_t size;
-    std::array<Step, 8> step_directions {{
-        {-1, -1},
-        {-1, 0},
-        {-1, 1},
-        {0, -1},
-        {0, 1},
-        {1, -1},
-        {1, 0},
-        {1, 1},
-    }};
 };
 
 }  // namespace othello

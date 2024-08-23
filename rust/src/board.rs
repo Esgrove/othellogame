@@ -13,13 +13,23 @@ use colored::{ColoredString, Colorize};
 
 use crate::utils::{Disk, Move, Square, Step};
 
+static STEP_DIRECTIONS: [Step; 8] = [
+    Step { x: -1, y: -1 },
+    Step { x: -1, y: 0 },
+    Step { x: -1, y: 1 },
+    Step { x: 0, y: -1 },
+    Step { x: 0, y: 1 },
+    Step { x: 1, y: -1 },
+    Step { x: 1, y: 0 },
+    Step { x: 1, y: 1 },
+];
+
 /// Handles game board state and logic.
 pub struct Board {
     board: Vec<Disk>,
     size: usize,
     empty_squares: HashSet<Square>,
     indices: Vec<usize>,
-    step_directions: [Step; 8],
 }
 
 impl Board {
@@ -48,16 +58,6 @@ impl Board {
             size,
             empty_squares,
             indices,
-            step_directions: [
-                Step { x: -1, y: -1 },
-                Step { x: -1, y: 0 },
-                Step { x: -1, y: 1 },
-                Step { x: 0, y: -1 },
-                Step { x: 0, y: 1 },
-                Step { x: 1, y: -1 },
-                Step { x: 1, y: 0 },
-                Step { x: 1, y: 1 },
-            ],
         }
     }
 
@@ -90,7 +90,7 @@ impl Board {
         for square in &self.empty_squares {
             let mut value: usize = 0;
             let mut directions: Vec<(Step, usize)> = Vec::new();
-            for step in &self.step_directions {
+            for step in &STEP_DIRECTIONS {
                 let mut pos = *square + *step;
                 // Next square in this direction needs to be the opposing disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) != opposing_disk {
