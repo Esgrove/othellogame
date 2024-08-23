@@ -27,7 +27,7 @@ pub struct Player {
 }
 
 /// Player settings.
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct PlayerSettings {
     pub show_helpers: bool,
     pub test_mode: bool,
@@ -35,7 +35,7 @@ pub struct PlayerSettings {
 
 impl Default for PlayerSettings {
     fn default() -> Self {
-        PlayerSettings {
+        Self {
             show_helpers: true,
             test_mode: false,
         }
@@ -44,8 +44,8 @@ impl Default for PlayerSettings {
 
 impl Player {
     /// Initialize new player for the given disk color.
-    pub fn new(disk: Disk, settings: PlayerSettings) -> Player {
-        Player {
+    pub const fn new(disk: Disk, settings: PlayerSettings) -> Self {
+        Self {
             disk,
             human: true,
             can_play: true,
@@ -55,25 +55,31 @@ impl Player {
     }
 
     /// Shorthand to initialize a new player for black disks.
-    pub fn black(settings: PlayerSettings) -> Player {
-        Player::new(Disk::Black, settings)
+    pub const fn black(settings: PlayerSettings) -> Self {
+        Self::new(Disk::Black, settings)
     }
 
     /// Shorthand to initialize a new player for white disks.
-    pub fn white(settings: PlayerSettings) -> Player {
-        Player::new(Disk::White, settings)
+    pub const fn white(settings: PlayerSettings) -> Self {
+        Self::new(Disk::White, settings)
     }
 
     /// Play one round as this player.
-    pub fn play_one_move(&mut self, board: &mut Board, disable_prints: &bool) -> Option<String> {
+    pub fn play_one_move(&mut self, board: &mut Board, disable_prints: bool) -> Option<String> {
         if !disable_prints {
             println!("Turn: {}", self.disk);
         }
         let moves = board.possible_moves(self.disk);
-        if !moves.is_empty() {
+        if moves.is_empty() {
+            self.can_play = false;
+            if !disable_prints {
+                println!("{}", "  No moves available...".yellow());
+            }
+            None
+        } else {
             self.can_play = true;
             if self.human && self.settings.show_helpers {
-                board.print_possible_moves(&moves)
+                board.print_possible_moves(&moves);
             }
             let chosen_move = if self.human {
                 self.get_human_move(&moves)
@@ -89,12 +95,6 @@ impl Player {
                 thread::sleep(Duration::from_secs(1));
             }
             Some(chosen_move.log_entry())
-        } else {
-            self.can_play = false;
-            if !disable_prints {
-                println!("{}", "  No moves available...".yellow());
-            }
-            None
         }
     }
 
@@ -110,7 +110,7 @@ impl Player {
     }
 
     /// Return move chosen by computer.
-    fn get_computer_move(&self, moves: &[Move], disable_prints: &bool) -> Move {
+    fn get_computer_move(&self, moves: &[Move], disable_prints: bool) -> Move {
         if !disable_prints {
             println!("  Computer plays...");
         }
@@ -165,7 +165,7 @@ impl Player {
                     return Square { x, y };
                 }
             }
-            print_error("  Give coordinates in the form 'x,y'!")
+            print_error("  Give coordinates in the form 'x,y'!");
         }
     }
 

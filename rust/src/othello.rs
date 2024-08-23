@@ -30,8 +30,8 @@ pub struct Othello {
 impl Othello {
     /// Initialize Othello game.
     // Typically this would be called `new` but using `init` to match other implementations.
-    pub fn init(settings: Settings) -> Othello {
-        Othello {
+    pub fn init(settings: Settings) -> Self {
+        Self {
             board: Board::new(settings.board_size),
             settings,
             player_black: Player::black(settings.to_player_settings()),
@@ -52,7 +52,7 @@ impl Othello {
                 self.print_log();
             }
             if self.settings.autoplay_mode
-                || !Othello::get_answer("Would you like to play again", "y", "n")
+                || !Self::get_answer("Would you like to play again", "y", "n")
             {
                 break;
             }
@@ -76,8 +76,8 @@ impl Othello {
         } else if self.settings.use_defaults {
             // Default: play as black against white computer player
             self.player_white.set_human(false);
-        } else if Othello::get_answer("Would you like to play against the computer", "y", "n") {
-            if Othello::get_answer("Would you like to play as black or white", "b", "w") {
+        } else if Self::get_answer("Would you like to play against the computer", "y", "n") {
+            if Self::get_answer("Would you like to play as black or white", "b", "w") {
                 self.player_white.set_human(false);
             } else {
                 self.player_black.set_human(false);
@@ -99,9 +99,9 @@ impl Othello {
                     format!("\n=========== ROUND: {} ===========", self.rounds_played).bold()
                 );
             }
-            for player in [&mut self.player_black, &mut self.player_white].iter_mut() {
+            for player in &mut [&mut self.player_black, &mut self.player_white] {
                 if let Some(result) =
-                    player.play_one_move(&mut self.board, &self.settings.check_mode)
+                    player.play_one_move(&mut self.board, self.settings.check_mode)
                 {
                     self.game_log
                         .push(format!("{};{}", result, self.board.log_entry()));
@@ -132,9 +132,9 @@ impl Othello {
 
         if !self.settings.check_mode {
             println!("{}", "Game log:".yellow().bold());
-            println!("{}", formatted_log);
+            println!("{formatted_log}");
         }
-        println!("{}", hex_hash);
+        println!("{hex_hash}");
     }
 
     /// Print ending status and winner info.
@@ -147,7 +147,7 @@ impl Othello {
         if winner == Disk::Empty {
             println!("The game ended in a tie...\n");
         } else {
-            println!("The winner is {}!\n", winner);
+            println!("The winner is {winner}!\n");
         }
     }
 
@@ -161,7 +161,7 @@ impl Othello {
     /// Ask a question with two options, and return bool from user answer.
     // Associated aka static function (no self parameter)
     fn get_answer(question: &str, yes: &str, no: &str) -> bool {
-        print!("{} ({}/{})? ", question, yes, no);
+        print!("{question} ({yes}/{no})? ");
         io::stdout().flush().expect("Failed to flush stdout.");
 
         let mut input = String::new();
@@ -171,7 +171,7 @@ impl Othello {
 
     /// Ask and return the desired board size.
     pub fn get_board_size() -> usize {
-        print!("Choose board size (default is {}): ", DEFAULT_BOARD_SIZE);
+        print!("Choose board size (default is {DEFAULT_BOARD_SIZE}): ");
         let mut input = String::new();
         if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {
             if let Ok(board_size) = input.trim().parse::<usize>() {
@@ -181,7 +181,7 @@ impl Othello {
                 return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
             }
         }
-        print_warn(format!("Invalid size, defaulting to {}...", DEFAULT_BOARD_SIZE).as_str());
+        print_warn(format!("Invalid size, defaulting to {DEFAULT_BOARD_SIZE}...").as_str());
         DEFAULT_BOARD_SIZE
     }
 }

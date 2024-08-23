@@ -64,7 +64,7 @@ pub struct Settings {
 
 impl Settings {
     /// Get player setting values from overall game settings.
-    pub fn to_player_settings(self) -> PlayerSettings {
+    pub const fn to_player_settings(self) -> PlayerSettings {
         PlayerSettings {
             show_helpers: self.show_helpers,
             test_mode: self.test_mode,
@@ -74,7 +74,7 @@ impl Settings {
 
 impl Default for Settings {
     fn default() -> Self {
-        Settings {
+        Self {
             board_size: 8,
             check_mode: false,
             test_mode: false,
@@ -88,43 +88,43 @@ impl Default for Settings {
 
 impl Disk {
     /// Returns a single character identifier string for the given disk.
-    pub fn board_char(&self) -> String {
+    pub fn board_char(self) -> String {
         match self {
-            Disk::Black => String::from("B"),
-            Disk::Empty => String::from("_"),
-            Disk::White => String::from("W"),
+            Self::Black => String::from("B"),
+            Self::Empty => String::from("_"),
+            Self::White => String::from("W"),
         }
     }
 
     /// Returns a single character identifier string for the given disk.
-    pub fn board_char_with_color(&self) -> ColoredString {
+    pub fn board_char_with_color(self) -> ColoredString {
         self.board_char().color(self.color())
     }
 
     /// Return the associated color for this disk.
-    pub fn color(&self) -> Color {
+    pub const fn color(self) -> Color {
         match self {
-            Disk::Black => Color::Magenta,
-            Disk::Empty => Color::White,
-            Disk::White => Color::Cyan,
+            Self::Black => Color::Magenta,
+            Self::Empty => Color::White,
+            Self::White => Color::Cyan,
         }
     }
 
     /// Returns the disk formatted as a colored string.
-    pub fn disk_string(&self) -> ColoredString {
+    pub fn disk_string(self) -> ColoredString {
         match self {
-            Disk::Black => "BLACK".color(self.color()),
-            Disk::Empty => "EMPTY".color(self.color()),
-            Disk::White => "WHITE".color(self.color()),
+            Self::Black => "BLACK".color(self.color()),
+            Self::Empty => "EMPTY".color(self.color()),
+            Self::White => "WHITE".color(self.color()),
         }
     }
 
     /// Return the opposing disk color for this disk.
-    pub fn opponent(&self) -> Disk {
+    pub const fn opponent(self) -> Self {
         match self {
-            Disk::Black => Disk::White,
-            Disk::Empty => Disk::Empty,
-            Disk::White => Disk::Black,
+            Self::Black => Self::White,
+            Self::Empty => Self::Empty,
+            Self::White => Self::Black,
         }
     }
 }
@@ -140,7 +140,7 @@ impl Move {
         // Calculate the required size for the vector
         let total_size: usize = self.directions.iter().map(|(_, size)| size).sum();
         let mut paths: Vec<Square> = Vec::with_capacity(total_size);
-        for &(step, count) in self.directions.iter() {
+        for &(step, count) in &self.directions {
             let mut pos: Square = self.square + step;
             for _ in 0..count {
                 paths.push(pos);
@@ -155,7 +155,7 @@ impl Move {
 impl Square {
     #[allow(dead_code)]
     /// Get the index of this square on the board.
-    pub fn board_index(&self, board_size: usize) -> usize {
+    pub const fn board_index(&self, board_size: usize) -> usize {
         self.y as usize * board_size + self.x as usize
     }
 }
@@ -200,10 +200,10 @@ impl Add<Step> for Square {
     }
 }
 
-impl Add<Step> for Step {
+impl Add<Self> for Step {
     type Output = Self;
 
-    fn add(self, other: Step) -> Self {
+    fn add(self, other: Self) -> Self {
         Self {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -229,7 +229,7 @@ impl AddAssign<Step> for Square {
     }
 }
 
-impl AddAssign<Step> for Step {
+impl AddAssign<Self> for Step {
     fn add_assign(&mut self, other: Self) {
         *self = Self {
             x: self.x + other.x,
@@ -358,7 +358,7 @@ mod tests {
 
         for (i, step) in step_directions.iter().enumerate() {
             let result = origin + *step;
-            assert_eq!(result, expected_results[i], "Step direction: {:?}", step);
+            assert_eq!(result, expected_results[i], "Step direction: {step:?}");
         }
     }
 

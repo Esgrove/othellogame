@@ -10,13 +10,13 @@ use colored::Colorize;
 /// Print error message with red colour.
 pub fn print_error(message: &str) {
     let (indent, text) = split_leading_whitespace(message);
-    println!("{}", format!("{}Error: {}", indent, text).red())
+    println!("{}", format!("{indent}Error: {text}").red());
 }
 
 /// Print warning message with yellow colour.
 pub fn print_warn(message: &str) {
     let (indent, text) = split_leading_whitespace(message);
-    println!("{}", format!("{}Warning: {}", indent, text).yellow())
+    println!("{}", format!("{indent}Warning: {text}").yellow());
 }
 
 /// Split a string into the leading whitespace and the rest of the string.
