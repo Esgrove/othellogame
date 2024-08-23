@@ -332,7 +332,7 @@ mod tests {
     }
 
     #[test]
-    fn test_step_directions() {
+    fn step_directions() {
         let origin = Square { x: 1, y: 1 };
         let step_directions = [
             Step { x: -1, y: -1 },

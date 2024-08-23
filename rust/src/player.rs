@@ -196,7 +196,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_new_player() {
+    fn new_player() {
         let settings = PlayerSettings::default();
         let player = Player::new(Disk::Black, settings);
         assert_eq!(player.disk, Disk::Black);
@@ -207,7 +207,7 @@ mod tests {
     }
 
     #[test]
-    fn test_reset_player() {
+    fn reset_player() {
         let mut player = Player::new(Disk::White, PlayerSettings::default());
         player.can_play = false;
         player.rounds_played = 10;
@@ -217,14 +217,14 @@ mod tests {
     }
 
     #[test]
-    fn test_set_human() {
+    fn set_human() {
         let mut player = Player::new(Disk::Black, PlayerSettings::default());
         player.set_human(false);
         assert!(!player.human);
     }
 
     #[test]
-    fn test_player_type_string() {
+    fn player_type_string() {
         let human_player = Player::new(Disk::Black, PlayerSettings::default());
         assert_eq!(human_player.type_string(), "Human   ");
 

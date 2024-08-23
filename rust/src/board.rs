@@ -278,11 +278,12 @@ impl fmt::Display for Board {
 }
 
 #[cfg(test)]
+#[allow(clippy::unwrap_used)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_board_initialization() {
+    fn board_initialization() {
         let board_size = 8;
         let board = Board::new(board_size);
         assert_eq!(board.size, board_size);
@@ -311,14 +312,14 @@ mod tests {
     }
 
     #[test]
-    fn test_can_play() {
+    fn can_play() {
         let board = Board::new(8);
         assert!(board.can_play());
         // TODO: Fill the board and test again
     }
 
     #[test]
-    fn test_scoring() {
+    fn scoring() {
         let board = Board::new(8);
         let (black_score, white_score) = board.player_scores();
         assert_eq!(black_score, 2);
@@ -327,7 +328,7 @@ mod tests {
     }
 
     #[test]
-    fn test_game_result() {
+    fn game_result() {
         let mut board = Board::new(8);
         let mut result = board.result();
         assert_eq!(result, Disk::Empty);
@@ -340,7 +341,7 @@ mod tests {
     }
 
     #[test]
-    fn test_log_entry() {
+    fn log_entry() {
         let board = Board::new(8);
         let log_entry = board.log_entry();
         assert_eq!(
