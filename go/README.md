@@ -44,6 +44,16 @@ Using [gofmt](https://pkg.go.dev/cmd/gofmt)
 gofmt -s -w .
 ```
 
+## Lint code
+
+Using [golangci-lint](https://golangci-lint.run/)
+
+```shell
+brew install golangci-lint
+
+golangci-lint run
+```
+
 ## Update dependencies
 
 ```shell

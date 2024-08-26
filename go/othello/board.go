@@ -1,9 +1,9 @@
-//==========================================================
+// ==========================================================
 // Board
 // Defines the game board
 // Akseli Lukkarila
 // 2019-2024
-//==========================================================
+// ==========================================================
 
 package othello
 
@@ -16,13 +16,23 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
+var STEP_DIRECTIONS = [8]Step{
+	{X: -1, Y: -1},
+	{X: -1, Y: 0},
+	{X: -1, Y: 1},
+	{X: 0, Y: -1},
+	{X: 0, Y: 1},
+	{X: 1, Y: -1},
+	{X: 1, Y: 0},
+	{X: 1, Y: 1},
+}
+
 // Board Handles game board state and logic.
 type Board struct {
 	board        []Disk
 	size         int
 	emptySquares mapset.Set[Square]
 	indices      []int
-	directions   [8]Step
 }
 
 func NewBoard(size int) Board {
@@ -52,16 +62,6 @@ func NewBoard(size int) Board {
 		size:         size,
 		emptySquares: emptySquares,
 		indices:      indices,
-		directions: [8]Step{
-			{X: -1, Y: -1},
-			{X: -1, Y: 0},
-			{X: -1, Y: 1},
-			{X: 0, Y: -1},
-			{X: 0, Y: 1},
-			{X: 1, Y: -1},
-			{X: 1, Y: 0},
-			{X: 1, Y: 1},
-		},
 	}
 }
 
@@ -115,7 +115,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 	for square := range b.emptySquares.Iter() {
 		var value int
 		var directions []StepCount
-		for _, step := range b.directions {
+		for _, step := range STEP_DIRECTIONS {
 			pos := square.Add(step)
 			// Next square in this direction needs to be the opposing disk
 			if b.getSquare(&pos) != opposingDisk {
@@ -210,6 +210,7 @@ func (b *Board) checkCoordinates(x, y int) bool {
 }
 
 // Returns the state of the board (empty, white, black) at the given coordinates.
+// nolint:unused
 func (b *Board) get(x, y int) (Disk, error) {
 	if b.checkCoordinates(x, y) {
 		return b.board[y*b.size+x], nil
