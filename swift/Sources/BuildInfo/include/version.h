@@ -1,5 +1,5 @@
 // Generated automatically by build script; DO NOT EDIT MANUALLY.
-#define BUILD_TIME "2024-05-16_2111"
-#define GIT_HASH "17f789a"
+#define BUILD_TIME "2024-09-17_0030"
+#define GIT_HASH "1451ee9"
 #define GIT_BRANCH "main"
-#define VERSION "2.3.0"
+#define VERSION "2.3.1"
