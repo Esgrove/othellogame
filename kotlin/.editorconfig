@@ -1,16 +1,8 @@
-# This .editorconfig section approximates ktfmt's formatting rules. You can include it in an
-# existing .editorconfig file or use it standalone by copying it to <project root>/.editorconfig
-# and making sure your editor is set to read settings from .editorconfig files.
-#
-# It includes editor-specific config options for IntelliJ IDEA.
-#
-# https://github.com/facebook/ktfmt
-
 [{*.kt,*.kts}]
+indent_size = 4
 indent_style = space
 insert_final_newline = true
 max_line_length = 100
-indent_size = 4
 ij_continuation_indent_size = 4
 ij_java_names_count_to_use_import_on_demand = 9999
 ij_kotlin_align_in_columns_case_branch = false
@@ -64,6 +56,7 @@ ij_kotlin_method_parameters_right_paren_on_new_line = true
 ij_kotlin_method_parameters_wrap = on_every_item
 ij_kotlin_name_count_to_use_star_import = 9999
 ij_kotlin_name_count_to_use_star_import_for_members = 9999
+ij_kotlin_packages_to_use_import_on_demand = java.util.*,kotlinx.android.synthetic.**
 ij_kotlin_parameter_annotation_wrap = off
 ij_kotlin_space_after_comma = true
 ij_kotlin_space_after_extend_colon = true
@@ -92,7 +85,6 @@ ij_kotlin_while_on_new_line = false
 ij_kotlin_wrap_elvis_expressions = 1
 ij_kotlin_wrap_expression_body_functions = 1
 ij_kotlin_wrap_first_method_in_call_chain = false
-ij_kotlin_packages_to_use_import_on_demand = java.util.*,kotlinx.android.synthetic.**
 
 # https://github.com/pinterest/ktlint
 ktlint_chain_method_rule_force_multiline_when_chain_operator_count_greater_or_equal_than = unset
@@ -101,3 +93,4 @@ ktlint_code_style = intellij_idea
 ktlint_function_signature_body_expression_wrapping = default
 ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = unset
 ktlint_ignore_back_ticked_identifier = false
+ktlint_standard_function_body_expression_style = block
