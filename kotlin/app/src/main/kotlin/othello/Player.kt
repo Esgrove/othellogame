@@ -10,13 +10,9 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
     private val random = Random
 
     companion object {
-        fun black(settings: PlayerSettings): Player {
-            return Player(Disk.Black, settings)
-        }
+        fun black(settings: PlayerSettings): Player = Player(Disk.Black, settings)
 
-        fun white(settings: PlayerSettings): Player {
-            return Player(Disk.White, settings)
-        }
+        fun white(settings: PlayerSettings): Player = Player(Disk.White, settings)
     }
 
     /** Play one round as this player.*/
@@ -101,11 +97,7 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
     }
 
     /** Return player type description string.*/
-    private fun typeString(): String {
-        return if (isHuman) "Human   " else "Computer"
-    }
+    private fun typeString(): String = if (isHuman) "Human   " else "Computer"
 
-    override fun toString(): String {
-        return "${disk.name()} | ${typeString()} | Moves: $roundsPlayed"
-    }
+    override fun toString(): String = "${disk.name()} | ${typeString()} | Moves: $roundsPlayed"
 }

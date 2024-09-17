@@ -49,9 +49,7 @@ class Board(private val size: Int) {
     }
 
     /** Return true if board contains empty squares.*/
-    fun canPlay(): Boolean {
-        return emptySquares.isNotEmpty()
-    }
+    fun canPlay(): Boolean = emptySquares.isNotEmpty()
 
     /** Update board for given disk placement.*/
     fun placeDisk(move: Move) {
@@ -152,14 +150,10 @@ class Board(private val size: Int) {
         }
     }
 
-    fun logEntry(): String {
-        return board.joinToString("") { it.boardChar(color = false) }
-    }
+    fun logEntry(): String = board.joinToString("") { it.boardChar(color = false) }
 
     /** Check that the given coordinates are inside the board.*/
-    private fun checkCoordinates(x: Int, y: Int): Boolean {
-        return x in 0..<size && y in 0..<size
-    }
+    private fun checkCoordinates(x: Int, y: Int): Boolean = x in 0..<size && y in 0..<size
 
     /** Returns the state of the board (empty, white, black) at the given coordinates.*/
     private fun getSquare(square: Square): Disk? {
@@ -189,9 +183,7 @@ class Board(private val size: Int) {
      * Returns the total score.
      * Positive value means more white disks and negative means more black disks.
      */
-    private fun score(): Int {
-        return board.sumOf { it.value }
-    }
+    private fun score(): Int = board.sumOf { it.value }
 
     /** Sets the given square to given value.*/
     private fun setSquare(square: Square, disk: Disk) {

@@ -35,9 +35,7 @@ data class Step(val x: Int, val y: Int) {
         return true
     }
 
-    override fun toString(): String {
-        return "[$x,$y]"
-    }
+    override fun toString(): String = "[$x,$y]"
 }
 
 /** Represents one square location on the board.*/
@@ -49,20 +47,14 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
         return result
     }
 
-    operator fun plus(step: Step): Square {
-        return Square(x + step.x, y + step.y)
-    }
+    operator fun plus(step: Step): Square = Square(x + step.x, y + step.y)
 
-    operator fun plus(square: Square): Square {
-        return Square(x + square.x, y + square.y)
-    }
+    operator fun plus(square: Square): Square = Square(x + square.x, y + square.y)
 
-    override fun compareTo(other: Square): Int {
-        return when {
-            x < other.x || (x <= other.x && y < other.y) -> -1
-            x > other.x || (x >= other.x && y > other.y) -> 1
-            else -> 0
-        }
+    override fun compareTo(other: Square): Int = when {
+        x < other.x || (x <= other.x && y < other.y) -> -1
+        x > other.x || (x >= other.x && y > other.y) -> 1
+        else -> 0
     }
 
     override fun equals(other: Any?): Boolean {
@@ -75,33 +67,21 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
         return true
     }
 
-    override fun toString(): String {
-        return "($x,$y)"
-    }
+    override fun toString(): String = "($x,$y)"
 }
 
 /** Represents one possible disk placement for given disk color.*/
-data class Move(
-    val square: Square,
-    val value: Int,
-    val disk: Disk,
-    val directions: List<Step>,
-) : Comparable<Move> {
-    override fun compareTo(other: Move): Int {
-        return when {
-            value > other.value || (value == other.value && square < other.square) -> -1
-            value < other.value || (value == other.value && square > other.square) -> 1
-            else -> 0
-        }
+data class Move(val square: Square, val value: Int, val disk: Disk, val directions: List<Step>) :
+    Comparable<Move> {
+    override fun compareTo(other: Move): Int = when {
+        value > other.value || (value == other.value && square < other.square) -> -1
+        value < other.value || (value == other.value && square > other.square) -> 1
+        else -> 0
     }
 
-    fun logEntry(): String {
-        return "${disk.boardChar(color = false)}:$square,$value"
-    }
+    fun logEntry(): String = "${disk.boardChar(color = false)}:$square,$value"
 
-    override fun toString(): String {
-        return "Square: $square -> value: $value"
-    }
+    override fun toString(): String = "Square: $square -> value: $value"
 }
 
 /** Game settings.*/
@@ -115,49 +95,36 @@ data class Settings(
 )
 
 /** Player settings.*/
-data class PlayerSettings(
-    val showHelpers: Boolean,
-    val testMode: Boolean,
-)
+data class PlayerSettings(val showHelpers: Boolean, val testMode: Boolean)
 
 /** Get player setting values from overall game settings.*/
-fun Settings.toPlayerSettings(): PlayerSettings {
-    return PlayerSettings(
-        showHelpers = this.showHelpers,
-        testMode = this.testMode,
-    )
-}
+fun Settings.toPlayerSettings(): PlayerSettings = PlayerSettings(
+    showHelpers = this.showHelpers,
+    testMode = this.testMode,
+)
 
 /** Returns the print colour for the given Disk.*/
-fun Disk.diskColor(): AnsiColor {
-    return when (this) {
-        Disk.Empty -> AnsiColor.WHITE
-        Disk.White -> AnsiColor.CYAN
-        Disk.Black -> AnsiColor.MAGENTA
-    }
+fun Disk.diskColor(): AnsiColor = when (this) {
+    Disk.Empty -> AnsiColor.WHITE
+    Disk.White -> AnsiColor.CYAN
+    Disk.Black -> AnsiColor.MAGENTA
 }
 
 /** Returns string character representing board status (black, white, empty).*/
-fun Disk.boardChar(color: Boolean = true): String {
-    return when (this) {
-        Disk.Empty -> "_"
-        Disk.White -> if (color) getColor("W", this.diskColor()) else "W"
-        Disk.Black -> if (color) getColor("B", this.diskColor()) else "B"
-    }
+fun Disk.boardChar(color: Boolean = true): String = when (this) {
+    Disk.Empty -> "_"
+    Disk.White -> if (color) getColor("W", this.diskColor()) else "W"
+    Disk.Black -> if (color) getColor("B", this.diskColor()) else "B"
 }
 
 /** Returns the disk formatted as a coloured string.*/
-fun Disk.name(): String {
-    return getColor(this.name.uppercase(), this.diskColor())
-}
+fun Disk.name(): String = getColor(this.name.uppercase(), this.diskColor())
 
 /** Returns the opposing disk colour.*/
-fun Disk.opponent(): Disk {
-    return when (this) {
-        Disk.Empty -> Disk.Empty
-        Disk.White -> Disk.Black
-        Disk.Black -> Disk.White
-    }
+fun Disk.opponent(): Disk = when (this) {
+    Disk.Empty -> Disk.Empty
+    Disk.White -> Disk.Black
+    Disk.Black -> Disk.White
 }
 
 /** Calculate SHA256 hash for the given string.*/
@@ -188,6 +155,5 @@ object BuildInfo {
     val version: String = properties.getProperty("build.version", "unknown")
 }
 
-fun versionInfo(): String {
-    return "${BuildInfo.version} ${BuildInfo.date} ${BuildInfo.branch} ${BuildInfo.commit}"
-}
+fun versionInfo(): String =
+    "${BuildInfo.version} ${BuildInfo.date} ${BuildInfo.branch} ${BuildInfo.commit}"

@@ -11,9 +11,7 @@ enum class AnsiColor(private val code: String) {
     RESET("\u001B[0m"),
     ;
 
-    override fun toString(): String {
-        return code
-    }
+    override fun toString(): String = code
 }
 
 /** Format string with colour.*/
