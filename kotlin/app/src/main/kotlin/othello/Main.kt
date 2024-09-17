@@ -1,6 +1,8 @@
 package othello
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.Context
+import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.options.flag
@@ -8,9 +10,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import kotlin.system.exitProcess
 
-class OthelloKotlin : CliktCommand(
-    help = "A simple Othello CLI game implementation.\n\njava -jar othello_kotlin.jar",
-) {
+class OthelloKotlin : CliktCommand() {
     private val size by argument(
         "size",
         help = "Optional board size ($MIN_BOARD_SIZE..$MAX_BOARD_SIZE)",
@@ -21,6 +21,9 @@ class OthelloKotlin : CliktCommand(
     private val noHelpers by option("-n", "--no-helpers", help = "Hide disk placement hints").flag()
     private val test by option("-t", "--test", help = "Enable test mode").flag()
     private val version by option("-v", "--version", help = "Print version and exit").flag()
+
+    override fun help(context: Context) =
+        "A simple Othello CLI game implementation.\n\njava -jar othello_kotlin.jar"
 
     override fun run() {
         if (version) {
