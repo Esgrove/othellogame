@@ -1,9 +1,8 @@
-//==========================================================
-// Player
-// Defines one player for Othello
-// Akseli Lukkarila
-// 2019-2024
-//==========================================================
+//! # Player
+//! Defines one player for Othello
+//!
+//! Akseli Lukkarila
+//! 2019-2024
 
 use std::io::Write;
 use std::{fmt, io};

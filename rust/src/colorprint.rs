@@ -1,9 +1,8 @@
-//==========================================================
-// Colorprint
-// Interface for colored printing
-// Akseli Lukkarila
-// 2019-2024
-//==========================================================
+//! # Colorprint
+//! Interface for coloured terminal printing.
+//!
+//! Akseli Lukkarila
+//! 2019-2024
 
 use colored::Colorize;
 

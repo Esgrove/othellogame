@@ -1,9 +1,8 @@
-//==========================================================
-// Board
-// Defines the game board
-// Akseli Lukkarila
-// 2019-2024
-//==========================================================
+//! # Board
+//! Defines the game board.
+//!
+//! Akseli Lukkarila
+//! 2019-2024
 
 use std::cmp::Ordering;
 use std::collections::HashSet;

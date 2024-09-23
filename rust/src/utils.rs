@@ -1,9 +1,8 @@
-//==========================================================
-// Utils
-// Helper utilities for Othello game
-// Akseli Lukkarila
-// 2019-2024
-//==========================================================
+//! # Utils
+//! Helper utilities for Othello game
+//!
+//! Akseli Lukkarila
+//! 2019-2024
 
 use std::cmp::Ordering;
 use std::fmt;
