@@ -3,6 +3,26 @@
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
+## Usage
+
+```console
+usage: Othello Python [options] [size]
+
+A simple Othello CLI game implementation.
+
+positional arguments:
+  size              Optional board size (4..10)
+
+options:
+  -h, --help        Print help and exit
+  -a, --autoplay    Enable autoplay mode
+  -d, --default     Play with default settings
+  -l, --log         Show log after a game
+  -n, --no-helpers  Hide disk placement hints
+  -t, --test        Enable test mode
+  -v, --version     Print version and exit
+```
+
 ## Dependencies
 
 Requires Python 3.11+
