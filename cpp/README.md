@@ -1,5 +1,25 @@
 # Othello CPP
 
+## Usage
+
+```console
+A simple Othello CLI game implementation.
+Usage:
+  othello_cpp [OPTIONS] [SIZE]
+
+Arguments:
+  [SIZE]            Optional board size (4..10)
+
+ Optional options:
+  -a, --autoplay    Enable autoplay mode
+  -d, --default     Play with default settings
+  -l, --log         Show log after a game
+  -n, --no-helpers  Hide disk placement hints
+  -t, --test        Enable test mode
+  -h, --help        Print help and exit
+  -v, --version     Print version and exit
+```
+
 ## Dependencies
 
 * CMake 3.18+

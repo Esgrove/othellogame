@@ -2,6 +2,27 @@
 
 Othello [Go](https://go.dev/) implementation.
 
+## Usage
+
+```console
+A simple Othello CLI game implementation.
+
+Usage:
+  othello_go [SIZE] [flags]
+
+Arguments:
+  [SIZE]             Optional board size (4..10)
+
+Flags:
+  -a, --autoplay     Enable autoplay mode
+  -d, --default      Play with default settings
+  -h, --help         help for othello_go
+  -l, --log          Show log after a game
+  -n, --no-helpers   Hide disk placement hints
+  -t, --test         Enable test mode
+  -v, --version      Print version and exit
+```
+
 ## Run
 
 ```shell

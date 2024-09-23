@@ -1,5 +1,25 @@
 # Othello Swift
 
+## Usage
+
+```console
+OVERVIEW: A simple Othello CLI game implementation.
+
+USAGE: othello_swift [options] [size]
+
+ARGUMENTS:
+  <size>                  Optional board size (4..10)
+
+OPTIONS:
+  -a, --autoplay          Enable autoplay mode
+  -u, --default           Play with default settings
+  -l, --log               Show log after a game
+  -n, --no-helpers        Hide disk placement hints
+  -t, --test              Enable test mode
+  -v, --version           Print version and exit
+  -h, --help              Show help information.
+```
+
 ## Build
 
 ```shell

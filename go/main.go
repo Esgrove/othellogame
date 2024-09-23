@@ -33,8 +33,6 @@ var (
 )
 
 func main() {
-	fmt.Println(aurora.Green("OTHELLO GAME - GO").Bold())
-
 	// Override usage template so can have positional argument info there
 	customUsageTemplate := fmt.Sprintf(`Usage:{{if .Runnable}}
   {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
@@ -80,6 +78,8 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 				fmt.Printf("Othello Go %s\n", othello.VersionInfo())
 				os.Exit(0)
 			}
+
+			fmt.Println(aurora.Green("OTHELLO GAME - GO").Bold())
 
 			var boardSize int
 			if len(args) == 1 {

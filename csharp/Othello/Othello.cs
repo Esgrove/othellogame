@@ -229,6 +229,10 @@ namespace Othello
                 testMode.AddAlias("-t");
 
                 var version = new Option<bool>(name: "-v", description: "Print version and exit");
+                // Can't add short alias since it conflicts with the default version flag.
+                // Haven't found a way to override the default version flag.
+                // Hopefully this would be supported in the future.
+                // version.AddAlias("--version");
 
                 var rootCommand = new RootCommand("A simple Othello CLI game implementation")
                 {
@@ -241,8 +245,6 @@ namespace Othello
                     version,
                 };
 
-                ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
-
                 rootCommand.SetHandler(
                     (size, autoplay, useDefaultSettings, showLog, hideHelpers, testMode, version) =>
                     {
@@ -251,6 +253,8 @@ namespace Othello
                             Console.WriteLine($"Othello C# {Utils.VersionInfo()}");
                             Environment.Exit(0);
                         }
+
+                        ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
 
                         int boardSize;
                         if (size != null)

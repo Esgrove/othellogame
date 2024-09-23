@@ -40,11 +40,12 @@ struct OthelloSwift: ParsableCommand {
     var version: Bool = false
 
     mutating func run() throws {
-        print("OTHELLO GAME - SWIFT".bold().green())
         if self.version {
             print("Othello Swift \(versionInfo())")
             Self.exit(withError: ExitCode.success)
         }
+
+        print("OTHELLO GAME - SWIFT".bold().green())
 
         // Try to read board size from command line args
         var boardSize: Int = self.size ?? 0

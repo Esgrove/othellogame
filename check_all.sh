@@ -16,7 +16,7 @@ if [ "$BASH_PLATFORM" = windows ]; then
         kotlin/othello_kotlin.sh
         python/othello_python.sh
         rust/othello_rust.exe
-        #swift/othello_swift.exe
+        swift/othello_swift.exe
     )
 else
     executables=(

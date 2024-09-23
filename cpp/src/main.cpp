@@ -40,8 +40,6 @@ int main(const int argc, const char* argv[])
     try {
         const auto result = options.parse(argc, argv);
 
-        print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
-
         if (result["version"].as<bool>()) {
             fmt::print(
                 "{} {} {} {} {}\n",
@@ -63,6 +61,8 @@ int main(const int argc, const char* argv[])
         const bool show_helpers = !result["no-helpers"].as<bool>();
         const bool show_log = result["log"].as<bool>();
         const bool test_mode = result["test"].as<bool>();
+
+        print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
 
         size_t board_size;
         if (result.count("size") > 0) {

@@ -31,6 +31,8 @@ class OthelloKotlin : CliktCommand() {
             exitProcess(0)
         }
 
+        printBold("OTHELLO GAME - KOTLIN", AnsiColor.GREEN)
+
         // Try to read board size from command line args
         val boardSize = if (size != null) {
             if (size!! < MIN_BOARD_SIZE || size!! > MAX_BOARD_SIZE) {
@@ -60,6 +62,5 @@ class OthelloKotlin : CliktCommand() {
 }
 
 fun main(args: Array<String>) {
-    printBold("OTHELLO GAME - KOTLIN", AnsiColor.GREEN)
     OthelloKotlin().main(args)
 }

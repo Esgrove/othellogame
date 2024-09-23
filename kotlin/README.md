@@ -4,6 +4,28 @@ Requires Gradle.
 
 Uses [Clikt](https://github.com/ajalt/clikt) for the CLI.
 
+## Usage
+
+```console
+Usage: othello-kotlin [<options>] [<size>]
+
+  A simple Othello CLI game implementation.
+
+  java -jar othello_kotlin.jar
+
+Options:
+  -a, --autoplay    Enable autoplay mode
+  -d, --default     Play with default settings
+  -l, --log         Show log after a game
+  -n, --no-helpers  Hide disk placement hints
+  -t, --test        Enable test mode
+  -v, --version     Print version and exit
+  -h, --help        Show this message and exit
+
+Arguments:
+  <size>  Optional board size (4..10)
+```
+
 ## Build and run
 
 ```shell
