@@ -74,8 +74,6 @@ fn main() -> Result<()> {
     // Set to 1 to display backtraces for panics for debugging
     env::set_var("RUST_BACKTRACE", "0");
 
-    println!("{}", "OTHELLO GAME - RUST".green().bold());
-
     // Parse command line arguments using clap
     let args = Args::parse();
 
@@ -89,6 +87,8 @@ fn main() -> Result<()> {
         );
         return Ok(());
     }
+
+    println!("{}", "OTHELLO GAME - RUST".green().bold());
 
     let board_size: usize = {
         // Try to read board size from command line args

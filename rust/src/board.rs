@@ -27,7 +27,7 @@ static STEP_DIRECTIONS: [Step; 8] = [
 pub struct Board {
     board: Vec<Disk>,
     empty_squares: HashSet<Square>,
-    indices: Vec<usize>,
+    indices: Box<[usize]>,
     size: usize,
 }
 
@@ -36,7 +36,8 @@ impl Board {
         let board = Self::initialize_board(size);
         // Index list (0...size) to avoid repeating same range in loops.
         // Not really needed in Rust but kept here to more closely match other implementations...
-        let indices: Vec<usize> = (0..size).collect();
+        // Could just use `0..self.size` directly.
+        let indices = (0..size).collect::<Vec<_>>().into_boxed_slice();
 
         // Keep track of empty squares on board to avoid checking already filled positions.
         let empty_squares = Self::initialize_empty_squares(size, &board);
@@ -131,17 +132,31 @@ impl Board {
             println!("  {possible_move}");
         }
         // Print board with move positions
-        print!("   ");
-        for i in 0..self.size {
-            print!(" {}", i.to_string().bold());
-        }
-        for y in 0..self.size {
-            print!("\n  {}", y.to_string().bold());
-            for x in 0..self.size {
-                print!(" {}", formatted_board[y * self.size + x]);
-            }
-        }
-        println!();
+        let header: String = std::iter::once("    ".to_string())
+            .chain(
+                self.indices
+                    .iter()
+                    .map(|i| format!("{}", i.to_string().bold())),
+            )
+            .collect::<Vec<_>>()
+            .join(" ");
+
+        let board: String = self
+            .indices
+            .iter()
+            .map(|y| {
+                let row = self
+                    .indices
+                    .iter()
+                    .map(|x| formatted_board[y * self.size + x].to_string())
+                    .collect::<Vec<_>>()
+                    .join(" ");
+                format!("  {} {}", y.to_string().bold(), row)
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
+
+        println!("{header}\n{board}");
     }
 
     /// Print current score for both players.
@@ -157,8 +172,8 @@ impl Board {
 
     /// Returns the winning disk colour. Empty indicates a draw.
     pub fn result(&self) -> Disk {
-        let sum = self.score();
-        match sum.cmp(&0) {
+        let total_score = self.score();
+        match total_score.cmp(&0) {
             Ordering::Greater => Disk::White,
             Ordering::Less => Disk::Black,
             Ordering::Equal => Disk::Empty,
@@ -167,7 +182,7 @@ impl Board {
 
     /// Get board status string for game log.
     pub fn log_entry(&self) -> String {
-        self.board.iter().map(|&d| d.board_char()).collect()
+        self.board.iter().map(|&disk| disk.board_char()).collect()
     }
 
     /// Check that the given coordinates are valid (inside the board).
@@ -197,6 +212,9 @@ impl Board {
 
     /// Count and return the number of black and white disks.
     fn player_scores(&self) -> (usize, usize) {
+        // Alternative that is more readable but iterates the board twice:
+        // let black = self.board.iter().filter(|&&disk| disk == Disk::Black).count();
+        // let white = self.board.iter().filter(|&&disk| disk == Disk::White).count();
         let mut black: usize = 0;
         let mut white: usize = 0;
         for disk in &self.board {
@@ -212,7 +230,11 @@ impl Board {
     /// Returns the total score.
     /// Positive value means more white disks and negative means more black disks.
     fn score(&self) -> i32 {
-        self.board.iter().map(|disk| *disk as i32).sum()
+        self.board
+            .iter()
+            .filter(|&&disk| disk != Disk::Empty)
+            .map(|disk| *disk as i32)
+            .sum()
     }
 
     /// Sets the given square to the given value.
@@ -260,19 +282,31 @@ impl Board {
 impl fmt::Display for Board {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // Horizontal indices
-        let column_indices: Vec<String> = self.indices.iter().map(|&i| i.to_string()).collect();
-        let mut text: String = format!("  {}", column_indices.join(" ").bold());
-        // Could just use `0..self.size` here
+        write!(
+            f,
+            "  {}",
+            self.indices
+                .iter()
+                .map(|&i| i.to_string())
+                .collect::<Vec<String>>()
+                .join(" ")
+                .bold()
+        )?;
+
         for y in &self.indices {
             // Vertical index
-            text += &format!("\n{}", y.to_string().bold());
+            write!(f, "\n{}", y.to_string().bold())?;
             // Row values
-            let row = &self.board[(y * self.size)..(y * self.size + self.size)];
-            for disk in row {
-                text += &format!(" {}", disk.board_char_with_color());
+            for x in &self.indices {
+                write!(
+                    f,
+                    " {}",
+                    self.board[y * self.size + x].board_char_with_color()
+                )?;
             }
         }
-        write!(f, "{text}")
+
+        Ok(())
     }
 }
 

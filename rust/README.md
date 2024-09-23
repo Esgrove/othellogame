@@ -2,6 +2,27 @@
 
 Othello [Rust](https://www.rust-lang.org/) implementation.
 
+## Usage
+
+```console
+A simple Othello CLI game implementation
+
+Usage: othello_rust [OPTIONS] [SIZE]
+
+Arguments:
+  [SIZE]  Optional board size (4..10)
+
+Options:
+  -a, --autoplay    Enable autoplay mode with both players controlled by computer
+  -c, --check       Only print hash to check the result (implies `autoplay` and `test`)
+  -d, --default     Play with default settings
+  -l, --log         Show game log at the end
+  -n, --no-helpers  Hide disk placement hints
+  -t, --test        Enable test mode with deterministic computer move selection
+  -v, --version     Print version and exit
+  -h, --help        Print help (see more with '--help')
+```
+
 ## Build
 
 Using script:
