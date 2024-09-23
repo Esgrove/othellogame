@@ -37,7 +37,10 @@ class Board:
 
         # Keep track of empty squares on board to avoid checking already filled positions
         self._empty_squares: set[Square] = {
-            Square(x, y) for x in range(self._size) for y in range(self._size) if self._board[y * size + x] == Disk.EMPTY
+            Square(x, y)
+            for x in range(self._size)
+            for y in range(self._size)
+            if self._board[y * size + x] == Disk.EMPTY
         }
 
     def can_play(self) -> bool:
@@ -52,7 +55,9 @@ class Board:
         Throws AssertionError if the move is not a valid move.
         """
         start = player_move.square
-        assert self._get_square(start) == Disk.EMPTY, f"Trying to place disk to an occupied square: {start}!"
+        assert (
+            self._get_square(start) == Disk.EMPTY
+        ), f"Trying to place disk to an occupied square: {start}!"
         self._set_square(start, player_move.disk)
         self._empty_squares.remove(start)
         for square in player_move.affected_squares():
@@ -109,7 +114,9 @@ class Board:
         """Print current score for both players."""
         black, white = self._player_scores()
         print(f"\n{self}")
-        print(f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}")
+        print(
+            f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}"
+        )
 
     def result(self) -> Disk:
         """Returns the winning disk colour. Empty indicates a draw."""
