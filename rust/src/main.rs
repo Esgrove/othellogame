@@ -1,6 +1,6 @@
 //! # Main
 //! Play Othello (Reversi) on the command line
-//! https://en.wikipedia.org/wiki/Reversi
+//! <https://en.wikipedia.org/wiki/Reversi>
 //!
 //! Akseli Lukkarila
 //! 2019-2024
@@ -32,8 +32,8 @@ shadow!(build);
 #[derive(Parser)]
 #[command(
     author,
-    about = "A simple Othello CLI game implementation.",
-    long_about = "A simple Othello CLI game implementation.",
+    about = "A simple Othello CLI game implementation",
+    long_about = "A simple Othello CLI game implementation",
     arg_required_else_help = false,
     disable_version_flag = true
 )]
@@ -116,7 +116,6 @@ fn main() -> Result<()> {
         show_log: args.log,
     };
 
-    let mut game = Othello::init(settings);
-    game.play();
+    Othello::new(settings).play();
     Ok(())
 }

@@ -26,37 +26,26 @@ static STEP_DIRECTIONS: [Step; 8] = [
 /// Handles game board state and logic.
 pub struct Board {
     board: Vec<Disk>,
-    size: usize,
     empty_squares: HashSet<Square>,
     indices: Vec<usize>,
+    size: usize,
 }
 
 impl Board {
     pub fn new(size: usize) -> Self {
-        let board = Self::init_board(size);
+        let board = Self::initialize_board(size);
         // Index list (0...size) to avoid repeating same range in loops.
         // Not really needed in Rust but kept here to more closely match other implementations...
         let indices: Vec<usize> = (0..size).collect();
 
         // Keep track of empty squares on board to avoid checking already filled positions.
-        let empty_squares: HashSet<Square> = (0..size * size)
-            .filter_map(|i| {
-                if board[i] == Disk::Empty {
-                    Some(Square {
-                        x: (i % size) as isize,
-                        y: (i / size) as isize,
-                    })
-                } else {
-                    None
-                }
-            })
-            .collect();
+        let empty_squares = Self::initialize_empty_squares(size, &board);
 
         Self {
             board,
-            size,
             empty_squares,
             indices,
+            size,
         }
     }
 
@@ -181,7 +170,6 @@ impl Board {
         self.board.iter().map(|&d| d.board_char()).collect()
     }
 
-    #[allow(dead_code)]
     /// Check that the given coordinates are valid (inside the board).
     const fn check_coordinates(&self, x: isize, y: isize) -> bool {
         x >= 0 && x < self.size as isize && y >= 0 && y < self.size as isize
@@ -189,10 +177,7 @@ impl Board {
 
     /// Check that the given square is valid (inside the board).
     const fn check_square(&self, square: &Square) -> bool {
-        square.x >= 0
-            && square.x < self.size as isize
-            && square.y >= 0
-            && square.y < self.size as isize
+        self.check_coordinates(square.x, square.y)
     }
 
     /// Returns the state of the board (empty, white, black) at the given square.
@@ -205,8 +190,7 @@ impl Board {
         }
     }
 
-    #[allow(dead_code)]
-    /// Map square to index on board.
+    /// Map square to board index.
     const fn square_index(&self, square: &Square) -> usize {
         square.y as usize * self.size + square.x as usize
     }
@@ -239,7 +223,7 @@ impl Board {
     }
 
     /// Initialize game board with starting disk positions.
-    fn init_board(size: usize) -> Vec<Disk> {
+    fn initialize_board(size: usize) -> Vec<Disk> {
         // Initialize game board with empty disks
         let mut board = vec![Disk::Empty; size * size];
         // Set starting positions
@@ -254,6 +238,22 @@ impl Board {
         board[col * size + row] = Disk::Black;
         board[col * size + col] = Disk::White;
         board
+    }
+
+    /// Initialize a set of empty squares for the board.
+    fn initialize_empty_squares(size: usize, board: &[Disk]) -> HashSet<Square> {
+        (0..board.len())
+            .filter_map(|i| {
+                if board[i] == Disk::Empty {
+                    Some(Square {
+                        x: (i % size) as isize,
+                        y: (i / size) as isize,
+                    })
+                } else {
+                    None
+                }
+            })
+            .collect()
     }
 }
 

@@ -1,6 +1,6 @@
 //! # Othello
 //! Play Othello (Reversi) on the command line
-//! https://en.wikipedia.org/wiki/Reversi
+//! <https://en.wikipedia.org/wiki/Reversi>
 //!
 //! Akseli Lukkarila
 //! 2019-2024
@@ -19,17 +19,16 @@ use crate::utils::{Disk, Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD
 pub struct Othello {
     board: Board,
     settings: Settings,
-    games_played: usize,
     player_black: Player,
     player_white: Player,
-    rounds_played: usize,
     game_log: Vec<String>,
+    games_played: usize,
+    rounds_played: usize,
 }
 
 impl Othello {
     /// Initialize Othello game.
-    // Typically this would be called `new` but using `init` to match other implementations.
-    pub fn init(settings: Settings) -> Self {
+    pub fn new(settings: Settings) -> Self {
         Self {
             board: Board::new(settings.board_size),
             settings,
@@ -60,6 +59,7 @@ impl Othello {
 
     /// Initialize game board and players for a new game.
     fn init_game(&mut self) {
+        // Re-use existing objects instead of initializing new ones
         if self.games_played > 0 {
             self.board = Board::new(self.settings.board_size);
             self.player_black.reset();
@@ -165,7 +165,7 @@ impl Othello {
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Input failed");
-        return input.trim().to_lowercase().as_str() == yes;
+        input.trim().to_lowercase().as_str() == yes
     }
 
     /// Ask and return the desired board size.
