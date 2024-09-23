@@ -46,5 +46,5 @@ check_and_set_python
 update_version_information
 
 # Pass arguments to program
-poetry install
+poetry install --sync --quiet
 poetry run python othello/othello.py "$@"
