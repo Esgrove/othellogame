@@ -96,7 +96,7 @@ class Othello:
                 result = player.play_one_move(self.board)
                 if result:
                     self.game_log.append(f"{result};{self.board.log_entry()}")
-                print("-------------------------------")
+                print("--------------------------------")
 
         self.games_played += 1
 
@@ -113,7 +113,7 @@ class Othello:
 
     def _print_result(self):
         """Print ending status and winner info."""
-        print_bold("\n===============================")
+        print_bold("\n================================")
         print_bold("The game is finished!\n", Color.green)
         print_bold("Result:")
         self._print_status()
@@ -152,12 +152,11 @@ class Othello:
         return DEFAULT_BOARD_SIZE
 
 
-if __name__ == "__main__":
-    print_bold("OTHELLO GAME - PYTHON", Color.green)
-
+def main():
     parser = argparse.ArgumentParser(
         prog="Othello Python",
         description="A simple Othello CLI game implementation.",
+        usage="Othello Python [options] [size]",
         # Specify custom help
         add_help=False,
     )
@@ -218,6 +217,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    print_bold("OTHELLO GAME - PYTHON", Color.green)
     try:
         # try to read board size from command line args
         if args.size is not None:
@@ -247,3 +247,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         # Catches CTRL-C
         sys.exit("\ncancelled...")
+
+
+if __name__ == "__main__":
+    main()
