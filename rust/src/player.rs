@@ -137,8 +137,8 @@ impl Player {
                 return valid_move.clone();
             }
             print_error(&format!(
-                "  Can't place a {} disk in square {}!",
-                self.disk, square
+                "  Can't place a {} disk in square {square}!",
+                self.disk
             ));
         }
     }

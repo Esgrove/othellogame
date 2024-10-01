@@ -215,8 +215,8 @@ impl Board {
         // Alternative that is more readable but iterates the board twice:
         // let black = self.board.iter().filter(|&&disk| disk == Disk::Black).count();
         // let white = self.board.iter().filter(|&&disk| disk == Disk::White).count();
-        let mut black: usize = 0;
-        let mut white: usize = 0;
+        let mut black = 0;
+        let mut white = 0;
         for disk in &self.board {
             match disk {
                 Disk::Black => black += 1,
