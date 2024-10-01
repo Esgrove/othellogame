@@ -4,8 +4,8 @@ Version information definitions
 Akseli Lukkarila
 2019-2024
 """
-
+# Updated by build script, do not edit manually!
 BRANCH = "main"
-COMMIT = "9cb409d"
-DATE = "2024-09-24_0104"
+COMMIT = "ba6aa56"
+DATE = "2024-10-01_1553"
 VERSION_NUMBER = "2.2.1"
