@@ -55,7 +55,7 @@ fixable = [
     "E",
     "F",
     "G",
-    #"I",  disable isort rules
+    "I",
     "N",
     "Q",
     "S",
@@ -127,7 +127,7 @@ docstring-code-format = false
 docstring-code-line-length = "dynamic"
 
 [tool.ruff.lint.isort]
-# https://beta.ruff.rs/docs/settings/#isort
+# https://docs.astral.sh/ruff/settings/#isort
 case-sensitive = false
 combine-as-imports = true
 lines-between-types = 1
