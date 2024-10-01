@@ -4,6 +4,7 @@ Version information definitions
 Akseli Lukkarila
 2019-2024
 """
+
 # Updated by build script, do not edit manually!
 BRANCH = "main"
 COMMIT = "ba6aa56"

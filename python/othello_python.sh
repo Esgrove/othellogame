@@ -28,6 +28,7 @@ update_version_information() {
         echo 'Akseli Lukkarila'
         echo '2019-2024'
         echo '"""'
+        echo ""
         echo "# Updated by build script, do not edit manually!"
         echo "BRANCH = \"$GIT_BRANCH\""
         echo "COMMIT = \"$GIT_HASH\""
