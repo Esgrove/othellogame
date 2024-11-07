@@ -105,10 +105,11 @@ class Board:
         # Print board with move positions
         header = f"    {' '.join(get_color(str(x), bold=True) for x in self._indices)}"
         board = "\n".join(
-            f"  {get_color(f"{y}", bold=True)} {' '.join(formatted_board[y * self._size + x] for x in self._indices)}"
+            f"  {get_color(str(y), bold=True)} {' '.join(formatted_board[y * self._size + x] for x in self._indices)}"
             for y in self._indices
         )
-        print(f"{header}\n{board}")
+        print(header)
+        print(board)
 
     def print_score(self) -> None:
         """Print current score for both players."""
