@@ -7,6 +7,6 @@ Akseli Lukkarila
 
 # Updated by build script, do not edit manually!
 BRANCH = "main"
-COMMIT = "1c15acc"
-DATE = "2024-11-07_1051"
+COMMIT = "6467897"
+DATE = "2024-11-07_1054"
 VERSION_NUMBER = "2.2.1"
