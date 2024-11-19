@@ -76,6 +76,7 @@ class Board:
                 # Next square in this direction needs to be the opposing disk
                 if self._get_square(pos) != opposing_disk:
                     continue
+
                 num_steps = 0
                 # Keep stepping over opponents disks
                 while self._get_square(pos) == disk.opponent():
