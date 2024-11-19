@@ -17,12 +17,12 @@ def black_human():
 
 @pytest.fixture
 def white_computer():
-    return Player(Disk.WHITE, human=False)
+    return Player(Disk.WHITE)
 
 
 @pytest.fixture
 def black_computer():
-    return Player(Disk.BLACK, human=False)
+    return Player(Disk.BLACK)
 
 
 @pytest.fixture
