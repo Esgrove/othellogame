@@ -62,7 +62,7 @@ int main(const int argc, const char* argv[])
         const bool show_log = result["log"].as<bool>();
         const bool test_mode = result["test"].as<bool>();
 
-        print_bold("OTHELLO GAME - C++\n", fmt::terminal_color::green);
+        print_green("OTHELLO GAME - C++\n", true);
 
         size_t board_size;
         if (result.count("size") > 0) {

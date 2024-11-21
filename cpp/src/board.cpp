@@ -103,9 +103,7 @@ std::vector<Move> Board::possible_moves(Disk disk) const
 /// Print board with available move coordinates and the resulting points gained.
 void Board::print_possible_moves(const std::vector<Move>& moves)
 {
-    print_color(
-        fmt::format("  Possible moves ({}):\n", std::to_string(moves.size())),
-        fmt::terminal_color::yellow);
+    print_yellow(fmt::format("  Possible moves ({}):\n", std::to_string(moves.size())));
     // Convert board from Disk enums to strings
     std::vector<std::string> formatted_board(board.size());
     std::ranges::transform(

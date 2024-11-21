@@ -67,6 +67,36 @@ inline void print_warn(const std::string& message)
     fmt::print(fmt::fg(fmt::terminal_color::yellow), "{}Warning: {}\n", indent, text);
 }
 
+/// Print text in green.
+template<typename T> void print_green(const T& object, bool bold = false)
+{
+    if (bold) {
+        print_bold(object, fmt::terminal_color::green);
+    } else {
+        print_color(object, fmt::terminal_color::green);
+    }
+}
+
+/// Print text in yellow.
+template<typename T> void print_yellow(const T& object, bool bold = false)
+{
+    if (bold) {
+        print_bold(object, fmt::terminal_color::yellow);
+    } else {
+        print_color(object, fmt::terminal_color::yellow);
+    }
+}
+
+/// Print text in red.
+template<typename T> void print_red(const T& object, bool bold = false)
+{
+    if (bold) {
+        print_bold(object, fmt::terminal_color::red);
+    } else {
+        print_color(object, fmt::terminal_color::red);
+    }
+}
+
 // Fallback with ANSI escape codes for stringstream
 
 namespace ansi
