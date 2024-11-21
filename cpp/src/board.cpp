@@ -117,7 +117,7 @@ void Board::print_possible_moves(const std::vector<Move>& moves)
         fmt::print("  {}\n", move);
     }
     // Print board with move positions
-    print("   ", false);
+    fmt::print("   ", false);
     for (const auto i : indices) {
         fmt::print(fmt::emphasis::bold, " {}", i);
     }
@@ -127,14 +127,14 @@ void Board::print_possible_moves(const std::vector<Move>& moves)
             fmt::print(" {}", formatted_board[y * size + x]);
         }
     }
-    print("");
+    fmt::print("");
 }
 
 /// Print current score for both players.
 void Board::print_score() const
 {
     auto [black, white] = player_scores();
-    print("");
+    fmt::print("");
     print(*this);
     fmt::print(
         "Score: {} | {}\n",

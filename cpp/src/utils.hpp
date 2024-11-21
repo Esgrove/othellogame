@@ -113,7 +113,6 @@ struct Settings {
 
     Settings()
         : board_size(8)
-
         , autoplay_mode(false)
         , use_defaults(false)
         , show_helpers(true)
@@ -191,7 +190,7 @@ std::string board_char(const Disk& disk, bool color = true);
 std::string disk_string(const Disk& disk);
 
 /// Returns the opposing disk colour.
-inline Disk opponent(const Disk& disk)
+inline constexpr Disk opponent(const Disk& disk)
 {
     switch (disk) {
         case Disk::white:
@@ -220,9 +219,12 @@ template<typename T> void print(T object, const bool newline = true, std::ostrea
 }
 
 /// Convert object to string using a stringstream.
+///
 /// Requires that the stream insertion operator `<<` has been implemented for the given object.
 /// Workaround for custom types without formatter specialization for fmt.
-template<typename T> std::string to_string(const T& object)
+template<typename T>
+    requires requires(T obj) { std::declval<std::ostream&>() << obj; }
+std::string to_string(const T& object)
 {
     std::ostringstream stream;
     stream << object;

@@ -27,15 +27,19 @@ std::vector<Square> Move::affected_squares() const
 {
     // Calculate the required size for the vector
     const size_t total_size = std::accumulate(
-        directions.begin(), directions.end(), 0, [](size_t sum, const auto& direction) {
-            return sum + direction.second;
+        this->directions.begin(), this->directions.end(), 0, [](size_t sum, const auto& dir) {
+            return sum + dir.second;
         });
-    std::vector<Square> paths;
-    paths.reserve(total_size);
+
+    std::vector<Square> paths(total_size);
+
+    // Insert directly to container since it has been pre-allocated to the correct size.
+    // This way avoids the overhead of dynamically resizing the container.
+    auto paths_iterator = paths.begin();
     for (const auto& [step, count] : directions) {
         Square pos = square + step;
         for (auto i = 0u; i < count; ++i) {
-            paths.push_back(pos);
+            *paths_iterator++ = pos;
             pos += step;
         }
     }
