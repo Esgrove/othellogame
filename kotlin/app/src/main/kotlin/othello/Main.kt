@@ -23,7 +23,7 @@ class OthelloKotlin : CliktCommand() {
     private val version by option("-v", "--version", help = "Print version and exit").flag()
 
     override fun help(context: Context) =
-        "A simple Othello CLI game implementation.\n\njava -jar othello_kotlin.jar"
+        "A simple Othello CLI game implementation in Kotlin\n\njava -jar othello_kotlin.jar"
 
     override fun run() {
         if (version) {

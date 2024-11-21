@@ -14,7 +14,7 @@ import Foundation
 
 struct OthelloSwift: ParsableCommand {
     static var configuration = CommandConfiguration(
-        abstract: "A simple Othello CLI game implementation.",
+        abstract: "A simple Othello CLI game implementation in Swift",
         usage: "othello_swift [options] [size]"
     )
 

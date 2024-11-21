@@ -14,7 +14,7 @@
 
 inline cxxopts::Options arguments()
 {
-    cxxopts::Options options("othello_cpp", "A simple Othello CLI game implementation.");
+    cxxopts::Options options("othello_cpp", "A simple Othello CLI game implementation in C++");
     options.custom_help("[OPTIONS]");
     options.positional_help(fmt::format(
         "[SIZE]\n\nArguments:\n  [SIZE]            Optional board size ({}..{})",

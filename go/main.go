@@ -70,8 +70,8 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 
 	var rootCmd = &cobra.Command{
 		Use:   "othello_go [SIZE]",
-		Short: "A simple Othello CLI game implementation.",
-		Long:  "A simple Othello CLI game implementation.",
+		Short: "A simple Othello CLI game implementation in Go",
+		Long:  "A simple Othello CLI game implementation in Go",
 		Args:  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			if version {

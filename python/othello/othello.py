@@ -155,7 +155,7 @@ class Othello:
 def main():
     parser = argparse.ArgumentParser(
         prog="Othello Python",
-        description="A simple Othello CLI game implementation.",
+        description="A simple Othello CLI game implementation in Python",
         usage="Othello Python [options] [size]",
         # Specify custom help
         add_help=False,

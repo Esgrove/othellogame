@@ -32,8 +32,7 @@ shadow!(build);
 #[derive(Parser)]
 #[command(
     author,
-    about = "A simple Othello CLI game implementation",
-    long_about = "A simple Othello CLI game implementation",
+    about,
     arg_required_else_help = false,
     disable_version_flag = true
 )]

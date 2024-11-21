@@ -234,7 +234,7 @@ namespace Othello
                 // Hopefully this would be supported in the future.
                 // version.AddAlias("--version");
 
-                var rootCommand = new RootCommand("A simple Othello CLI game implementation")
+                var rootCommand = new RootCommand("A simple Othello CLI game implementation in C#")
                 {
                     size,
                     autoplay,
