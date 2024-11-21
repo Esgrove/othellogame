@@ -53,12 +53,12 @@ pub struct Move {
 #[derive(Debug, Copy, Clone)]
 pub struct Settings {
     pub board_size: usize,
-    pub check_mode: bool,
-    pub test_mode: bool,
     pub autoplay_mode: bool,
-    pub use_defaults: bool,
+    pub check_mode: bool,
     pub show_helpers: bool,
     pub show_log: bool,
+    pub test_mode: bool,
+    pub use_defaults: bool,
 }
 
 impl Settings {

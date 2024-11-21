@@ -34,9 +34,9 @@ impl Othello {
             settings,
             player_black: Player::black(settings.to_player_settings()),
             player_white: Player::white(settings.to_player_settings()),
+            game_log: Vec::new(),
             rounds_played: 0,
             games_played: 0,
-            game_log: Vec::new(),
         }
     }
 

@@ -12,7 +12,7 @@
 #include "utils.hpp"
 #include "version.hpp"
 
-int main(const int argc, const char* argv[])
+inline cxxopts::Options arguments()
 {
     cxxopts::Options options("othello_cpp", "A simple Othello CLI game implementation.");
     options.custom_help("[OPTIONS]");
@@ -32,15 +32,22 @@ int main(const int argc, const char* argv[])
         "l,log", "Show log after a game", cxxopts::value<bool>())(
         "n,no-helpers", "Hide disk placement hints", cxxopts::value<bool>())(
         "t,test", "Enable test mode", cxxopts::value<bool>())(
+        "c,check", "Only print hash to check the result", cxxopts::value<bool>())(
         "h,help", "Print help and exit", cxxopts::value<bool>())(
         "v,version", "Print version and exit", cxxopts::value<bool>());
 
     options.parse_positional({"size"});
 
-    try {
-        const auto result = options.parse(argc, argv);
+    return options;
+}
 
-        if (result["version"].as<bool>()) {
+int main(const int argc, const char* argv[])
+{
+    try {
+        auto args = arguments();
+        const auto parsed_args = args.parse(argc, argv);
+
+        if (parsed_args["version"].as<bool>()) {
             fmt::print(
                 "{} {} {} {} {}\n",
                 version::APP_NAME,
@@ -51,22 +58,23 @@ int main(const int argc, const char* argv[])
             return 0;
         }
 
-        if (result["help"].as<bool>()) {
-            std::cout << options.help({"Optional"}) << std::endl;
+        if (parsed_args["help"].as<bool>()) {
+            std::cout << args.help({"Optional"}) << std::endl;
             return 1;
         }
 
-        const bool autoplay = result["autoplay"].as<bool>();
-        const bool use_defaults = result["default"].as<bool>();
-        const bool show_helpers = !result["no-helpers"].as<bool>();
-        const bool show_log = result["log"].as<bool>();
-        const bool test_mode = result["test"].as<bool>();
+        const bool autoplay = parsed_args["autoplay"].as<bool>();
+        const bool check_mode = parsed_args["check"].as<bool>();
+        const bool show_helpers = !parsed_args["no-helpers"].as<bool>();
+        const bool show_log = parsed_args["log"].as<bool>();
+        const bool test_mode = parsed_args["test"].as<bool>();
+        const bool use_defaults = parsed_args["default"].as<bool>();
 
         print_green("OTHELLO GAME - C++\n", true);
 
         size_t board_size;
-        if (result.count("size") > 0) {
-            board_size = result["size"].as<size_t>();
+        if (parsed_args.count("size") > 0) {
+            board_size = parsed_args["size"].as<size_t>();
             if (board_size < othello::MIN_BOARD_SIZE || board_size > othello::MAX_BOARD_SIZE) {
                 print_error(fmt::format("Unsupported board size: {}", board_size));
                 return 1;
@@ -79,10 +87,15 @@ int main(const int argc, const char* argv[])
         }
 
         const othello::Settings settings(
-            board_size, autoplay, use_defaults, show_helpers, show_log, test_mode);
+            board_size,
+            autoplay || check_mode,
+            check_mode,
+            show_helpers,
+            show_log,
+            test_mode || check_mode,
+            use_defaults);
 
-        othello::Othello game {settings};
-        game.play();
+        othello::Othello(settings).play();
     } catch (const cxxopts::exceptions::exception& e) {
         print_error(e.what());
         return 1;

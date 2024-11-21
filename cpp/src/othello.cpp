@@ -32,7 +32,7 @@ void Othello::play()
         init_game();
         game_loop();
         print_result();
-        if (this->settings.show_log) {
+        if (this->settings.show_log || this->settings.check_mode) {
             print_log();
         }
         if (this->settings.autoplay_mode || !get_answer("Would you like to play again")) {

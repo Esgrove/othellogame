@@ -108,12 +108,12 @@ fn main() -> Result<()> {
 
     let settings = Settings {
         board_size,
-        check_mode: args.check,
-        test_mode: args.test || args.check,
         autoplay_mode: args.autoplay || args.check,
-        use_defaults: args.default,
+        check_mode: args.check,
         show_helpers: !args.no_helpers,
         show_log: args.log,
+        test_mode: args.test || args.check,
+        use_defaults: args.default,
     };
 
     Othello::new(settings).play();

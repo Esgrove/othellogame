@@ -16,6 +16,7 @@ class Othello
 {
 public:
     explicit Othello(Settings settings);
+
     void play();
 
     static size_t get_board_size();
@@ -36,9 +37,9 @@ private:
     Settings settings;
     Player player_black;
     Player player_white;
-    int rounds_played {0};
-    int games_played {0};
     std::vector<std::string> game_log;
+    size_t rounds_played {0};
+    size_t games_played {0};
 };
 
 }  // namespace othello
