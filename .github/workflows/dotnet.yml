@@ -41,8 +41,8 @@ jobs:
             ~/.nuget/packages
             !~/.nuget/packages/*/contentFiles
             !~/.nuget/packages/*/analyzers
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: ${{ runner.os }}-nuget-
+          key: ${{ runner.os }}-nuget-9-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-9
 
       - name: Restore dependencies
         working-directory: csharp
