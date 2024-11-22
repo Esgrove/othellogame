@@ -59,7 +59,7 @@ int main(const int argc, const char* argv[])
         }
 
         if (parsed_args["help"].as<bool>()) {
-            std::cout << args.help({"Optional"}) << std::endl;
+            fmt::print("{}", args.help({"Optional"}));
             return 1;
         }
 
