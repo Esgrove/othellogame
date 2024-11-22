@@ -10,7 +10,6 @@ Akseli Lukkarila
 import hashlib
 import sys
 
-
 import click
 
 try:
@@ -242,11 +241,11 @@ def main(size, autoplay, check, default, log, no_helpers, test, version):
 
         settings = Settings(
             board_size=board_size,
-            autoplay_mode=autoplay,
+            autoplay_mode=autoplay or check,
             check_mode=check,
             show_helpers=not no_helpers,
             show_log=log,
-            test_mode=test,
+            test_mode=test or check,
             use_defaults=default,
         )
 
