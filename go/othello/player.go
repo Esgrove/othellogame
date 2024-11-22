@@ -43,7 +43,9 @@ func WhitePlayer(settings PlayerSettings) *Player {
 
 // PlayOneMove Play one round as this player.
 func (p *Player) PlayOneMove(board *Board) *string {
-	fmt.Printf("Turn: %s\n", p.color.DiskString())
+	if !p.settings.CheckMode {
+		fmt.Printf("Turn: %s\n", p.color.DiskString())
+	}
 	moves := board.PossibleMoves(p.color)
 	if len(moves) > 0 {
 		p.CanPlay = true
@@ -57,7 +59,9 @@ func (p *Player) PlayOneMove(board *Board) *string {
 			chosenMove = p.getComputerMove(moves)
 		}
 		board.PlaceDisk(&chosenMove)
-		board.PrintScore()
+		if !p.settings.CheckMode {
+			board.PrintScore()
+		}
 		p.roundsPlayed++
 		if !p.settings.TestMode {
 			time.Sleep(time.Second)
@@ -66,13 +70,17 @@ func (p *Player) PlayOneMove(board *Board) *string {
 		return &logEntry
 	}
 	p.CanPlay = false
-	fmt.Println("  No moves available...")
+	if !p.settings.CheckMode {
+		fmt.Println("  No moves available...")
+	}
 	return nil
 }
 
 // Return move chosen by computer.
 func (p *Player) getComputerMove(moves []Move) Move {
-	fmt.Println("  Computer plays...")
+	if !p.settings.CheckMode {
+		fmt.Println("  Computer plays...")
+	}
 	var chosenMove Move
 	if p.settings.TestMode {
 		chosenMove = moves[0]
@@ -81,8 +89,9 @@ func (p *Player) getComputerMove(moves []Move) Move {
 		time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)+1000))
 		chosenMove = moves[rand.Intn(len(moves))]
 	}
-
-	fmt.Printf("  %s -> %d\n", chosenMove.Square, chosenMove.Value)
+	if !p.settings.CheckMode {
+		fmt.Printf("  %s -> %d\n", chosenMove.Square, chosenMove.Value)
+	}
 	return chosenMove
 }
 

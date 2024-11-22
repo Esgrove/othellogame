@@ -10,8 +10,9 @@ package othello
 
 import (
 	"fmt"
-	"github.com/logrusorgru/aurora/v4"
 	"strings"
+
+	"github.com/logrusorgru/aurora/v4"
 )
 
 // Othello Gameplay loop and main logic.
@@ -66,7 +67,7 @@ func (o *Othello) initGame() {
 		// Computer plays both
 		o.playerBlack.SetHuman(false)
 		o.playerWhite.SetHuman(false)
-	} else if o.settings.useDefaults {
+	} else if o.settings.UseDefaults {
 		// Default: play as black against white computer player
 		o.playerWhite.SetHuman(false)
 	} else if GetAnswer("Would you like to play against the computer", "y", "n") {
@@ -76,9 +77,10 @@ func (o *Othello) initGame() {
 			o.playerBlack.SetHuman(false)
 		}
 	}
-
-	PrintBold("\nPlayers:")
-	o.printStatus()
+	if !o.settings.CheckMode {
+		PrintBold("\nPlayers:")
+		o.printStatus()
+	}
 }
 
 // Keep making moves until both players can't make a move any more.
@@ -86,14 +88,23 @@ func (o *Othello) gameLoop() {
 	players := []*Player{&o.playerBlack, &o.playerWhite}
 	for o.board.CanPlay() && (o.playerBlack.CanPlay || o.playerWhite.CanPlay) {
 		o.roundsPlayed++
-		PrintBold("\n=========== ROUND: %d ===========", o.roundsPlayed)
+		if !o.settings.CheckMode {
+			PrintBold("\n=========== ROUND: %d ===========", o.roundsPlayed)
+		}
 		for _, player := range players {
 			result := player.PlayOneMove(&o.board)
 			if result != nil {
 				o.gameLog = append(o.gameLog, fmt.Sprintf("%s;%s", *result, o.board.LogEntry()))
 			}
-			fmt.Println("--------------------------------")
+			if !o.settings.CheckMode {
+				fmt.Println("--------------------------------")
+			}
 		}
+	}
+	o.gamesPlayed++
+	if !o.settings.CheckMode {
+		PrintBold("\n================================")
+		fmt.Println(aurora.Green("The game is finished!"))
 	}
 }
 
@@ -115,8 +126,7 @@ func (o *Othello) printLog() {
 
 // Print ending status and winner info.
 func (o *Othello) printResult() {
-	PrintBold("\n================================")
-	fmt.Println(aurora.Green("The game is finished!"))
+
 	PrintBold("\nResult:")
 	o.printStatus()
 	fmt.Println()

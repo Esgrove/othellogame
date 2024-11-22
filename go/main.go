@@ -24,12 +24,13 @@ import (
 
 // CLI flags
 var (
-	autoplay   bool
-	defaultOpt bool
-	log        bool
-	noHelpers  bool
-	test       bool
-	version    bool
+	autoplay    bool
+	check       bool
+	log         bool
+	noHelpers   bool
+	test        bool
+	useDefaults bool
+	version     bool
 )
 
 func main() {
@@ -93,13 +94,13 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 				}
 				boardSize = size
 				fmt.Printf("Using board size: %d\n", boardSize)
-			} else if autoplay || defaultOpt {
+			} else if autoplay || useDefaults {
 				boardSize = othello.DefaultBoardSize
 			} else {
 				boardSize = othello.GetBoardSize()
 			}
 
-			settings := othello.NewSettings(boardSize, autoplay, defaultOpt, !noHelpers, log, test)
+			settings := othello.NewSettings(boardSize, autoplay || check, check, !noHelpers, log, test || check, useDefaults)
 
 			game := othello.InitOthello(settings)
 			game.Play()
@@ -109,7 +110,7 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 	rootCmd.SetUsageTemplate(customUsageTemplate)
 
 	rootCmd.Flags().BoolVarP(&autoplay, "autoplay", "a", false, "Enable autoplay mode")
-	rootCmd.Flags().BoolVarP(&defaultOpt, "default", "d", false, "Play with default settings")
+	rootCmd.Flags().BoolVarP(&useDefaults, "default", "d", false, "Play with default settings")
 	rootCmd.Flags().BoolVarP(&log, "log", "l", false, "Show log after a game")
 	rootCmd.Flags().BoolVarP(&noHelpers, "no-helpers", "n", false, "Hide disk placement hints")
 	rootCmd.Flags().BoolVarP(&test, "test", "t", false, "Enable test mode")
