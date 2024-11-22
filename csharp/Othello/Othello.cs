@@ -280,15 +280,14 @@ namespace Othello
                             boardSize = GetBoardSize();
                         }
 
-                        Settings settings =
-                            new(
-                                boardSize,
-                                autoplay,
-                                useDefaultSettings,
-                                showLog,
-                                !hideHelpers,
-                                testMode
-                            );
+                        Settings settings = new(
+                            boardSize,
+                            autoplay,
+                            useDefaultSettings,
+                            showLog,
+                            !hideHelpers,
+                            testMode
+                        );
 
                         var game = new Othello(settings);
                         game.Play();
