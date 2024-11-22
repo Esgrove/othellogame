@@ -60,10 +60,10 @@ linting with [ruff](https://github.com/astral-sh/ruff).
 
 ### C++
 
-C++20. Uses [CMake](https://cmake.org/) as the build system,
+C++23.
+Uses [CMake](https://cmake.org/) as the build system,
 and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text.
-Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rl-camel) recommended naming style (*snake_case*),
-which sadly not that many C++ codebases seem to be using (in my experience).
+Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rl-camel) recommended naming style (*snake_case*).
 Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html).
 
 * main.cpp
@@ -76,7 +76,7 @@ Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFor
 
 ### C\#
 
-.NET 8 and C# 11.
+.NET 9 and C# 11.
 Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal.
 Follows the [C# style guide](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) (*PascalCase*),
 but with line length limit of 100.
@@ -91,7 +91,7 @@ Code formatting with [CSharpier](https://github.com/belav/csharpier).
 
 ### Swift
 
-Swift 5.
+Swift 6.
 Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
 Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/),

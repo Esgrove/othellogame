@@ -3,7 +3,7 @@
 ## Usage
 
 ```console
-A simple Othello CLI game implementation.
+A simple Othello CLI game implementation in C++
 Usage:
   othello_cpp [OPTIONS] [SIZE]
 
@@ -16,6 +16,7 @@ Arguments:
   -l, --log         Show log after a game
   -n, --no-helpers  Hide disk placement hints
   -t, --test        Enable test mode
+  -c, --check       Only print hash to check the result
   -h, --help        Print help and exit
   -v, --version     Print version and exit
 ```

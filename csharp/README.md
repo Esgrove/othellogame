@@ -4,7 +4,7 @@
 
 ```console
 Description:
-  A simple Othello CLI game implementation
+  A simple Othello CLI game implementation in C#
 
 Usage:
   othello_csharp [<size>] [options]
