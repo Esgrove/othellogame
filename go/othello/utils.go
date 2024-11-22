@@ -37,19 +37,19 @@ const (
 	White Disk = 1
 )
 
-// Step represents a step direction on the board.
+// Represents a step direction on the board.
 type Step struct {
 	X int
 	Y int
 }
 
-// Square represents one square location on the board.
+// Represents one square location on the board.
 type Square struct {
 	X int
 	Y int
 }
 
-// Move represents one possible disk placement for the given disk colour.
+// Represents one possible disk placement for the given disk colour.
 type Move struct {
 	Square     Square
 	Disk       Disk
@@ -57,7 +57,7 @@ type Move struct {
 	Directions []StepCount
 }
 
-// Squares implements sort.Interface for a slice of Square objects
+// Implements sort.Interface for a slice of Square objects
 type Squares []Square
 
 // Hold Step and number of steps since Go lacks a tuple / pair construct
@@ -66,10 +66,10 @@ type StepCount struct {
 	Count int
 }
 
-// MovesDescending implements sort.Interface with custom sort order.
+// Implements sort.Interface with custom sort order.
 type MovesDescending []Move
 
-// Settings Game settings.
+// Game settings.
 type Settings struct {
 	BoardSize    int
 	AutoplayMode bool
@@ -80,7 +80,7 @@ type Settings struct {
 	UseDefaults  bool
 }
 
-// PlayerSettings player settings.
+// Player settings.
 type PlayerSettings struct {
 	ShowHelpers bool
 	CheckMode   bool
@@ -95,7 +95,10 @@ func NewPlayerSettings(showHelpers, checkMode, testMode bool) PlayerSettings {
 	}
 }
 
-func NewSettings(boardSize int, autoplayMode, checkMode, showHelpers, showLog, testMode, useDefaults bool) Settings {
+func NewSettings(
+	boardSize int,
+	autoplayMode, checkMode, showHelpers, showLog, testMode, useDefaults bool,
+) Settings {
 	return Settings{
 		BoardSize:    boardSize,
 		AutoplayMode: autoplayMode,
@@ -160,7 +163,7 @@ func (d Disk) BoardChar() string {
 	}
 }
 
-// BoardCharWithColor Returns a single character identifier string for the given disk.
+// Returns a single character identifier string for the given disk.
 func (d Disk) BoardCharWithColor() string {
 	switch d {
 	case Black:
@@ -172,7 +175,7 @@ func (d Disk) BoardCharWithColor() string {
 	}
 }
 
-// DiskString Returns the disk formatted as a coloured string.
+// Returns the disk formatted as a coloured string.
 func (d Disk) DiskString() string {
 	switch d {
 	case Black:
@@ -184,7 +187,7 @@ func (d Disk) DiskString() string {
 	}
 }
 
-// Opponent Returns the opposing disk colour for this disk.
+// Returns the opposing disk colour for this disk.
 func (d Disk) Opponent() Disk {
 	if d == Black {
 		return White
@@ -202,7 +205,7 @@ func (s Square) Add(step Step) Square {
 	return Square{X: s.X + step.X, Y: s.Y + step.Y}
 }
 
-// IsLessThan Custom comparison method since can't overload '<' operator in Go :(
+// Custom comparison method since can't overload '<' operator in Go :(
 func (s Square) IsLessThan(other Square) bool {
 	if s.X < other.X {
 		return true
@@ -246,7 +249,7 @@ func calculateSHA256(input string) string {
 	return hashString
 }
 
-// VersionInfo Returns formatted build version info string.
+// Returns formatted build version info string.
 func VersionInfo() string {
 	if info, ok := debug.ReadBuildInfo(); ok {
 		goVersion := info.GoVersion
@@ -256,9 +259,15 @@ func VersionInfo() string {
 				arch = setting.Value
 			}
 		}
-		return fmt.Sprintf("%s %s %s %s %s %s", VersionNumber, Timestamp, GitBranch, GitHash, goVersion, arch)
+		return fmt.Sprintf(
+			"%s %s %s %s %s %s",
+			VersionNumber, Timestamp, GitBranch, GitHash, goVersion, arch,
+		)
 	}
-	return fmt.Sprintf("%s %s %s %s", VersionNumber, Timestamp, GitBranch, GitHash)
+	return fmt.Sprintf(
+		"%s %s %s %s",
+		VersionNumber, Timestamp, GitBranch, GitHash,
+	)
 }
 
 // Clamp a value to the given range.

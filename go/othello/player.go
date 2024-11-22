@@ -15,7 +15,7 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
-// Player Defines one player (human or computer).
+// Defines one player (human or computer).
 type Player struct {
 	CanPlay      bool
 	color        Disk
@@ -41,7 +41,7 @@ func WhitePlayer(settings PlayerSettings) *Player {
 	return NewPlayer(White, settings)
 }
 
-// PlayOneMove Play one round as this player.
+// Play one round as this player.
 func (p *Player) PlayOneMove(board *Board) *string {
 	if !p.settings.CheckMode {
 		fmt.Printf("Turn: %s\n", p.color.DiskString())
@@ -128,7 +128,7 @@ func (p *Player) Reset() {
 	p.roundsPlayed = 0
 }
 
-// SetHuman Set the player as human or computer controlled.
+// Set the player as human or computer controlled.
 func (p *Player) SetHuman(isHuman bool) {
 	p.human = isHuman
 }

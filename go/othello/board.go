@@ -27,7 +27,7 @@ var STEP_DIRECTIONS = [8]Step{
 	{X: 1, Y: 1},
 }
 
-// Board Handles game board state and logic.
+// Handles game board state and logic.
 type Board struct {
 	board        []Disk
 	size         int
@@ -86,12 +86,12 @@ func initBoard(size int) []Disk {
 	return board
 }
 
-// CanPlay Return true if board contains empty squares.
+// Return true if board contains empty squares.
 func (b *Board) CanPlay() bool {
 	return b.emptySquares.Cardinality() > 0
 }
 
-// PlaceDisk Update board for given disk placement.
+// Update board for given disk placement.
 func (b *Board) PlaceDisk(playerMove *Move) {
 	start := playerMove.Square
 	if b.getSquare(&start) != Empty {
@@ -108,7 +108,7 @@ func (b *Board) PlaceDisk(playerMove *Move) {
 	}
 }
 
-// PossibleMoves Returns a list of possible moves for the given disk colour.
+// Returns a list of possible moves for the given disk colour.
 func (b *Board) PossibleMoves(disk Disk) []Move {
 	var moves []Move
 	opposingDisk := disk.Opponent()
@@ -147,7 +147,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 	return moves
 }
 
-// printPossibleMoves Print board with available move coordinates and the resulting points gained.
+// Print board with available move coordinates and the resulting points gained.
 func (b *Board) printPossibleMoves(moves []Move) {
 	fmt.Println(aurora.Yellow(fmt.Sprintf("  Possible moves (%d):", len(moves))))
 	// Convert board from Disk enums to strings
@@ -175,7 +175,7 @@ func (b *Board) printPossibleMoves(moves []Move) {
 	fmt.Println()
 }
 
-// PrintScore Print current score for both players.
+// Print current score for both players.
 func (b *Board) PrintScore() {
 	black, white := b.playerScores()
 	fmt.Println()
@@ -183,7 +183,7 @@ func (b *Board) PrintScore() {
 	fmt.Printf("Score: %d | %d\n", aurora.Magenta(black), aurora.Cyan(white))
 }
 
-// Result Returns the winner disk color.
+// Returns the winner disk color.
 func (b *Board) Result() Disk {
 	sum := b.score()
 	switch {
@@ -225,7 +225,8 @@ func (b *Board) getSquare(square *Square) Disk {
 		return b.board[index]
 	}
 	// Square is out of bounds.
-	// This probably should return a (Disk, error) instead but that makes using this quite cumbersome...
+	// This probably should return a (Disk, error) instead,
+	// but that makes using this quite cumbersome...
 	return Empty
 }
 

@@ -34,6 +34,7 @@ var (
 )
 
 func main() {
+	// nolint:lll
 	// Override usage template so can have positional argument info there
 	customUsageTemplate := fmt.Sprintf(`Usage:{{if .Runnable}}
   {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
@@ -100,7 +101,15 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 				boardSize = othello.GetBoardSize()
 			}
 
-			settings := othello.NewSettings(boardSize, autoplay || check, check, !noHelpers, log, test || check, useDefaults)
+			settings := othello.NewSettings(
+				boardSize,
+				autoplay || check,
+				check,
+				!noHelpers,
+				log,
+				test || check,
+				useDefaults,
+			)
 
 			game := othello.InitOthello(settings)
 			game.Play()
