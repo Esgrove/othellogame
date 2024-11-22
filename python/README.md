@@ -52,8 +52,10 @@ poetry shell
 ```shell
 # with virtual env active
 python3 othello/othello.py
-# through poetry
+# with poetry
 poetry run python othello/othello.py
+# with poetry script
+poetry run othello
 # or with helper script
 ./othello_python.sh
 # executing directly also works in a unix shell
