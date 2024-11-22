@@ -12,7 +12,7 @@
 #include "utils.hpp"
 #include "version.hpp"
 
-inline cxxopts::Options arguments()
+inline cxxopts::Options cli_arguments()
 {
     cxxopts::Options options("othello_cpp", "A simple Othello CLI game implementation in C++");
     options.custom_help("[OPTIONS]");
@@ -44,7 +44,7 @@ inline cxxopts::Options arguments()
 int main(const int argc, const char* argv[])
 {
     try {
-        auto args = arguments();
+        auto args = cli_arguments();
         const auto parsed_args = args.parse(argc, argv);
 
         if (parsed_args["version"].as<bool>()) {
@@ -100,5 +100,6 @@ int main(const int argc, const char* argv[])
         print_error(e.what());
         return 1;
     }
+
     return 0;
 }
