@@ -5,7 +5,7 @@ Othello [Go](https://go.dev/) implementation.
 ## Usage
 
 ```console
-A simple Othello CLI game implementation.
+A simple Othello CLI game implementation in Go
 
 Usage:
   othello_go [SIZE] [flags]
@@ -15,6 +15,7 @@ Arguments:
 
 Flags:
   -a, --autoplay     Enable autoplay mode
+  -c, --check        Only print hash to check the result
   -d, --default      Play with default settings
   -h, --help         help for othello_go
   -l, --log          Show log after a game
