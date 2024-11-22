@@ -46,3 +46,9 @@ updates:
     directory: "/csharp"
     schedule:
       interval: "daily"
+
+  # .NET
+  - package-ecosystem: "dotnet-sdk"
+    directory: "/csharp"
+    schedule:
+      interval: "daily"
