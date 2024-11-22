@@ -65,8 +65,10 @@ void Othello::init_game()
             player_black.set_human(false);
         }
     }
-    print_bold("\nPlayers:\n");
-    print_status();
+    if (!this->settings.check_mode) {
+        print_bold("\nPlayers:\n");
+        print_status();
+    }
 }
 
 /// Keep making moves until both players can't make a move any more.
@@ -74,18 +76,26 @@ void Othello::game_loop()
 {
     while (board.can_play() && (player_black.can_play || player_white.can_play)) {
         ++rounds_played;
-        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
-
+        if (!this->settings.check_mode) {
+            fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
+        }
         for (Player* player : {&player_black, &player_white}) {
             if (auto result = player->play_one_move(board); result.has_value()) {
                 game_log.push_back(fmt::format("{};{}", result.value(), board.log_entry()));
             }
-            fmt::print("--------------------------------\n");
+            if (!this->settings.check_mode) {
+                fmt::print("--------------------------------\n");
+            }
         }
     }
     ++games_played;
+    if (!this->settings.check_mode) {
+        print_bold("\n================================\n");
+        print_green("The game is finished!\n\n", true);
+    }
 }
 
+/// Print game log which shows all moves made and the game board state after each move.
 void Othello::print_log() const
 {
     std::string formatted_log;
@@ -99,24 +109,24 @@ void Othello::print_log() const
 
     const auto hex_hash = calculate_sha256(formatted_log);
 
-    print_bold("Game log:\n", fmt::terminal_color::yellow);
-    print(formatted_log);
+    if (!this->settings.check_mode) {
+        print_bold("Game log:\n", fmt::terminal_color::yellow);
+        print(formatted_log);
+    }
     print(hex_hash);
 }
 
 /// Print ending status and winner info.
 void Othello::print_result() const
 {
-    print_bold("\n================================\n");
-    print_color("The game is finished!\n", fmt::terminal_color::green);
-    print("Result:");
+    print_bold("Result:\n");
     print_status();
-    print("");
+    fmt::print("\n");
 
     if (const Disk winner = board.result(); winner == Disk::empty) {
-        print("The game ended in a tie...\n");
+        fmt::print("The game ended in a tie...\n\n");
     } else {
-        print(fmt::format("The winner is {}!\n", disk_string(winner)));
+        fmt::print("The winner is {}!\n\n", disk_string(winner));
     }
 }
 
@@ -129,7 +139,7 @@ void Othello::print_status() const
     print(board);
 }
 
-/// Read user input for yes/no question and return bool.
+/// Ask a question with two options, and return bool from user answer.
 bool Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no)
 {
     // fmt library enables nice, modern string formatting,

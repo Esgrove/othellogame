@@ -83,14 +83,16 @@ struct Square {
 
 /// Player settings.
 struct PlayerSettings {
-    explicit PlayerSettings(const bool show_helpers, const bool test_mode)
+    explicit PlayerSettings(const bool show_helpers, const bool check_mode, const bool test_mode)
         : show_helpers(show_helpers)
+        , check_mode(check_mode)
         , test_mode(test_mode)
     {}
 
-    PlayerSettings() : show_helpers(true), test_mode(false) {}
+    PlayerSettings() : show_helpers(true), check_mode(false), test_mode(false) {}
 
     bool show_helpers;
+    bool check_mode;
     bool test_mode;
 };
 
@@ -126,7 +128,7 @@ struct Settings {
     /// Get player setting values from overall game settings.
     [[nodiscard]] PlayerSettings to_player_settings() const
     {
-        return PlayerSettings(show_helpers, test_mode);
+        return PlayerSettings(show_helpers, check_mode, test_mode);
     }
 
     size_t board_size;

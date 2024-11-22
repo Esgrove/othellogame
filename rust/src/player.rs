@@ -29,6 +29,7 @@ pub struct Player {
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct PlayerSettings {
     pub show_helpers: bool,
+    pub check_mode: bool,
     pub test_mode: bool,
 }
 
@@ -36,6 +37,7 @@ impl Default for PlayerSettings {
     fn default() -> Self {
         Self {
             show_helpers: true,
+            check_mode: false,
             test_mode: false,
         }
     }
@@ -64,29 +66,29 @@ impl Player {
     }
 
     /// Play one round as this player.
-    pub fn play_one_move(&mut self, board: &mut Board, disable_prints: bool) -> Option<String> {
-        if !disable_prints {
+    pub fn play_one_move(&mut self, board: &mut Board) -> Option<String> {
+        if !self.settings.check_mode {
             println!("Turn: {}", self.disk);
         }
         let moves = board.possible_moves(self.disk);
         if moves.is_empty() {
             self.can_play = false;
-            if !disable_prints {
+            if !self.settings.check_mode {
                 println!("{}", "  No moves available...".yellow());
             }
             None
         } else {
             self.can_play = true;
-            if self.human && self.settings.show_helpers {
+            if self.human && self.settings.show_helpers && !self.settings.check_mode {
                 board.print_possible_moves(&moves);
             }
             let chosen_move = if self.human {
                 self.get_human_move(&moves)
             } else {
-                self.get_computer_move(&moves, disable_prints)
+                self.get_computer_move(&moves)
             };
             board.place_disk(&chosen_move);
-            if !disable_prints {
+            if !self.settings.check_mode {
                 board.print_score();
             }
             self.rounds_played += 1;
@@ -109,8 +111,8 @@ impl Player {
     }
 
     /// Return move chosen by computer.
-    fn get_computer_move(&self, moves: &[Move], disable_prints: bool) -> Move {
-        if !disable_prints {
+    fn get_computer_move(&self, moves: &[Move]) -> Move {
+        if !self.settings.check_mode {
             println!("  Computer plays...");
         }
         let chosen_move = if self.settings.test_mode {
@@ -122,7 +124,7 @@ impl Player {
             ));
             moves[rand::thread_rng().gen_range(0..moves.len())].clone()
         };
-        if !disable_prints {
+        if !self.settings.check_mode {
             println!("  {} -> {}", chosen_move.square, chosen_move.value);
         }
         chosen_move

@@ -66,6 +66,7 @@ impl Settings {
     pub const fn to_player_settings(self) -> PlayerSettings {
         PlayerSettings {
             show_helpers: self.show_helpers,
+            check_mode: self.check_mode,
             test_mode: self.test_mode,
         }
     }

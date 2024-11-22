@@ -20,23 +20,30 @@ namespace othello
 /// Play one round as this player.
 std::optional<std::string> Player::play_one_move(Board& board)
 {
-    print("Turn: " + disk_string(disk));
+    if (!this->settings.check_mode) {
+        print("Turn: " + disk_string(disk));
+    }
     if (const auto moves = board.possible_moves(disk); !moves.empty()) {
         can_play = true;
-        if (this->human && this->settings.show_helpers) {
+        if (this->human && this->settings.show_helpers && !this->settings.check_mode) {
             board.print_possible_moves(moves);
         }
         const auto chosen_move = human ? get_human_move(moves) : get_computer_move(moves);
         board.place_disk(chosen_move);
-        board.print_score();
+        if (!this->settings.check_mode) {
+            board.print_score();
+        }
         ++rounds_played;
         if (!this->settings.test_mode) {
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
         return chosen_move.log_entry();
     }
+
     can_play = false;
-    print_color("  No moves available...\n", fmt::terminal_color::yellow);
+    if (!this->settings.check_mode) {
+        print_color("  No moves available...\n", fmt::terminal_color::yellow);
+    }
     return std::nullopt;
 }
 
@@ -56,7 +63,9 @@ void Player::reset()
 /// Return move chosen by computer.
 Move Player::get_computer_move(const std::vector<Move>& moves)
 {
-    print("  Computer plays...");
+    if (!this->settings.check_mode) {
+        print("  Computer plays...");
+    }
     Move chosen_move;
     if (this->settings.test_mode) {
         chosen_move = moves[0];
@@ -70,7 +79,9 @@ Move Player::get_computer_move(const std::vector<Move>& moves)
         // C++17 std::sample is even more convoluted here :(
         chosen_move = moves[rand_item(this->rand_gen)];
     }
-    fmt::print("  {} -> {}\n", chosen_move.square, chosen_move.value);
+    if (!this->settings.check_mode) {
+        fmt::print("  {} -> {}\n", chosen_move.square, chosen_move.value);
+    }
     return chosen_move;
 }
 

@@ -99,9 +99,7 @@ impl Othello {
                 );
             }
             for player in &mut [&mut self.player_black, &mut self.player_white] {
-                if let Some(result) =
-                    player.play_one_move(&mut self.board, self.settings.check_mode)
-                {
+                if let Some(result) = player.play_one_move(&mut self.board) {
                     self.game_log
                         .push(format!("{};{}", result, self.board.log_entry()));
                 }
