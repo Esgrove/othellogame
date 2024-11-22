@@ -7,9 +7,11 @@ Akseli Lukkarila
 2019-2024
 """
 
-import argparse
 import hashlib
 import sys
+
+
+import click
 
 try:
     from othello.board import Board
@@ -57,7 +59,7 @@ class Othello:
             self._init_game()
             self._game_loop()
             self._print_result()
-            if self.settings.show_log:
+            if self.settings.show_log or self.settings.check_mode:
                 self._print_log()
 
             if self.settings.autoplay_mode or not self.get_answer("Would you like to play again"):
@@ -84,21 +86,29 @@ class Othello:
             else:
                 self.player_black.set_human(False)
 
-        print_bold("\nPlayers:")
-        self._print_status()
+        if not self.settings.check_mode:
+            print_bold("\nPlayers:")
+            self._print_status()
 
     def _game_loop(self):
         """Keep making moves until both players can't make a move any more."""
         while self.board.can_play() and (self.player_black.can_play or self.player_white.can_play):
             self.rounds_played += 1
-            print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")
+            if not self.settings.check_mode:
+                print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")
+
             for player in (self.player_black, self.player_white):
                 result = player.play_one_move(self.board)
                 if result:
                     self.game_log.append(f"{result};{self.board.log_entry()}")
-                print("--------------------------------")
+
+                if not self.settings.check_mode:
+                    print("--------------------------------")
 
         self.games_played += 1
+        if not self.settings.check_mode:
+            print_bold("\n================================")
+            print_bold("The game is finished!\n", Color.green)
 
     def _print_log(self):
         """Print game log which shows all moves made and the game board state after each move."""
@@ -107,14 +117,14 @@ class Othello:
         )
         hex_hash = hashlib.sha256(formatted_log.encode()).hexdigest()
 
-        print_bold("Game log:", Color.yellow)
-        print(formatted_log)
+        if not self.settings.check_mode:
+            print_bold("Game log:", Color.yellow)
+            print(formatted_log)
+
         print(hex_hash)
 
     def _print_result(self):
         """Print ending status and winner info."""
-        print_bold("\n================================")
-        print_bold("The game is finished!\n", Color.green)
         print_bold("Result:")
         self._print_status()
         print("")
@@ -149,85 +159,82 @@ class Othello:
             return clamp(ans, MIN_BOARD_SIZE, MAX_BOARD_SIZE)
         except ValueError:
             print_warn(f"Invalid size, defaulting to {DEFAULT_BOARD_SIZE}...")
+
         return DEFAULT_BOARD_SIZE
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        prog="Othello Python",
-        description="A simple Othello CLI game implementation in Python",
-        usage="Othello Python [options] [size]",
-        # Specify custom help
-        add_help=False,
-    )
-    # Optional positional argument for the board size
-    parser.add_argument(
-        "size",
-        nargs="?",
-        type=int,
-        help=f"Optional board size ({MIN_BOARD_SIZE}..{MAX_BOARD_SIZE})",
-    )
-    parser.add_argument(
-        "-h",
-        "--help",
-        action="help",
-        default=argparse.SUPPRESS,
-        help="Print help and exit",
-    )
-
-    exclusive = parser.add_mutually_exclusive_group()
-    exclusive.add_argument(
-        "-a",
-        "--autoplay",
-        action="store_true",
-        help="Enable autoplay mode",
-    )
-    exclusive.add_argument(
-        "-d",
-        "--default",
-        action="store_true",
-        help="Play with default settings",
-    )
-
-    parser.add_argument(
-        "-l",
-        "--log",
-        action="store_true",
-        help="Show log after a game",
-    )
-    parser.add_argument(
-        "-n",
-        "--no-helpers",
-        action="store_true",
-        help="Hide disk placement hints",
-    )
-    parser.add_argument(
-        "-t",
-        "--test",
-        action="store_true",
-        help="Enable test mode",
-    )
-    parser.add_argument(
-        "-v",
-        "--version",
-        action="version",
-        version=f"Othello Python {version_info()}",
-        help="Print version and exit",
-    )
-
-    args = parser.parse_args()
+@click.command(
+    name="Othello",
+    help="A simple Othello CLI game implementation in Python",
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
+@click.argument(
+    "size",
+    required=False,
+    # Could let click handle board size automatically,
+    # but doing it manually to match other implementations.
+    # type=click.IntRange(MIN_BOARD_SIZE, MAX_BOARD_SIZE, clamp=True),
+    type=click.INT,
+)
+@click.option(
+    "-a",
+    "--autoplay",
+    is_flag=True,
+    help="Enable autoplay mode",
+)
+@click.option(
+    "-c",
+    "--check",
+    is_flag=True,
+    help="Only print hash to check the result",
+)
+@click.option(
+    "-d",
+    "--default",
+    is_flag=True,
+    help="Play with default settings",
+)
+@click.option(
+    "-l",
+    "--log",
+    is_flag=True,
+    help="Show log after a game",
+)
+@click.option(
+    "-n",
+    "--no-helpers",
+    is_flag=True,
+    help="Hide disk placement hints",
+)
+@click.option(
+    "-t",
+    "--test",
+    is_flag=True,
+    help="Enable test mode with deterministic computer moves",
+)
+@click.option(
+    "-v",
+    "--version",
+    is_flag=True,
+    is_eager=True,
+    help="Print version and exit",
+)
+def main(size, autoplay, check, default, log, no_helpers, test, version):
+    if version:
+        print(f"Othello Python {version_info()}")
+        sys.exit(0)
 
     print_bold("OTHELLO GAME - PYTHON", Color.green)
     try:
         # try to read board size from command line args
-        if args.size is not None:
-            board_size = args.size
+        if size is not None:
+            board_size = size
             if board_size < MIN_BOARD_SIZE or board_size > MAX_BOARD_SIZE:
                 print_error(f"Unsupported board size: {board_size}")
                 sys.exit(1)
 
             print(f"Using board size: {board_size}")
-        elif args.autoplay or args.default:
+        elif autoplay or default:
             board_size = DEFAULT_BOARD_SIZE
         else:
             # Otherwise ask user for board size
@@ -235,18 +242,18 @@ def main():
 
         settings = Settings(
             board_size=board_size,
-            autoplay_mode=args.autoplay,
-            use_defaults=args.default,
-            show_helpers=not args.no_helpers,
-            show_log=args.log,
-            test_mode=args.test,
+            autoplay_mode=autoplay,
+            check_mode=check,
+            show_helpers=not no_helpers,
+            show_log=log,
+            test_mode=test,
+            use_defaults=default,
         )
 
-        game = Othello(settings)
-        game.play()
+        Othello(settings).play()
     except KeyboardInterrupt:
         # Catches CTRL-C
-        sys.exit("\ncancelled...")
+        sys.exit("\naborted...")
 
 
 if __name__ == "__main__":

@@ -60,7 +60,7 @@ struct Args {
     #[arg(short, long)]
     no_helpers: bool,
 
-    /// Enable test mode with deterministic computer move selection
+    /// Enable test mode with deterministic computer moves
     #[arg(short, long)]
     test: bool,
 

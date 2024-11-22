@@ -41,17 +41,20 @@ class Player:
 
     def play_one_move(self, board: Board) -> str | None:
         """Play one round as this player."""
-        print(f"Turn: {str(self._disk)}")
+        if not self._settings.check_mode:
+            print(f"Turn: {str(self._disk)}")
+
         if moves := board.possible_moves(self._disk):
             self.can_play = True
-            if self._human and self._settings.show_helpers:
+            if self._human and self._settings.show_helpers and not self._settings.check_mode:
                 board.print_possible_moves(moves)
 
             chosen_move = (
                 self._get_human_move(moves) if self._human else self._get_computer_move(moves)
             )
             board.place_disk(chosen_move)
-            board.print_score()
+            if not self._settings.check_mode:
+                board.print_score()
             self._rounds_played += 1
             if not self._settings.test_mode:
                 time.sleep(1)
@@ -59,7 +62,9 @@ class Player:
             return chosen_move.log_entry()
 
         self.can_play = False
-        print_color("  No moves available...", Color.yellow)
+        if not self._settings.check_mode:
+            print_color("  No moves available...", Color.yellow)
+
         return None
 
     def reset(self) -> None:
@@ -73,7 +78,9 @@ class Player:
 
     def _get_computer_move(self, moves: list[Move]) -> Move:
         """Return move chosen by computer."""
-        print("  Computer plays...")
+        if not self._settings.check_mode:
+            print("  Computer plays...")
+
         if self._settings.test_mode:
             chosen_move = moves[0]
         else:
@@ -81,7 +88,9 @@ class Player:
             time.sleep(random.uniform(1.0, 2.0))
             chosen_move = random.choice(moves)
 
-        print(f"  {chosen_move.square} -> {chosen_move.value}")
+        if not self._settings.check_mode:
+            print(f"  {chosen_move.square} -> {chosen_move.value}")
+
         return chosen_move
 
     def _get_human_move(self, moves: list[Move]) -> Move:
