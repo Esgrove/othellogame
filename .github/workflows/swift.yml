@@ -31,9 +31,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6"
+      # This does not seem to be maintained anymore,
+      # has not been updated to support Swift 6
+      #- uses: swift-actions/setup-swift@v2
+      #  with:
+      #    swift-version: "6"
 
       - name: Check Swift version
         run: swift --version
