@@ -7,7 +7,7 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$DIR/../common.sh"
 
 # Define project version here, normally would use git tags for this...
-PROJECT_VERSION="1.5.1"
+PROJECT_VERSION="1.6.0"
 
 USAGE="Usage: $(basename "$0") [OPTIONS]
 
