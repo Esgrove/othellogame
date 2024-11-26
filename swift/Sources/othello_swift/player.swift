@@ -31,24 +31,28 @@ class Player {
 
     /// Play one round as this player.
     func playOneMove(board: inout Board) -> String? {
-        print("Turn: \(self.disk)")
+        if !self.settings.checkMode {
+            print("Turn: \(self.disk)")
+        }
         let moves = board.possibleMoves(disk: self.disk)
         if !moves.isEmpty {
             self.canPlay = true
-            if self.isHuman && self.settings.showHelpers {
+            if self.isHuman && self.settings.showHelpers && !self.settings.checkMode {
                 board.printPossibleMoves(moves)
             }
             let chosenMove = self.isHuman ? self.getHumanMove(moves) : self.getComputerMove(moves)
             board.placeDisk(move: chosenMove)
-            board.printScore()
-            self.roundsPlayed += 1
             if !self.settings.testMode {
+                board.printScore()
                 Thread.sleep(forTimeInterval: 1)
             }
+            self.roundsPlayed += 1
             return chosenMove.logEntry()
         }
         self.canPlay = false
-        print("  No moves available...".yellow())
+        if !self.settings.checkMode {
+            print("  No moves available...".yellow())
+        }
         return nil
     }
 
@@ -65,7 +69,9 @@ class Player {
 
     /// Return move chosen by computer.
     func getComputerMove(_ moves: [Move]) -> Move {
-        print("  Computer plays...")
+        if !self.settings.checkMode {
+            print("  Computer plays...")
+        }
         let move: Move
         if self.settings.testMode {
             move = moves[0]
@@ -75,7 +81,9 @@ class Player {
             move = moves.randomElement()!
         }
 
-        print("  \(move.square) -> \(move.value)")
+        if !self.settings.checkMode {
+            print("  \(move.square) -> \(move.value)")
+        }
         return move
     }
 

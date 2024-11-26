@@ -31,7 +31,7 @@ class Othello {
             self.initGame()
             self.gameLoop()
             self.printResult()
-            if self.settings.showLog {
+            if self.settings.showLog || self.settings.checkMode {
                 self.printLog()
             }
             if self.settings.autoplayMode || !self.getAnswer("Would you like to play again") {
@@ -64,21 +64,32 @@ class Othello {
             }
         }
 
-        print("\nPlayers:".bold())
-        self.printStatus()
+        if !self.settings.checkMode {
+            print("\nPlayers:".bold())
+            self.printStatus()
+        }
     }
 
     /// Keep making moves until both players can't make a move any more.
     func gameLoop() {
         while self.board.canPlay() && (self.playerBlack.canPlay || self.playerWhite.canPlay) {
             self.roundsPlayed += 1
-            printBold("\n=========== ROUND: \(self.roundsPlayed) ===========")
+            if !self.settings.checkMode {
+                printBold("\n=========== ROUND: \(self.roundsPlayed) ===========")
+            }
             for player in [self.playerBlack, self.playerWhite] {
                 if let result = player.playOneMove(board: &self.board) {
                     self.gameLog.append("\(result);\(self.board.logEntry())")
                 }
             }
-            print("-------------------------------")
+            if !self.settings.checkMode {
+                print("-------------------------------")
+            }
+        }
+        self.gamesPlayed += 1
+        if !self.settings.checkMode {
+            print("\n===============================".bold())
+            print("The game is finished!\n".green())
         }
     }
 
@@ -96,15 +107,15 @@ class Othello {
 
         let hexHash = calculateSHA256(formattedLog)
 
-        printBold("Game log:", color: TerminalColor.yellow)
-        print(formattedLog)
+        if !self.settings.checkMode {
+            printBold("Game log:", color: TerminalColor.yellow)
+            print(formattedLog)
+        }
         print(hexHash)
     }
 
     /// Print ending status and winner info.
     func printResult() {
-        print("\n===============================".bold())
-        print("The game is finished!\n".green())
         print("Result:".bold())
         self.printStatus()
         print("")
@@ -136,13 +147,10 @@ class Othello {
     class func getBoardSize() -> Int {
         while true {
             print("Choose board size (default is \(DEFAULT_BOARD_SIZE)): ", terminator: "")
-            if let input = readLine() {
-                // TODO: create clamp method
-                if let size = Int(input) {
-                    return max(MIN_BOARD_SIZE, min(size, MAX_BOARD_SIZE))
-                }
+            if let input = readLine(), let size = Int(input) {
+                return size.clamp(min: MIN_BOARD_SIZE, max: MAX_BOARD_SIZE)
             }
-            printError("give a valid number...")
+            printError("Give a valid number...")
         }
     }
 }

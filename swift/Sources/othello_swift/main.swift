@@ -24,6 +24,9 @@ struct OthelloSwift: ParsableCommand {
     @Flag(name: .shortAndLong, help: "Enable autoplay mode")
     var autoplay: Bool = false
 
+    @Flag(name: .shortAndLong, help: "Only print hash to check the result")
+    var check: Bool = false
+
     @Flag(name: [.short, .customLong("default")], help: "Play with default settings")
     var useDefaultSettings: Bool = false
 
@@ -64,11 +67,12 @@ struct OthelloSwift: ParsableCommand {
 
         let settings = Settings(
             boardSize: boardSize,
-            autoplayMode: autoplay,
+            autoplayMode: autoplay || check,
+            checkMode: check,
             useDefaults: useDefaultSettings,
-            showHelpers: !self.noHelpers,
-            showLog: self.log,
-            testMode: self.test
+            showHelpers: !noHelpers,
+            showLog: log,
+            testMode: test || check
         )
 
         Othello(settings).play()

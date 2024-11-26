@@ -117,10 +117,11 @@ struct Move {
     }
 }
 
-/// Game settings
+/// Game settings.
 struct Settings {
     var boardSize: Int
     var autoplayMode: Bool
+    var checkMode: Bool
     var useDefaults: Bool
     var showHelpers: Bool
     var showLog: Bool
@@ -130,6 +131,7 @@ struct Settings {
     func toPlayerSettings() -> PlayerSettings {
         return PlayerSettings(
             showHelpers: self.showHelpers,
+            checkMode: self.checkMode,
             testMode: self.testMode
         )
     }
@@ -138,6 +140,7 @@ struct Settings {
 /// Player settings.
 struct PlayerSettings {
     var showHelpers: Bool
+    var checkMode: Bool
     var testMode: Bool
 }
 
@@ -215,4 +218,10 @@ func versionInfo() -> String {
     let gitHash = GIT_HASH
     let gitBranch = GIT_BRANCH
     return "\(versionNumber) \(buildTime) \(gitBranch) \(gitHash)"
+}
+
+extension Comparable {
+    func clamp(min: Self, max: Self) -> Self {
+        return Swift.max(min, Swift.min(self, max))
+    }
 }
