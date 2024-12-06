@@ -9,15 +9,15 @@ namespace othello
 
 TEST(step, initialization)
 {
-    const Step step(1, 2);
+    constexpr Step step(1, 2);
     ASSERT_EQ(step.x, 1);
     ASSERT_EQ(step.y, 2);
 }
 
 TEST(step, addition)
 {
-    const Step step1(1, 2);
-    const Step step2(2, 3);
+    constexpr Step step1(1, 2);
+    constexpr Step step2(2, 3);
     Step result = step1 + step2;
     ASSERT_EQ(result.x, 3);
     ASSERT_EQ(result.y, 5);
@@ -41,11 +41,11 @@ TEST(step, addition)
 
 TEST(step, comparison)
 {
-    const Step step1(1, 2);
-    const Step step2(1, 3);
+    constexpr Step step1(1, 2);
+    constexpr Step step2(1, 3);
     ASSERT_TRUE(step1 < step2);
     ASSERT_FALSE(step1 == step2);
-    const Step step3(2, 3);
+    constexpr Step step3(2, 3);
     ASSERT_TRUE(step2 < step3);
     ASSERT_TRUE(step3 == Step(2, 3));
 }
@@ -97,7 +97,7 @@ TEST(square, addition_with_square)
 TEST(square, addition_with_step)
 {
     const Square square(3, 4);
-    const Step step(1, 2);
+    constexpr Step step(1, 2);
     Square result = square + step;
     ASSERT_EQ(result.x, 4);
     ASSERT_EQ(result.y, 6);

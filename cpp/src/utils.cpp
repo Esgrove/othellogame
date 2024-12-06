@@ -25,11 +25,13 @@ std::string Move::log_entry() const
 /// Get all the squares playing this move will change.
 std::vector<Square> Move::affected_squares() const
 {
-    // Calculate the required size for the vector
+    // Calculate the required size for the vector.
+    // Need to specify the initial size type explicitly to make MSVC happy.
     const size_t total_size = std::accumulate(
-        this->directions.begin(), this->directions.end(), 0, [](size_t sum, const auto& dir) {
-            return sum + dir.second;
-        });
+        this->directions.begin(),
+        this->directions.end(),
+        size_t {0},
+        [](size_t sum, const auto& dir) { return sum + dir.second; });
 
     std::vector<Square> paths(total_size);
 

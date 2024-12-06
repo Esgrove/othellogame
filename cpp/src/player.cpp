@@ -25,10 +25,10 @@ std::optional<std::string> Player::play_one_move(Board& board)
     }
     if (const auto moves = board.possible_moves(disk); !moves.empty()) {
         can_play = true;
-        if (this->human && this->settings.show_helpers && !this->settings.check_mode) {
+        if (this->human() && this->settings.show_helpers && !this->settings.check_mode) {
             board.print_possible_moves(moves);
         }
-        const auto chosen_move = human ? get_human_move(moves) : get_computer_move(moves);
+        const auto chosen_move = human() ? get_human_move(moves) : get_computer_move(moves);
         board.place_disk(chosen_move);
         if (!this->settings.check_mode) {
             board.print_score();
@@ -47,10 +47,34 @@ std::optional<std::string> Player::play_one_move(Board& board)
     return std::nullopt;
 }
 
-/// Set player to be controlled by human or computer.
-void Player::set_human(const bool is_human)
+/// Check if the player is human.
+bool Player::human() const
 {
-    this->human = is_human;
+    return this->player_type == PlayerType::Human;
+}
+
+/// Check if the player is a computer.
+bool Player::computer() const
+{
+    return this->player_type == PlayerType::Computer;
+}
+
+/// Set player to be controlled by human or computer.
+void Player::set_player_type(const PlayerType type)
+{
+    this->player_type = type;
+}
+
+/// Set the player to be controlled by a human.
+void Player::set_human()
+{
+    set_player_type(PlayerType::Human);
+}
+
+/// Set the player to be controlled by a computer.
+void Player::set_computer()
+{
+    set_player_type(PlayerType::Computer);
 }
 
 /// Reset player status for a new game.
@@ -120,6 +144,18 @@ Square Player::get_square()
         } catch (const std::invalid_argument&) {
             print_error("  Give coordinates in the form 'x,y'\n");
         }
+    }
+}
+
+std::string Player::type_string() const
+{
+    switch (this->player_type) {
+        case PlayerType::Human:
+            return "Human   ";
+        case PlayerType::Computer:
+            return "Computer";
+        default:
+            return "Unknown";
     }
 }
 

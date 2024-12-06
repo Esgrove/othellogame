@@ -26,7 +26,7 @@ enum class Disk { black = -1, empty = 0, white = 1 };
 
 /// Represents one step direction on the board.
 struct Step {
-    Step(const int x, const int y) : x(x), y(y) {}
+    constexpr Step(const int x, const int y) : x(x), y(y) {}
 
     friend std::ostream& operator<<(std::ostream& out, const Step& step)
     {
@@ -193,7 +193,7 @@ std::string board_char(const Disk& disk, bool color = true);
 std::string disk_string(const Disk& disk);
 
 /// Returns the opposing disk colour.
-inline constexpr Disk opponent(const Disk& disk)
+constexpr Disk opponent(const Disk& disk)
 {
     switch (disk) {
         case Disk::white:

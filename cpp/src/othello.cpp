@@ -53,16 +53,15 @@ void Othello::init_game()
 
     if (this->settings.autoplay_mode) {
         // Computer plays both
-        player_black.set_human(false);
-        player_white.set_human(false);
-    } else if (this->settings.use_defaults) {
-        // Default: play as black against white computer player
-        player_white.set_human(false);
-    } else if (get_answer("Would you like to play against the computer")) {
+        player_black.set_computer();
+        player_white.set_computer();
+    } else if (
+        !this->settings.use_defaults && get_answer("Would you like to play against the computer"))
+    {
         if (get_answer("Would you like to play as black or white", "b", "w")) {
-            player_white.set_human(false);
+            player_white.set_computer();
         } else {
-            player_black.set_human(false);
+            player_black.set_computer();
         }
     }
     if (!this->settings.check_mode) {
@@ -162,8 +161,11 @@ size_t Othello::get_board_size()
     try {
         const size_t size = std::stoi(input);
         if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
-            print_warn(fmt::format(
-                "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE));
+            print_warn(
+                fmt::format(
+                    "Limiting board size to valid range {}...{}\n",
+                    MIN_BOARD_SIZE,
+                    MAX_BOARD_SIZE));
         }
         return std::clamp(size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
     } catch (const std::exception&) {
