@@ -48,7 +48,22 @@ set(APP_BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_HASH}_${TIMESTAMP
 message(STATUS "Build name: ${APP_BUILD_NAME}")
 
 if(WIN32)
-    set(OPENSSL_ROOT_DIR "C:/Program Files/OpenSSL-Win64")
+    # Set OpenSSL search path for Windows
+    execute_process(
+        COMMAND powershell.exe -Command "[System.Environment]::GetEnvironmentVariable('USERPROFILE')"
+        OUTPUT_VARIABLE USERPROFILE
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    set(SCOOP_OPENSSL_PATH "${USERPROFILE}/scoop/apps/openssl/current")
+    if(EXISTS "${SCOOP_OPENSSL_PATH}")
+        set(OPENSSL_ROOT_DIR "${SCOOP_OPENSSL_PATH}")
+        set(OPENSSL_INCLUDE_DIR "${SCOOP_OPENSSL_PATH}/include")
+        message(STATUS "Found OpenSSL installed via Scoop")
+    else()
+        set(OPENSSL_ROOT_DIR "C:/Program Files/OpenSSL-Win64")
+        set(OPENSSL_INCLUDE_DIR "C:/Program Files/OpenSSL-Win64/include")
+        message(WARNING "Scoop OpenSSL path not found. Falling back to default path: ${OPENSSL_ROOT_DIR}")
+    endif()
 endif()
 
 # OpenSSL
