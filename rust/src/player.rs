@@ -20,9 +20,16 @@ use crate::utils::{Disk, Move, Square};
 pub struct Player {
     pub can_play: bool,
     disk: Disk,
-    human: bool,
+    player_type: PlayerType,
     rounds_played: usize,
     settings: PlayerSettings,
+}
+
+/// Player can be controlled either by a human or computer.
+#[derive(Debug, PartialEq, Eq)]
+pub enum PlayerType {
+    Human,
+    Computer,
 }
 
 /// Player settings.
@@ -45,11 +52,11 @@ impl Default for PlayerSettings {
 
 impl Player {
     /// Initialize new player for the given disk color.
-    pub const fn new(disk: Disk, settings: PlayerSettings) -> Self {
+    pub const fn new(disk: Disk, settings: PlayerSettings, player_type: PlayerType) -> Self {
         Self {
-            disk,
-            human: true,
             can_play: true,
+            disk,
+            player_type,
             rounds_played: 0,
             settings,
         }
@@ -57,12 +64,12 @@ impl Player {
 
     /// Shorthand to initialize a new player for black disks.
     pub const fn black(settings: PlayerSettings) -> Self {
-        Self::new(Disk::Black, settings)
+        Self::new(Disk::Black, settings, PlayerType::Human)
     }
 
     /// Shorthand to initialize a new player for white disks.
     pub const fn white(settings: PlayerSettings) -> Self {
-        Self::new(Disk::White, settings)
+        Self::new(Disk::White, settings, PlayerType::Computer)
     }
 
     /// Play one round as this player.
@@ -79,10 +86,10 @@ impl Player {
             None
         } else {
             self.can_play = true;
-            if self.human && self.settings.show_helpers && !self.settings.check_mode {
+            if self.human() && self.settings.show_helpers && !self.settings.check_mode {
                 board.print_possible_moves(&moves);
             }
-            let chosen_move = if self.human {
+            let chosen_move = if self.human() {
                 self.get_human_move(&moves)
             } else {
                 self.get_computer_move(&moves)
@@ -106,8 +113,30 @@ impl Player {
     }
 
     /// Set the player as human or computer controlled.
-    pub fn set_human(&mut self, is_human: bool) {
-        self.human = is_human;
+    pub fn human(&self) -> bool {
+        self.player_type.human()
+    }
+
+    /// Set the player as human or computer controlled.
+    #[allow(unused)]
+    pub fn computer(&self) -> bool {
+        self.player_type.computer()
+    }
+
+    /// Set the player as human or computer controlled.
+    pub fn set_player_type(&mut self, player_type: PlayerType) {
+        self.player_type = player_type;
+    }
+
+    /// Set the player as human controlled.
+    #[allow(unused)]
+    pub fn set_human(&mut self) {
+        self.set_player_type(PlayerType::Human);
+    }
+
+    /// Set the player as computer controlled.
+    pub fn set_computer(&mut self) {
+        self.set_player_type(PlayerType::Computer);
     }
 
     /// Return move chosen by computer.
@@ -172,11 +201,31 @@ impl Player {
 
     /// Return player type description string.
     pub fn type_string(&self) -> String {
-        if self.human {
-            "Human   ".to_string()
-        } else {
-            "Computer".to_string()
+        self.player_type.to_string()
+    }
+}
+
+impl Default for Player {
+    fn default() -> Self {
+        Self {
+            can_play: true,
+            disk: Disk::Black,
+            player_type: PlayerType::Human,
+            rounds_played: 0,
+            settings: PlayerSettings::default(),
         }
+    }
+}
+
+impl PlayerType {
+    /// Check if the player is controlled by a human.
+    pub fn human(&self) -> bool {
+        *self == Self::Human
+    }
+
+    /// Check if the player is controlled by a computer.
+    pub fn computer(&self) -> bool {
+        *self == Self::Computer
     }
 }
 
@@ -192,24 +241,32 @@ impl fmt::Display for Player {
     }
 }
 
+impl fmt::Display for PlayerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Human => write!(f, "Human   "),
+            Self::Computer => write!(f, "Computer"),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn new_player() {
-        let settings = PlayerSettings::default();
-        let player = Player::new(Disk::Black, settings);
+        let player = Player::default();
         assert_eq!(player.disk, Disk::Black);
-        assert!(player.human);
+        assert!(player.human());
         assert!(player.can_play);
         assert_eq!(player.rounds_played, 0);
-        assert_eq!(player.settings, settings);
+        assert_eq!(player.settings, PlayerSettings::default());
     }
 
     #[test]
     fn reset_player() {
-        let mut player = Player::new(Disk::White, PlayerSettings::default());
+        let mut player = Player::new(Disk::White, PlayerSettings::default(), PlayerType::Human);
         player.can_play = false;
         player.rounds_played = 10;
         player.reset();
@@ -219,18 +276,21 @@ mod tests {
 
     #[test]
     fn set_human() {
-        let mut player = Player::new(Disk::Black, PlayerSettings::default());
-        player.set_human(false);
-        assert!(!player.human);
+        let mut player = Player::default();
+        player.set_computer();
+        assert!(player.computer());
+        assert_eq!(player.player_type, PlayerType::Computer);
+        player.set_human();
+        assert!(player.human());
+        assert_eq!(player.player_type, PlayerType::Human);
     }
 
     #[test]
     fn player_type_string() {
-        let human_player = Player::new(Disk::Black, PlayerSettings::default());
-        assert_eq!(human_player.type_string(), "Human   ");
+        let mut player = Player::default();
+        assert_eq!(player.type_string(), "Human   ");
 
-        let mut computer_player = human_player;
-        computer_player.set_human(false);
-        assert_eq!(computer_player.type_string(), "Computer");
+        player.set_computer();
+        assert_eq!(player.type_string(), "Computer");
     }
 }

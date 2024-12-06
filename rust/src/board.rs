@@ -12,15 +12,22 @@ use colored::{ColoredString, Colorize};
 
 use crate::utils::{Disk, Move, Square, Step};
 
+const UP: isize = 1;
+const DOWN: isize = -1;
+const LEFT: isize = -1;
+const RIGHT: isize = 1;
+const STILL: isize = 0;
+
+/// All possible step directions for a square on the board.
 static STEP_DIRECTIONS: [Step; 8] = [
-    Step { x: -1, y: -1 },
-    Step { x: -1, y: 0 },
-    Step { x: -1, y: 1 },
-    Step { x: 0, y: -1 },
-    Step { x: 0, y: 1 },
-    Step { x: 1, y: -1 },
-    Step { x: 1, y: 0 },
-    Step { x: 1, y: 1 },
+    Step { x: UP, y: LEFT },
+    Step { x: UP, y: STILL },
+    Step { x: UP, y: RIGHT },
+    Step { x: STILL, y: LEFT },
+    Step { x: STILL, y: RIGHT },
+    Step { x: DOWN, y: LEFT },
+    Step { x: DOWN, y: STILL },
+    Step { x: DOWN, y: RIGHT },
 ];
 
 /// Handles game board state and logic.

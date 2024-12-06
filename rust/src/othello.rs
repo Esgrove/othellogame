@@ -70,16 +70,15 @@ impl Othello {
 
         if self.settings.autoplay_mode {
             // Computer plays both
-            self.player_white.set_human(false);
-            self.player_black.set_human(false);
-        } else if self.settings.use_defaults {
-            // Default: play as black against white computer player
-            self.player_white.set_human(false);
-        } else if Self::get_answer("Would you like to play against the computer", "y", "n") {
+            self.player_white.set_computer();
+            self.player_black.set_computer();
+        } else if !self.settings.use_defaults
+            && Self::get_answer("Would you like to play against the computer", "y", "n")
+        {
             if Self::get_answer("Would you like to play as black or white", "b", "w") {
-                self.player_white.set_human(false);
+                self.player_white.set_computer();
             } else {
-                self.player_black.set_human(false);
+                self.player_black.set_computer();
             }
         }
         if !self.settings.check_mode {
