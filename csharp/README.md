@@ -62,3 +62,7 @@ dotnet tool install --global csharpier
 
 dotnet csharpier .
 ```
+
+## TODO
+
+Use <https://github.com/commandlineparser/commandline>
