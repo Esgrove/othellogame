@@ -10,10 +10,13 @@
     <SelfContained>false</SelfContained>
     <TargetFramework>net9.0</TargetFramework>
     <Version>2.6.0</Version>
-    <StartupObject></StartupObject>
+    <StartupObject>Othello.Program.Othello</StartupObject>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Esgrove/othellogame</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <Title>Othello C#</Title>
+    <Description>A simple Othello CLI game implementation in C#</Description>
+    <PackageProjectUrl>https://github.com/Esgrove/othellogame</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
