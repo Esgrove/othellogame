@@ -1,48 +1,49 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    kotlin("multiplatform") version "1.9.10"
+    kotlin("multiplatform") version "2.1.0"
+}
+
+repositories {
+    mavenCentral()
 }
 
 version = "2.0.0"
-
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-}
 
 kotlin {
     macosX64("macos") {
         binaries {
             executable {
-                entryPoint = "main"
+                entryPoint = "othello.MainKt"
             }
         }
     }
     linuxX64("linux") {
         binaries {
             executable {
-                entryPoint = "main"
+                entryPoint = "othello.MainKt"
             }
         }
     }
     mingwX64("windows") {
         binaries {
             executable {
-                entryPoint = "main"
+                entryPoint = "othello.MainKt"
             }
         }
     }
 
     sourceSets {
         val commonMain by getting {
+            kotlin.srcDirs("app/src/main/kotlin")
+            kotlin.srcDir("${layout.buildDirectory.get().asFile}/generated-sources/build-info")
             dependencies {
                 implementation("com.github.ajalt.clikt:clikt:5.0.2")
                 implementation("com.squareup.okio:okio:3.9.1")
             }
-            kotlin.srcDir("${layout.buildDirectory.get().asFile}/generated-sources/build-info")
         }
         val commonTest by getting {
+            kotlin.srcDirs("app/src/test/kotlin")
             dependencies {
                 implementation(kotlin("test"))
             }
@@ -101,7 +102,7 @@ tasks {
                     const val date: String = "$buildDate"
                     const val version: String = "$projectVersion"
                 }
-                """.trimIndent()
+                """.trimIndent(),
             )
         }
     }
