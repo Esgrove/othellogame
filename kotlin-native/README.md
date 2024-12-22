@@ -7,11 +7,9 @@ Uses [Clikt](https://github.com/ajalt/clikt) for the CLI.
 ## Usage
 
 ```console
-Usage: othello_kotlin [<options>] [<size>]
+Usage: othello-kotlin [<options>] [<size>]
 
   A simple Othello CLI game implementation in Kotlin
-
-  java -jar othello_kotlin.jar
 
 Options:
   -a, --autoplay    Enable autoplay mode with computer control
@@ -31,7 +29,6 @@ Arguments:
 
 ```shell
 ./gradlew build
-
 ./gradlew run
 ```
 
@@ -40,20 +37,6 @@ With shell script:
 ```shell
 ./build.sh
 ```
-
-The build script will produce a standalone jar
-using [Shadow](https://github.com/johnrengelman/shadow)
-that can then be run with:
-
-```shell
-java -jar othello_kotlin.jar
-```
-
-## Unit tests
-
-````shell
-./gradlew test
-````
 
 ## Code formatting
 
@@ -64,7 +47,3 @@ brew install ktlint
 
 ktlint --format
 ```
-
-## Todo
-
-- Use [Arrow](https://arrow-kt.io) for Rust style error handling
