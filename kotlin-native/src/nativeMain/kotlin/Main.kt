@@ -10,6 +10,10 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import kotlin.system.exitProcess
 
+const val MIN_BOARD_SIZE = 4
+const val MAX_BOARD_SIZE = 10
+const val DEFAULT_BOARD_SIZE = 8
+
 class OthelloKotlin : CliktCommand(name = "othello_kotlin") {
     private val size by argument(
         "size",
@@ -26,8 +30,7 @@ class OthelloKotlin : CliktCommand(name = "othello_kotlin") {
     private val test by option("-t", "--test", help = "Enable test mode with deterministic computer moves").flag()
     private val version by option("-v", "--version", help = "Print version and exit").flag()
 
-    override fun help(context: Context) =
-        "A simple Othello CLI game implementation in Kotlin\n\njava -jar othello_kotlin.jar"
+    override fun help(context: Context) = "A simple Othello CLI game implementation in Kotlin"
 
     override fun run() {
         if (version) {
@@ -35,33 +38,7 @@ class OthelloKotlin : CliktCommand(name = "othello_kotlin") {
             exitProcess(0)
         }
 
-        printBold("OTHELLO GAME - KOTLIN", AnsiColor.GREEN)
-
-        // Try to read board size from command line args
-        val boardSize = if (size != null) {
-            if (size!! < MIN_BOARD_SIZE || size!! > MAX_BOARD_SIZE) {
-                printError("Unsupported board size: $size")
-                exitProcess(1)
-            }
-            println("Using board size: $size")
-            size!!
-        } else if (autoplay || default) {
-            DEFAULT_BOARD_SIZE
-        } else {
-            getBoardSize()
-        }
-
-        val settings = Settings(
-            boardSize,
-            autoplayMode = autoplay || check,
-            checkMode = check,
-            showHelpers = !noHelpers,
-            showLog = log || check,
-            testMode = test || check,
-            useDefaults = default,
-        )
-
-        Othello(settings).play()
+        println("Othello Kotlin")
     }
 }
 
