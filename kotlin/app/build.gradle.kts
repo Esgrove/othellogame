@@ -1,98 +1,119 @@
 import java.io.ByteArrayOutputStream
 
-version = "1.7.0"
+version = "2.0.0"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.1.10"
-    // https://github.com/johnrengelman/shadow
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
+    kotlin("multiplatform") version "2.1.0"
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation(kotlin("stdlib"))
-    implementation("com.google.guava:guava:33.4.0-jre")
-    implementation("com.github.ajalt.clikt:clikt:5.0.3")
-    implementation("com.squareup.okio:okio:3.10.2")
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir("${layout.buildDirectory.get().asFile}/generated-resources")
-        }
-    }
-}
-
-testing {
-    suites {
-        // Configure the built-in test suite
-        val test by getting(JvmTestSuite::class) {
-            // Use Kotlin Test framework
-            useKotlinTest("1.8.10")
-        }
-    }
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
-}
-
-application {
-    mainClass.set("othello.MainKt")
-}
-
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = application.mainClass
-    }
-}
-
-tasks.register("generateBuildInfo") {
-    doLast {
-        val buildDir = "${layout.buildDirectory.get().asFile}"
-        val propsFile = file("$buildDir/generated-resources/build-info.properties")
-        propsFile.parentFile.mkdirs()
-
-        fun executeCommand(vararg command: String): String {
-            val outputStream = ByteArrayOutputStream()
-            project.exec {
-                commandLine(*command)
-                standardOutput = outputStream
+kotlin {
+    macosX64("macos") {
+        binaries {
+            executable {
+                entryPoint = "othello.MainKt"
             }
-            return outputStream.toString("UTF-8").trim()
+        }
+    }
+    linuxX64("linux") {
+        binaries {
+            executable {
+                entryPoint = "othello.MainKt"
+            }
+        }
+    }
+    mingwX64("windows") {
+        binaries {
+            executable {
+                entryPoint = "othello.MainKt"
+            }
+        }
+    }
+
+    sourceSets {
+        val commonMain by getting {
+            kotlin.srcDirs("app/src/main/kotlin")
+            kotlin.srcDir("${layout.buildDirectory.get().asFile}/generated-sources/build-info")
+            dependencies {
+                implementation("com.github.ajalt.clikt:clikt:5.0.2")
+                implementation("com.squareup.okio:okio:3.9.1")
+            }
+        }
+        val commonTest by getting {
+            kotlin.srcDirs("app/src/test/kotlin")
+            dependencies {
+                implementation(kotlin("test"))
+            }
         }
 
-        val gitBranch = executeCommand("git", "branch", "--show-current")
-        val gitCommit = executeCommand("git", "rev-parse", "--short", "HEAD")
-        val buildTime = executeCommand("date", "-u", "+%Y-%m-%d_%H%M")
-        val projectVersion = version.toString()
+        val macosMain by getting
+        val macosTest by getting
 
-        logger.lifecycle("Writing build version information to: ${propsFile.absolutePath}")
+        val linuxMain by getting
+        val linuxTest by getting
 
-        propsFile.writeText(
-            """
-            build.branch=$gitBranch
-            build.commit=$gitCommit
-            build.time=$buildTime
-            build.version=$projectVersion
-            """.trimIndent(),
-        )
+        val windowsMain by getting
+        val windowsTest by getting
     }
 }
 
-tasks.named("processResources") {
-    dependsOn("generateBuildInfo")
-}
+tasks {
+    val generateBuildInfo by registering {
+        val outputDir = layout.buildDirectory.dir("generated-sources/build-info").get().asFile
+        val buildInfoFile = file("$outputDir/BuildInfo.kt")
 
-tasks.named<Copy>("processResources") {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE // Options: INCLUDE, EXCLUDE, FAIL, WARN
+        doLast {
+            outputDir.mkdirs()
+
+            val gitBranch: String = ByteArrayOutputStream().use { outputStream ->
+                exec {
+                    commandLine("git", "branch", "--show-current")
+                    standardOutput = outputStream
+                }
+                outputStream.toString("UTF-8").trim()
+            }
+
+            val gitCommit: String = ByteArrayOutputStream().use { outputStream ->
+                exec {
+                    commandLine("git", "rev-parse", "--short", "HEAD")
+                    standardOutput = outputStream
+                }
+                outputStream.toString("UTF-8").trim()
+            }
+
+            val buildDate: String = ByteArrayOutputStream().use { outputStream ->
+                exec {
+                    commandLine("date", "+%Y-%m-%d_%H%M")
+                    standardOutput = outputStream
+                }
+                outputStream.toString("UTF-8").trim()
+            }
+
+            val projectVersion: String = version.toString()
+
+            buildInfoFile.writeText(
+                """
+                object BuildInfo {
+                    const val branch: String = "$gitBranch"
+                    const val commit: String = "$gitCommit"
+                    const val date: String = "$buildDate"
+                    const val version: String = "$projectVersion"
+                }
+                """.trimIndent(),
+            )
+        }
+    }
+
+    named("compileKotlinLinux") {
+        dependsOn(generateBuildInfo)
+    }
+    named("compileKotlinMacos") {
+        dependsOn(generateBuildInfo)
+    }
+    named("compileKotlinWindows") {
+        dependsOn(generateBuildInfo)
+    }
 }
