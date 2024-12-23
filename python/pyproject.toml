@@ -9,7 +9,7 @@ repository = "https://github.com/Esgrove/othellogame"
 packages = [{ include = "othello" }]
 
 [tool.poetry.dependencies]
-click = "^8.1.7"
+click = "^8.1.8"
 colorama = "^0.4.6"
 python = "^3.11"
 
