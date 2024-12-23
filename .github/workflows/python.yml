@@ -37,13 +37,13 @@ jobs:
           python-version: 3.x
 
       - name: Ruff format
-        uses: astral-sh/ruff-action@v1
+        uses: astral-sh/ruff-action@v3
         with:
           src: "./python"
           args: format --check --verbose
 
       - name: Ruff lint
-        uses: astral-sh/ruff-action@v1
+        uses: astral-sh/ruff-action@v3
         with:
           src: "./python"
           args: check --verbose
