@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 project("Othello C++"
-    VERSION 2.9.0
+    VERSION 2.9.1
     DESCRIPTION "A simple Othello CLI game implementation in C++"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -137,7 +137,7 @@ target_compile_definitions(othello_cpp PRIVATE
 message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 11.0.2
+    GIT_TAG 11.1.0
 )
 FetchContent_MakeAvailable(fmt)
 
