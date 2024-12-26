@@ -91,6 +91,9 @@ generate_msvc_project() {
 }
 
 generate_ninja_project() {
+    if [ -z "$(command -v ninja)" ]; then
+        print_error_and_exit "ninja not found in path"
+    fi
     # Use brew Clang which is typically more recent than Xcode's
     if [ "$BASH_PLATFORM" = "mac" ] && brew ls --versions llvm > /dev/null; then
         CC="$(brew --prefix llvm)/bin/clang"
