@@ -75,11 +75,13 @@ jobs:
           restore-keys: ${{ runner.os }}-cmake-
 
       - name: Build
-        run: chmod +x build.sh && ./build.sh --msvc
+        run: |
+          chmod +x build.sh
+          ./build.sh --msvc
         shell: bash
 
       - name: Test
-        run: chmod +x test.sh && ./test.sh
+        run: ./build.sh --msvc --test
         shell: bash
 
   clang-format:
