@@ -1,4 +1,4 @@
-﻿# Config for C++ code formatting
+# Config for C++ code formatting
 # https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 ---
 BasedOnStyle: WebKit
@@ -96,6 +96,6 @@ SpacesInCStyleCastParentheses: false
 SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
-Standard: c++20
+Standard: c++23
 TabWidth: 4
 UseTab: Never
