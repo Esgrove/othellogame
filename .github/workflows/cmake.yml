@@ -5,16 +5,18 @@ on:
     branches:
       - main
     paths:
-      - 'cpp/**.cpp'
-      - 'cpp/**.hpp'
-      - 'cpp/CMakeLists.txt'
       - ".github/workflows/cmake.yml"
+      - "cpp/**.cpp"
+      - "cpp/**.hpp"
+      - "cpp/.clang-format"
+      - "cpp/CMakeLists.txt"
   pull_request:
     paths:
-      - 'cpp/**.cpp'
-      - 'cpp/**.hpp'
-      - 'cpp/CMakeLists.txt'
       - ".github/workflows/cmake.yml"
+      - "cpp/**.cpp"
+      - "cpp/**.hpp"
+      - "cpp/.clang-format"
+      - "cpp/CMakeLists.txt"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:
@@ -25,7 +27,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest] # windows-latest
+        os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -78,3 +80,20 @@ jobs:
         working-directory: cpp
         run: chmod +x test.sh && ./test.sh
         shell: bash
+
+  clang-format:
+    name: Run Clang Format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Run clang-format
+        run: |
+          clang-format --style=file --dry-run --Werror $(find . -type f \( -name "*.cpp" -o -name "*.hpp" \))
