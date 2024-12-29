@@ -56,7 +56,7 @@ init_options() {
 
     PROJECT_PATH="$REPO_ROOT/cpp"
     CMAKE_BUILD_DIR="$PROJECT_PATH/cmake-build-$BASH_PLATFORM"
-    if [ "$USE_VISUAL_STUDIO" = true ]; then
+    if [ "$BASH_PLATFORM" = windows ] && [ "$USE_VISUAL_STUDIO" = true ]; then
         CMAKE_BUILD_DIR+="-vs"
     else
         CMAKE_BUILD_DIR+="-ninja"

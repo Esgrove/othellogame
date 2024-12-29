@@ -70,11 +70,12 @@ jobs:
             cpp/cmake-build-linux-ninja-release
             cpp/cmake-build-mac-ninja-release
             cpp/cmake-build-windows-ninja-release
+            cpp/cmake-build-windows-vs-release
           key: ${{ runner.os }}-cmake-${{ github.sha }}
           restore-keys: ${{ runner.os }}-cmake-
 
       - name: Build
-        run: chmod +x build.sh && ./build.sh
+        run: chmod +x build.sh && ./build.sh --msvc
         shell: bash
 
       - name: Test
