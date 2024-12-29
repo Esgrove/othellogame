@@ -52,7 +52,7 @@ jobs:
 
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
-        run: choco install ninja openssl
+        run: choco install --no-progress ninja openssl
         shell: powershell
 
       - name: Install dependencies (macOS)
