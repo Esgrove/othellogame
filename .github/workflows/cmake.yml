@@ -54,6 +54,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           choco install ninja
+          choco install openssl
         shell: powershell
 
       - name: Install dependencies (macOS)
