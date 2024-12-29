@@ -31,6 +31,10 @@ jobs:
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: cpp
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -72,18 +76,19 @@ jobs:
           restore-keys: ${{ runner.os }}-cmake-
 
       - name: Build
-        working-directory: cpp
         run: chmod +x build.sh && ./build.sh
         shell: bash
 
       - name: Test
-        working-directory: cpp
         run: chmod +x test.sh && ./test.sh
         shell: bash
 
   clang-format:
     name: Run Clang Format
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cpp
 
     steps:
       - name: Checkout code
