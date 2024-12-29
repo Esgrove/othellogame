@@ -5,16 +5,18 @@ on:
     branches:
       - main
     paths:
-      - 'cpp/**.cpp'
-      - 'cpp/**.hpp'
-      - 'cpp/CMakeLists.txt'
       - ".github/workflows/cmake.yml"
+      - "cpp/**.cpp"
+      - "cpp/**.hpp"
+      - "cpp/.clang-format"
+      - "cpp/CMakeLists.txt"
   pull_request:
     paths:
-      - 'cpp/**.cpp'
-      - 'cpp/**.hpp'
-      - 'cpp/CMakeLists.txt'
       - ".github/workflows/cmake.yml"
+      - "cpp/**.cpp"
+      - "cpp/**.hpp"
+      - "cpp/.clang-format"
+      - "cpp/CMakeLists.txt"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:
@@ -25,10 +27,14 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest] # windows-latest
+        os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: cpp
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -46,9 +52,7 @@ jobs:
 
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
-        run: |
-          choco install openssl
-          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+        run: choco install --no-progress ninja openssl
         shell: powershell
 
       - name: Install dependencies (macOS)
@@ -66,15 +70,35 @@ jobs:
             cpp/cmake-build-linux-ninja-release
             cpp/cmake-build-mac-ninja-release
             cpp/cmake-build-windows-ninja-release
+            cpp/cmake-build-windows-vs-release
           key: ${{ runner.os }}-cmake-${{ github.sha }}
           restore-keys: ${{ runner.os }}-cmake-
 
       - name: Build
-        working-directory: cpp
-        run: chmod +x build.sh && ./build.sh
+        run: |
+          chmod +x build.sh
+          ./build.sh --msvc
         shell: bash
 
       - name: Test
-        working-directory: cpp
-        run: chmod +x test.sh && ./test.sh
+        run: ./build.sh --msvc --test
         shell: bash
+
+  clang-format:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cpp
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Check formatting
+        run: |
+          clang-format --verbose --style=file --dry-run --Werror $(find . -type f \( -name "*.cpp" -o -name "*.hpp" \))

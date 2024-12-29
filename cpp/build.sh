@@ -16,8 +16,12 @@ OPTIONS: All options are optional
     -m | --msvc
         Use Visual Studio generator on Windows.
 
+    -t | --test
+        Build tests.
+
     -v | --verbose
-        Display commands being executed."
+        Display commands being executed.
+"
 
 # Import common functions
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -25,9 +29,12 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$DIR/../common.sh"
 
 init_options() {
+    BUILD_TARGET=othello_cpp
+    BUILD_TESTS=false
+    BUILD_TESTS_FLAG=OFF
     BUILD_TYPE="Release"
-    USE_VISUAL_STUDIO=false
     CLEAN=false
+    USE_VISUAL_STUDIO=false
 
     while [ $# -gt 0 ]; do
         case "$1" in
@@ -47,6 +54,11 @@ init_options() {
             -m | --msvc)
                 USE_VISUAL_STUDIO=true
                 ;;
+            -t | --test)
+                BUILD_TARGET=othello_tests
+                BUILD_TESTS=true
+                BUILD_TESTS_FLAG=ON
+                ;;
             -v | --verbose)
                 set -x
                 ;;
@@ -56,7 +68,7 @@ init_options() {
 
     PROJECT_PATH="$REPO_ROOT/cpp"
     CMAKE_BUILD_DIR="$PROJECT_PATH/cmake-build-$BASH_PLATFORM"
-    if [ "$USE_VISUAL_STUDIO" = true ]; then
+    if [ "$BASH_PLATFORM" = windows ] && [ "$USE_VISUAL_STUDIO" = true ]; then
         CMAKE_BUILD_DIR+="-vs"
     else
         CMAKE_BUILD_DIR+="-ninja"
@@ -82,12 +94,15 @@ ccache_show_stats() {
 }
 
 generate_msvc_project() {
+    if [ "$BASH_PLATFORM" != windows ]; then
+        print_error_and_exit "Visual Studio generator can't be used on $BASH_PLATFORM"
+    fi
     cmake -B "$CMAKE_BUILD_DIR" \
         -G "Visual Studio 17 2022" \
         -A x64 \
         -S "$PROJECT_PATH" \
         -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-        -DBUILD_TESTS=OFF
+        -DBUILD_TESTS=$BUILD_TESTS_FLAG
 }
 
 generate_ninja_project() {
@@ -105,7 +120,7 @@ generate_ninja_project() {
         -G Ninja \
         -S "$PROJECT_PATH" \
         -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-        -DBUILD_TESTS=OFF
+        -DBUILD_TESTS=$BUILD_TESTS_FLAG
 }
 
 build_project() {
@@ -127,7 +142,7 @@ build_project() {
             generate_msvc_project
         fi
         print_magenta "Building $BUILD_TYPE"
-        time cmake --build "$CMAKE_BUILD_DIR" --target othello_cpp --config "$BUILD_TYPE"
+        time cmake --build "$CMAKE_BUILD_DIR" --target "$BUILD_TARGET" --config "$BUILD_TYPE"
     else
         echo "Generating Ninja build..."
         if ! generate_ninja_project; then
@@ -137,7 +152,7 @@ build_project() {
         fi
         print_magenta "Building $BUILD_TYPE"
         ccache_zero_stats
-        time ninja -C "$CMAKE_BUILD_DIR" othello_cpp
+        time ninja -C "$CMAKE_BUILD_DIR" "$BUILD_TARGET"
         ccache_show_stats
     fi
     print_green "Build successful"
@@ -157,6 +172,18 @@ move_exe_to_root() {
     ./"$executable" -h || :
 }
 
+run_tests() {
+    cd "$CMAKE_BUILD_DIR"
+    print_magenta "Running tests..."
+    ctest --output-on-failure
+    print_green "Tests successful"
+}
+
 init_options "$@"
 build_project
-move_exe_to_root
+
+if [ "$BUILD_TESTS" = true ]; then
+    run_tests
+else
+    move_exe_to_root
+fi
