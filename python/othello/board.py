@@ -55,9 +55,9 @@ class Board:
         Throws AssertionError if the move is not a valid move.
         """
         start = player_move.square
-        assert (
-            self._get_square(start) == Disk.EMPTY
-        ), f"Trying to place disk to an occupied square: {start}!"
+        assert self._get_square(start) == Disk.EMPTY, (
+            f"Trying to place disk to an occupied square: {start}!"
+        )
         self._set_square(start, player_move.disk)
         self._empty_squares.remove(start)
         for square in player_move.affected_squares():
