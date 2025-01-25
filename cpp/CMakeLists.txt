@@ -137,7 +137,7 @@ target_compile_definitions(othello_cpp PRIVATE
 message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 11.1.1
+    GIT_TAG 11.1.2
 )
 FetchContent_MakeAvailable(fmt)
 
