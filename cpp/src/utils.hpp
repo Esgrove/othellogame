@@ -7,6 +7,7 @@
 
 #pragma once
 #include "colorprint.hpp"
+#include "version.hpp"
 
 #include <algorithm>  // transform
 #include <iostream>   // cout, cin
@@ -236,6 +237,18 @@ std::string to_string(const T& object)
 
 /// Calculate SHA256 hash for the given string.
 std::string calculate_sha256(const std::string& text);
+
+/// Print version string
+inline void print_version()
+{
+    fmt::print(
+        "{} {} {} {} {}\n",
+        version::APP_NAME,
+        version::VERSION_NUMBER,
+        version::TIMESTAMP,
+        version::BRANCH,
+        version::COMMIT);
+}
 
 }  // namespace othello
 
