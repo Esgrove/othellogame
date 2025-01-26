@@ -99,11 +99,18 @@ if(APPLE)
     # set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
 endif()
 
-include_directories(src)
-if(BUILD_TESTS)
-    enable_testing()
-    add_subdirectory(tests)
-endif()
+# Set version information
+set(VERSION_INFO_DEFINITIONS
+    BUILDTIME_APP_NAME="${CMAKE_PROJECT_NAME}"
+    BUILDTIME_BRANCH="${GIT_BRANCH}"
+    BUILDTIME_BUILD_NAME="${APP_BUILD_NAME}"
+    BUILDTIME_COMMIT="${GIT_HASH}"
+    BUILDTIME_DATE="${DATE}"
+    BUILDTIME_TIMESTAMP="${TIMESTAMP}"
+    BUILDTIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
+)
+
+set_property(GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS "${VERSION_INFO_DEFINITIONS}")
 
 add_executable(othello_cpp
     src/board.cpp
@@ -119,16 +126,13 @@ add_executable(othello_cpp
     src/version.hpp
 )
 
-# Include version info
-target_compile_definitions(othello_cpp PRIVATE
-    BUILDTIME_APP_NAME="${CMAKE_PROJECT_NAME}"
-    BUILDTIME_BRANCH="${GIT_BRANCH}"
-    BUILDTIME_BUILD_NAME="${APP_BUILD_NAME}"
-    BUILDTIME_COMMIT="${GIT_HASH}"
-    BUILDTIME_DATE="${DATE}"
-    BUILDTIME_TIMESTAMP="${TIMESTAMP}"
-    BUILDTIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
-)
+target_compile_definitions(othello_cpp PRIVATE ${VERSION_INFO_DEFINITIONS})
+
+include_directories(src)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
 # {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
 # https://github.com/fmtlib/fmt

@@ -17,6 +17,10 @@ add_executable(othello_tests
     ../src/utils.cpp
 )
 
+get_property(VERSION_INFO_DEFINITIONS GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS)
+
+target_compile_definitions(othello_tests PRIVATE ${VERSION_INFO_DEFINITIONS})
+
 target_link_libraries(othello_tests
     gtest_main
     fmt::fmt
