@@ -148,10 +148,8 @@ impl Player {
             moves[0].clone()
         } else {
             // Wait a bit and pick a random move
-            thread::sleep(Duration::from_millis(
-                rand::thread_rng().gen_range(1000..2000),
-            ));
-            moves[rand::thread_rng().gen_range(0..moves.len())].clone()
+            thread::sleep(Duration::from_millis(rand::rng().random_range(1000..2000)));
+            moves[rand::rng().random_range(0..moves.len())].clone()
         };
         if !self.settings.check_mode {
             println!("  {} -> {}", chosen_move.square, chosen_move.value);
