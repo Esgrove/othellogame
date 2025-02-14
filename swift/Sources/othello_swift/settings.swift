@@ -27,13 +27,13 @@ struct Settings: CustomStringConvertible {
     var description: String {
         return """
         Settings:
-          boardSize: \(boardSize)
-          autoplayMode: \(autoplayMode)
-          checkMode: \(checkMode)
-          showHelpers: \(showHelpers)
-          showLog: \(showLog)
-          testMode: \(testMode)
-          useDefaults: \(useDefaults)
+          boardSize: \(self.boardSize)
+          autoplayMode: \(self.autoplayMode)
+          checkMode: \(self.checkMode)
+          showHelpers: \(self.showHelpers)
+          showLog: \(self.showLog)
+          testMode: \(self.testMode)
+          useDefaults: \(self.useDefaults)
         """
     }
 }

@@ -67,12 +67,12 @@ struct OthelloSwift: ParsableCommand {
 
         let settings = Settings(
             boardSize: boardSize,
-            autoplayMode: autoplay || check,
-            checkMode: check,
-            showHelpers: !noHelpers,
-            showLog: log  || check,
-            testMode: test || check,
-            useDefaults: useDefaultSettings
+            autoplayMode: autoplay || self.check,
+            checkMode: self.check,
+            showHelpers: !self.noHelpers,
+            showLog: self.log || self.check,
+            testMode: self.test || self.check,
+            useDefaults: self.useDefaultSettings
         )
 
         Othello(settings).play()
