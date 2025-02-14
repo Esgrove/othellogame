@@ -2,7 +2,7 @@
 //! Interface for coloured terminal printing.
 //!
 //! Akseli Lukkarila
-//! 2019-2024
+//! 2019-2025
 
 use colored::Colorize;
 

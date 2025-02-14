@@ -26,7 +26,7 @@ update_version_information() {
         echo 'Version'
         echo 'Version information definitions'
         echo 'Akseli Lukkarila'
-        echo '2019-2024'
+        echo '2019-2025'
         echo '"""'
         echo ""
         echo "# Updated by build script, do not edit manually!"

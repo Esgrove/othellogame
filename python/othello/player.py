@@ -2,7 +2,7 @@
 Class Player
 Defines one player for Othello
 Akseli Lukkarila
-2019-2024
+2019-2025
 """
 
 import random

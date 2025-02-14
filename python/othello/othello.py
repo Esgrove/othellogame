@@ -4,7 +4,7 @@ Class Othello and main
 Play Othello (Reversi) on the command line
 https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
-2019-2024
+2019-2025
 """
 
 import hashlib

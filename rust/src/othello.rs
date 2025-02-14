@@ -3,7 +3,7 @@
 //! <https://en.wikipedia.org/wiki/Reversi>
 //!
 //! Akseli Lukkarila
-//! 2019-2024
+//! 2019-2025
 
 use std::io::{self, Write};
 

@@ -2,7 +2,7 @@
 // Utils source
 // Helper utilities for Othello game
 // Akseli Lukkarila
-// 2019-2024
+// 2019-2025
 //==========================================================
 
 #include "utils.hpp"

@@ -2,7 +2,7 @@
 Colorprint
 Color print helper
 Akseli Lukkarila
-2019-2024
+2019-2025
 """
 
 import sys
