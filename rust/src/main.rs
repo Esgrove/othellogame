@@ -11,20 +11,15 @@ mod othello;
 mod player;
 mod settings;
 mod utils;
-
-use std::env;
+mod version;
 
 use anyhow::Result;
 use clap::{arg, Parser};
 use colored::Colorize;
 use settings::Settings;
-use shadow_rs::shadow;
 
 use crate::othello::Othello;
 use crate::utils::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
-
-// Get build information
-shadow!(build);
 
 /// Command line arguments
 ///
@@ -33,10 +28,10 @@ shadow!(build);
 /// <https://docs.rs/clap/latest/clap/_derive/index.html>
 #[derive(Parser)]
 #[command(
-    author,
     about,
-    arg_required_else_help = false,
-    disable_version_flag = true
+    author,
+    disable_version_flag = true,
+    arg_required_else_help = false
 )]
 struct Args {
     /// Optional board size (4..10)
@@ -66,29 +61,23 @@ struct Args {
     #[arg(short, long)]
     test: bool,
 
-    /// Custom version flag instead of clap default
+    // Custom version flag instead of Clap default,
+    // since Clap adds package name to version output.
     #[arg(short, long, help = "Print version and exit")]
     version: bool,
 }
 
 fn main() -> Result<()> {
     // Set to 1 to display backtraces for panics for debugging
-    env::set_var("RUST_BACKTRACE", "0");
+    // std::env::set_var("RUST_BACKTRACE", "1");
 
     // Parse command line arguments using clap
     let args = Args::parse();
 
     if args.version {
-        println!(
-            "Othello Rust {} {} {} {}",
-            build::PKG_VERSION,
-            build::BUILD_TIME,
-            build::BRANCH,
-            build::SHORT_COMMIT,
-        );
+        println!("{}", version::version_string());
         return Ok(());
     }
-
     println!("{}", "OTHELLO GAME - RUST".green().bold());
 
     let board_size: usize = {
