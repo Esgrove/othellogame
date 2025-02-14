@@ -17,16 +17,20 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
 
     /** Play one round as this player.*/
     fun playOneMove(board: Board): String? {
-        println("Turn: ${disk.name()}")
+        if (!settings.checkMode) {
+            println("Turn: ${disk.name()}")
+        }
         val moves = board.possibleMoves(disk)
         if (moves.isNotEmpty()) {
             canPlay = true
-            if (isHuman && settings.showHelpers) {
+            if (isHuman && settings.showHelpers && !settings.checkMode) {
                 board.printPossibleMoves(moves)
             }
             val chosenMove = if (isHuman) getHumanMove(moves) else getComputerMove(moves)
             board.placeDisk(chosenMove)
-            board.printScore()
+            if (!settings.checkMode) {
+                board.printScore()
+            }
             roundsPlayed++
             if (!settings.testMode) {
                 Thread.sleep(1000)
@@ -34,7 +38,9 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
             return chosenMove.logEntry()
         }
         canPlay = false
-        printColor("  No moves available...", AnsiColor.YELLOW)
+        if (!settings.checkMode) {
+            printColor("  No moves available...", AnsiColor.YELLOW)
+        }
         return null
     }
 
@@ -51,15 +57,19 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
 
     /** Return move chosen by computer.*/
     private fun getComputerMove(moves: List<Move>): Move {
-        println("  Computer plays...")
+        if (!settings.checkMode) {
+            println("  Computer plays...")
+        }
         val chosenMove = if (settings.testMode) {
             moves[0]
         } else {
+            // Wait a bit and pick a random move
             Thread.sleep((random.nextInt(1000) + 1000).toLong())
             moves[random.nextInt(moves.size)]
         }
-
-        println("  ${chosenMove.square} -> ${chosenMove.value}")
+        if (!settings.checkMode) {
+            println("  ${chosenMove.square} -> ${chosenMove.value}")
+        }
         return chosenMove
     }
 
@@ -67,6 +77,7 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
     private fun getHumanMove(moves: List<Move>): Move {
         while (true) {
             val square = getSquare()
+            // Check that the chosen square is actually one of the possible moves
             val validMove = moves.find { it.square == square }
             if (validMove != null) {
                 return validMove

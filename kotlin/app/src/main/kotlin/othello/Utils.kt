@@ -84,25 +84,6 @@ data class Move(val square: Square, val value: Int, val disk: Disk, val directio
     override fun toString(): String = "Square: $square -> value: $value"
 }
 
-/** Game settings.*/
-data class Settings(
-    val boardSize: Int,
-    val autoplayMode: Boolean,
-    val useDefaults: Boolean,
-    val showHelpers: Boolean,
-    val showLog: Boolean,
-    val testMode: Boolean,
-)
-
-/** Player settings.*/
-data class PlayerSettings(val showHelpers: Boolean, val testMode: Boolean)
-
-/** Get player setting values from overall game settings.*/
-fun Settings.toPlayerSettings(): PlayerSettings = PlayerSettings(
-    showHelpers = this.showHelpers,
-    testMode = this.testMode,
-)
-
 /** Returns the print colour for the given Disk.*/
 fun Disk.diskColor(): AnsiColor = when (this) {
     Disk.Empty -> AnsiColor.WHITE

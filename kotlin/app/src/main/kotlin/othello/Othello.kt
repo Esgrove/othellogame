@@ -33,7 +33,6 @@ class Othello(private val settings: Settings) {
             roundsPlayed = 0
             gameLog.clear()
         }
-
         if (settings.autoplayMode) {
             // Computer plays both
             playerBlack.setHuman(false)
@@ -48,44 +47,67 @@ class Othello(private val settings: Settings) {
                 playerBlack.setHuman(false)
             }
         }
-
-        printBold("\nPlayers:")
-        printStatus()
+        if (!settings.checkMode) {
+            printBold("\nPlayers:")
+            printStatus()
+        }
     }
 
     /** Keep making moves until both players can't make a move any more.*/
     private fun gameLoop() {
         while (board.canPlay() && (playerBlack.canPlay || playerWhite.canPlay)) {
             roundsPlayed++
-            printBold("\n=========== ROUND: $roundsPlayed ===========")
+            printRoundHeader()
             for (player in listOf(playerBlack, playerWhite)) {
                 val result = player.playOneMove(board)
                 if (result != null) {
                     gameLog.add("$result;${board.logEntry()}")
                 }
-                println("--------------------------------")
+                printDivider()
             }
         }
         gamesPlayed++
+        printGameEndFooter()
+    }
+
+    private fun formatGameLog(): String {
+        return gameLog
+            .mapIndexed { index, line -> String.format("%02d: %s", index + 1, line) }
+            .joinToString("\n")
+    }
+
+    private fun printRoundHeader() {
+        if (!settings.checkMode) {
+            printBold("\n=========== ROUND: $roundsPlayed ===========")
+        }
+    }
+
+    private fun printDivider() {
+        if (!settings.checkMode) {
+            println("--------------------------------")
+        }
+    }
+
+    private fun printGameEndFooter() {
+        if (!settings.checkMode) {
+            printBold("\n================================")
+            printColor("The game is finished!\n", AnsiColor.GREEN)
+        }
     }
 
     /** Print game log which shows all moves made and the game board state after each move.*/
     private fun printLog() {
-        val formattedLog = gameLog
-            .mapIndexed { index, line -> String.format("%02d: %s", index + 1, line) }
-            .joinToString("\n")
-
+        val formattedLog = formatGameLog()
+        if (!settings.checkMode) {
+            printBold("Game log:", AnsiColor.YELLOW)
+            println(formattedLog)
+        }
         val hexHash = calculateSha256(formattedLog)
-
-        printBold("Game log:", AnsiColor.YELLOW)
-        println(formattedLog)
         println(hexHash)
     }
 
     /** Print ending status and winner info.*/
     private fun printResult() {
-        printBold("\n================================")
-        printColor("The game is finished!", AnsiColor.GREEN)
         printBold("Result:")
         printStatus()
         println()

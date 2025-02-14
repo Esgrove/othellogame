@@ -15,11 +15,12 @@ class OthelloKotlin : CliktCommand() {
         "size",
         help = "Optional board size ($MIN_BOARD_SIZE..$MAX_BOARD_SIZE)",
     ).int().optional()
-    private val autoplay by option("-a", "--autoplay", help = "Enable autoplay mode").flag()
+    private val autoplay by option("-a", "--autoplay", help = "Enable autoplay mode with both players controlled by computer").flag()
+    private val check by option("-c", "--check", help = " Only print hash to check the result (implies `autoplay` and `test`)").flag()
     private val default by option("-d", "--default", help = "Play with default settings").flag()
-    private val log by option("-l", "--log", help = "Show log after a game").flag()
+    private val log by option("-l", "--log", help = "Show game log at the end").flag()
     private val noHelpers by option("-n", "--no-helpers", help = "Hide disk placement hints").flag()
-    private val test by option("-t", "--test", help = "Enable test mode").flag()
+    private val test by option("-t", "--test", help = "Enable test mode with deterministic computer moves").flag()
     private val version by option("-v", "--version", help = "Print version and exit").flag()
 
     override fun help(context: Context) =
@@ -49,11 +50,12 @@ class OthelloKotlin : CliktCommand() {
 
         val settings = Settings(
             boardSize,
-            autoplayMode = autoplay,
-            useDefaults = default,
+            autoplayMode = autoplay || check,
+            checkMode = check,
             showHelpers = !noHelpers,
-            showLog = log,
-            testMode = test,
+            showLog = log || check,
+            testMode = test || check,
+            useDefaults = default,
         )
 
         val game = Othello(settings)
