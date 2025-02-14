@@ -150,15 +150,16 @@ TEST(disk, opponent)
 TEST(calculate_sha256, simple)
 {
     EXPECT_EQ(
-        calculate_sha256("test"),
-        "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
+        calculate_sha256("test"), "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+    );
 }
 
 TEST(calculate_sha256, log_line)
 {
     EXPECT_EQ(
         calculate_sha256("01: B:(0,1),1;____BBB__BW_____"),
-        "d087cd890b81b7153cc870fba7372396e91cdcd4b6d13b82bbc88b5a4eb889d1");
+        "d087cd890b81b7153cc870fba7372396e91cdcd4b6d13b82bbc88b5a4eb889d1"
+    );
 }
 
 TEST(calculate_sha256, full_log)
@@ -179,6 +180,7 @@ TEST(calculate_sha256, full_log)
 
     EXPECT_EQ(
         calculate_sha256(test_log),
-        "ad4679949110ed7997aa1bf09441a7eb491b498189c03685ffdd6ddbb70e3c22");
+        "ad4679949110ed7997aa1bf09441a7eb491b498189c03685ffdd6ddbb70e3c22"
+    );
 }
 }  // namespace othello

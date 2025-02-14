@@ -6,4 +6,4 @@ set -eo pipefail
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 cd "$DIR"
-clang-format --verbose -i -style=file:".clang-format" "$DIR"/src/*.cpp "$DIR"/src/*.hpp
+clang-format --verbose -i -style=file:".clang-format" $(find "$DIR/src" "$DIR/tests" -type f \( -name "*.cpp" -o -name "*.hpp" \))
