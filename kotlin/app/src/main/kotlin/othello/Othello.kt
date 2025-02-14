@@ -70,11 +70,9 @@ class Othello(private val settings: Settings) {
         printGameEndFooter()
     }
 
-    private fun formatGameLog(): String {
-        return gameLog
-            .mapIndexed { index, line -> String.format("%02d: %s", index + 1, line) }
-            .joinToString("\n")
-    }
+    private fun formatGameLog(): String = gameLog
+        .mapIndexed { index, line -> String.format("%02d: %s", index + 1, line) }
+        .joinToString("\n")
 
     private fun printRoundHeader() {
         if (!settings.checkMode) {
