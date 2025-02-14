@@ -21,10 +21,10 @@ try:
         MAX_BOARD_SIZE,
         MIN_BOARD_SIZE,
         Disk,
-        Settings,
         clamp,
         version_info,
     )
+    from othello.settings import Settings
 except ModuleNotFoundError:
     from board import Board
     from colorprint import Color, print_bold, print_error, print_warn
@@ -34,10 +34,10 @@ except ModuleNotFoundError:
         MAX_BOARD_SIZE,
         MIN_BOARD_SIZE,
         Disk,
-        Settings,
         clamp,
         version_info,
     )
+    from settings import Settings
 
 
 class Othello:
