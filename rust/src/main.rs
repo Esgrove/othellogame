@@ -30,8 +30,8 @@ use crate::utils::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 #[command(
     about,
     author,
-    disable_version_flag = true,
-    arg_required_else_help = false
+    arg_required_else_help = false,
+    disable_version_flag = true
 )]
 struct Args {
     /// Optional board size (4..10)
