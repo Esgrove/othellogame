@@ -94,7 +94,7 @@ impl Player {
             } else {
                 self.get_computer_move(&moves)
             };
-            board.place_disk(&chosen_move);
+            board.place_disk(chosen_move);
             if !self.settings.check_mode {
                 board.print_score();
             }
@@ -140,16 +140,20 @@ impl Player {
     }
 
     /// Return move chosen by computer.
-    fn get_computer_move(&self, moves: &[Move]) -> Move {
+    ///
+    /// Lifetime annotation `<'a>` simply tells that the returned reference to a `Move`
+    /// needs to live as long as the list of moves given as input.
+    /// This way we avoid an unnecessary clone since the return value is not consumed by the caller.
+    fn get_computer_move<'a>(&self, moves: &'a [Move]) -> &'a Move {
         if !self.settings.check_mode {
             println!("  Computer plays...");
         }
         let chosen_move = if self.settings.test_mode {
-            moves[0].clone()
+            &moves[0]
         } else {
             // Wait a bit and pick a random move
             thread::sleep(Duration::from_millis(rand::rng().random_range(1000..2000)));
-            moves[rand::rng().random_range(0..moves.len())].clone()
+            &moves[rand::rng().random_range(0..moves.len())]
         };
         if !self.settings.check_mode {
             println!("  {} -> {}", chosen_move.square, chosen_move.value);
@@ -158,12 +162,16 @@ impl Player {
     }
 
     /// Return move chosen by a human player.
-    fn get_human_move(&self, moves: &[Move]) -> Move {
+    ///
+    /// Lifetime annotation `<'a>` simply tells that the returned reference to a `Move`
+    /// needs to live as long as the list of moves given as input.
+    /// This way we avoid an unnecessary clone since the return value is not consumed by the caller.
+    fn get_human_move<'a>(&self, moves: &'a [Move]) -> &'a Move {
         loop {
             let square = Self::get_square();
             // Check that the chosen square is actually one of the possible moves
             if let Some(valid_move) = moves.iter().find(|m| m.square == square) {
-                return valid_move.clone();
+                return valid_move;
             }
             print_error(&format!(
                 "  Can't place a {} disk in square {square}!",
