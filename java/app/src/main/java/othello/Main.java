@@ -8,6 +8,9 @@ import picocli.CommandLine.Parameters;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 
+import static othello.ColorPrint.printBold;
+import static othello.ColorPrint.printError;
+
 @Command(name = "othello_java",
     mixinStandardHelpOptions = true,
     version = "Othello Java 1.0",
@@ -38,29 +41,23 @@ public class Main implements Callable<Integer> {
     @Option(names = {"-t", "--test"}, description = "Enable test mode")
     private boolean testMode;
 
-    //@Option(names = {"-v", "--version"}, versionHelp = true, description = "Print version and exit")
-    //private boolean version;
-
     @Override
     public Integer call() {
-        System.out.println("\u001B[32m\u001B[1mOTHELLO GAME - JAVA\u001B[0m");
+        printBold("OTHELLO GAME - JAVA", AnsiColor.GREEN);
 
-        if (boardSize == null) {
-            if (autoplay || useDefaults) {
-                boardSize = DEFAULT_BOARD_SIZE;
-                System.out.println("Using default board size: " + boardSize);
-            } else {
-                boardSize = getBoardSize();
+        // Try to read board size from command line args
+        if (boardSize != null) {
+            if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
+                printError("Unsupported board size: " + boardSize);
+                return 1;
             }
-        }
+            System.out.println("Using board size: " + boardSize);
 
-        // Validate board size
-        if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
-            System.err.println("Error: Unsupported board size: " + boardSize);
-            return 1;
+        } else if (autoplay || useDefaults) {
+            boardSize = DEFAULT_BOARD_SIZE;
+        } else {
+            boardSize = getBoardSize();
         }
-
-        System.out.println("Using board size: " + boardSize);
 
         Settings settings = new Settings(
             boardSize,
