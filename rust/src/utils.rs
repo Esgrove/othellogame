@@ -1,5 +1,5 @@
 //! # Utils
-//! Helper utilities for Othello game
+//! Helper utilities
 //!
 //! Akseli Lukkarila
 //! 2019-2025
@@ -11,8 +11,6 @@ use std::ops::{Add, AddAssign};
 
 use colored::{Color, ColoredString, Colorize};
 use sha2::{Digest, Sha256};
-
-use crate::player::PlayerSettings;
 
 pub const MIN_BOARD_SIZE: usize = 4;
 pub const MAX_BOARD_SIZE: usize = 10;
@@ -47,43 +45,6 @@ pub struct Move {
     pub disk: Disk,
     pub value: usize,
     pub directions: Vec<(Step, usize)>,
-}
-
-/// Game settings
-#[derive(Debug, Copy, Clone)]
-pub struct Settings {
-    pub board_size: usize,
-    pub autoplay_mode: bool,
-    pub check_mode: bool,
-    pub show_helpers: bool,
-    pub show_log: bool,
-    pub test_mode: bool,
-    pub use_defaults: bool,
-}
-
-impl Settings {
-    /// Get player setting values from overall game settings.
-    pub const fn to_player_settings(self) -> PlayerSettings {
-        PlayerSettings {
-            show_helpers: self.show_helpers,
-            check_mode: self.check_mode,
-            test_mode: self.test_mode,
-        }
-    }
-}
-
-impl Default for Settings {
-    fn default() -> Self {
-        Self {
-            board_size: 8,
-            check_mode: false,
-            test_mode: false,
-            autoplay_mode: false,
-            use_defaults: false,
-            show_helpers: true,
-            show_log: false,
-        }
-    }
 }
 
 impl Disk {

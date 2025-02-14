@@ -112,12 +112,12 @@ impl Player {
         self.rounds_played = 0;
     }
 
-    /// Set the player as human or computer controlled.
+    /// Returns true if player is controlled by a human player.
     pub fn human(&self) -> bool {
         self.player_type.human()
     }
 
-    /// Set the player as human or computer controlled.
+    /// Returns true if player is controlled by computer.
     #[allow(unused)]
     pub fn computer(&self) -> bool {
         self.player_type.computer()

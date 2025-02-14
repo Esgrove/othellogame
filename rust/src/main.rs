@@ -9,6 +9,7 @@ mod board;
 mod colorprint;
 mod othello;
 mod player;
+mod settings;
 mod utils;
 
 use std::env;
@@ -16,10 +17,11 @@ use std::env;
 use anyhow::Result;
 use clap::{arg, Parser};
 use colored::Colorize;
+use settings::Settings;
 use shadow_rs::shadow;
 
 use crate::othello::Othello;
-use crate::utils::{Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+use crate::utils::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 // Get build information
 shadow!(build);
@@ -110,7 +112,7 @@ fn main() -> Result<()> {
         autoplay_mode: args.autoplay || args.check,
         check_mode: args.check,
         show_helpers: !args.no_helpers,
-        show_log: args.log,
+        show_log: args.log || args.check,
         test_mode: args.test || args.check,
         use_defaults: args.default,
     };

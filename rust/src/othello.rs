@@ -12,8 +12,9 @@ use colored::Colorize;
 use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::player::Player;
+use crate::settings::Settings;
 use crate::utils;
-use crate::utils::{Disk, Settings, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+use crate::utils::{Disk, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 /// Gameplay loop and main logic.
 pub struct Othello {
@@ -46,7 +47,7 @@ impl Othello {
             self.init_game();
             self.game_loop();
             self.print_result();
-            if self.settings.show_log || self.settings.check_mode {
+            if self.settings.show_log {
                 self.print_log();
             }
             if self.settings.autoplay_mode
@@ -67,7 +68,6 @@ impl Othello {
             self.rounds_played = 0;
             self.game_log.clear();
         }
-
         if self.settings.autoplay_mode {
             // Computer plays both
             self.player_white.set_computer();
@@ -91,12 +91,7 @@ impl Othello {
     fn game_loop(&mut self) {
         while self.board.can_play() && (self.player_black.can_play || self.player_white.can_play) {
             self.rounds_played += 1;
-            if !self.settings.check_mode {
-                println!(
-                    "{}",
-                    format!("\n=========== ROUND: {} ===========", self.rounds_played).bold()
-                );
-            }
+            self.print_round_header();
             for player in &mut [&mut self.player_black, &mut self.player_white] {
                 if let Some(result) = player.play_one_move(&mut self.board) {
                     self.game_log
@@ -108,6 +103,28 @@ impl Othello {
             }
         }
         self.games_played += 1;
+        self.print_game_end_footer();
+    }
+
+    fn format_game_log(&self) -> String {
+        self.game_log
+            .iter()
+            .enumerate()
+            .map(|(index, line)| format!("{:02}: {}", index + 1, line))
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
+
+    fn print_round_header(&self) {
+        if !self.settings.check_mode {
+            println!(
+                "{}",
+                format!("\n=========== ROUND: {} ===========", self.rounds_played).bold()
+            );
+        }
+    }
+
+    fn print_game_end_footer(&self) {
         if !self.settings.check_mode {
             println!("{}", "\n================================".bold());
             println!("{}", "The game is finished!\n".green().bold());
@@ -116,20 +133,12 @@ impl Othello {
 
     /// Print game log which shows all moves made and the game board state after each move.
     fn print_log(&self) {
-        let formatted_log = self
-            .game_log
-            .iter()
-            .enumerate()
-            .map(|(index, line)| format!("{:02}: {}", index + 1, line))
-            .collect::<Vec<_>>()
-            .join("\n");
-
-        let hex_hash = utils::calculate_sha256(&formatted_log);
-
+        let formatted_log = self.format_game_log();
         if !self.settings.check_mode {
             println!("{}", "Game log:".yellow().bold());
             println!("{formatted_log}");
         }
+        let hex_hash = utils::calculate_sha256(&formatted_log);
         println!("{hex_hash}");
     }
 
