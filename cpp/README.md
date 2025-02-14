@@ -78,4 +78,4 @@ Add `C:\Program Files\Git\bin` to the system PATH environment variable.
 
 * Use C++20 modules
 * Replace fmt with C++20/23 standard library methods (`std::format` / `std::print`)
-* Write tests
+* Write more tests

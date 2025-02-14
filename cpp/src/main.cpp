@@ -27,15 +27,17 @@ inline cxxopts::Options cli_arguments()
             "Optional board size ({}..{})", othello::MIN_BOARD_SIZE, othello::MAX_BOARD_SIZE),
         cxxopts::value<size_t>());
 
-    options.add_options("Optional")("a,autoplay", "Enable autoplay mode", cxxopts::value<bool>())(
-        "d,default", "Play with default settings", cxxopts::value<bool>())(
-        "l,log", "Show log after a game", cxxopts::value<bool>())(
-        "n,no-helpers", "Hide disk placement hints", cxxopts::value<bool>())(
-        "t,test", "Enable test mode", cxxopts::value<bool>())(
-        "c,check", "Only print hash to check the result", cxxopts::value<bool>())(
-        "h,help", "Print help and exit", cxxopts::value<bool>())(
-        "v,version", "Print version and exit", cxxopts::value<bool>());
-
+    // clang-format off
+    options.add_options("Optional")
+        ("a,autoplay", "Enable autoplay mode", cxxopts::value<bool>())
+        ("c,check", "Only print hash to check the result", cxxopts::value<bool>())
+        ("d,default", "Play with default settings", cxxopts::value<bool>())
+        ("h,help", "Print help and exit", cxxopts::value<bool>())
+        ("l,log", "Show log after a game", cxxopts::value<bool>())
+        ("n,no-helpers", "Hide disk placement hints", cxxopts::value<bool>())
+        ("t,test", "Enable test mode", cxxopts::value<bool>())
+        ("v,version", "Print version and exit", cxxopts::value<bool>());
+    // clang-format on
     options.parse_positional({"size"});
 
     return options;

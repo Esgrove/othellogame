@@ -7,6 +7,7 @@
 
 #pragma once
 #include "board.hpp"
+#include "settings.hpp"
 
 #include <random>
 

@@ -9,7 +9,7 @@
 #include "utils.hpp"
 
 #include <array>
-#include <optional>  // std::optional
+#include <optional>
 #include <set>
 #include <vector>
 

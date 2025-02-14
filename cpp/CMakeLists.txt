@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 project("Othello C++"
-    VERSION 2.9.2
+    VERSION 2.9.3
     DESCRIPTION "A simple Othello CLI game implementation in C++"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -121,6 +121,7 @@ add_executable(othello_cpp
     src/othello.hpp
     src/player.cpp
     src/player.hpp
+    src/settings.hpp
     src/utils.cpp
     src/utils.hpp
     src/version.hpp
@@ -165,7 +166,7 @@ if(result)
     message(STATUS "Using LTO")
     set_target_properties(othello_cpp PROPERTIES INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
 else()
-    message(WARNING "IPO is not supported: ${output}")
+    message(STATUS "IPO is not supported: ${output}")
 endif()
 
 if(MSVC)
@@ -181,6 +182,5 @@ endif()
 
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
 message(STATUS "CMAKE_CXX_COMPILER_LAUNCHER: ${CMAKE_CXX_COMPILER_LAUNCHER}")
-
 message(STATUS "CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
 message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
