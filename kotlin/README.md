@@ -9,16 +9,17 @@ Uses [Clikt](https://github.com/ajalt/clikt) for the CLI.
 ```console
 Usage: othello-kotlin [<options>] [<size>]
 
-  A simple Othello CLI game implementation.
+  A simple Othello CLI game implementation in Kotlin
 
   java -jar othello_kotlin.jar
 
 Options:
-  -a, --autoplay    Enable autoplay mode
+  -a, --autoplay    Enable autoplay mode with computer control
+  -c, --check       Autoplay and only print result
   -d, --default     Play with default settings
-  -l, --log         Show log after a game
+  -l, --log         Show game log at the end
   -n, --no-helpers  Hide disk placement hints
-  -t, --test        Enable test mode
+  -t, --test        Enable test mode with deterministic computer moves
   -v, --version     Print version and exit
   -h, --help        Show this message and exit
 

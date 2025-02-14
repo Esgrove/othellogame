@@ -164,7 +164,10 @@ class Othello:
 
 @click.command(
     name="Othello",
-    help="A simple Othello CLI game implementation in Python",
+    help=(
+        "A simple Othello CLI game implementation in Python\n\n"
+        f"[SIZE]  Optional board size ({MIN_BOARD_SIZE}..{MAX_BOARD_SIZE})"
+    ),
     context_settings={"help_option_names": ["-h", "--help"]},
 )
 @click.argument(
@@ -179,13 +182,13 @@ class Othello:
     "-a",
     "--autoplay",
     is_flag=True,
-    help="Enable autoplay mode",
+    help="Enable autoplay mode with computer control",
 )
 @click.option(
     "-c",
     "--check",
     is_flag=True,
-    help="Only print hash to check the result",
+    help="Autoplay and only print result",
 )
 @click.option(
     "-d",
@@ -197,7 +200,7 @@ class Othello:
     "-l",
     "--log",
     is_flag=True,
-    help="Show log after a game",
+    help="Show game log at the end",
 )
 @click.option(
     "-n",

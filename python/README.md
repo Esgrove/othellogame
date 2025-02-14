@@ -6,21 +6,21 @@
 ## Usage
 
 ```console
-usage: Othello Python [options] [size]
+Usage: othello.py [OPTIONS] [SIZE]
 
-A simple Othello CLI game implementation.
+  A simple Othello CLI game implementation in Python
 
-positional arguments:
-  size              Optional board size (4..10)
+  [SIZE]  Optional board size (4..10)
 
-options:
-  -h, --help        Print help and exit
-  -a, --autoplay    Enable autoplay mode
+Options:
+  -a, --autoplay    Enable autoplay mode with computer control
+  -c, --check       Autoplay and only print result
   -d, --default     Play with default settings
-  -l, --log         Show log after a game
+  -l, --log         Show game log at the end
   -n, --no-helpers  Hide disk placement hints
-  -t, --test        Enable test mode
+  -t, --test        Enable test mode with deterministic computer moves
   -v, --version     Print version and exit
+  -h, --help        Show this message and exit.
 ```
 
 ## Dependencies
@@ -80,3 +80,8 @@ Shortcut:
 ```shell
 ./test.sh
 ```
+
+## TODO
+
+- Swap from Poetry to uv
+- Add more test cases
