@@ -19,18 +19,19 @@ enum class PlayerType { Human, Computer };
 class Player
 {
 public:
-    explicit Player(const Disk disk, const PlayerSettings player_settings)
-        : disk(disk)
-        , settings(player_settings)
+    explicit Player(const Disk disk, const PlayerSettings player_settings) :
+        disk(disk),
+        settings(player_settings)
     {}
 
     explicit Player(
         const Disk disk,
         const PlayerSettings player_settings,
-        const PlayerType player_type)
-        : disk(disk)
-        , settings(player_settings)
-        , player_type(player_type)
+        const PlayerType player_type
+    ) :
+        disk(disk),
+        settings(player_settings),
+        player_type(player_type)
     {}
 
     /// Shorthand to initialize a new player for black disks.

@@ -55,7 +55,8 @@ void Board::place_disk(const Move& player_move)
     auto start = player_move.square;
     if (get_square(start) != Disk::empty) {
         throw std::invalid_argument(
-            fmt::format("Trying to place disk to an occupied square {}!", start));
+            fmt::format("Trying to place disk to an occupied square {}!", start)
+        );
     }
     set_square(start, player_move.disk);
     empty_squares.erase(start);
@@ -106,8 +107,9 @@ void Board::print_possible_moves(const std::vector<Move>& moves)
     print_yellow(fmt::format("  Possible moves ({}):\n", std::to_string(moves.size())));
     // Convert board from Disk enums to strings
     std::vector<std::string> formatted_board(board.size());
-    std::ranges::transform(
-        board, formatted_board.begin(), [&](const Disk& disk) { return board_char(disk); });
+    std::ranges::transform(board, formatted_board.begin(), [&](const Disk& disk) {
+        return board_char(disk);
+    });
     // Add possible moves to board
     for (const Move& move : moves) {
         const auto index = square_index(move.square);
@@ -137,7 +139,8 @@ void Board::print_score() const
     fmt::print(
         "Score: {} | {}\n",
         get_color(std::to_string(black), disk_color(Disk::black)),
-        get_color(std::to_string(white), disk_color(Disk::white)));
+        get_color(std::to_string(white), disk_color(Disk::white))
+    );
 }
 
 /// Returns the winning disk colour. Empty indicates a draw.
@@ -160,7 +163,8 @@ std::string Board::log_entry() const
         std::string {},
         [](const std::string& accumulator, const Disk& disk) {
             return accumulator + board_char(disk, false);
-        });
+        }
+    );
 }
 
 /// Check that the given coordinates are valid (inside the board).

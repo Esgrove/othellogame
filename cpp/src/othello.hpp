@@ -25,7 +25,8 @@ private:
     static bool get_answer(
         const std::string& question,
         const std::string& yes = "y",
-        const std::string& no = "n");
+        const std::string& no = "n"
+    );
 
     void init_game();
     void game_loop();

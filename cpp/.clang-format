@@ -3,7 +3,7 @@
 ---
 BasedOnStyle: WebKit
 AccessModifierOffset: -4
-AlignAfterOpenBracket: AlwaysBreak
+AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveAssignments: None
 AlignConsecutiveDeclarations: None
 AlignEscapedNewlines: DontAlign
@@ -38,9 +38,9 @@ BraceWrapping:
     SplitEmptyRecord: false
     SplitEmptyNamespace: false
 BreakBeforeTernaryOperators: true
-BreakConstructorInitializers: BeforeComma
+BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
-BreakStringLiterals: false
+BreakStringLiterals: true
 ColumnLimit: 100
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true

@@ -31,7 +31,8 @@ std::vector<Square> Move::affected_squares() const
         this->directions.begin(),
         this->directions.end(),
         size_t {0},
-        [](size_t sum, const auto& dir) { return sum + dir.second; });
+        [](size_t sum, const auto& dir) { return sum + dir.second; }
+    );
 
     std::vector<Square> paths(total_size);
 

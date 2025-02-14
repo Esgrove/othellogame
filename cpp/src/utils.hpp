@@ -97,11 +97,12 @@ struct Move {
         const Square square,
         const Disk disk,
         const size_t value,
-        std::vector<std::pair<Step, size_t>> directions)
-        : square(square)
-        , disk(disk)
-        , value(value)
-        , directions(std::move(directions))
+        std::vector<std::pair<Step, size_t>> directions
+    ) :
+        square(square),
+        disk(disk),
+        value(value),
+        directions(std::move(directions))
     {}
 
     [[nodiscard]] std::string log_entry() const;
@@ -187,7 +188,8 @@ inline void print_version()
         version::VERSION_NUMBER,
         version::TIMESTAMP,
         version::BRANCH,
-        version::COMMIT);
+        version::COMMIT
+    );
 }
 
 }  // namespace othello

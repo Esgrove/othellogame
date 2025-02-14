@@ -123,7 +123,8 @@ Move Player::get_human_move(const std::vector<Move>& moves) const
             return *move;
         }
         print_error(
-            fmt::format("  Can't place a {} disk in square {}!\n", disk_string(disk), square));
+            fmt::format("  Can't place a {} disk in square {}!\n", disk_string(disk), square)
+        );
     }
 }
 
@@ -165,6 +166,7 @@ std::ostream& operator<<(std::ostream& out, Player& player)
                "{} | {} | Moves: {}",
                disk_string(player.disk),
                player.type_string(),
-               player.rounds_played);
+               player.rounds_played
+           );
 }
 }  // namespace othello

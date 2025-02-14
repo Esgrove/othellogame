@@ -18,11 +18,11 @@
 namespace othello
 {
 
-Othello::Othello(const Settings settings)
-    : board(Board(settings.board_size))
-    , settings(settings)
-    , player_black(Player::black(settings.to_player_settings()))
-    , player_white(Player::white(settings.to_player_settings()))
+Othello::Othello(const Settings settings) :
+    board(Board(settings.board_size)),
+    settings(settings),
+    player_black(Player::black(settings.to_player_settings())),
+    player_white(Player::white(settings.to_player_settings()))
 {}
 
 /// Play one full game of Othello.
@@ -32,7 +32,7 @@ void Othello::play()
         init_game();
         game_loop();
         print_result();
-        if (this->settings.show_log || this->settings.check_mode) {
+        if (this->settings.show_log) {
             print_log();
         }
         if (this->settings.autoplay_mode || !get_answer("Would you like to play again")) {
@@ -55,8 +55,8 @@ void Othello::init_game()
         // Computer plays both
         player_black.set_computer();
         player_white.set_computer();
-    } else if (
-        !this->settings.use_defaults && get_answer("Would you like to play against the computer"))
+    } else if (!this->settings.use_defaults
+               && get_answer("Would you like to play against the computer"))
     {
         if (get_answer("Would you like to play as black or white", "b", "w")) {
             player_white.set_computer();
@@ -147,8 +147,9 @@ bool Othello::get_answer(const std::string& question, const std::string& yes, co
     fmt::print("{} ({}/{})? ", question, yes, no);
     std::string input;
     std::cin >> input;
-    std::ranges::transform(
-        input, input.begin(), [](const unsigned char c) { return std::tolower(c); });
+    std::ranges::transform(input, input.begin(), [](const unsigned char c) {
+        return std::tolower(c);
+    });
     return input == yes;
 }
 
@@ -162,7 +163,8 @@ size_t Othello::get_board_size()
         const size_t size = std::stoi(input);
         if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
             print_warn(fmt::format(
-                "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE));
+                "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE
+            ));
         }
         return std::clamp(size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
     } catch (const std::exception&) {

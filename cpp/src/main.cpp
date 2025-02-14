@@ -19,13 +19,16 @@ inline cxxopts::Options cli_arguments()
     options.positional_help(fmt::format(
         "[SIZE]\n\nArguments:\n  [SIZE]            Optional board size ({}..{})",
         othello::MIN_BOARD_SIZE,
-        othello::MAX_BOARD_SIZE));
+        othello::MAX_BOARD_SIZE
+    ));
 
     options.add_options("Positional")(
         "size",
         fmt::format(
-            "Optional board size ({}..{})", othello::MIN_BOARD_SIZE, othello::MAX_BOARD_SIZE),
-        cxxopts::value<size_t>());
+            "Optional board size ({}..{})", othello::MIN_BOARD_SIZE, othello::MAX_BOARD_SIZE
+        ),
+        cxxopts::value<size_t>()
+    );
 
     // clang-format off
     options.add_options("Optional")
@@ -122,9 +125,10 @@ int main(const int argc, const char* argv[])
             autoplay || check_mode,
             check_mode,
             show_helpers,
-            show_log,
+            show_log || check_mode,
             test_mode || check_mode,
-            use_defaults);
+            use_defaults
+        );
 
         othello::Othello(settings).play();
     } catch (const cxxopts::exceptions::exception& e) {

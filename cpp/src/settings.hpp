@@ -11,10 +11,10 @@ namespace othello
 {
 /// Player settings.
 struct PlayerSettings {
-    explicit PlayerSettings(const bool show_helpers, const bool check_mode, const bool test_mode)
-        : show_helpers(show_helpers)
-        , check_mode(check_mode)
-        , test_mode(test_mode)
+    explicit PlayerSettings(const bool show_helpers, const bool check_mode, const bool test_mode) :
+        show_helpers(show_helpers),
+        check_mode(check_mode),
+        test_mode(test_mode)
     {}
 
     PlayerSettings() : show_helpers(true), check_mode(false), test_mode(false) {}
@@ -33,24 +33,25 @@ struct Settings {
         const bool show_helpers,
         const bool show_log,
         const bool test_mode,
-        const bool use_defaults)
-        : board_size(board_size)
-        , autoplay_mode(autoplay_mode)
-        , check_mode(check_mode)
-        , show_helpers(show_helpers)
-        , show_log(show_log)
-        , test_mode(test_mode)
-        , use_defaults(use_defaults)
+        const bool use_defaults
+    ) :
+        board_size(board_size),
+        autoplay_mode(autoplay_mode),
+        check_mode(check_mode),
+        show_helpers(show_helpers),
+        show_log(show_log),
+        test_mode(test_mode),
+        use_defaults(use_defaults)
     {}
 
-    Settings()
-        : board_size(8)
-        , autoplay_mode(false)
-        , check_mode(false)
-        , show_helpers(true)
-        , show_log(false)
-        , test_mode(false)
-        , use_defaults(false)
+    Settings() :
+        board_size(8),
+        autoplay_mode(false),
+        check_mode(false),
+        show_helpers(true),
+        show_log(false),
+        test_mode(false),
+        use_defaults(false)
     {}
 
     /// Get player setting values from overall game settings.
