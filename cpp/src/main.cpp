@@ -32,14 +32,14 @@ inline cxxopts::Options cli_arguments()
 
     // clang-format off
     options.add_options("Optional")
-        ("a,autoplay", "Enable autoplay mode", cxxopts::value<bool>())
-        ("c,check", "Only print hash to check the result", cxxopts::value<bool>())
+        ("a,autoplay", "Enable autoplay mode with computer control", cxxopts::value<bool>())
+        ("c,check", "Autoplay and only print result", cxxopts::value<bool>())
         ("d,default", "Play with default settings", cxxopts::value<bool>())
-        ("h,help", "Print help and exit", cxxopts::value<bool>())
-        ("l,log", "Show log after a game", cxxopts::value<bool>())
+        ("l,log", "Show game log at the end", cxxopts::value<bool>())
         ("n,no-helpers", "Hide disk placement hints", cxxopts::value<bool>())
-        ("t,test", "Enable test mode", cxxopts::value<bool>())
-        ("v,version", "Print version and exit", cxxopts::value<bool>());
+        ("t,test", "Enable test mode with deterministic computer moves", cxxopts::value<bool>())
+        ("v,version", "Print version and exit", cxxopts::value<bool>())
+        ("h,help", "Print help and exit", cxxopts::value<bool>());
     // clang-format on
     options.parse_positional({"size"});
 

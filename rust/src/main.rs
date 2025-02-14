@@ -37,11 +37,11 @@ struct Args {
     /// Optional board size (4..10)
     size: Option<usize>,
 
-    /// Enable autoplay mode with both players controlled by computer
+    /// Enable autoplay mode with computer control
     #[arg(short, long, conflicts_with = "default")]
     autoplay: bool,
 
-    /// Only print hash to check the result (implies `autoplay` and `test`)
+    /// Autoplay and only print result
     #[arg(short, long)]
     check: bool,
 
