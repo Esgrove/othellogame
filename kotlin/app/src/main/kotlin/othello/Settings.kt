@@ -5,20 +5,20 @@ data class Settings(
     val boardSize: Int,
     val autoplayMode: Boolean,
     val checkMode: Boolean,
-    val useDefaults: Boolean,
     val showHelpers: Boolean,
     val showLog: Boolean,
     val testMode: Boolean,
+    val useDefaults: Boolean,
 ) {
     override fun toString(): String = """
             Settings:
               boardSize: $boardSize
               autoplayMode: $autoplayMode
               checkMode: $checkMode
-              useDefaults: $useDefaults
               showHelpers: $showHelpers
               showLog: $showLog
               testMode: $testMode
+              useDefaults: $useDefaults
     """.trimIndent()
 }
 
