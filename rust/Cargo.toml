@@ -2,7 +2,7 @@
 
 [package]
 name = "othello_rust"
-version = "1.9.1"
+version = "1.9.2"
 authors = ["Esgrove <esgrove@outlook.com>"]
 description = "A simple Othello CLI game implementation in Rust"
 edition = "2021"
