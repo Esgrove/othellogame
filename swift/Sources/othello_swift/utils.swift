@@ -117,33 +117,6 @@ struct Move {
     }
 }
 
-/// Game settings.
-struct Settings {
-    var boardSize: Int
-    var autoplayMode: Bool
-    var checkMode: Bool
-    var useDefaults: Bool
-    var showHelpers: Bool
-    var showLog: Bool
-    var testMode: Bool
-
-    // Get player setting values from overall game settings.
-    func toPlayerSettings() -> PlayerSettings {
-        return PlayerSettings(
-            showHelpers: self.showHelpers,
-            checkMode: self.checkMode,
-            testMode: self.testMode
-        )
-    }
-}
-
-/// Player settings.
-struct PlayerSettings {
-    var showHelpers: Bool
-    var checkMode: Bool
-    var testMode: Bool
-}
-
 extension Square: CustomStringConvertible {
     var description: String {
         "(\(self.x),\(self.y))"

@@ -21,22 +21,22 @@ struct OthelloSwift: ParsableCommand {
     @Argument(help: "Optional board size (\(MIN_BOARD_SIZE)..\(MAX_BOARD_SIZE))")
     var size: Int?
 
-    @Flag(name: .shortAndLong, help: "Enable autoplay mode")
+    @Flag(name: .shortAndLong, help: "Enable autoplay mode with computer control")
     var autoplay: Bool = false
 
-    @Flag(name: .shortAndLong, help: "Only print hash to check the result")
+    @Flag(name: .shortAndLong, help: "Autoplay and only print result")
     var check: Bool = false
 
     @Flag(name: [.short, .customLong("default")], help: "Play with default settings")
     var useDefaultSettings: Bool = false
 
-    @Flag(name: .shortAndLong, help: "Show log after a game")
+    @Flag(name: .shortAndLong, help: "Show game log at the end")
     var log: Bool = false
 
     @Flag(name: .shortAndLong, help: "Hide disk placement hints")
     var noHelpers: Bool = false
 
-    @Flag(name: .shortAndLong, help: "Enable test mode")
+    @Flag(name: .shortAndLong, help: "Enable test mode with deterministic computer moves")
     var test: Bool = false
 
     @Flag(name: .shortAndLong, help: "Print version and exit")
@@ -69,10 +69,10 @@ struct OthelloSwift: ParsableCommand {
             boardSize: boardSize,
             autoplayMode: autoplay || check,
             checkMode: check,
-            useDefaults: useDefaultSettings,
             showHelpers: !noHelpers,
-            showLog: log,
-            testMode: test || check
+            showLog: log  || check,
+            testMode: test || check,
+            useDefaults: useDefaultSettings
         )
 
         Othello(settings).play()
