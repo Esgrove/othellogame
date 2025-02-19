@@ -13,7 +13,7 @@ use rand::{self, Rng};
 
 use crate::board::Board;
 use crate::colorprint::print_error;
-use crate::types::{Disk, Move, Square};
+use crate::models::{Disk, Move, Square};
 
 /// Defines one player that can be either human or computer controlled.
 #[derive(Debug)]

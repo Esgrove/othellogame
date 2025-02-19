@@ -7,10 +7,10 @@ Akseli Lukkarila
 
 try:
     from othello.colorprint import Color, get_color, print_color
-    from othello.types import Disk, Step, Square, Move
+    from othello.models import Disk, Move, Step, Square
 except ModuleNotFoundError:
     from colorprint import Color, get_color, print_color
-    from utils import Disk, Move, Square, Step
+    from models import Disk, Move, Step, Square
 
 
 class Board:

@@ -2,7 +2,7 @@ import pytest
 
 from othello.board import Board
 from othello.player import Player
-from othello.types import Disk
+from othello.models import Disk
 
 
 @pytest.fixture

@@ -1,3 +1,10 @@
+"""
+Models
+Basic types and methods
+Akseli Lukkarila
+2019-2025
+"""
+
 from enum import IntEnum
 from typing import Self
 

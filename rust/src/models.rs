@@ -229,7 +229,7 @@ impl PartialOrd for Move {
 #[cfg(test)]
 mod tests {
 
-    use crate::types::{Disk, Move, Square, Step};
+    use crate::models::{Disk, Move, Square, Step};
 
     #[test]
     fn step_addition() {

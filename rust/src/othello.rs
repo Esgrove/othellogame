@@ -11,9 +11,9 @@ use colored::Colorize;
 
 use crate::board::Board;
 use crate::colorprint::print_warn;
+use crate::models::Disk;
 use crate::player::Player;
 use crate::settings::Settings;
-use crate::types::Disk;
 use crate::utils;
 use crate::utils::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 

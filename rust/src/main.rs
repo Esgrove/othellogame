@@ -7,10 +7,10 @@
 
 mod board;
 mod colorprint;
+mod models;
 mod othello;
 mod player;
 mod settings;
-mod types;
 mod utils;
 mod version;
 

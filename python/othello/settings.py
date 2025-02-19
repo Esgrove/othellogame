@@ -1,3 +1,10 @@
+"""
+Settings
+Defines game settings
+Akseli Lukkarila
+2019-2025
+"""
+
 from typing import Self
 
 

@@ -19,11 +19,11 @@ try:
         DEFAULT_BOARD_SIZE,
         MAX_BOARD_SIZE,
         MIN_BOARD_SIZE,
+        calculate_sha256,
         clamp,
         version_info,
-        calculate_sha256,
     )
-    from othello.types import Disk
+    from othello.models import Disk
     from othello.settings import Settings
 except ModuleNotFoundError:
     from board import Board
@@ -33,10 +33,11 @@ except ModuleNotFoundError:
         DEFAULT_BOARD_SIZE,
         MAX_BOARD_SIZE,
         MIN_BOARD_SIZE,
+        calculate_sha256,
         clamp,
         version_info,
     )
-    from types import Disk
+    from models import Disk
     from settings import Settings
 
 

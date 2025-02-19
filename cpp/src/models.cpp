@@ -1,4 +1,11 @@
-#include "types.hpp"
+//==========================================================
+// Models source
+// Basic types and methods.
+// Akseli Lukkarila
+// 2019-2025
+//==========================================================
+
+#include "models.hpp"
 
 #include "utils.hpp"
 

@@ -1,6 +1,6 @@
 import pytest
 
-from othello.types import Disk, Square, Move
+from othello.models import Disk, Square, Move
 
 
 @pytest.fixture

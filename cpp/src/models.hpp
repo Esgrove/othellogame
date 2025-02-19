@@ -1,5 +1,5 @@
 //==========================================================
-// Types header
+// Models header
 // Basic types and methods.
 // Akseli Lukkarila
 // 2019-2025

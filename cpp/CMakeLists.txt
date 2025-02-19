@@ -137,9 +137,9 @@ add_executable(othello_cpp)
 target_sources(othello_cpp PRIVATE
   src/board.cpp
   src/main.cpp
+  src/models.cpp
   src/othello.cpp
   src/player.cpp
-  src/types.cpp
   src/utils.cpp
 )
 

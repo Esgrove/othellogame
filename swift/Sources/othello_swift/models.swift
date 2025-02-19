@@ -1,5 +1,5 @@
 //==========================================================
-// Types
+// Models
 // Basic types and methods
 // Akseli Lukkarila
 // 2019-2025
