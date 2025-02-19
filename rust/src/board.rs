@@ -10,7 +10,7 @@ use std::fmt;
 
 use colored::{ColoredString, Colorize};
 
-use crate::utils::{Disk, Move, Square, Step};
+use crate::types::{Disk, Move, Square, Step};
 
 const UP: isize = 1;
 const DOWN: isize = -1;

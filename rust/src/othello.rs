@@ -13,8 +13,9 @@ use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::player::Player;
 use crate::settings::Settings;
+use crate::types::Disk;
 use crate::utils;
-use crate::utils::{Disk, DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+use crate::utils::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 /// Gameplay loop and main logic.
 pub struct Othello {
@@ -181,7 +182,13 @@ impl Othello {
         if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {
             if let Ok(board_size) = input.trim().parse::<usize>() {
                 if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&board_size) {
-                    println!("{}", format!("Limiting board size to valid range {MIN_BOARD_SIZE}...{MAX_BOARD_SIZE}").yellow());
+                    println!(
+                        "{}",
+                        format!(
+                            "Limiting board size to valid range {MIN_BOARD_SIZE}..{MAX_BOARD_SIZE}"
+                        )
+                        .yellow()
+                    );
                 }
                 return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
             }
