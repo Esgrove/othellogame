@@ -10,7 +10,7 @@ PROJECT_PATH="$REPO_ROOT/swift"
 VERSION_HEADER="$PROJECT_PATH/Sources/BuildInfo/include/version.h"
 
 # Define poject version number here since Swift Package Manager does not provide a way...
-VERSION_NUMBER="2.3.1"
+VERSION_NUMBER="2.3.2"
 
 print_magenta "Building Othello Swift..."
 
