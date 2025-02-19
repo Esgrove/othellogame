@@ -7,7 +7,7 @@
 
 #pragma once
 #include "colorprint.hpp"
-#include "types.hpp"
+#include "models.hpp"
 #include "version.hpp"
 
 #include <iostream>  // cout, cin
