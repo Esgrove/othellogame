@@ -14,6 +14,13 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0")
+    # Create universal binary.
+    # Disabled due to OpenSSL being arch specific by default...
+    # set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
+endif()
+
 # Export compile commands for clang-tidy
 # Note: only works with makefile and ninja generators
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -92,12 +99,25 @@ if(CCACHE_EXECUTABLE)
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_EXECUTABLE})
 endif(CCACHE_EXECUTABLE)
 
-if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0")
-    # Create universal binary.
-    # Disabled due to OpenSSL being arch specific by default...
-    # set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
-endif()
+# {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+# https://github.com/fmtlib/fmt
+# This can be used if fmt is installed locally (brew, vcpkg, apt...)
+# find_package(fmt 9 REQUIRED)
+message(STATUS "Fetching fmt library")
+FetchContent_Declare(fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt
+  GIT_TAG 11.1.3
+)
+FetchContent_MakeAvailable(fmt)
+
+# CLI argument parsing library
+# https://github.com/jarro2783/cxxopts
+message(STATUS "Fetching cxxopts library")
+FetchContent_Declare(cxxopts
+  GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+  GIT_TAG v3.2.0
+)
+FetchContent_MakeAvailable(cxxopts)
 
 # Set version information
 set(VERSION_INFO_DEFINITIONS
@@ -112,42 +132,20 @@ set(VERSION_INFO_DEFINITIONS
 
 set_property(GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS "${VERSION_INFO_DEFINITIONS}")
 
-add_executable(othello_cpp
-    src/board.cpp
-    src/main.cpp
-    src/othello.cpp
-    src/player.cpp
-    src/types.cpp
-    src/utils.cpp
+add_executable(othello_cpp)
+
+target_sources(othello_cpp PRIVATE
+  src/board.cpp
+  src/main.cpp
+  src/othello.cpp
+  src/player.cpp
+  src/types.cpp
+  src/utils.cpp
 )
 
-target_compile_definitions(othello_cpp PRIVATE ${VERSION_INFO_DEFINITIONS})
 target_include_directories(othello_cpp PRIVATE src)
 
-if(BUILD_TESTS)
-    enable_testing()
-    add_subdirectory(tests)
-endif()
-
-# {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
-# https://github.com/fmtlib/fmt
-# This can be used if fmt is installed locally (brew, vcpkg, apt...)
-# find_package(fmt 9 REQUIRED)
-message(STATUS "Fetching fmt library")
-FetchContent_Declare(fmt
-    GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 11.1.3
-)
-FetchContent_MakeAvailable(fmt)
-
-# CLI argument parsing library
-# https://github.com/jarro2783/cxxopts
-message(STATUS "Fetching cxxopts library")
-FetchContent_Declare(cxxopts
-    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
-    GIT_TAG v3.2.0
-)
-FetchContent_MakeAvailable(cxxopts)
+target_compile_definitions(othello_cpp PRIVATE ${VERSION_INFO_DEFINITIONS})
 
 target_link_libraries(othello_cpp
     cxxopts
@@ -174,6 +172,11 @@ else()
     target_compile_options(othello_cpp PRIVATE
         -Wall -Wextra -pedantic
     )
+endif()
+
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
 
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")

@@ -9,14 +9,14 @@ on:
       - "cpp/**.cpp"
       - "cpp/**.hpp"
       - "cpp/.clang-format"
-      - "cpp/CMakeLists.txt"
+      - "cpp/**/CMakeLists.txt"
   pull_request:
     paths:
       - ".github/workflows/cmake.yml"
       - "cpp/**.cpp"
       - "cpp/**.hpp"
       - "cpp/.clang-format"
-      - "cpp/CMakeLists.txt"
+      - "cpp/**/CMakeLists.txt"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:

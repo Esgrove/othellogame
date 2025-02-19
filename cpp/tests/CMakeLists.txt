@@ -12,14 +12,16 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(othello_tests
-    ../src/types.cpp
-    ../src/utils.cpp
-    test_types.cpp
-    test_utils.cpp
+add_executable(othello_tests)
+
+target_sources(othello_tests PRIVATE
+  ${CMAKE_SOURCE_DIR}/src/types.cpp
+  ${CMAKE_SOURCE_DIR}/src/utils.cpp
+  test_types.cpp
+  test_utils.cpp
 )
 
-target_include_directories(othello_tests PRIVATE ../src)
+target_include_directories(othello_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 get_property(VERSION_INFO_DEFINITIONS GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS)
 
