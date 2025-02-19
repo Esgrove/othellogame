@@ -10,6 +10,8 @@ import java.util.concurrent.Callable;
 
 import static othello.ColorPrint.printBold;
 import static othello.ColorPrint.printError;
+import static othello.ColorPrint.printColor;
+import static othello.ColorPrint.printWarn;
 
 @Command(name = "othello_java",
     mixinStandardHelpOptions = true,
@@ -20,25 +22,25 @@ public class Main implements Callable<Integer> {
     private static final int MAX_BOARD_SIZE = 10;
     private static final int DEFAULT_BOARD_SIZE = 8;
 
-    @Parameters(index = "0", description = "Board size (" + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE + ")", arity = "0..1")
+    @Parameters(index = "0", description = "Optional board size (" + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE + ")", arity = "0..1")
     private Integer boardSize;
 
-    @Option(names = {"-a", "--autoplay"}, description = "Enable autoplay mode")
+    @Option(names = {"-a", "--autoplay"}, description = "Enable autoplay mode with computer control")
     private boolean autoplay;
 
-    @Option(names = {"-c", "--check"}, description = "Enable check mode (implies --test and --autoplay)")
+    @Option(names = {"-c", "--check"}, description = "Autoplay and only print result")
     private boolean checkMode;
 
     @Option(names = {"-d", "--default"}, description = "Play with default settings")
     private boolean useDefaults;
 
-    @Option(names = {"-l", "--log"}, description = "Show log after a game")
+    @Option(names = {"-l", "--log"}, description = "Show game log at the end")
     private boolean showLog;
 
     @Option(names = {"-n", "--no-helpers"}, description = "Hide disk placement hints")
     private boolean noHelpers;
 
-    @Option(names = {"-t", "--test"}, description = "Enable test mode")
+    @Option(names = {"-t", "--test"}, description = "Enable test mode with deterministic computer moves")
     private boolean testMode;
 
     @Override
@@ -56,6 +58,7 @@ public class Main implements Callable<Integer> {
         } else if (autoplay || useDefaults) {
             boardSize = DEFAULT_BOARD_SIZE;
         } else {
+            // Otherwise ask user for board size
             boardSize = getBoardSize();
         }
 
@@ -86,13 +89,13 @@ public class Main implements Callable<Integer> {
         try {
             int boardSize = Integer.parseInt(input.trim());
             if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
-                System.out.printf("\u001B[33mLimiting board size to valid range %d...%d\u001B[0m%n", MIN_BOARD_SIZE, MAX_BOARD_SIZE);
+                printColor("Limiting board size to valid range " + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE, AnsiColor.YELLOW);
             }
-            return Math.max(MIN_BOARD_SIZE, Math.min(boardSize, MAX_BOARD_SIZE));
+            return Utils.clamp(boardSize, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         } catch (NumberFormatException ignored) {
         }
 
-        System.out.printf("\u001B[33mInvalid size, defaulting to %d...\u001B[0m%n", DEFAULT_BOARD_SIZE);
+        printWarn("Invalid size, defaulting to " + DEFAULT_BOARD_SIZE + "...");
         return DEFAULT_BOARD_SIZE;
     }
 
