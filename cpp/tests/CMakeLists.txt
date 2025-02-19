@@ -19,6 +19,8 @@ add_executable(othello_tests
     test_utils.cpp
 )
 
+target_include_directories(othello_tests PRIVATE ../src)
+
 get_property(VERSION_INFO_DEFINITIONS GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS)
 
 target_compile_definitions(othello_tests PRIVATE ${VERSION_INFO_DEFINITIONS})
