@@ -13,8 +13,10 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(othello_tests
-    test_utils.cpp
+    ../src/types.cpp
     ../src/utils.cpp
+    test_types.cpp
+    test_utils.cpp
 )
 
 get_property(VERSION_INFO_DEFINITIONS GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS)

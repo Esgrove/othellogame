@@ -1,10 +1,10 @@
 # Othello C++
 # Akseli Lukkarila
-# 2019 - 2024
+# 2019-2025
 cmake_minimum_required(VERSION 3.18)
 
 project("Othello C++"
-    VERSION 2.9.3
+    VERSION 2.9.4
     DESCRIPTION "A simple Othello CLI game implementation in C++"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -114,22 +114,16 @@ set_property(GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS "${VERSION_INFO_DEFINITI
 
 add_executable(othello_cpp
     src/board.cpp
-    src/board.hpp
-    src/colorprint.hpp
     src/main.cpp
     src/othello.cpp
-    src/othello.hpp
     src/player.cpp
-    src/player.hpp
-    src/settings.hpp
+    src/types.cpp
     src/utils.cpp
-    src/utils.hpp
-    src/version.hpp
 )
 
 target_compile_definitions(othello_cpp PRIVATE ${VERSION_INFO_DEFINITIONS})
+target_include_directories(othello_cpp PRIVATE src)
 
-include_directories(src)
 if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
@@ -146,6 +140,8 @@ FetchContent_Declare(fmt
 )
 FetchContent_MakeAvailable(fmt)
 
+# CLI argument parsing library
+# https://github.com/jarro2783/cxxopts
 message(STATUS "Fetching cxxopts library")
 FetchContent_Declare(cxxopts
     GIT_REPOSITORY https://github.com/jarro2783/cxxopts
