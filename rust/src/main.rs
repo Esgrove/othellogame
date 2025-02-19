@@ -76,7 +76,7 @@ fn main() -> Result<()> {
     let args = Args::parse();
 
     if args.version {
-        println!("{}", version::version_string());
+        println!("{}", version::version_info());
         return Ok(());
     }
     println!("{}", "OTHELLO GAME - RUST".green().bold());
