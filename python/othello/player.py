@@ -12,12 +12,12 @@ from typing import Self
 try:
     from othello.board import Board
     from othello.colorprint import Color, print_color, print_error
-    from othello.utils import Disk, Move, Square
+    from othello.types import Disk, Square, Move
     from othello.settings import PlayerSettings
 except ModuleNotFoundError:
     from board import Board
     from colorprint import Color, print_color, print_error
-    from utils import Disk, Move, Square
+    from types import Disk, Move, Square
     from settings import PlayerSettings
 
 

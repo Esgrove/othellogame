@@ -7,7 +7,6 @@ Akseli Lukkarila
 2019-2025
 """
 
-import hashlib
 import sys
 
 import click
@@ -20,10 +19,11 @@ try:
         DEFAULT_BOARD_SIZE,
         MAX_BOARD_SIZE,
         MIN_BOARD_SIZE,
-        Disk,
         clamp,
         version_info,
+        calculate_sha256,
     )
+    from othello.types import Disk
     from othello.settings import Settings
 except ModuleNotFoundError:
     from board import Board
@@ -33,10 +33,10 @@ except ModuleNotFoundError:
         DEFAULT_BOARD_SIZE,
         MAX_BOARD_SIZE,
         MIN_BOARD_SIZE,
-        Disk,
         clamp,
         version_info,
     )
+    from types import Disk
     from settings import Settings
 
 
@@ -114,7 +114,7 @@ class Othello:
         formatted_log = "\n".join(
             f"{index:02}: {line}" for index, line in enumerate(self.game_log, start=1)
         )
-        hex_hash = hashlib.sha256(formatted_log.encode()).hexdigest()
+        hex_hash = calculate_sha256(formatted_log)
 
         if not self.settings.check_mode:
             print_bold("Game log:", Color.yellow)

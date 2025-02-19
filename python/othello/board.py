@@ -7,7 +7,7 @@ Akseli Lukkarila
 
 try:
     from othello.colorprint import Color, get_color, print_color
-    from othello.utils import Disk, Move, Square, Step
+    from othello.types import Disk, Step, Square, Move
 except ModuleNotFoundError:
     from colorprint import Color, get_color, print_color
     from utils import Disk, Move, Square, Step
