@@ -22,9 +22,9 @@ yet small enough that it could be done in a weekend even when starting with a ne
 It is also easy to check that the code is working correctly,
 especially since it is possible to compare side-by-side with the other implementations.
 
-So far, I have added *C#*, *Swift*, *Rust*, *Go*, and *Kotlin* implementations.
+So far, I have added _C#_, _Swift_, _Rust_, _Go_, and _Kotlin_ implementations.
 I might still do a few other (modern) languages that interest me and/or have some hype around them,
-such as *[Zig](https://ziglang.org/)*, *[Mojo](https://www.modular.com/max/mojo)*, and *[Ruby](https://www.ruby-lang.org/)*.
+such as _[Zig](https://ziglang.org/)_, _[Mojo](https://www.modular.com/max/mojo)_, and _[Ruby](https://www.ruby-lang.org/)_.
 
 In the meantime, there's probably still room to improve in the current implementations,
 especially in the languages that I haven't been actively using so much.
@@ -33,14 +33,18 @@ especially in the languages that I haven't been actively using so much.
 
 All implementations follow this overall architecture:
 
-* *main*: Command line argument handling and entry point to initialize the game.
-* *othello*: The main gameplay loop.
-* *board*: Game board state and logic.
-* *player*: Player object used for making moves and storing player information.
-* *utils*: Helper classes, enums and functions.
-* *colorprint*: Helper methods for terminal color printing and string formatting (if needed).
+- _main_: Command line argument handling and entry point to initialize the game.
+- _othello_: The main gameplay loop.
+- _board_: Game board state and logic.
+- _player_: Player object used for making moves and storing player state.
+- _models_: Shared classes and enums.
+- _settings_: Game and player settings.
+- _utils_: Helper functions.
+- _colorprint_: Helper methods for terminal color printing and string formatting (if needed).
 
 ## Languages
+
+Listed in order of implementation from oldest to newest.
 
 ### Python
 
@@ -52,42 +56,21 @@ Dependencies are handled by [Poetry](https://github.com/python-poetry/poetry).
 Formatting with [Black](https://github.com/psf/black) and [isort](https://github.com/PyCQA/isort),
 linting with [ruff](https://github.com/astral-sh/ruff).
 
-* othello.py
-* board.py
-* player.py
-* utils.py
-* colorprint.py
-
 ### C++
 
 C++23.
 Uses [CMake](https://cmake.org/) as the build system,
 and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text.
-Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rl-camel) recommended naming style (*snake_case*).
+Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rl-camel) recommended naming style (_snake_case_).
 Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html).
-
-* main.cpp
-* othello.hpp & othello.cpp
-* board.hpp & board.cpp
-* player.hpp & player.cpp
-* utils.hpp & utils.cpp
-* colorprint.hpp
-* version.hpp
 
 ### C\#
 
 .NET 9 and C# 11.
 Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal.
-Follows the [C# style guide](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) (*PascalCase*),
+Follows the [C# style guide](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) (_PascalCase_),
 but with line length limit of 100.
 Code formatting with [CSharpier](https://github.com/belav/csharpier).
-
-* Othello.cs
-* Board.cs
-* Player.cs
-* Utils.cs
-* ColorPrint.cs
-* Version.cs
 
 ### Swift
 
@@ -97,51 +80,22 @@ Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/),
 meaning there is no Xcode project.
 
-* main.swift
-* othello.swift
-* board.swift
-* player.swift
-* utils.swift
-* colorprint.swift
-* version.h
-
 ### Rust
 
 Rust 2021 edition.
 Uses the [colored](https://crates.io/crates/colored) crate for colored text in the terminal.
-
-* main.rs
-* othello.rs
-* board.rs
-* player.rs
-* utils.rs
-* colorprint.rs
 
 ### Go
 
 Go 1.21+.
 Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 
-* main.go
-* othello/othello.go
-* othello/board.go
-* othello/player.go
-* othello/utils.go
-* othello/colorprint.go
-* othello/version.go
-
 ### Kotlin
 
 Kotlin 1.9+ and [Gradle](https://gradle.org/kotlin/).
 
-* Othello.kt
-* Board.kt
-* Player.kt
-* Utils.kt
-* ColorPrint.kt
-
 ## TODO
 
-* Write some thoughts on the languages and their differences
-* Add unit tests for each language
-* Make a NumPy version of Python implementation (not really needed but why not)
+- Write some thoughts on the languages and their differences
+- Add unit tests for each language
+- Make a NumPy version of Python implementation (not really needed but why not)
