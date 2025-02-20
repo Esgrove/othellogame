@@ -117,12 +117,13 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 	}
 
 	rootCmd.SetUsageTemplate(customUsageTemplate)
-
+	// nolint:lll
 	rootCmd.Flags().BoolVarP(&autoplay, "autoplay", "a", false, "Enable autoplay mode with computer control")
 	rootCmd.Flags().BoolVarP(&check, "check", "c", false, "Autoplay and only print result")
 	rootCmd.Flags().BoolVarP(&defaultSettings, "default", "d", false, "Play with default settings")
 	rootCmd.Flags().BoolVarP(&log, "log", "l", false, "Show game log at the end")
 	rootCmd.Flags().BoolVarP(&noHelpers, "no-helpers", "n", false, "Hide disk placement hints")
+	// nolint:lll
 	rootCmd.Flags().BoolVarP(&test, "test", "t", false, "Enable test mode with deterministic computer moves")
 	rootCmd.Flags().BoolVarP(&version, "version", "v", false, "Print version and exit")
 

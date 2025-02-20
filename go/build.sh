@@ -7,7 +7,7 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$DIR/../common.sh"
 
 # Define project version here, normally would use git tags for this...
-PROJECT_VERSION="1.6.0"
+PROJECT_VERSION="1.6.1"
 
 USAGE="Usage: $(basename "$0") [OPTIONS]
 
@@ -52,13 +52,14 @@ build_project() {
         go version
     fi
 
-    cd "$PROJECT_PATH"
-    rm -f "$EXECUTABLE"
-    time go build -v \
-        -ldflags "-X othello_go/othello.GitBranch=$GIT_BRANCH \
+    VERSION_INFO="-X othello_go/othello.GitBranch=$GIT_BRANCH \
                   -X othello_go/othello.GitHash=$GIT_HASH \
                   -X othello_go/othello.Timestamp=$BUILD_TIME \
                   -X othello_go/othello.VersionNumber=$PROJECT_VERSION"
+
+    cd "$PROJECT_PATH"
+    rm -f "$EXECUTABLE"
+    time go build -v -ldflags "$VERSION_INFO"
 
     file "$EXECUTABLE"
     ./"$EXECUTABLE" --version
