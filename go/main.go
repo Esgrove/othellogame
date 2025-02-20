@@ -118,12 +118,12 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 
 	rootCmd.SetUsageTemplate(customUsageTemplate)
 
-	rootCmd.Flags().BoolVarP(&autoplay, "autoplay", "a", false, "Enable autoplay mode")
-	rootCmd.Flags().BoolVarP(&check, "check", "c", false, "Only print hash to check the result")
+	rootCmd.Flags().BoolVarP(&autoplay, "autoplay", "a", false, "Enable autoplay mode with computer control")
+	rootCmd.Flags().BoolVarP(&check, "check", "c", false, "Autoplay and only print result")
 	rootCmd.Flags().BoolVarP(&defaultSettings, "default", "d", false, "Play with default settings")
-	rootCmd.Flags().BoolVarP(&log, "log", "l", false, "Show log after a game")
+	rootCmd.Flags().BoolVarP(&log, "log", "l", false, "Show game log at the end")
 	rootCmd.Flags().BoolVarP(&noHelpers, "no-helpers", "n", false, "Hide disk placement hints")
-	rootCmd.Flags().BoolVarP(&test, "test", "t", false, "Enable test mode")
+	rootCmd.Flags().BoolVarP(&test, "test", "t", false, "Enable test mode with deterministic computer moves")
 	rootCmd.Flags().BoolVarP(&version, "version", "v", false, "Print version and exit")
 
 	if err := rootCmd.Execute(); err != nil {
