@@ -12,7 +12,7 @@ Since then, I figured that this could actually be a useful personal project to:
 
 I have cleaned up and improved both my old implementations in Python and C++,
 the two languages I have been using the most.
-For each language, I try to make the program structure and all the functions match as close as possible,
+For each language, I try to make the program structure and code match as close as possible,
 while also trying to follow the best practices and guidelines for each language.
 
 While the program is quite simple,
@@ -53,8 +53,7 @@ Uses the [colorama](https://pypi.org/project/colorama/) package for colored text
 Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 79.
 Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
 Dependencies are handled by [Poetry](https://github.com/python-poetry/poetry).
-Formatting with [Black](https://github.com/psf/black) and [isort](https://github.com/PyCQA/isort),
-linting with [ruff](https://github.com/astral-sh/ruff).
+Formatting and linting with [ruff](https://github.com/astral-sh/ruff).
 
 ### C++
 
@@ -78,7 +77,7 @@ Swift 6.
 Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
 Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/),
-meaning there is no Xcode project.
+meaning there is no Xcode project and it works on all platforms.
 
 ### Rust
 
@@ -98,4 +97,3 @@ Kotlin 1.9+ and [Gradle](https://gradle.org/kotlin/).
 
 - Write some thoughts on the languages and their differences
 - Add unit tests for each language
-- Make a NumPy version of Python implementation (not really needed but why not)
