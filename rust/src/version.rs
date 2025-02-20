@@ -15,6 +15,7 @@ static VERSION_STRING: LazyLock<String> = LazyLock::new(|| {
     )
 });
 
+/// Return version info string
 pub fn version_info() -> &'static str {
     &VERSION_STRING
 }

@@ -14,6 +14,7 @@ use rand::{self, Rng};
 use crate::board::Board;
 use crate::colorprint::print_error;
 use crate::models::{Disk, Move, Square};
+use crate::settings::PlayerSettings;
 
 /// Defines one player that can be either human or computer controlled.
 #[derive(Debug)]
@@ -30,24 +31,6 @@ pub struct Player {
 pub enum PlayerType {
     Human,
     Computer,
-}
-
-/// Player settings.
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub struct PlayerSettings {
-    pub show_helpers: bool,
-    pub check_mode: bool,
-    pub test_mode: bool,
-}
-
-impl Default for PlayerSettings {
-    fn default() -> Self {
-        Self {
-            show_helpers: true,
-            check_mode: false,
-            test_mode: false,
-        }
-    }
 }
 
 impl Player {

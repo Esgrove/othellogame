@@ -7,8 +7,6 @@
 use std::fmt;
 use std::fmt::Display;
 
-use crate::player::PlayerSettings;
-
 /// Game settings.
 #[derive(Debug, Copy, Clone)]
 pub struct Settings {
@@ -19,6 +17,14 @@ pub struct Settings {
     pub show_log: bool,
     pub test_mode: bool,
     pub use_defaults: bool,
+}
+
+/// Player settings.
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub struct PlayerSettings {
+    pub show_helpers: bool,
+    pub check_mode: bool,
+    pub test_mode: bool,
 }
 
 impl Settings {
@@ -42,6 +48,16 @@ impl Default for Settings {
             use_defaults: false,
             show_helpers: true,
             show_log: false,
+        }
+    }
+}
+
+impl Default for PlayerSettings {
+    fn default() -> Self {
+        Self {
+            show_helpers: true,
+            check_mode: false,
+            test_mode: false,
         }
     }
 }
