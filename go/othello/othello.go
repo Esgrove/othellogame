@@ -117,10 +117,11 @@ func (o *Othello) printLog() {
 			formattedLog += "\n"
 		}
 	}
+	if !o.settings.CheckMode {
+		fmt.Println(aurora.Yellow("Game log:").Bold())
+		fmt.Println(formattedLog)
+	}
 	hexHash := calculateSHA256(formattedLog)
-
-	fmt.Println(aurora.Yellow("Game log:").Bold())
-	fmt.Println(formattedLog)
 	fmt.Println(hexHash)
 }
 
