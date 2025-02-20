@@ -48,18 +48,24 @@ namespace Othello
         /// Play one round as this player.
         public string? PlayOneMove(Board board)
         {
-            Console.WriteLine($"Turn: {_disk.Name()}");
+            if (!_settings.CheckMode)
+            {
+                Console.WriteLine($"Turn: {_disk.Name()}");
+            }
             var moves = board.PossibleMoves(_disk);
             if (moves.Count != 0)
             {
                 canPlay = true;
-                if (_isHuman && _settings.ShowHelpers)
+                if (_isHuman && _settings.ShowHelpers && !_settings.CheckMode)
                 {
                     board.PrintPossibleMoves(moves);
                 }
                 var chosenMove = _isHuman ? GetHumanMove(moves) : GetComputerMove(moves);
                 board.PlaceDisc(chosenMove);
-                board.PrintScore();
+                if (!_settings.CheckMode)
+                {
+                    board.PrintScore();
+                }
                 ++_roundsPlayed;
                 if (!_settings.TestMode)
                 {
@@ -69,7 +75,10 @@ namespace Othello
             }
 
             canPlay = false;
-            ColorPrint.WriteLine("  No moves available...", Color.Yellow);
+            if (!_settings.CheckMode)
+            {
+                ColorPrint.WriteLine("  No moves available...", Color.Yellow);
+            }
             return null;
         }
 
@@ -91,7 +100,10 @@ namespace Othello
         /// Return move chosen by computer.
         private Move GetComputerMove(IReadOnlyList<Move> moves)
         {
-            Console.WriteLine("  Computer plays...");
+            if (!_settings.CheckMode)
+            {
+                Console.WriteLine("  Computer plays...");
+            }
             Move chosenMove;
             if (_settings.TestMode)
             {
@@ -103,7 +115,10 @@ namespace Othello
                 Thread.Sleep(_random.Next(1000, 2000));
                 chosenMove = moves[_random.Next(moves.Count)];
             }
-            Console.WriteLine($"  {chosenMove.Square} -> {chosenMove.Value}");
+            if (!_settings.CheckMode)
+            {
+                Console.WriteLine($"  {chosenMove.Square} -> {chosenMove.Value}");
+            }
             return chosenMove;
         }
 

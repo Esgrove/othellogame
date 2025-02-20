@@ -95,8 +95,11 @@ namespace Othello
                     }
                 }
 
-                Console.WriteLine("\nPlayers:".Pastel(Color.Silver));
-                PrintStatus();
+                if (!_settings.CheckMode)
+                {
+                    Console.WriteLine("\nPlayers:".Pastel(Color.Silver));
+                    PrintStatus();
+                }
             }
 
             /// Keep making moves until both players can't make a move any more.
@@ -105,7 +108,7 @@ namespace Othello
                 while (_board.CanPlay() && (_playerBlack.canPlay || _playerWhite.canPlay))
                 {
                     ++_roundsPlayed;
-                    Console.WriteLine($"\n=========== ROUND: {_roundsPlayed} ===========");
+                    printRoundHeader();
                     foreach (Player player in new Player[] { _playerBlack, _playerWhite })
                     {
                         var result = player.PlayOneMove(_board);
@@ -113,13 +116,14 @@ namespace Othello
                         {
                             _gameLog.Add($"{result};{_board.LogEntry()}");
                         }
-                        Console.WriteLine("--------------------------------");
+                        printDivider();
                     }
                 }
                 ++_gamesPlayed;
+                printGameEndFooter();
             }
 
-            private void PrintLog()
+            private string FormatGameLog()
             {
                 string formattedLog = "";
                 int index = 1;
@@ -131,18 +135,49 @@ namespace Othello
                         formattedLog += "\n";
                     }
                 }
+                return formattedLog;
+            }
 
+            private void printRoundHeader()
+            {
+                if (!_settings.CheckMode)
+                {
+                    Console.WriteLine($"\n=========== ROUND: {_roundsPlayed} ===========");
+                }
+            }
+
+            private void printDivider()
+            {
+                if (!_settings.CheckMode)
+                {
+                    Console.WriteLine("--------------------------------");
+                }
+            }
+
+            private void printGameEndFooter()
+            {
+                if (!_settings.CheckMode)
+                {
+                    Console.WriteLine("\n================================");
+                    ColorPrint.WriteLine("The game is finished!", Color.Green);
+                }
+            }
+
+            private void PrintLog()
+            {
+                string formattedLog = FormatGameLog();
+                if (!_settings.CheckMode)
+                {
+                    ColorPrint.WriteLine("Game log:", Color.Yellow);
+                    Console.WriteLine(formattedLog);
+                }
                 var hexHash = Utils.CalculateSHA256(formattedLog);
-                ColorPrint.WriteLine("Game log:", Color.Yellow);
-                Console.WriteLine(formattedLog);
                 Console.WriteLine(hexHash);
             }
 
             /// Print ending status and winner info.
             private void PrintResult()
             {
-                Console.WriteLine("\n================================");
-                ColorPrint.WriteLine("The game is finished!", Color.Green);
                 Console.WriteLine("Result:".Pastel(Color.Silver));
                 PrintStatus();
                 Console.WriteLine("");
@@ -206,9 +241,15 @@ namespace Othello
 
                 var autoplay = new Option<bool>(
                     name: "--autoplay",
-                    description: "Enable autoplay mode"
+                    description: "Enable autoplay mode with computer control"
                 );
                 autoplay.AddAlias("-a");
+
+                var checkMode = new Option<bool>(
+                    name: "--check",
+                    description: "Autoplay and only print result"
+                );
+                checkMode.AddAlias("-c");
 
                 var useDefaultSettings = new Option<bool>(
                     name: "--default",
@@ -216,7 +257,10 @@ namespace Othello
                 );
                 useDefaultSettings.AddAlias("-d");
 
-                var showLog = new Option<bool>(name: "--log", description: "Show log after a game");
+                var showLog = new Option<bool>(
+                    name: "--log",
+                    description: "Show game log at the end"
+                );
                 showLog.AddAlias("-l");
 
                 var hideHelpers = new Option<bool>(
@@ -225,7 +269,10 @@ namespace Othello
                 );
                 hideHelpers.AddAlias("-n");
 
-                var testMode = new Option<bool>(name: "--test", description: "Enable test mode");
+                var testMode = new Option<bool>(
+                    name: "--test",
+                    description: "Enable test mode with deterministic computer moves"
+                );
                 testMode.AddAlias("-t");
 
                 var version = new Option<bool>(name: "-v", description: "Print version and exit");
@@ -238,6 +285,7 @@ namespace Othello
                 {
                     size,
                     autoplay,
+                    checkMode,
                     useDefaultSettings,
                     showLog,
                     hideHelpers,
@@ -246,7 +294,16 @@ namespace Othello
                 };
 
                 rootCommand.SetHandler(
-                    (size, autoplay, useDefaultSettings, showLog, hideHelpers, testMode, version) =>
+                    (
+                        size,
+                        autoplay,
+                        checkMode,
+                        useDefaultSettings,
+                        hideHelpers,
+                        showLog,
+                        testMode,
+                        version
+                    ) =>
                     {
                         if (version)
                         {
@@ -259,6 +316,7 @@ namespace Othello
                         int boardSize;
                         if (size != null)
                         {
+                            // Try to read board size from command line args
                             boardSize = size.Value;
                             if (
                                 boardSize < Othello.MIN_BOARD_SIZE
@@ -276,17 +334,18 @@ namespace Othello
                         }
                         else
                         {
-                            // Ask user for board size
+                            // Otherwise ask user for board size
                             boardSize = GetBoardSize();
                         }
 
                         Settings settings = new(
                             boardSize,
-                            autoplay,
-                            useDefaultSettings,
-                            showLog,
+                            autoplay || checkMode,
+                            checkMode,
                             !hideHelpers,
-                            testMode
+                            showLog || checkMode,
+                            testMode || checkMode,
+                            useDefaultSettings
                         );
 
                         var game = new Othello(settings);
@@ -294,10 +353,11 @@ namespace Othello
                     },
                     size,
                     autoplay,
-                    useDefaultSettings,
-                    showLog,
+                    checkMode,
                     hideHelpers,
+                    showLog,
                     testMode,
+                    useDefaultSettings,
                     version
                 );
 
