@@ -567,7 +567,7 @@ checksum = "945462a4b81e43c4e3ba96bd7b49d834c6f61198356aa858733bc4acf3cbe62e"
 
 [[package]]
 name = "othello_rust"
-version = "1.9.3"
+version = "1.9.4"
 dependencies = [
  "anyhow",
  "base16ct",

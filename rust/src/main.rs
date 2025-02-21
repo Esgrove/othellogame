@@ -15,7 +15,7 @@ mod utils;
 mod version;
 
 use anyhow::Result;
-use clap::{arg, Parser};
+use clap::{Parser, arg};
 use colored::Colorize;
 use settings::Settings;
 
