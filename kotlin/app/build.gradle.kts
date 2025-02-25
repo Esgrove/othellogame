@@ -91,9 +91,9 @@ tasks.register("generateBuildInfo") {
             outputStream.toString("UTF-8").trim()
         }
 
-        val buildDate: String = ByteArrayOutputStream().use { outputStream ->
+        val buildTime: String = ByteArrayOutputStream().use { outputStream ->
             exec {
-                commandLine("date", "+%Y-%m-%d_%H%M")
+                commandLine("date", "-u", "+%Y-%m-%d_%H%M")
                 standardOutput = outputStream
             }
             outputStream.toString("UTF-8").trim()
@@ -107,7 +107,7 @@ tasks.register("generateBuildInfo") {
             """
             build.branch=$gitBranch
             build.commit=$gitCommit
-            build.date=$buildDate
+            build.time=$buildTime
             build.version=$projectVersion
             """.trimIndent(),
         )

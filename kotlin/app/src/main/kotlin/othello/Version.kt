@@ -13,7 +13,7 @@ object BuildInfo {
 
     val branch: String = properties.getProperty("build.branch", "unknown")
     val commit: String = properties.getProperty("build.commit", "unknown")
-    val date: String = properties.getProperty("build.date", "unknown")
+    val date: String = properties.getProperty("build.time", "unknown")
     val version: String = properties.getProperty("build.version", "unknown")
 }
 

@@ -17,8 +17,8 @@ fn main() {
             |o| String::from_utf8_lossy(&o.stdout).trim().to_string(),
         );
 
-    let build_timestamp = Command::new("date")
-        .args(["+%Y-%m-%d_%H%M"])
+    let build_time = Command::new("date")
+        .args(["-u", "+%Y-%m-%d_%H%M"])
         .output()
         .ok()
         .and_then(|o| String::from_utf8(o.stdout).ok())
@@ -29,7 +29,7 @@ fn main() {
     // Set compile time env variables
     println!("cargo:rustc-env=GIT_COMMIT={git_hash}");
     println!("cargo:rustc-env=GIT_BRANCH={git_branch}");
-    println!("cargo:rustc-env=BUILD_TIMESTAMP={build_timestamp}");
+    println!("cargo:rustc-env=BUILD_TIME={build_time}");
     println!("cargo:rustc-env=VERSION={version}");
 
     // Tell Cargo to rerun if these change
