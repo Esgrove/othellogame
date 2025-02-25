@@ -7,6 +7,6 @@ Akseli Lukkarila
 
 # Updated by build script, do not edit manually!
 BRANCH = "main"
-COMMIT = "88bdbb8"
-DATE = "2025-02-19_1712"
+COMMIT = "c86ae86"
+DATE = "2025-02-25_1339"
 VERSION_NUMBER = "2.3.2"
