@@ -9,7 +9,7 @@
 
 import java.io.ByteArrayOutputStream
 
-version = "1.6.2"
+version = "1.7.0"
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
@@ -71,35 +71,23 @@ tasks.jar {
 
 tasks.register("generateBuildInfo") {
     doLast {
-        val propsFile =
-            file("${layout.buildDirectory.get().asFile}/generated-resources/build-info.properties")
+        val buildDir = "${layout.buildDirectory.get().asFile}"
+        val propsFile = file("${buildDir}/generated-resources/build-info.properties")
         propsFile.parentFile.mkdirs()
 
-        val gitBranch: String = ByteArrayOutputStream().use { outputStream ->
-            exec {
-                commandLine("git", "branch", "--show-current")
+        fun executeCommand(vararg command: String): String {
+            val outputStream = ByteArrayOutputStream()
+            project.exec {
+                commandLine(*command)
                 standardOutput = outputStream
             }
-            outputStream.toString("UTF-8").trim()
+            return outputStream.toString("UTF-8").trim()
         }
 
-        val gitCommit: String = ByteArrayOutputStream().use { outputStream ->
-            exec {
-                commandLine("git", "rev-parse", "--short", "HEAD")
-                standardOutput = outputStream
-            }
-            outputStream.toString("UTF-8").trim()
-        }
-
-        val buildTime: String = ByteArrayOutputStream().use { outputStream ->
-            exec {
-                commandLine("date", "-u", "+%Y-%m-%d_%H%M")
-                standardOutput = outputStream
-            }
-            outputStream.toString("UTF-8").trim()
-        }
-
-        val projectVersion: String = version.toString()
+        val gitBranch = executeCommand("git", "branch", "--show-current")
+        val gitCommit = executeCommand("git", "rev-parse", "--short", "HEAD")
+        val buildTime = executeCommand("date", "-u", "+%Y-%m-%d_%H%M")
+        val projectVersion = version.toString()
 
         logger.lifecycle("Writing build version information to: ${propsFile.absolutePath}")
 
@@ -120,6 +108,6 @@ tasks.named("processResources") {
     dependsOn("generateBuildInfo")
 }
 
-tasks.named("processResources", Copy::class) {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE // INCLUDE, EXCLUDE, FAIL, WARN
+tasks.named<Copy>("processResources") {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE // Options: INCLUDE, EXCLUDE, FAIL, WARN
 }

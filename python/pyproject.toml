@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "othello_python"
-version = "2.3.2"
+version = "2.4.0"
 description = "A simple Othello CLI game implementation in Python"
 authors = ["Akseli Lukkarila <esgrove@outlook.com>"]
 readme = "README.md"
