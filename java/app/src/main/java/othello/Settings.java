@@ -12,14 +12,14 @@ public class Settings {
     private final boolean testMode;
     private final boolean useDefaults;
 
-    public Settings(int boardSize, boolean autoplayMode, boolean checkMode, boolean useDefaults, boolean showHelpers, boolean showLog, boolean testMode) {
+    public Settings(int boardSize, boolean autoplayMode, boolean checkMode, boolean showHelpers, boolean showLog, boolean testMode, boolean useDefaults) {
         this.boardSize = boardSize;
         this.autoplayMode = autoplayMode;
         this.checkMode = checkMode;
-        this.useDefaults = useDefaults;
         this.showHelpers = showHelpers;
         this.showLog = showLog;
         this.testMode = testMode;
+        this.useDefaults = useDefaults;
     }
 
     public int getBoardSize() {
@@ -54,10 +54,10 @@ public class Settings {
                   boardSize: %d
                   autoplayMode: %b
                   checkMode: %b
-                  useDefaults: %b
                   showHelpers: %b
                   showLog: %b
                   testMode: %b
+                  useDefaults: %b
                 """,
             boardSize, autoplayMode, checkMode, useDefaults, showHelpers, showLog, testMode
         );
