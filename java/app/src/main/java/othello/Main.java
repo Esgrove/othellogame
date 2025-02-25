@@ -66,10 +66,10 @@ public class Main implements Callable<Integer> {
             boardSize,
             autoplay || checkMode,
             checkMode,
-            useDefaults,
             !noHelpers,
-            showLog,
-            testMode || checkMode
+            showLog || checkMode,
+            testMode || checkMode,
+            useDefaults
         );
         System.out.printf(settings.toString());
         //new Othello(settings).play();
@@ -82,7 +82,7 @@ public class Main implements Callable<Integer> {
         String input = System.console() != null ? System.console().readLine() : new Scanner(System.in).nextLine();
 
         if (input == null || input.trim().isEmpty()) {
-            System.out.printf("\u001B[33mInvalid size, defaulting to %d...\u001B[0m%n", DEFAULT_BOARD_SIZE);
+            printColor("Invalid size, defaulting to %d...", AnsiColor.YELLOW);
             return DEFAULT_BOARD_SIZE;
         }
 
