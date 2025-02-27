@@ -102,11 +102,11 @@ endif(CCACHE_EXECUTABLE)
 # {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
 # https://github.com/fmtlib/fmt
 # This can be used if fmt is installed locally (brew, vcpkg, apt...)
-# find_package(fmt 9 REQUIRED)
+# find_package(fmt 11 REQUIRED)
 message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt
-  GIT_TAG 11.1.3
+  GIT_TAG 11.1.4
 )
 FetchContent_MakeAvailable(fmt)
 
