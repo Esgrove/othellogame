@@ -1,13 +1,17 @@
 package othello
 
-/** Represents one game piece or lack of one. */
+/**
+ * Represents one game piece or lack of one.
+ */
 enum class Disk(val value: Int) {
     Black(-1),
     Empty(0),
     White(1),
 }
 
-/** Represents a step direction on the board. */
+/**
+ * Represents a step direction on the board.
+ */
 data class Step(val x: Int, val y: Int) {
     override fun hashCode(): Int {
         var result = 17
@@ -29,7 +33,9 @@ data class Step(val x: Int, val y: Int) {
     override fun toString(): String = "[$x,$y]"
 }
 
-/** Represents one square location on the board. */
+/**
+ * Represents one square location on the board.
+ */
 data class Square(val x: Int, val y: Int) : Comparable<Square> {
     override fun hashCode(): Int {
         var result = 17
@@ -61,7 +67,9 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
     override fun toString(): String = "($x,$y)"
 }
 
-/** Represents one possible disk placement for given disk color. */
+/**
+ * Represents one possible disk placement for given disk color.
+ */
 data class Move(val square: Square, val value: Int, val disk: Disk, val directions: List<Step>) :
     Comparable<Move> {
     override fun compareTo(other: Move): Int = when {
@@ -75,14 +83,18 @@ data class Move(val square: Square, val value: Int, val disk: Disk, val directio
     override fun toString(): String = "Square: $square -> value: $value"
 }
 
-/** Returns the print colour for the given Disk. */
+/**
+ * Returns the print colour for the given Disk.
+ */
 fun Disk.diskColor(): AnsiColor = when (this) {
     Disk.Empty -> AnsiColor.WHITE
     Disk.White -> AnsiColor.CYAN
     Disk.Black -> AnsiColor.MAGENTA
 }
 
-/** Returns string character representing board status (black, white, empty). */
+/**
+ * Returns string character representing board status (black, white, empty).
+ */
 fun Disk.boardChar(color: Boolean = true): String = when (this) {
     Disk.Empty -> "_"
     Disk.White -> if (color) getColor("W", this.diskColor()) else "W"
