@@ -1,5 +1,9 @@
 package othello
 
+const val MIN_BOARD_SIZE = 4
+const val MAX_BOARD_SIZE = 10
+const val DEFAULT_BOARD_SIZE = 8
+
 /** Game settings.*/
 data class Settings(
     val boardSize: Int,

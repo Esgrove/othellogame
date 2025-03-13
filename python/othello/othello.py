@@ -15,30 +15,16 @@ try:
     from othello.board import Board
     from othello.colorprint import Color, print_bold, print_error, print_warn
     from othello.player import Player
-    from othello.utils import (
-        DEFAULT_BOARD_SIZE,
-        MAX_BOARD_SIZE,
-        MIN_BOARD_SIZE,
-        calculate_sha256,
-        clamp,
-        version_info,
-    )
+    from othello.utils import calculate_sha256, clamp, version_info
     from othello.models import Disk
-    from othello.settings import Settings
+    from othello.settings import DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings
 except ModuleNotFoundError:
     from board import Board
     from colorprint import Color, print_bold, print_error, print_warn
     from player import Player
-    from utils import (
-        DEFAULT_BOARD_SIZE,
-        MAX_BOARD_SIZE,
-        MIN_BOARD_SIZE,
-        calculate_sha256,
-        clamp,
-        version_info,
-    )
+    from utils import calculate_sha256, clamp, version_info
     from models import Disk
-    from settings import Settings
+    from settings import DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings
 
 
 class Othello:

@@ -13,9 +13,8 @@ use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::models::Disk;
 use crate::player::Player;
-use crate::settings::Settings;
+use crate::settings::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings};
 use crate::utils;
-use crate::utils::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
 
 /// Gameplay loop and main logic.
 pub struct Othello {

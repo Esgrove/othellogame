@@ -6,10 +6,6 @@
 
 use sha2::{Digest, Sha256};
 
-pub const MIN_BOARD_SIZE: usize = 4;
-pub const MAX_BOARD_SIZE: usize = 10;
-pub const DEFAULT_BOARD_SIZE: usize = 8;
-
 /// Calculate SHA256 hash for the given string.
 pub fn calculate_sha256(formatted_log: &String) -> String {
     let hash = Sha256::digest(formatted_log.as_bytes());

@@ -17,10 +17,9 @@ mod version;
 use anyhow::Result;
 use clap::{Parser, arg};
 use colored::Colorize;
-use settings::Settings;
 
 use crate::othello::Othello;
-use crate::utils::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE};
+use crate::settings::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings};
 
 /// Command line arguments
 ///

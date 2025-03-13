@@ -4,10 +4,6 @@ import okio.Buffer
 import okio.HashingSink
 import okio.buffer
 
-const val MIN_BOARD_SIZE = 4
-const val MAX_BOARD_SIZE = 10
-const val DEFAULT_BOARD_SIZE = 8
-
 /**
  * Calculate the SHA-256 hash for the given string.
  *

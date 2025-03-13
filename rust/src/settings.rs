@@ -7,6 +7,10 @@
 use std::fmt;
 use std::fmt::Display;
 
+pub const MIN_BOARD_SIZE: usize = 4;
+pub const MAX_BOARD_SIZE: usize = 10;
+pub const DEFAULT_BOARD_SIZE: usize = 8;
+
 /// Game settings.
 #[derive(Debug, Copy, Clone)]
 pub struct Settings {

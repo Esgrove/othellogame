@@ -13,10 +13,6 @@ try:
 except ModuleNotFoundError:
     from version import BRANCH, COMMIT, DATE, VERSION_NUMBER
 
-MIN_BOARD_SIZE: int = 4
-MAX_BOARD_SIZE: int = 10
-DEFAULT_BOARD_SIZE: int = 8
-
 
 def calculate_sha256(formatted_log: str) -> str:
     """Calculate SHA256 hash for the given string."""
