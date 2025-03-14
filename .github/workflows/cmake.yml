@@ -101,4 +101,5 @@ jobs:
 
       - name: Check formatting
         run: |
+          clang-format --version
           clang-format --verbose --style=file --dry-run --Werror $(find . -type f \( -name "*.cpp" -o -name "*.hpp" \))
