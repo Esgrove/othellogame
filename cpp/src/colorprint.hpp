@@ -8,14 +8,14 @@
 #pragma once
 
 #include <fmt/base.h>
-#include <fmt/chrono.h>
 #include <fmt/color.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/ranges.h>
 #include <fmt/std.h>
 
-#include <cctype>    // std::isspace
+#include <cctype>  // std::isspace
+#include <concepts>
 #include <iostream>  // std::cout
 #include <string>    // std::string
 #include <utility>   // std::pair
@@ -31,24 +31,57 @@ inline std::pair<std::string, std::string> split_leading_whitespace(const std::s
     return {message.substr(0, indent_size), message.substr(indent_size)};
 }
 
+/// Require that `T` is formattable by `fmt`
+template<typename T> concept Formattable = fmt::is_formattable<T>::value;
+
 /// Format string with colour using fmt.
-template<typename T> std::string get_color(const T& object, const fmt::terminal_color color)
+template<Formattable T> std::string get_color(const T& object, const fmt::terminal_color color)
 {
     return fmt::format(fmt::fg(color), "{}", object);
 }
 
 /// Print text with colour.
-template<typename T>
+template<Formattable T>
 void print_color(const T& object, const fmt::terminal_color color = fmt::terminal_color::white)
 {
     fmt::print(fmt::fg(color), "{}", object);
 }
 
 /// Print bold text.
-template<typename T>
+template<Formattable T>
 void print_bold(const T& object, const fmt::terminal_color color = fmt::terminal_color::white)
 {
     fmt::print(fmt::emphasis::bold | fmt::fg(color), "{}", object);
+}
+
+/// Print text in green.
+template<Formattable T> void print_green(const T& object, bool bold = false)
+{
+    if (bold) {
+        print_bold(object, fmt::terminal_color::green);
+    } else {
+        print_color(object, fmt::terminal_color::green);
+    }
+}
+
+/// Print text in yellow.
+template<Formattable T> void print_yellow(const T& object, bool bold = false)
+{
+    if (bold) {
+        print_bold(object, fmt::terminal_color::yellow);
+    } else {
+        print_color(object, fmt::terminal_color::yellow);
+    }
+}
+
+/// Print text in red.
+template<Formattable T> void print_red(const T& object, bool bold = false)
+{
+    if (bold) {
+        print_bold(object, fmt::terminal_color::red);
+    } else {
+        print_color(object, fmt::terminal_color::red);
+    }
 }
 
 /// Print error message with red colour.
@@ -65,36 +98,6 @@ inline void print_warn(const std::string& message)
 {
     auto [indent, text] = split_leading_whitespace(message);
     fmt::print(fmt::fg(fmt::terminal_color::yellow), "{}Warning: {}\n", indent, text);
-}
-
-/// Print text in green.
-template<typename T> void print_green(const T& object, bool bold = false)
-{
-    if (bold) {
-        print_bold(object, fmt::terminal_color::green);
-    } else {
-        print_color(object, fmt::terminal_color::green);
-    }
-}
-
-/// Print text in yellow.
-template<typename T> void print_yellow(const T& object, bool bold = false)
-{
-    if (bold) {
-        print_bold(object, fmt::terminal_color::yellow);
-    } else {
-        print_color(object, fmt::terminal_color::yellow);
-    }
-}
-
-/// Print text in red.
-template<typename T> void print_red(const T& object, bool bold = false)
-{
-    if (bold) {
-        print_bold(object, fmt::terminal_color::red);
-    } else {
-        print_color(object, fmt::terminal_color::red);
-    }
 }
 
 // Fallback with ANSI escape codes for stringstream
