@@ -97,6 +97,7 @@ jobs:
 
       - name: Install clang-format
         run: |
+          brew update
           brew install clang-format
 
       - name: Check formatting
