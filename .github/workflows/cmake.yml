@@ -85,7 +85,8 @@ jobs:
         shell: bash
 
   clang-format:
-    runs-on: ubuntu-latest
+    # Need to use mac since Ubuntu apt has an old clang-format version
+    runs-on: macos-latest
     defaults:
       run:
         working-directory: cpp
@@ -96,8 +97,7 @@ jobs:
 
       - name: Install clang-format
         run: |
-          sudo apt-get update
-          sudo apt-get install -y clang-format
+          brew install clang-format
 
       - name: Check formatting
         run: |
