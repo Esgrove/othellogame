@@ -172,6 +172,11 @@ else()
     target_compile_options(othello_cpp PRIVATE
         -Wall -Wextra -pedantic
     )
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        target_compile_options(othello_cpp PRIVATE
+            -march=native -mtune=native
+        )
+    endif()
 endif()
 
 if(BUILD_TESTS)
@@ -179,7 +184,8 @@ if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
+get_target_property(COMPILE_OPTIONS othello_cpp COMPILE_OPTIONS)
+message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
 message(STATUS "CMAKE_CXX_COMPILER_LAUNCHER: ${CMAKE_CXX_COMPILER_LAUNCHER}")
-message(STATUS "CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
-message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS "COMPILE_OPTIONS: ${COMPILE_OPTIONS}")
