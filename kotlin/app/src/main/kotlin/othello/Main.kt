@@ -15,11 +15,14 @@ class OthelloKotlin : CliktCommand() {
         "size",
         help = "Optional board size ($MIN_BOARD_SIZE..$MAX_BOARD_SIZE)",
     ).int().optional()
+
+    @Suppress("ktlint")
     private val autoplay by option("-a", "--autoplay", help = "Enable autoplay mode with computer control").flag()
     private val check by option("-c", "--check", help = "Autoplay and only print result").flag()
     private val default by option("-d", "--default", help = "Play with default settings").flag()
     private val log by option("-l", "--log", help = "Show game log at the end").flag()
     private val noHelpers by option("-n", "--no-helpers", help = "Hide disk placement hints").flag()
+    @Suppress("ktlint")
     private val test by option("-t", "--test", help = "Enable test mode with deterministic computer moves").flag()
     private val version by option("-v", "--version", help = "Print version and exit").flag()
 
@@ -58,8 +61,7 @@ class OthelloKotlin : CliktCommand() {
             useDefaults = default,
         )
 
-        val game = Othello(settings)
-        game.play()
+        Othello(settings).play()
     }
 }
 
