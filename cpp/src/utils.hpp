@@ -16,10 +16,6 @@
 
 namespace othello
 {
-static constexpr size_t MIN_BOARD_SIZE = 4;
-static constexpr size_t MAX_BOARD_SIZE = 10;
-static constexpr size_t DEFAULT_BOARD_SIZE = 8;
-
 /// Returns the opposing disk colour.
 constexpr Disk opponent(const Disk& disk)
 {

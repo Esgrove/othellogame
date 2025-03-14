@@ -16,11 +16,13 @@ inline cxxopts::Options cli_arguments()
 {
     cxxopts::Options options("othello_cpp", "A simple Othello CLI game implementation in C++");
     options.custom_help("[OPTIONS]");
-    options.positional_help(fmt::format(
-        "[SIZE]\n\nArguments:\n  [SIZE]            Optional board size ({}..{})",
-        othello::MIN_BOARD_SIZE,
-        othello::MAX_BOARD_SIZE
-    ));
+    options.positional_help(
+        fmt::format(
+            "[SIZE]\n\nArguments:\n  [SIZE]            Optional board size ({}..{})",
+            othello::MIN_BOARD_SIZE,
+            othello::MAX_BOARD_SIZE
+        )
+    );
 
     options.add_options("Positional")(
         "size",

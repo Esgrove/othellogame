@@ -9,6 +9,10 @@
 
 namespace othello
 {
+static constexpr size_t MIN_BOARD_SIZE = 4;
+static constexpr size_t MAX_BOARD_SIZE = 10;
+static constexpr size_t DEFAULT_BOARD_SIZE = 8;
+
 /// Player settings.
 struct PlayerSettings {
     explicit PlayerSettings(const bool show_helpers, const bool check_mode, const bool test_mode) :

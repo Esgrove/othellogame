@@ -162,9 +162,11 @@ size_t Othello::get_board_size()
     try {
         const size_t size = std::stoi(input);
         if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
-            print_warn(fmt::format(
-                "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE
-            ));
+            print_warn(
+                fmt::format(
+                    "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE
+                )
+            );
         }
         return std::clamp(size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
     } catch (const std::exception&) {

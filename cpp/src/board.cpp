@@ -127,7 +127,7 @@ void Board::print_possible_moves(const std::vector<Move>& moves)
             fmt::print(" {}", formatted_board[y * size + x]);
         }
     }
-    fmt::print("");
+    fmt::print("\n");
 }
 
 /// Print current score for both players.
