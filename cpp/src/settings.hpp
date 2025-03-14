@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <format>
+
 namespace othello
 {
 static constexpr size_t MIN_BOARD_SIZE = 4;
@@ -22,6 +24,20 @@ struct PlayerSettings {
     {}
 
     PlayerSettings() : show_helpers(true), check_mode(false), test_mode(false) {}
+
+    friend std::ostream& operator<<(std::ostream& out, const PlayerSettings& player_settings)
+    {
+        out << std::format(
+            "PlayerSettings:\n"
+            "  show_helpers: {}\n"
+            "  check_mode:   {}\n"
+            "  test_mode:    {}\n",
+            player_settings.show_helpers ? "true" : "false",
+            player_settings.check_mode ? "true" : "false",
+            player_settings.test_mode ? "true" : "false"
+        );
+        return out;
+    }
 
     bool show_helpers;
     bool check_mode;
@@ -64,6 +80,28 @@ struct Settings {
         return PlayerSettings(show_helpers, check_mode, test_mode);
     }
 
+    friend std::ostream& operator<<(std::ostream& out, const Settings& settings)
+    {
+        out << std::format(
+            "Settings:\n"
+            "  board_size:    {}\n"
+            "  autoplay_mode: {}\n"
+            "  check_mode:    {}\n"
+            "  show_helpers:  {}\n"
+            "  show_log:      {}\n"
+            "  test_mode:     {}\n"
+            "  use_defaults:  {}\n",
+            settings.board_size,
+            settings.autoplay_mode ? "true" : "false",
+            settings.check_mode ? "true" : "false",
+            settings.show_helpers ? "true" : "false",
+            settings.show_log ? "true" : "false",
+            settings.test_mode ? "true" : "false",
+            settings.use_defaults ? "true" : "false"
+        );
+        return out;
+    }
+
     size_t board_size;
     bool autoplay_mode;
     bool check_mode;
@@ -73,3 +111,6 @@ struct Settings {
     bool use_defaults;
 };
 }  // namespace othello
+
+template<> struct fmt::formatter<othello::Settings> : ostream_formatter {};
+template<> struct fmt::formatter<othello::PlayerSettings> : ostream_formatter {};
