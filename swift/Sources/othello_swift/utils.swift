@@ -11,10 +11,6 @@ import Foundation
 
 import BuildInfo
 
-let MIN_BOARD_SIZE: Int = 4
-let MAX_BOARD_SIZE: Int = 10
-let DEFAULT_BOARD_SIZE: Int = 8
-
 /// Calculate SHA256 hash for the given string.
 func calculateSHA256(_ text: String) -> String {
     let data = text.data(using: .utf8)!

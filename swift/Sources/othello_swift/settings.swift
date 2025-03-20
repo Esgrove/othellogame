@@ -5,6 +5,10 @@
 // 2019-2025
 //==========================================================
 
+let MIN_BOARD_SIZE: Int = 4
+let MAX_BOARD_SIZE: Int = 10
+let DEFAULT_BOARD_SIZE: Int = 8
+
 /// Game settings.
 struct Settings: CustomStringConvertible {
     var boardSize: Int
