@@ -3,7 +3,7 @@ import java.io.ByteArrayOutputStream
 version = "1.7.0"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.1.10"
+    id("org.jetbrains.kotlin.jvm") version "2.1.20"
     // https://github.com/johnrengelman/shadow
     id("com.github.johnrengelman.shadow") version "8.1.1"
 
