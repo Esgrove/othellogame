@@ -39,9 +39,6 @@ set_version_info() {
     BUILD_TIME=$(date -u +"%Y-%m-%d_%H%M")
     GIT_COMMIT=$(git -C "$REPO_ROOT" rev-parse --short HEAD)
     GIT_BRANCH=$(git -C "$REPO_ROOT" branch --show-current)
-    echo "BUILD_TIME: $BUILD_TIME"
-    echo "GIT_COMMIT: $GIT_COMMIT"
-    echo "GIT_BRANCH: $GIT_BRANCH"
     export BUILD_TIME
     export GIT_COMMIT
     export GIT_BRANCH

@@ -16,6 +16,9 @@ print_magenta "Building Othello Swift..."
 
 echo "Writing version information..."
 set_version_info
+echo "BUILD_TIME: $BUILD_TIME"
+echo "GIT_COMMIT: $GIT_COMMIT"
+echo "GIT_BRANCH: $GIT_BRANCH"
 {
     echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
     echo "public enum VersionInfo {"

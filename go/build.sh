@@ -56,6 +56,10 @@ build_project() {
         go version
     fi
 
+    echo "BUILD_TIME: $BUILD_TIME"
+    echo "GIT_COMMIT: $GIT_COMMIT"
+    echo "GIT_BRANCH: $GIT_BRANCH"
+
     VERSION_INFO="-X othello_go/othello.GitBranch=$GIT_BRANCH \
                   -X othello_go/othello.GitCommit=$GIT_COMMIT \
                   -X othello_go/othello.BuildTime=$BUILD_TIME \

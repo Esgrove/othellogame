@@ -63,6 +63,9 @@ update_version_info() {
     set_version_info
     VERSION="$(awk -F'[<>]' '/<Version>/{print $3}' "$PROJECT_PATH/Othello/Othello.csproj")"
     print_yellow "Writing version information with version $VERSION"
+    echo "BUILD_TIME: $BUILD_TIME"
+    echo "GIT_COMMIT: $GIT_COMMIT"
+    echo "GIT_BRANCH: $GIT_BRANCH"
     {
         echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
         echo ""
