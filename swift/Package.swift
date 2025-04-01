@@ -4,10 +4,10 @@
 import PackageDescription
 
 let package = Package(
-    name: "othello_swift",
+    name: "Othello",
     platforms: [
         // Minimum macOS version
-        .macOS(.v12),
+        .macOS(.v13),
     ],
     dependencies: [
         .package(url: "https://github.com/mtynior/ColorizeSwift.git", from: "1.6.0"),
@@ -16,17 +16,17 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "BuildInfo",
-            publicHeadersPath: "include"
+            name: "VersionInfo"
         ),
         .executableTarget(
             name: "othello_swift",
             dependencies: [
-                .target(name: "BuildInfo"),
+                .target(name: "VersionInfo"),
                 .product(name: "ColorizeSwift", package: "ColorizeSwift"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Crypto", package: "swift-crypto"),
-            ]
+            ],
+            path: "Sources/Othello"
         ),
     ]
 )

@@ -9,23 +9,12 @@ import ColorizeSwift
 import Crypto
 import Foundation
 
-import BuildInfo
-
 /// Calculate SHA256 hash for the given string.
 func calculateSHA256(_ text: String) -> String {
     let data = text.data(using: .utf8)!
     let hash = SHA256.hash(data: data)
 
     return hash.map { String(format: "%02x", $0) }.joined()
-}
-
-/// Return formatted build version information.
-func versionInfo() -> String {
-    let versionNumber = VERSION
-    let buildTime = BUILD_TIME
-    let gitHash = GIT_HASH
-    let gitBranch = GIT_BRANCH
-    return "\(versionNumber) \(buildTime) \(gitBranch) \(gitHash)"
 }
 
 extension Comparable {

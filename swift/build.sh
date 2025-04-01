@@ -7,10 +7,10 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$DIR/../common.sh"
 
 PROJECT_PATH="$REPO_ROOT/swift"
-VERSION_HEADER="$PROJECT_PATH/Sources/BuildInfo/include/version.h"
+VERSION_HEADER="$PROJECT_PATH/Sources/VersionInfo/versionInfo.swift"
 
-# Define poject version number here since Swift Package Manager does not provide a way...
-VERSION_NUMBER="2.4.0"
+# Define poject version number here since Swift Package Manager does not provide a way :(
+VERSION_NUMBER="2.5.0"
 
 print_magenta "Building Othello Swift..."
 
@@ -18,10 +18,12 @@ echo "Writing version information..."
 set_version_info
 {
     echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
-    echo "#define BUILD_TIME \"${BUILD_TIME}\""
-    echo "#define GIT_HASH \"${GIT_HASH}\""
-    echo "#define GIT_BRANCH \"${GIT_BRANCH}\""
-    echo "#define VERSION \"${VERSION_NUMBER}\""
+    echo "public enum VersionInfo {"
+    echo "    public static let buildTime = \"${BUILD_TIME}\""
+    echo "    public static let gitHash = \"${GIT_HASH}\""
+    echo "    public static let gitBranch = \"${GIT_BRANCH}\""
+    echo "    public static let version = \"${VERSION_NUMBER}\""
+    echo "}"
 } > "$VERSION_HEADER"
 
 if [ -z "$(command -v swift)" ]; then
