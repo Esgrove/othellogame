@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 project("Othello C++"
-    VERSION 2.10.0
+    VERSION 2.11.0
     DESCRIPTION "A simple Othello CLI game implementation in C++"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -36,7 +36,7 @@ message(STATUS "CMake source dir: ${CMAKE_SOURCE_DIR}")
 # Get git hash
 execute_process(
     COMMAND bash -c "git rev-parse --short HEAD"
-    OUTPUT_VARIABLE GIT_HASH
+    OUTPUT_VARIABLE GIT_COMMIT
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 # Get git branch
@@ -46,11 +46,9 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
-# Date and time
-string(TIMESTAMP DATE "%Y-%m-%d" UTC)
-string(TIMESTAMP TIMESTAMP "%Y-%m-%d_%H%M" UTC)
+string(TIMESTAMP BUILD_TIME "%Y-%m-%d_%H%M" UTC)
 
-set(APP_BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_HASH}_${TIMESTAMP}")
+set(APP_BUILD_NAME "othello_cpp_${CMAKE_PROJECT_VERSION}_${GIT_COMMIT}_${BUILD_TIME}")
 
 message(STATUS "Build name: ${APP_BUILD_NAME}")
 
@@ -105,8 +103,8 @@ endif(CCACHE_EXECUTABLE)
 # find_package(fmt 11 REQUIRED)
 message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt
-  GIT_TAG 11.1.4
+    GIT_REPOSITORY https://github.com/fmtlib/fmt
+    GIT_TAG 11.1.4
 )
 FetchContent_MakeAvailable(fmt)
 
@@ -114,20 +112,19 @@ FetchContent_MakeAvailable(fmt)
 # https://github.com/jarro2783/cxxopts
 message(STATUS "Fetching cxxopts library")
 FetchContent_Declare(cxxopts
-  GIT_REPOSITORY https://github.com/jarro2783/cxxopts
-  GIT_TAG v3.2.0
+    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+    GIT_TAG v3.2.0
 )
 FetchContent_MakeAvailable(cxxopts)
 
 # Set version information
 set(VERSION_INFO_DEFINITIONS
-    BUILDTIME_APP_NAME="${CMAKE_PROJECT_NAME}"
-    BUILDTIME_BRANCH="${GIT_BRANCH}"
-    BUILDTIME_BUILD_NAME="${APP_BUILD_NAME}"
-    BUILDTIME_COMMIT="${GIT_HASH}"
-    BUILDTIME_DATE="${DATE}"
-    BUILDTIME_TIMESTAMP="${TIMESTAMP}"
-    BUILDTIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
+    COMPILE_TIME_APP_NAME="${CMAKE_PROJECT_NAME}"
+    COMPILE_TIME_GIT_BRANCH="${GIT_BRANCH}"
+    COMPILE_TIME_GIT_COMMIT="${GIT_COMMIT}"
+    COMPILE_TIME_BUILD_TIME="${BUILD_TIME}"
+    COMPILE_TIME_VERSION_NUMBER="${CMAKE_PROJECT_VERSION}"
+    COMPILE_TIME_VERSION_STRING="${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_VERSION} ${BUILD_TIME} ${GIT_BRANCH} ${GIT_COMMIT}"
 )
 
 set_property(GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS "${VERSION_INFO_DEFINITIONS}")
@@ -135,12 +132,12 @@ set_property(GLOBAL PROPERTY GLOBAL_COMPILE_DEFINITIONS "${VERSION_INFO_DEFINITI
 add_executable(othello_cpp)
 
 target_sources(othello_cpp PRIVATE
-  src/board.cpp
-  src/main.cpp
-  src/models.cpp
-  src/othello.cpp
-  src/player.cpp
-  src/utils.cpp
+    src/board.cpp
+    src/main.cpp
+    src/models.cpp
+    src/othello.cpp
+    src/player.cpp
+    src/utils.cpp
 )
 
 target_include_directories(othello_cpp PRIVATE src)

@@ -1,7 +1,7 @@
 use std::process::Command;
 
 fn main() {
-    let git_hash = Command::new("git")
+    let git_commit = Command::new("git")
         .args(["rev-parse", "--short", "HEAD"])
         .output()
         .map_or_else(
@@ -27,10 +27,10 @@ fn main() {
     let version = std::env::var("CARGO_PKG_VERSION").unwrap_or_else(|_| "unknown".to_string());
 
     // Set compile time env variables
-    println!("cargo:rustc-env=GIT_COMMIT={git_hash}");
+    println!("cargo:rustc-env=GIT_COMMIT={git_commit}");
     println!("cargo:rustc-env=GIT_BRANCH={git_branch}");
     println!("cargo:rustc-env=BUILD_TIME={build_time}");
-    println!("cargo:rustc-env=VERSION={version}");
+    println!("cargo:rustc-env=VERSION_NUMBER={version}");
 
     // Tell Cargo to rerun if these change
     println!("cargo:rerun-if-changed=build.rs");

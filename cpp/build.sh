@@ -3,24 +3,15 @@ set -eo pipefail
 
 USAGE="Usage: $(basename "$0") [OPTIONS]
 
+Build Othello C++ binary.
+
 OPTIONS: All options are optional
-    -h | --help
-        Display these instructions.
-
-    -b | --build-type <type>
-        Specify build type for CMake. Default is 'Release'.
-
-    -c | --clean
-        Clean temporary files before building.
-
-    -m | --msvc
-        Use Visual Studio generator on Windows.
-
-    -t | --test
-        Build tests.
-
-    -v | --verbose
-        Display commands being executed.
+    -h | --help                 Display these instructions.
+    -b | --build-type <type>    Specify build type for CMake. Default is 'Release'.
+    -c | --clean                Clean temporary files before building.
+    -m | --msvc                 Use Visual Studio generator on Windows.
+    -t | --test                 Build tests.
+    -v | --verbose              Display commands being executed.
 "
 
 # Import common functions
@@ -61,6 +52,10 @@ init_options() {
                 ;;
             -v | --verbose)
                 set -x
+                ;;
+            *)
+                print_warn "Unknown argument '$1'"
+                print_usage_and_exit
                 ;;
         esac
         shift

@@ -20,9 +20,9 @@ set_version_info
     echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
     echo "public enum VersionInfo {"
     echo "    public static let buildTime = \"${BUILD_TIME}\""
-    echo "    public static let gitHash = \"${GIT_HASH}\""
+    echo "    public static let gitCommit = \"${GIT_COMMIT}\""
     echo "    public static let gitBranch = \"${GIT_BRANCH}\""
-    echo "    public static let version = \"${VERSION_NUMBER}\""
+    echo "    public static let versionNumber = \"${VERSION_NUMBER}\""
     echo "}"
 } > "$VERSION_HEADER"
 

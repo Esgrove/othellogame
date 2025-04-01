@@ -1,6 +1,6 @@
 static VERSION_STRING: &str = concat!(
     "Othello Rust ",
-    env!("VERSION"),
+    env!("VERSION_NUMBER"),
     " ",
     env!("BUILD_TIME"),
     " ",

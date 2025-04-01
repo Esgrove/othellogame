@@ -7,16 +7,16 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$DIR/../common.sh"
 
 # Define project version here, normally would use git tags for this...
-PROJECT_VERSION="1.7.0"
+PROJECT_VERSION="1.8.0"
 
 USAGE="Usage: $(basename "$0") [OPTIONS]
 
-OPTIONS: All options are optional
-    -h | --help
-        Display these instructions.
+Build Othello Go binary.
 
-    -v | --verbose
-        Display commands being executed."
+OPTIONS: All options are optional
+    -h | --help       Display these instructions.
+    -v | --verbose    Display commands being executed.
+"
 
 init_options() {
     while [ $# -gt 0 ]; do
@@ -27,6 +27,10 @@ init_options() {
                 ;;
             -v | --verbose)
                 set -x
+                ;;
+            *)
+                print_warn "Unknown argument '$1'"
+                print_usage_and_exit
                 ;;
         esac
         shift
@@ -53,8 +57,8 @@ build_project() {
     fi
 
     VERSION_INFO="-X othello_go/othello.GitBranch=$GIT_BRANCH \
-                  -X othello_go/othello.GitHash=$GIT_HASH \
-                  -X othello_go/othello.Timestamp=$BUILD_TIME \
+                  -X othello_go/othello.GitCommit=$GIT_COMMIT \
+                  -X othello_go/othello.BuildTime=$BUILD_TIME \
                   -X othello_go/othello.VersionNumber=$PROJECT_VERSION"
 
     cd "$PROJECT_PATH"

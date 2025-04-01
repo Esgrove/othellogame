@@ -81,7 +81,7 @@ meaning there is no Xcode project and it works on all platforms.
 
 ### Rust
 
-Rust 2021 edition.
+Rust 2024 edition.
 Uses the [colored](https://crates.io/crates/colored) crate for colored text in the terminal.
 
 ### Go

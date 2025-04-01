@@ -16,6 +16,7 @@ case "$(uname -s)" in
         BASH_PLATFORM="linux"
         ;;
 esac
+export BASH_PLATFORM
 
 check_and_set_python() {
     # Check Python is found on path and set PYTHON variable to it
@@ -33,13 +34,16 @@ check_and_set_python() {
     export PYTHON
 }
 
-# Set variables BUILD_TIME, GIT_HASH, and GIT_BRANCH
+# Set variables BUILD_TIME, GIT_COMMIT, and GIT_BRANCH
 set_version_info() {
     BUILD_TIME=$(date -u +"%Y-%m-%d_%H%M")
-    GIT_HASH=$(git -C "$REPO_ROOT" rev-parse --short HEAD)
+    GIT_COMMIT=$(git -C "$REPO_ROOT" rev-parse --short HEAD)
     GIT_BRANCH=$(git -C "$REPO_ROOT" branch --show-current)
+    echo "BUILD_TIME: $BUILD_TIME"
+    echo "GIT_COMMIT: $GIT_COMMIT"
+    echo "GIT_BRANCH: $GIT_BRANCH"
     export BUILD_TIME
-    export GIT_HASH
+    export GIT_COMMIT
     export GIT_BRANCH
 }
 
@@ -67,5 +71,19 @@ print_yellow() {
 print_error_and_exit() {
     print_red "ERROR: $1"
     # use exit code if given as argument, otherwise default to 1
+    exit "${2:-1}"
+}
+
+# Print usage and exit the program. An optional error message can be given as well.
+print_usage_and_exit() {
+    if [ $# -eq 1 ]; then
+        print_red "ERROR: $1"
+    fi
+    if [ -z "$USAGE" ]; then
+        print_red "No usage text provided in variable USAGE"
+    else
+        echo "$USAGE"
+    fi
+    # use exit code if given as second argument, otherwise default to 1
     exit "${2:-1}"
 }

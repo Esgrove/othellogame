@@ -30,9 +30,9 @@ update_version_information() {
         echo '"""'
         echo ""
         echo "# Updated by build script, do not edit manually!"
-        echo "BRANCH = \"$GIT_BRANCH\""
-        echo "COMMIT = \"$GIT_HASH\""
-        echo "DATE = \"$BUILD_TIME\""
+        echo "GIT_BRANCH = \"$GIT_BRANCH\""
+        echo "GIT_COMMIT = \"$GIT_COMMIT\""
+        echo "BUILD_TIME = \"$BUILD_TIME\""
         echo "VERSION_NUMBER = \"$VERSION_NUMBER\""
     } > "$VERSION_FILE"
 }

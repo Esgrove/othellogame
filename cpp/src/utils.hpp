@@ -73,13 +73,6 @@ std::string to_string(const T& object)
 /// Print version string
 inline void print_version()
 {
-    fmt::print(
-        "{} {} {} {} {}\n",
-        version::APP_NAME,
-        version::VERSION_NUMBER,
-        version::TIMESTAMP,
-        version::BRANCH,
-        version::COMMIT
-    );
+    std::println("{}", version::VERSION_STRING);
 }
 }  // namespace othello

@@ -9,9 +9,9 @@ import hashlib
 import sys
 
 try:
-    from othello.version import BRANCH, COMMIT, DATE, VERSION_NUMBER
+    from othello.version import GIT_BRANCH, GIT_COMMIT, BUILD_TIME, VERSION_NUMBER
 except ModuleNotFoundError:
-    from version import BRANCH, COMMIT, DATE, VERSION_NUMBER
+    from version import GIT_BRANCH, GIT_COMMIT, BUILD_TIME, VERSION_NUMBER
 
 
 def calculate_sha256(formatted_log: str) -> str:
@@ -37,4 +37,4 @@ def python_version() -> str:
 
 def version_info() -> str:
     """Return formatted build version information."""
-    return f"{VERSION_NUMBER} {DATE} {BRANCH} {COMMIT}"
+    return f"{VERSION_NUMBER} {BUILD_TIME} {GIT_BRANCH} {GIT_COMMIT}"

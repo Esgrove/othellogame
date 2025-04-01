@@ -3,15 +3,13 @@ set -eo pipefail
 
 USAGE="Usage: $(basename "$0") [OPTIONS]
 
+Build Othello C# binary.
+
 OPTIONS: All options are optional
-    -h | --help
-        Display these instructions.
-
-    -b | --build-type <type>
-        Specify build type. Default is 'Release'.
-
-    -v | --verbose
-        Display commands being executed."
+    -h | --help                 Display these instructions.
+    -b | --build-type <type>    Specify build type. Default is 'Release'.
+    -v | --verbose              Display commands being executed.
+"
 
 # Import common functions
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -33,6 +31,10 @@ init_options() {
                 ;;
             -v | --verbose)
                 set -x
+                ;;
+            *)
+                print_warn "Unknown argument '$1'"
+                print_usage_and_exit
                 ;;
         esac
         shift
@@ -69,7 +71,7 @@ update_version_info() {
         echo "    public static class Version"
         echo "    {"
         echo "        public const string BuildTime = \"$BUILD_TIME\";"
-        echo "        public const string GitBranch = \"$GIT_HASH\";"
+        echo "        public const string GitBranch = \"$GIT_COMMIT\";"
         echo "        public const string GitCommit = \"$GIT_BRANCH\";"
         echo "        public const string VersionNumber = \"$VERSION\";"
         echo "    }"
