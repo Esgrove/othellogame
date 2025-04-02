@@ -12,6 +12,9 @@ case "$(uname -s)" in
     "MINGW"*)
         BASH_PLATFORM="windows"
         ;;
+    "MSYS"*)
+        BASH_PLATFORM="windows"
+        ;;
     *)
         BASH_PLATFORM="linux"
         ;;
@@ -64,9 +67,17 @@ print_yellow() {
     printf "\e[1;49;33m%s\e[0m\n" "$1"
 }
 
+print_error() {
+    print_red "ERROR: $1"
+}
+
+print_warn() {
+    print_yellow "WARNING: $1"
+}
+
 # Print an error and exit the program
 print_error_and_exit() {
-    print_red "ERROR: $1"
+    print_error "$1"
     # use exit code if given as argument, otherwise default to 1
     exit "${2:-1}"
 }
@@ -74,7 +85,7 @@ print_error_and_exit() {
 # Print usage and exit the program. An optional error message can be given as well.
 print_usage_and_exit() {
     if [ $# -eq 1 ]; then
-        print_red "ERROR: $1"
+        print_error "$1"
     fi
     if [ -z "$USAGE" ]; then
         print_red "No usage text provided in variable USAGE"
