@@ -10,6 +10,7 @@ static VERSION_STRING: &str = concat!(
 );
 
 /// Return version info string
+#[inline]
 pub fn version_info() -> &'static str {
     VERSION_STRING
 }
