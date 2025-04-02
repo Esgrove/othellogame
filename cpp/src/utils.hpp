@@ -10,9 +10,18 @@
 #include "models.hpp"
 #include "version.hpp"
 
+#include <concepts>
 #include <iostream>  // cout, cin
 #include <sstream>   // stringstream
 #include <string>    // string
+
+// Concept: checks if T can be streamed into std::ostream
+template<typename T>
+concept Streamable = requires(std::ostream& os, T a) {
+    {
+        os << a
+    } -> std::same_as<std::ostream&>;
+};
 
 namespace othello
 {
@@ -49,7 +58,10 @@ inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
 }
 
 /// Print an object to stream (default is std::cout).
-template<typename T> void print(T object, const bool newline = true, std::ostream& out = std::cout)
+///
+/// Requires that the stream insertion operator `<<` has been implemented for the given object.
+template<Streamable T>
+void print(T object, const bool newline = true, std::ostream& out = std::cout)
 {
     out << object;
     if (newline) {
@@ -61,9 +73,7 @@ template<typename T> void print(T object, const bool newline = true, std::ostrea
 ///
 /// Requires that the stream insertion operator `<<` has been implemented for the given object.
 /// Workaround for custom types without formatter specialization for fmt.
-template<typename T>
-    requires requires(T obj) { std::declval<std::ostream&>() << obj; }
-std::string to_string(const T& object)
+template<Streamable T> std::string to_string(const T& object)
 {
     std::ostringstream stream;
     stream << object;
@@ -73,6 +83,8 @@ std::string to_string(const T& object)
 /// Print version string
 inline void print_version()
 {
-    std::println("{}", version::VERSION_STRING);
+    // TODO: change to C++23 std once supported with all
+    // std::println("{}", version::VERSION_STRING);
+    fmt::print("{}\n", version::VERSION_STRING);
 }
 }  // namespace othello
