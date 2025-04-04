@@ -90,7 +90,7 @@ impl Player {
     }
 
     /// Reset player status for a new game.
-    pub fn reset(&mut self) {
+    pub const fn reset(&mut self) {
         self.can_play = true;
         self.rounds_played = 0;
     }
@@ -107,18 +107,18 @@ impl Player {
     }
 
     /// Set the player as human or computer controlled.
-    pub fn set_player_type(&mut self, player_type: PlayerType) {
+    pub const fn set_player_type(&mut self, player_type: PlayerType) {
         self.player_type = player_type;
     }
 
     /// Set the player as human controlled.
     #[allow(unused)]
-    pub fn set_human(&mut self) {
+    pub const fn set_human(&mut self) {
         self.set_player_type(PlayerType::Human);
     }
 
     /// Set the player as computer controlled.
-    pub fn set_computer(&mut self) {
+    pub const fn set_computer(&mut self) {
         self.set_player_type(PlayerType::Computer);
     }
 
