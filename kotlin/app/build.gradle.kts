@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.google.guava:guava:33.4.7-jre")
+    implementation("com.google.guava:guava:33.4.8-jre")
     implementation("com.github.ajalt.clikt:clikt:5.0.3")
     implementation("com.squareup.okio:okio:3.11.0")
 }
