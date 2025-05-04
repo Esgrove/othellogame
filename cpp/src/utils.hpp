@@ -69,10 +69,10 @@ void print(T object, const bool newline = true, std::ostream& out = std::cout)
     }
 }
 
-/// Convert object to string using a stringstream.
+/// Convert an object to string using a stringstream.
 ///
 /// Requires that the stream insertion operator `<<` has been implemented for the given object.
-/// Workaround for custom types without formatter specialization for fmt.
+/// Workaround for custom types without formatter specialisation for fmt.
 template<Streamable T> std::string to_string(const T& object)
 {
     std::ostringstream stream;
@@ -83,7 +83,7 @@ template<Streamable T> std::string to_string(const T& object)
 /// Print version string
 inline void print_version()
 {
-    // TODO: change to C++23 std once supported with all
+    // TODO: change to C++23 std once supported with all implementations
     // std::println("{}", version::VERSION_STRING);
     fmt::print("{}\n", version::VERSION_STRING);
 }

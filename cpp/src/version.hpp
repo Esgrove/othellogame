@@ -13,6 +13,7 @@ static constexpr auto GIT_BRANCH = COMPILE_TIME_GIT_BRANCH;
 static constexpr auto GIT_COMMIT = COMPILE_TIME_GIT_COMMIT;
 static constexpr auto BUILD_TIME = COMPILE_TIME_BUILD_TIME;
 static constexpr auto VERSION_NUMBER = COMPILE_TIME_VERSION_NUMBER;
+static constexpr auto VERSION_STRING = COMPILE_TIME_VERSION_STRING;
 
 /// Compile-time formatted version string.
 ///
@@ -25,6 +26,4 @@ static constexpr auto VERSION_NUMBER = COMPILE_TIME_VERSION_NUMBER;
 // }
 //
 // static constexpr auto VERSION_STRING = make_version_string();
-
-static constexpr auto VERSION_STRING = COMPILE_TIME_VERSION_STRING;
 }  // namespace version
