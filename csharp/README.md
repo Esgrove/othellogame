@@ -61,7 +61,8 @@ Using [CSharpier](https://github.com/belav/csharpier)
 ```shell
 dotnet tool install --global csharpier
 
-dotnet csharpier .
+csharpier format .
+csharpier check .
 ```
 
 ## TODO
