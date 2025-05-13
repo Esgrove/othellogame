@@ -4,8 +4,8 @@ version = "1.7.1"
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.1.20"
-    // https://github.com/johnrengelman/shadow
-    id("com.github.johnrengelman.shadow") version "8.3.6"
+    // https://github.com/GradleUp/shadow
+    id("com.gradleup.shadow") version "8.3.6"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
