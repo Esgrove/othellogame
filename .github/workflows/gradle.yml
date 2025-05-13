@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - "kotlin/**"
       - ".github/workflows/gradle.yml"
+      - "kotlin/**"
   pull_request:
     paths:
-      - "kotlin/**"
       - ".github/workflows/gradle.yml"
+      - "kotlin/**"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:
@@ -27,9 +27,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'gradle'
+          java-version: "21"
+          distribution: "temurin"
+          cache: "gradle"
 
       - name: Build with Gradle
         working-directory: kotlin
