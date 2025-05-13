@@ -22,11 +22,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  format:
+  check:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./python
+        working-directory: python
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -48,8 +48,8 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v4
         with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          path: python/.venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('python/poetry.lock') }}
           restore-keys: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
 
       - name: Install dependencies
@@ -62,13 +62,13 @@ jobs:
       - name: Ruff format
         uses: astral-sh/ruff-action@v3
         with:
-          src: ./python
+          src: python
           args: format --check --verbose
 
       - name: Ruff lint
         uses: astral-sh/ruff-action@v3
         with:
-          src: ./python
+          src: python
           args: check --verbose
 
       - name: Run tests
