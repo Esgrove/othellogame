@@ -1,11 +1,11 @@
 import java.io.ByteArrayOutputStream
 
-version = "1.7.0"
+version = "1.7.1"
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.1.20"
     // https://github.com/johnrengelman/shadow
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.github.johnrengelman.shadow") version "8.3.6"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -18,7 +18,9 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:33.4.8-jre")
+    // https://github.com/ajalt/clikt
     implementation("com.github.ajalt.clikt:clikt:5.0.3")
+    // https://github.com/square/okio
     implementation("com.squareup.okio:okio:3.11.0")
 }
 
