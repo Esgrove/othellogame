@@ -5,12 +5,14 @@ on:
     branches:
       - main
     paths:
-      - "csharp/**"
       - ".github/workflows/dotnet.yml"
+      - "csharp/**"
+      - "!csharp/README.md"
   pull_request:
     paths:
-      - "csharp/**"
       - ".github/workflows/dotnet.yml"
+      - "csharp/**"
+      - "!csharp/README.md"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:

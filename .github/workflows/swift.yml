@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/swift.yml"
       - "swift/**.swift"
       - "swift/Package.resolved"
-      - ".github/workflows/swift.yml"
   pull_request:
     paths:
+      - ".github/workflows/swift.yml"
       - "swift/**.swift"
       - "swift/Package.resolved"
-      - ".github/workflows/swift.yml"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:
