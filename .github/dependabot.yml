@@ -35,6 +35,12 @@ updates:
     schedule:
       interval: "daily"
 
+  # Java
+  - package-ecosystem: "gradle"
+    directory: "/java"
+    schedule:
+      interval: "daily"
+
   # Swift
   - package-ecosystem: "swift"
     directory: "/swift"
