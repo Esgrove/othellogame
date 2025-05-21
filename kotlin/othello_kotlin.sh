@@ -6,9 +6,16 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
-PROJECT_PATH="$REPO_ROOT/kotlin"
+cd "$DIR"
 
-cd "$PROJECT_PATH"
+executable="othello_kotlin.jar"
+
+if [ ! -e "$executable" ]; then
+    rm -rf build/libs/*.jar
+    ./gradlew --console plain --quiet shadowJar
+    jar=$(find build -iname "app-*-all.jar" -print -quit)
+    mv "$jar" "$executable"
+fi
 
 # Pass arguments to program
-java -jar "$PROJECT_PATH/othello_kotlin.jar" "$@"
+java -jar "$DIR/$executable" "$@"

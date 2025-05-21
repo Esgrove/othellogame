@@ -6,25 +6,19 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
-# Get absolute path to repo root
-REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
-PROJECT_PATH="$REPO_ROOT/kotlin"
+cd "$DIR"
 
 print_magenta "Building Othello Kotlin..."
 
-if [ -z "$(command -v gradle)" ]; then
-    print_error_and_exit "gradle not found in path"
-else
-    gradle --version
-fi
+rm -rf build/libs/*.jar
 
-cd "$PROJECT_PATH"
+./gradlew shadowJar
 
-gradle shadowJar
-
+jar="$(find build -iname "app-*-all.jar" -print -quit)"
 executable="othello_kotlin.jar"
+
 rm -f "$executable"
-mv "$(find app/build -iname "app-*-all.jar" -print -quit)" "$executable"
+mv "$jar" "$executable"
 file "$executable"
 java -jar "$executable" --version
 java -jar "$executable" -h || :
