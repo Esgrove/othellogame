@@ -11,9 +11,9 @@ cd "$DIR"
 executable="othello_kotlin.jar"
 
 if [ ! -e "$executable" ]; then
-    rm -rf build/libs/*.jar
+    rm -rf build/libs/othello_kotlin*.jar
     ./gradlew --console plain --quiet shadowJar
-    jar=$(find build -iname "app-*-all.jar" -print -quit)
+    jar=$(find build -iname "othello_kotlin-*-all.jar" -print -quit)
     mv "$jar" "$executable"
 fi
 

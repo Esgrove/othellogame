@@ -10,11 +10,11 @@ cd "$DIR"
 
 print_magenta "Building Othello Kotlin..."
 
-rm -rf build/libs/*.jar
+rm -rf build/libs/othello_kotlin*.jar
 
 ./gradlew shadowJar
 
-jar="$(find build -iname "app-*-all.jar" -print -quit)"
+jar="$(find build -iname "othello_kotlin-*-all.jar" -print -quit)"
 executable="othello_kotlin.jar"
 
 rm -f "$executable"
