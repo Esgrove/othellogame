@@ -34,24 +34,32 @@ public class Settings {
         return boardSize;
     }
 
-    public boolean isAutoplayMode() {
+    public boolean autoplayMode() {
         return autoplayMode;
     }
 
-    public boolean isUseDefaults() {
+    public boolean useDefaults() {
         return useDefaults;
     }
 
-    public boolean isShowHelpers() {
+    public boolean showHelpers() {
         return showHelpers;
     }
 
-    public boolean isShowLog() {
+    public boolean showLog() {
         return showLog;
     }
 
-    public boolean isTestMode() {
+    public boolean testMode() {
         return testMode;
+    }
+
+    public boolean checkMode() {
+        return checkMode;
+    }
+
+    public PlayerSettings toPlayerSettings() {
+        return new PlayerSettings(this.checkMode, this.showHelpers, this.testMode);
     }
 
     @Override

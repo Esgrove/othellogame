@@ -31,7 +31,7 @@ class OthelloKotlin : CliktCommand() {
 
     override fun run() {
         if (version) {
-            println("${VersionInfo.VERSION_STRING}")
+            println(VersionInfo.VERSION_STRING)
             exitProcess(0)
         }
 

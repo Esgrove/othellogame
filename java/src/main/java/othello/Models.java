@@ -105,4 +105,9 @@ public class Models {
             return "Square: " + square + " -> value: " + value;
         }
     }
+
+    /**
+     * A simple immutable tuple.
+     */
+    public record IntPair(int first, int second) {}
 }

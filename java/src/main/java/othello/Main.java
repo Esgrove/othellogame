@@ -103,8 +103,8 @@ public class Main implements Callable<Integer> {
             testMode || checkMode,
             useDefaults
         );
-        System.out.printf(settings.toString());
-        // new Othello(settings).play();
+
+        new Othello(settings).play();
         return 0;
     }
 

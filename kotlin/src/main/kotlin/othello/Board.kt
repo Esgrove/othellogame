@@ -34,7 +34,7 @@ class Board(private val size: Int) {
         board[col * size + row] = Disk.Black
         board[col * size + col] = Disk.White
 
-        // Index list (0...size) to avoid repeating same range in loops
+        // Index list (0...size) to avoid repeating the same range in loops
         indices = (0 until size).toList()
 
         // Keep track of empty squares on board to avoid checking already filled positions
