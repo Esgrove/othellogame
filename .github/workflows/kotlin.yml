@@ -1,0 +1,59 @@
+name: Kotlin
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/kotlin.yml"
+      - "kotlin/**.kt"
+      - "kotlin/**.kts"
+      - "kotlin/**.sh"
+  pull_request:
+    paths:
+      - ".github/workflows/kotlin.yml"
+      - "kotlin/**.kt"
+      - "kotlin/**.kts"
+      - "kotlin/**.sh"
+
+# Cancel previous runs for PRs but not pushes to main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kotlin
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch all history including 'origin/main' so Spotless can detect the changes
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: "gradle"
+
+      - name: Cache Gradle wrapper and build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            kotlin/.gradle
+            kotlin/build
+          key: gradle-wrapper-kotlin-${{ runner.os }}-${{ hashFiles('kotlin/gradle/wrapper/gradle-wrapper.properties', 'kotlin/build.gradle.kts') }}
+          restore-keys: gradle-wrapper-kotlin-${{ runner.os }}-
+
+      - name: Build with Gradle
+        run: chmod +x build.sh && ./build.sh
+
+      - name: Lint
+        run: ./gradlew spotlessCheck

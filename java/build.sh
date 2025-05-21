@@ -8,14 +8,14 @@ source "$DIR/../common.sh"
 
 cd "$DIR"
 
-print_magenta "Building Othello Kotlin..."
+print_magenta "Building Othello Java..."
 
-rm -rf build/libs/othello_kotlin*.jar
+rm -rf build/libs/othello_java-*-all.jar
 
-./gradlew shadowJar
+./gradlew fatJar
 
-jar="$(find build -iname "othello_kotlin-*-all.jar" -print -quit)"
-executable="othello_kotlin.jar"
+jar="$(find build -iname "othello_java-*-all.jar" -print -quit)"
+executable="othello_java.jar"
 
 rm -f "$executable"
 mv "$jar" "$executable"

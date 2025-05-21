@@ -8,14 +8,14 @@ source "$DIR/../common.sh"
 
 cd "$DIR"
 
-executable="othello_kotlin.jar"
+executable="othello_java.jar"
 
 if [ ! -e "$executable" ]; then
-    rm -rf build/libs/othello_kotlin*.jar
-    ./gradlew --console plain --quiet shadowJar
-    jar=$(find build -iname "othello_kotlin-*-all.jar" -print -quit)
+    rm -rf build/libs/othello_java*.jar
+    ./gradlew --console plain --quiet fatJar
+    jar=$(find build/libs -iname "othello_java-*-all.jar" -print -quit)
     mv "$jar" "$executable"
 fi
 
-# Pass arguments to program
+# Run the JAR with any provided arguments
 java -jar "$DIR/$executable" "$@"

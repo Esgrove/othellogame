@@ -6,11 +6,17 @@ on:
       - main
     paths:
       - ".github/workflows/go.yml"
-      - "go/**"
+      - "go/**.go"
+      - "go/**.mod"
+      - "go/**.sh"
+      - "go/**.sum"
   pull_request:
     paths:
       - ".github/workflows/go.yml"
-      - "go/**"
+      - "go/**.go"
+      - "go/**.mod"
+      - "go/**.sh"
+      - "go/**.sum"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:
@@ -19,7 +25,12 @@ concurrency:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: go
+        shell: bash
     steps:
       - uses: actions/checkout@v4
 
@@ -33,16 +44,7 @@ jobs:
         run: go version
 
       - name: Build
-        working-directory: go
         run: chmod +x build.sh && ./build.sh
-        shell: bash
 
       - name: Format
-        working-directory: ./go
-        run: |
-          if [ -n "$(gofmt -l .)" ]; then
-            echo "Code is not formatted with gofmt. Please format your code."
-            gofmt -d .
-            exit 1
-          fi
-        shell: bash
+        run: chmod +x format.sh && ./format.sh --check
