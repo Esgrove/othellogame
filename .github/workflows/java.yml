@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: kotlin
+        working-directory: java
         shell: bash
     steps:
       - name: Check out repository
