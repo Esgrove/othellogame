@@ -93,6 +93,10 @@ Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
 
 Kotlin 1.9+ and [Gradle](https://gradle.org/kotlin/).
 
+### Java
+
+Java 21 and [Gradle](https://gradle.org).
+
 ## TODO
 
 - Write some thoughts on the languages and their differences
