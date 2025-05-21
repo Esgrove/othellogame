@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - ".github/workflows/java.yml"
-      - "java/**.kt"
+      - "java/**.java"
       - "java/**.kts"
       - "java/**.sh"
   pull_request:
