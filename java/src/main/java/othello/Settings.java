@@ -12,7 +12,15 @@ public class Settings {
     private final boolean testMode;
     private final boolean useDefaults;
 
-    public Settings(int boardSize, boolean autoplayMode, boolean checkMode, boolean showHelpers, boolean showLog, boolean testMode, boolean useDefaults) {
+    public Settings(
+        int boardSize,
+        boolean autoplayMode,
+        boolean checkMode,
+        boolean showHelpers,
+        boolean showLog,
+        boolean testMode,
+        boolean useDefaults
+    ) {
         this.boardSize = boardSize;
         this.autoplayMode = autoplayMode;
         this.checkMode = checkMode;
@@ -59,7 +67,13 @@ public class Settings {
                   testMode: %b
                   useDefaults: %b
                 """,
-            boardSize, autoplayMode, checkMode, useDefaults, showHelpers, showLog, testMode
+            boardSize,
+            autoplayMode,
+            checkMode,
+            useDefaults,
+            showHelpers,
+            showLog,
+            testMode
         );
     }
 }

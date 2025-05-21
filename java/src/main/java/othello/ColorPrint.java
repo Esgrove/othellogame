@@ -16,6 +16,15 @@ public class ColorPrint {
     }
 
     /**
+     * Format string with color.
+     * <p>
+     * Overload with bold defaulting to false.
+     */
+    public static String getColor(String text, AnsiColor color) {
+        return getColor(text, color, false);
+    }
+
+    /**
      * Print text with specified color.
      */
     public static void printColor(String text, AnsiColor color) {
@@ -60,6 +69,8 @@ public class ColorPrint {
         while (indentSize < message.length() && Character.isWhitespace(message.charAt(indentSize))) {
             indentSize++;
         }
-        return new String[]{message.substring(0, indentSize), message.substring(indentSize)};
+        return new String[] {
+            message.substring(0, indentSize), message.substring(indentSize)
+        };
     }
 }

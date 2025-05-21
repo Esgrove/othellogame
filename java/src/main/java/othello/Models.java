@@ -1,7 +1,6 @@
 package othello;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Models {
 
@@ -25,17 +24,17 @@ public class Models {
 
         public AnsiColor diskColor() {
             return switch (this) {
-                case EMPTY -> AnsiColor.WHITE;
-                case WHITE -> AnsiColor.CYAN;
-                case BLACK -> AnsiColor.MAGENTA;
+            case EMPTY -> AnsiColor.WHITE;
+            case WHITE -> AnsiColor.CYAN;
+            case BLACK -> AnsiColor.MAGENTA;
             };
         }
 
         public Disk opponent() {
             return switch (this) {
-                case EMPTY -> EMPTY;
-                case WHITE -> BLACK;
-                case BLACK -> WHITE;
+            case EMPTY -> EMPTY;
+            case WHITE -> BLACK;
+            case BLACK -> WHITE;
             };
         }
 
@@ -44,9 +43,9 @@ public class Models {
          */
         public String boardChar(boolean color) {
             return switch (this) {
-                case EMPTY -> "_";
-                case WHITE -> color ? ColorPrint.getColor("W", this.diskColor()) : "W";
-                case BLACK -> color ? ColorPrint.getColor("B", this.diskColor()) : "B";
+            case EMPTY -> "_";
+            case WHITE -> color ? ColorPrint.getColor("W", this.diskColor()) : "W";
+            case BLACK -> color ? ColorPrint.getColor("B", this.diskColor()) : "B";
             };
         }
     }
@@ -75,8 +74,8 @@ public class Models {
 
         @Override
         public int compareTo(Square other) {
-            return (x < other.x || (x == other.x && y < other.y)) ? -1 :
-                (x > other.x || (x == other.x && y > other.y)) ? 1 : 0;
+            return (x < other.x || (x == other.x && y < other.y)) ? -1
+                : (x > other.x || (x == other.x && y > other.y)) ? 1 : 0;
         }
 
         @Override
@@ -89,11 +88,12 @@ public class Models {
      * Represents one possible disk placement for given disk color.
      */
     public record Move(Square square, int value, Disk disk, List<Step> directions)
-        implements Comparable<Move> {
+        implements
+        Comparable<Move> {
         @Override
         public int compareTo(Move other) {
-            return (value > other.value || (value == other.value && square.compareTo(other.square) < 0)) ? -1 :
-                (value < other.value || (value == other.value && square.compareTo(other.square) > 0)) ? 1 : 0;
+            return (value > other.value || (value == other.value && square.compareTo(other.square) < 0)) ? -1
+                : (value < other.value || (value == other.value && square.compareTo(other.square) > 0)) ? 1 : 0;
         }
 
         public String logEntry() {
