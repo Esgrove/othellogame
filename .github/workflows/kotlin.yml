@@ -49,7 +49,7 @@ jobs:
           path: |
             kotlin/.gradle
             kotlin/build
-          key: gradle-wrapper-java-${{ runner.os }}-${{ hashFiles('kotlin/gradle/wrapper/gradle-wrapper.properties', 'kotlin/build.gradle.kts') }}
+          key: gradle-wrapper-kotlin-${{ runner.os }}-${{ hashFiles('kotlin/gradle/wrapper/gradle-wrapper.properties', 'kotlin/build.gradle.kts') }}
           restore-keys: gradle-wrapper-kotlin-${{ runner.os }}-
 
       - name: Build with Gradle
