@@ -1,5 +1,8 @@
 package othello;
 
+/**
+ * Defines ANSI escape codes for adding colors to console output.
+ */
 public enum AnsiColor {
     CYAN("\u001B[36m"),
     GREEN("\u001B[32m"),
