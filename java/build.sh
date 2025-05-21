@@ -14,7 +14,7 @@ rm -rf build/libs/othello_java-*-all.jar
 
 ./gradlew fatJar
 
-jar="$(find app/build -iname "othello_java-*-all.jar" -print -quit)"
+jar="$(find build -iname "othello_java-*-all.jar" -print -quit)"
 executable="othello_java.jar"
 
 rm -f "$executable"
