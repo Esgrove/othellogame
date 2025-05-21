@@ -8,14 +8,14 @@ source "$DIR/../common.sh"
 
 cd "$DIR"
 
-rm -rf build/libs/othello_java*.jar
+executable="othello_java.jar"
 
-./gradlew --console plain --quiet fatJar
-
-# Find the generated JAR
-FAT_JAR=$(find build/libs -iname "othello_java-*-all.jar" | head -n 1)
-
-mv "$FAT_JAR" ./othello_java.jar
+if [ ! -e "$executable" ]; then
+    rm -rf build/libs/othello_java*.jar
+    ./gradlew --console plain --quiet fatJar
+    jar=$(find build/libs -iname "othello_java-*-all.jar" -print -quit)
+    mv "$jar" "$executable"
+fi
 
 # Run the JAR with any provided arguments
-java -jar ./othello_java.jar "$@"
+java -jar "$DIR/$executable" "$@"
