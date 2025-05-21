@@ -116,6 +116,7 @@ tasks.named("compileJava") {
 tasks.register<JavaExec>("othello") {
     group = "application"
     mainClass.set("othello.Main")
+    classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
 
     javaLauncher.set(javaToolchains.launcherFor {
@@ -162,4 +163,23 @@ tasks.register("version") {
 
 tasks.named("build") {
     dependsOn("version")
+}
+
+tasks.register<Jar>("fatJar") {
+    group = "build"
+    archiveClassifier.set("all")
+
+    manifest {
+        attributes["Main-Class"] = "othello.Main"
+    }
+
+    from(sourceSets.main.get().output)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get()
+            .filter { it.name.endsWith("jar") }
+            .map { zipTree(it) }
+    })
 }
