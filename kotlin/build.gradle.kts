@@ -1,5 +1,3 @@
-import java.io.ByteArrayOutputStream
-import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
@@ -8,13 +6,14 @@ import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.*
 import org.gradle.process.ExecOperations
+import java.io.ByteArrayOutputStream
+import javax.inject.Inject
 
 abstract class ExecHelper @Inject constructor(val execOps: ExecOperations) :
     BuildService<BuildServiceParameters.None>
 
-abstract class WriteVersionTask @Inject constructor(
-    private val objects: ObjectFactory
-) : DefaultTask() {
+abstract class WriteVersionTask @Inject constructor(private val objects: ObjectFactory) :
+    DefaultTask() {
 
     @get:OutputDirectory
     abstract val outputDir: DirectoryProperty
@@ -59,7 +58,7 @@ abstract class WriteVersionTask @Inject constructor(
                 const val VERSION_NUMBER = "${appVersion.get()}"
                 const val VERSION_STRING = "$formattedVersion"
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 }
@@ -157,7 +156,9 @@ tasks.register("format") {
 
 tasks.register("version") {
     dependsOn(writeVersionFile)
-    val versionFile = layout.buildDirectory.file("generated/sources/versioninfo/kotlin/othello/VersionInfo.kt")
+    val versionFile = layout.buildDirectory.file(
+        "generated/sources/versioninfo/kotlin/othello/VersionInfo.kt",
+    )
     doLast {
         val file = versionFile.get().asFile
         println("Generated build info to: ${file.absolutePath}")
@@ -176,4 +177,3 @@ tasks.register("version") {
 tasks.named("build") {
     dependsOn("version")
 }
-
