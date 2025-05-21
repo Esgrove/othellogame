@@ -17,7 +17,8 @@ import static othello.ColorPrint.printWarn;
     name = "othello_java",
     mixinStandardHelpOptions = true,
     version = VersionInfo.VERSION_STRING,
-    description = "A simple Othello CLI game implementation in Java."
+    description = "A simple Othello CLI game implementation in Java\n",
+    customSynopsis = "java -jar othello_java [<options>] [<size>]\n"
 )
 public class Main implements Callable<Integer> {
     private static final int MIN_BOARD_SIZE = 4;
@@ -27,6 +28,7 @@ public class Main implements Callable<Integer> {
     @Parameters(
         index = "0",
         description = "Optional board size (" + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE + ")",
+        paramLabel = "size",
         arity = "0..1"
     )
     private Integer boardSize;
