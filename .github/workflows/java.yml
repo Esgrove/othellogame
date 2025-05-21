@@ -43,8 +43,16 @@ jobs:
           distribution: "temurin"
           cache: "gradle"
 
+      - name: Cache Gradle wrapper and build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            java/.gradle
+            java/build
+          key: gradle-wrapper-java-${{ runner.os }}-${{ hashFiles('java/gradle/wrapper/gradle-wrapper.properties', 'java/build.gradle.kts') }}
+          restore-keys: gradle-wrapper-java-${{ runner.os }}-
+
       - name: Build with Gradle
-        working-directory: java
         run: chmod +x build.sh && ./build.sh
 
       - name: Lint
