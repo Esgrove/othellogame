@@ -1,12 +1,13 @@
 package othello;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 import othello.Models.Disk;
 import othello.Models.Move;
 import othello.Models.Square;
 import othello.Models.Step;
-import othello.Models.IntPair;
+import othello.Utils.IntPair;
 
 import static othello.ColorPrint.getColor;
 import static othello.ColorPrint.printColor;
@@ -40,32 +41,33 @@ public class Board {
         // Set starting positions
         int row = (size % 2 == 0) ? (size - 1) / 2 : (size - 1) / 2 - 1;
         int col = size / 2;
-        setDisk(row * size + row, Disk.WHITE);
-        setDisk(row * size + col, Disk.BLACK);
-        setDisk(col * size + row, Disk.BLACK);
-        setDisk(col * size + col, Disk.WHITE);
+        this.board.set(row * size + row, Disk.WHITE);
+        this.board.set(row * size + col, Disk.BLACK);
+        this.board.set(col * size + row, Disk.BLACK);
+        this.board.set(col * size + col, Disk.WHITE);
 
         // Index list (0...size) to avoid repeating the same range in loops
-        this.indices = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            indices.add(i);
-        }
+        this.indices = IntStream.range(0, size)
+            .boxed()
+            .toList();
 
         // Keep track of empty squares on board to avoid checking already filled positions
         this.emptySquares = new HashSet<>();
         for (int y : indices) {
             for (int x : indices) {
-                if (getDisk(x, y) == Disk.EMPTY) {
+                if (board.get(y * size + x) == Disk.EMPTY) {
                     emptySquares.add(new Square(x, y));
                 }
             }
         }
     }
 
+    /** Return true if board contains empty squares. */
     public boolean canPlay() {
         return !emptySquares.isEmpty();
     }
 
+    /** Update board for given disk placement. */
     public void placeDisk(Move move) {
         Square start = move.square();
         if (getSquare(start) != Disk.EMPTY) {
@@ -82,6 +84,7 @@ public class Board {
         }
     }
 
+    /** Returns a list of possible moves for the given player. */
     public List<Move> possibleMoves(Disk color) {
         List<Move> moves = new ArrayList<>();
         Disk other = color.opponent();
@@ -90,15 +93,20 @@ public class Board {
             List<Step> directions = new ArrayList<>();
             for (Step step : stepDirections) {
                 Square pos = square.add(step);
-                if (getSquare(pos) != other)
+                // Next square in this direction needs to be the opposing disk
+                if (getSquare(pos) != other) {
                     continue;
+                }
                 int numSteps = 0;
+                // Keep stepping over opponents disks
                 while (getSquare(pos) == other) {
                     numSteps++;
                     pos = pos.add(step);
                 }
-                if (getSquare(pos) != color)
+                // Valid move only if a line of opposing disks ends in own disk
+                if (getSquare(pos) != color) {
                     continue;
+                }
                 value += numSteps;
                 directions.add(step);
             }
@@ -108,28 +116,27 @@ public class Board {
         }
 
         moves.sort(
-            Comparator
-                .comparingInt(Move::value).reversed()
-                .thenComparing(m -> m.square().x())
-                .thenComparing(m -> m.square().y())
+            null
         );
         return moves;
     }
 
+    /** Print board with available move coordinates and the resulting points gained. */
     public void printPossibleMoves(Collection<Move> moves) {
         printColor("  Possible moves (" + moves.size() + "):", AnsiColor.YELLOW);
+        // Convert board from Disk enums to strings
         List<String> formattedBoard = new ArrayList<>();
         for (Disk disk : board) {
             formattedBoard.add(disk.boardChar(true));
         }
-
+        // Add possible moves to board
         for (Move move : moves) {
             System.out.println("  " + move);
             int x = move.square().x();
             int y = move.square().y();
             formattedBoard.set(y * size + x, getColor(Integer.toString(move.value()), AnsiColor.YELLOW));
         }
-
+        // print board with move positions
         System.out.print("   ");
         for (int col : indices) {
             System.out.print(" " + col);
@@ -143,6 +150,7 @@ public class Board {
         System.out.println();
     }
 
+    /** Print current score for both players. */
     public void printScore() {
         IntPair scores = playerScores();
         int black = scores.first();
@@ -154,6 +162,7 @@ public class Board {
         );
     }
 
+    /** Calculates the final score and returns the winning player. */
     public Disk result() {
         int sum = score();
         if (sum < 0)
@@ -163,6 +172,7 @@ public class Board {
         return Disk.EMPTY;
     }
 
+    /** Get board status string for game log. */
     public String logEntry() {
         StringBuilder builder = new StringBuilder();
         for (Disk disk : board) {
@@ -171,35 +181,22 @@ public class Board {
         return builder.toString();
     }
 
+    /** Check that the given coordinates are valid (inside the board). */
     private boolean checkCoordinates(int x, int y) {
         return x >= 0 && x < size && y >= 0 && y < size;
     }
 
+    /** Returns the state of the board (empty, white, black) at the given coordinates. */
     private Disk getSquare(Square square) {
         int x = square.x();
         int y = square.y();
-        if (!checkCoordinates(x, y))
+        if (!checkCoordinates(x, y)) {
             return null;
-        return getDisk(x, y);
-    }
-
-    private Disk getDisk(int x, int y) {
+        }
         return board.get(y * size + x);
     }
 
-    private void setSquare(Square square, Disk disk) {
-        int x = square.x();
-        int y = square.y();
-        if (!checkCoordinates(x, y)) {
-            throw new RuntimeException("Invalid coordinates (" + x + "," + y + ")!");
-        }
-        board.set(y * size + x, disk);
-    }
-
-    private void setDisk(int index, Disk disk) {
-        board.set(index, disk);
-    }
-
+    /** Count and return the number of black and white disks. */
     private IntPair playerScores() {
         int black = 0;
         int white = 0;
@@ -213,8 +210,21 @@ public class Board {
         return new IntPair(black, white);
     }
 
+    /**
+     * Returns the total score. Positive value means more white disks and negative means more black disks.
+     */
     private int score() {
-        return board.stream().mapToInt(Disk::getValue).sum();
+        return board.stream().mapToInt(Disk::value).sum();
+    }
+
+    /** Sets the given square to given value. */
+    private void setSquare(Square square, Disk disk) {
+        int x = square.x();
+        int y = square.y();
+        if (!checkCoordinates(x, y)) {
+            throw new RuntimeException("Invalid coordinates (" + x + "," + y + ")!");
+        }
+        board.set(y * size + x, disk);
     }
 
     @Override
@@ -226,7 +236,7 @@ public class Board {
         for (int row : indices) {
             builder.append("\n").append(row);
             for (int col : indices) {
-                builder.append(" ").append(board.get(row * size + col).boardChar(false));
+                builder.append(" ").append(board.get(row * size + col).boardChar(true));
             }
         }
         return builder.toString();

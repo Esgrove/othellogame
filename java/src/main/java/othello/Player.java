@@ -17,8 +17,8 @@ public class Player {
     private boolean canPlay = true;
     private boolean isHuman = true;
     private int roundsPlayed = 0;
-    private static final Random random = new Random();
 
+    private static final Random random = new Random();
     private static final Scanner scanner = new Scanner(System.in);
 
     public Player(Disk disk, PlayerSettings settings) {
@@ -34,49 +34,40 @@ public class Player {
         return new Player(Disk.WHITE, settings);
     }
 
+    public boolean canPlay() {
+        return canPlay;
+    }
+
     /**
      * Play one round as this player.
-     *
-     * @param board the game board
-     * @return log entry string or null if no move was made
      */
     public String playOneMove(Board board) {
         if (!settings.checkMode()) {
             System.out.println("Turn: " + disk.name());
         }
-
         List<Move> moves = board.possibleMoves(disk);
         if (!moves.isEmpty()) {
             canPlay = true;
-
             if (isHuman && settings.showHelpers() && !settings.checkMode()) {
                 board.printPossibleMoves(moves);
             }
-
             Move chosenMove = isHuman ? getHumanMove(moves) : getComputerMove(moves);
-
             board.placeDisk(chosenMove);
-
             if (!settings.checkMode()) {
                 board.printScore();
             }
-
             roundsPlayed++;
             if (!settings.testMode()) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {}
             }
-
             return chosenMove.logEntry();
         }
-
         canPlay = false;
-
         if (!settings.checkMode()) {
             ColorPrint.printColor("  No moves available...", AnsiColor.YELLOW);
         }
-
         return null;
     }
 
@@ -90,8 +81,6 @@ public class Player {
 
     /**
      * Set the player as human or computer controlled.
-     *
-     * @param isHuman true if human player, false if computer
      */
     public void setHuman(boolean isHuman) {
         this.isHuman = isHuman;
@@ -104,21 +93,19 @@ public class Player {
         if (!settings.checkMode()) {
             System.out.println("  Computer plays...");
         }
-
         Move chosenMove;
         if (settings.testMode()) {
-            chosenMove = moves.get(0);
+            chosenMove = moves.getFirst();
         } else {
+            // Wait a bit and pick a random move
             try {
                 Thread.sleep(1000 + random.nextInt(1000));
             } catch (InterruptedException ignored) {}
             chosenMove = moves.get(random.nextInt(moves.size()));
         }
-
         if (!settings.checkMode()) {
             System.out.println("  " + chosenMove.square() + " -> " + chosenMove.value());
         }
-
         return chosenMove;
     }
 
@@ -129,6 +116,7 @@ public class Player {
         while (true) {
             Square square = getSquare();
             for (Move move : moves) {
+                // Check that the chosen square is actually one of the possible moves
                 if (move.square().equals(square)) {
                     return move;
                 }
@@ -165,14 +153,6 @@ public class Player {
      */
     private String typeString() {
         return isHuman ? "Human   " : "Computer";
-    }
-
-    public boolean canPlay() {
-        return canPlay;
-    }
-
-    public Disk disk() {
-        return disk;
     }
 
     @Override

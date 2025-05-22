@@ -101,7 +101,7 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
                 val y = coordinates.substring(2, 3).toInt()
 
                 return Square(x, y)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 printError("  Give coordinates in the form 'x,y'")
             }
         }

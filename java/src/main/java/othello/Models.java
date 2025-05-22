@@ -1,5 +1,6 @@
 package othello;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class Models {
@@ -18,7 +19,7 @@ public class Models {
             this.value = value;
         }
 
-        public int getValue() {
+        public int value() {
             return value;
         }
 
@@ -74,8 +75,10 @@ public class Models {
 
         @Override
         public int compareTo(Square other) {
-            return (x < other.x || (x == other.x && y < other.y)) ? -1
-                : (x > other.x || (x == other.x && y > other.y)) ? 1 : 0;
+            return Comparator
+                .comparingInt(Square::x)
+                .thenComparingInt(Square::y)
+                .compare(this, other);
         }
 
         @Override
@@ -92,8 +95,10 @@ public class Models {
         Comparable<Move> {
         @Override
         public int compareTo(Move other) {
-            return (value > other.value || (value == other.value && square.compareTo(other.square) < 0)) ? -1
-                : (value < other.value || (value == other.value && square.compareTo(other.square) > 0)) ? 1 : 0;
+            return Comparator
+                .comparingInt(Move::value).reversed()
+                .thenComparing(Move::square)
+                .compare(this, other);
         }
 
         public String logEntry() {
@@ -105,9 +110,4 @@ public class Models {
             return "Square: " + square + " -> value: " + value;
         }
     }
-
-    /**
-     * A simple immutable tuple.
-     */
-    public record IntPair(int first, int second) {}
 }

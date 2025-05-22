@@ -25,4 +25,9 @@ public class Utils {
             throw new RuntimeException("SHA-256 algorithm not available", e);
         }
     }
+
+    /**
+     * A simple immutable tuple.
+     */
+    public record IntPair(int first, int second) {}
 }

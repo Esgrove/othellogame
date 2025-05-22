@@ -150,6 +150,7 @@ class Board(private val size: Int) {
         }
     }
 
+    /** Get board status string for game log.*/
     fun logEntry(): String = board.joinToString("") { it.boardChar(color = false) }
 
     /** Check that the given coordinates are inside the board.*/
@@ -165,7 +166,7 @@ class Board(private val size: Int) {
         }
     }
 
-    /** Count and return the number of black and white disks. */
+    /** Count and return the number of black and white disks.*/
     private fun playerScores(): Pair<Int, Int> {
         var black = 0
         var white = 0
