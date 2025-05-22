@@ -3,6 +3,8 @@ package othello;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import othello.Models.Disk;
 
@@ -113,14 +115,14 @@ public class Othello {
     }
 
     private String formatGameLog() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < gameLog.size(); i++) {
-            sb.append(String.format("%02d: %s%n", i + 1, gameLog.get(i)));
-        }
-        return sb.toString();
+        return IntStream.range(0, gameLog.size())
+            .mapToObj(i -> String.format("%02d: %s", i + 1, gameLog.get(i)))
+            .collect(Collectors.joining("\n"));
     }
 
-    /** Print final result and winner. */
+    /**
+     * Print final result and winner.
+     */
     private void printResult() {
         ColorPrint.printBold("Result:");
         printStatus();
@@ -134,7 +136,9 @@ public class Othello {
         }
     }
 
-    /** Print current board and player status. */
+    /**
+     * Print current board and player status.
+     */
     private void printStatus() {
         System.out.println(playerBlack);
         System.out.println(playerWhite);
