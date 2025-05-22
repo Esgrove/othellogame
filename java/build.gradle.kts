@@ -75,12 +75,14 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit test framework.
-    testImplementation(libs.junit)
+    // https://mvnrepository.com/artifact/org.junit/junit-bom
+    testImplementation(platform("org.junit:junit-bom:5.12.2"))
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+    testImplementation("org.junit.jupiter:junit-jupiter")
 
-    implementation(libs.guava)
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation("com.google.guava:guava:33.4.8-jre")
 
-    // CLI
     // https://mvnrepository.com/artifact/info.picocli/picocli
     implementation("info.picocli:picocli:4.7.7")
 }
@@ -126,6 +128,10 @@ tasks.register<JavaExec>("othello") {
 
 tasks.named<ProcessResources>("processResources") {
     dependsOn(writeVersionFile)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 spotless {
