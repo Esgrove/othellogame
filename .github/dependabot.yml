@@ -58,3 +58,9 @@ updates:
     directory: "/csharp"
     schedule:
       interval: "daily"
+
+  # TypeScript
+  - package-ecosystem: "bun"
+    directory: "/typescript"
+    schedule:
+      interval: "daily"
