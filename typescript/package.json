@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "bun build ./src/othello.ts --outdir ./dist --target node",
     "othello": "bun src/othello.ts",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs}\"",
+    "fmt": "bun format",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix"
   },
   "repository": {

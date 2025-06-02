@@ -23,8 +23,6 @@ const program = new Command()
 
 program.parse(process.argv);
 
-console.log(chalk.green('OTHELLO NODE.JS'));
-
 const options = program.opts();
 const sizeArgument = program.args[0];
 
@@ -55,6 +53,8 @@ class Othello {
         const prompt = `Choose board size (default is ${DEFAULT_BOARD_SIZE}): `;
         process.stdout.write(prompt);
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         for await (const line of console) {
             const input = line.trim();
             if (input === '') {
@@ -79,6 +79,7 @@ class Othello {
 }
 
 try {
+    console.log(chalk.green('OTHELLO TYPESCRIPT'));
     let boardSize: number;
     if (sizeArgument !== undefined) {
         boardSize = parseInt(sizeArgument);
