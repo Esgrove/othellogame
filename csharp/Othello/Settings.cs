@@ -5,12 +5,6 @@
 // 2019-2025
 //==========================================================
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Security.Cryptography;
-using System.Text;
-
 namespace Othello
 {
     /// Game settings.

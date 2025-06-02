@@ -19,9 +19,9 @@ namespace Othello
         /// Gameplay loop and main logic.
         internal class Othello
         {
-            public static int MIN_BOARD_SIZE = 4;
-            public static int MAX_BOARD_SIZE = 10;
-            public static int DEFAULT_BOARD_SIZE = 8;
+            private const int MinBoardSize = 4;
+            private const int MaxBoardSize = 10;
+            private const int DefaultBoardSize = 8;
 
             private Board _board;
             private readonly Player _playerBlack;
@@ -105,22 +105,22 @@ namespace Othello
             /// Keep making moves until both players can't make a move any more.
             private void GameLoop()
             {
-                while (_board.CanPlay() && (_playerBlack.canPlay || _playerWhite.canPlay))
+                while (_board.CanPlay() && (_playerBlack.CanPlay || _playerWhite.CanPlay))
                 {
                     ++_roundsPlayed;
-                    printRoundHeader();
-                    foreach (Player player in new Player[] { _playerBlack, _playerWhite })
+                    PrintRoundHeader();
+                    foreach (Player player in new[] { _playerBlack, _playerWhite })
                     {
-                        var result = player.PlayOneMove(_board);
+                        string result = player.PlayOneMove(_board);
                         if (result != null)
                         {
                             _gameLog.Add($"{result};{_board.LogEntry()}");
                         }
-                        printDivider();
+                        PrintDivider();
                     }
                 }
                 ++_gamesPlayed;
-                printGameEndFooter();
+                PrintGameEndFooter();
             }
 
             private string FormatGameLog()
@@ -138,7 +138,7 @@ namespace Othello
                 return formattedLog;
             }
 
-            private void printRoundHeader()
+            private void PrintRoundHeader()
             {
                 if (!_settings.CheckMode)
                 {
@@ -146,7 +146,7 @@ namespace Othello
                 }
             }
 
-            private void printDivider()
+            private void PrintDivider()
             {
                 if (!_settings.CheckMode)
                 {
@@ -154,7 +154,7 @@ namespace Othello
                 }
             }
 
-            private void printGameEndFooter()
+            private void PrintGameEndFooter()
             {
                 if (!_settings.CheckMode)
                 {
@@ -171,7 +171,7 @@ namespace Othello
                     ColorPrint.WriteLine("Game log:", Color.Yellow);
                     Console.WriteLine(formattedLog);
                 }
-                var hexHash = Utils.CalculateSHA256(formattedLog);
+                string hexHash = Utils.CalculateSha256(formattedLog);
                 Console.WriteLine(hexHash);
             }
 
@@ -182,15 +182,12 @@ namespace Othello
                 PrintStatus();
                 Console.WriteLine("");
 
-                var winner = _board.Result();
-                if (winner == Disk.Empty)
-                {
-                    Console.WriteLine("The game ended in a tie...\n");
-                }
-                else
-                {
-                    Console.WriteLine($"The winner is {winner.Name()}!\n");
-                }
+                Disk winner = _board.Result();
+                Console.WriteLine(
+                    winner == Disk.Empty
+                        ? "The game ended in a tie...\n"
+                        : $"The winner is {winner.Name()}!\n"
+                );
             }
 
             /// Print current board and player info.
@@ -205,83 +202,77 @@ namespace Othello
             private static bool GetAnswer(string question, string yes = "y", string no = "n")
             {
                 Console.Write($"{question} ({yes}/{no})? ");
-                var ans = Console.ReadLine();
-                return !string.IsNullOrEmpty(ans)
-                    && string.Equals(ans, yes, StringComparison.CurrentCultureIgnoreCase);
+                string answer = Console.ReadLine();
+                return !string.IsNullOrEmpty(answer)
+                    && string.Equals(answer, yes, StringComparison.CurrentCultureIgnoreCase);
             }
 
             /// Ask and return the desired board size.
             private static int GetBoardSize()
             {
-                Console.Write($"Choose board size (default is {DEFAULT_BOARD_SIZE}): ");
-                if (int.TryParse(Console.ReadLine(), out var boardSize))
+                Console.Write($"Choose board size (default is {DefaultBoardSize}): ");
+                if (int.TryParse(Console.ReadLine(), out int boardSize))
                 {
-                    if (boardSize < Othello.MIN_BOARD_SIZE || boardSize > Othello.MAX_BOARD_SIZE)
+                    if (boardSize is < MinBoardSize or > MaxBoardSize)
                     {
                         ColorPrint.Warn(
-                            $"Limiting board size to valid range {Othello.MIN_BOARD_SIZE}...{Othello.MAX_BOARD_SIZE}"
+                            $"Limiting board size to valid range {MinBoardSize}...{MaxBoardSize}"
                         );
                     }
-                    return Math.Max(
-                        Othello.MIN_BOARD_SIZE,
-                        Math.Min(boardSize, Othello.MAX_BOARD_SIZE)
-                    );
+                    return Math.Max(MinBoardSize, Math.Min(boardSize, MaxBoardSize));
                 }
-                ColorPrint.Warn($"Invalid size, defaulting to {Othello.DEFAULT_BOARD_SIZE}...");
-                return Othello.DEFAULT_BOARD_SIZE;
+                ColorPrint.Warn($"Invalid size, defaulting to {DefaultBoardSize}...");
+                return DefaultBoardSize;
             }
 
             public static int Main(string[] args)
             {
-                var size = new Argument<int?>(
+                Argument<int?> size = new(
                     name: "size",
-                    description: $"Optional board size ({Othello.MIN_BOARD_SIZE}..{Othello.MAX_BOARD_SIZE})",
+                    description: $"Optional board size ({MinBoardSize}..{MaxBoardSize})",
                     getDefaultValue: () => null
                 );
 
-                var autoplay = new Option<bool>(
+                Option<bool> autoplay = new(
                     name: "--autoplay",
                     description: "Enable autoplay mode with computer control"
                 );
                 autoplay.AddAlias("-a");
 
-                var checkMode = new Option<bool>(
+                Option<bool> checkMode = new(
                     name: "--check",
                     description: "Autoplay and only print result"
                 );
                 checkMode.AddAlias("-c");
 
-                var useDefaultSettings = new Option<bool>(
+                Option<bool> useDefaultSettings = new(
                     name: "--default",
                     description: "Play with default settings"
                 );
                 useDefaultSettings.AddAlias("-d");
 
-                var showLog = new Option<bool>(
-                    name: "--log",
-                    description: "Show game log at the end"
-                );
+                Option<bool> showLog = new(name: "--log", description: "Show game log at the end");
                 showLog.AddAlias("-l");
 
-                var hideHelpers = new Option<bool>(
+                Option<bool> hideHelpers = new(
                     name: "--no-helpers",
                     description: "Hide disk placement hints"
                 );
                 hideHelpers.AddAlias("-n");
 
-                var testMode = new Option<bool>(
+                Option<bool> testMode = new(
                     name: "--test",
                     description: "Enable test mode with deterministic computer moves"
                 );
                 testMode.AddAlias("-t");
 
-                var version = new Option<bool>(name: "-v", description: "Print version and exit");
+                Option<bool> version = new(name: "-v", description: "Print version and exit");
                 // Can't add short alias since it conflicts with the default version flag.
                 // Haven't found a way to override the default version flag.
                 // Hopefully this would be supported in the future.
                 // version.AddAlias("--version");
 
-                var rootCommand = new RootCommand("A simple Othello CLI game implementation in C#")
+                RootCommand rootCommand = new("A simple Othello CLI game implementation in C#")
                 {
                     size,
                     autoplay,
@@ -318,10 +309,7 @@ namespace Othello
                         {
                             // Try to read board size from command line args
                             boardSize = size.Value;
-                            if (
-                                boardSize < Othello.MIN_BOARD_SIZE
-                                || boardSize > Othello.MAX_BOARD_SIZE
-                            )
+                            if (boardSize is < MinBoardSize or > MaxBoardSize)
                             {
                                 ColorPrint.Error($"Unsupported board size: {boardSize}");
                                 Environment.Exit(1);
@@ -330,7 +318,7 @@ namespace Othello
                         }
                         else if (autoplay || useDefaultSettings)
                         {
-                            boardSize = DEFAULT_BOARD_SIZE;
+                            boardSize = DefaultBoardSize;
                         }
                         else
                         {
@@ -348,8 +336,7 @@ namespace Othello
                             useDefaultSettings
                         );
 
-                        var game = new Othello(settings);
-                        game.Play();
+                        new Othello(settings).Play();
                     },
                     size,
                     autoplay,

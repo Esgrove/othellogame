@@ -41,13 +41,13 @@ init_options() {
     done
 
     EXECUTABLE="othello_csharp"
-    if [ $BASH_PLATFORM = "mac" ]; then
+    if [ "$BASH_PLATFORM" = mac ]; then
         if [ "$(uname -m)" = arm64 ]; then
             RUNTIME="osx-arm64"
         else
             RUNTIME="osx-x64"
         fi
-    elif [ $BASH_PLATFORM = "windows" ]; then
+    elif [ "$BASH_PLATFORM" = windows ]; then
         RUNTIME="win-x64"
         EXECUTABLE="othello_csharp.exe"
     else

@@ -8,12 +8,11 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 
 namespace Othello
 {
     /// Represents one game piece or lack of one.
-    public enum Disk : int
+    public enum Disk
     {
         Black = -1,
         Empty = 0,
@@ -21,7 +20,7 @@ namespace Othello
     }
 
     /// Represents one step direction on the board.
-    public readonly struct Step
+    public readonly struct Step : IEquatable<Step>
     {
         public readonly int X;
         public readonly int Y;
@@ -37,19 +36,14 @@ namespace Othello
             return HashCode.Combine(X, Y);
         }
 
-        public override bool Equals(Object obj)
+        public override bool Equals(object obj)
         {
-            if (obj is not Step step)
-            {
-                return false;
-            }
-            return Equals(step);
+            return obj is Step other && Equals(other);
         }
 
         public bool Equals(Step other)
         {
-            var (x, y) = other;
-            return X.Equals(x) && Y.Equals(y);
+            return X == other.X && Y == other.Y;
         }
 
         public override string ToString()
@@ -75,7 +69,7 @@ namespace Othello
     }
 
     /// Represents one square location on the board.
-    public readonly struct Square : IComparable<Square>
+    public readonly struct Square : IComparable<Square>, IEquatable<Square>
     {
         public readonly int X;
         public readonly int Y;
@@ -98,17 +92,12 @@ namespace Othello
 
         public override bool Equals(Object obj)
         {
-            if (obj is not Square square)
-            {
-                return false;
-            }
-            return Equals(square);
+            return obj is Square other && Equals(other);
         }
 
         public bool Equals(Square other)
         {
-            var (x, y) = other;
-            return X.Equals(x) && Y.Equals(y);
+            return X == other.X && Y == other.Y;
         }
 
         public override string ToString()
@@ -124,12 +113,7 @@ namespace Othello
 
         public int CompareTo(Square other)
         {
-            if (X == other.X)
-            {
-                return Y.CompareTo(other.Y);
-            }
-
-            return X.CompareTo(other.X);
+            return X == other.X ? Y.CompareTo(other.Y) : X.CompareTo(other.X);
         }
 
         public static Square operator +(Square left, Square right)
@@ -184,9 +168,9 @@ namespace Othello
         public List<Square> AffectedSquares()
         {
             List<Square> paths = new();
-            foreach (var (step, num) in this.Directions)
+            foreach (var (step, num) in Directions)
             {
-                Square pos = this.Square + step;
+                Square pos = Square + step;
                 for (int i = 0; i < num; i++)
                 {
                     paths.Add(pos);
@@ -204,7 +188,7 @@ namespace Othello
 
         public int CompareTo(Move other)
         {
-            var value = other.Value.CompareTo(Value);
+            int value = other.Value.CompareTo(Value);
             return value == 0 ? Square.CompareTo(other.Square) : value;
         }
 
@@ -258,10 +242,8 @@ namespace Othello
             {
                 return ColorPrint.Get(diskChar, disk.DiskColor());
             }
-            else
-            {
-                return diskChar;
-            }
+
+            return diskChar;
         }
     }
 }

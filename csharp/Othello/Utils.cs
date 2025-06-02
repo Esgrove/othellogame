@@ -5,9 +5,6 @@
 // 2019-2025
 //==========================================================
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,7 +14,7 @@ namespace Othello
     public static class Utils
     {
         /// Calculate SHA256 hash for the given string.
-        public static string CalculateSHA256(string input)
+        public static string CalculateSha256(string input)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(input);
             byte[] hashBytes = SHA256.HashData(inputBytes);

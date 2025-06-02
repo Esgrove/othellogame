@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Threading;
 
 namespace Othello
@@ -16,7 +15,7 @@ namespace Othello
     /// Defines one player that can be either human or computer controlled.
     internal class Player
     {
-        public bool canPlay;
+        public bool CanPlay;
         private bool _isHuman;
         private int _roundsPlayed;
         private readonly Disk _disk;
@@ -25,7 +24,7 @@ namespace Othello
 
         public Player(Disk color, PlayerSettings settings)
         {
-            canPlay = true;
+            CanPlay = true;
             _disk = color;
             _isHuman = true;
             _random = new Random();
@@ -52,15 +51,15 @@ namespace Othello
             {
                 Console.WriteLine($"Turn: {_disk.Name()}");
             }
-            var moves = board.PossibleMoves(_disk);
+            List<Move>? moves = board.PossibleMoves(_disk);
             if (moves.Count != 0)
             {
-                canPlay = true;
-                if (_isHuman && _settings.ShowHelpers && !_settings.CheckMode)
+                CanPlay = true;
+                if (_isHuman && _settings is { ShowHelpers: true, CheckMode: false })
                 {
                     board.PrintPossibleMoves(moves);
                 }
-                var chosenMove = _isHuman ? GetHumanMove(moves) : GetComputerMove(moves);
+                Move chosenMove = _isHuman ? GetHumanMove(moves) : GetComputerMove(moves);
                 board.PlaceDisc(chosenMove);
                 if (!_settings.CheckMode)
                 {
@@ -74,7 +73,7 @@ namespace Othello
                 return chosenMove.LogEntry();
             }
 
-            canPlay = false;
+            CanPlay = false;
             if (!_settings.CheckMode)
             {
                 ColorPrint.WriteLine("  No moves available...", Color.Yellow);
@@ -93,7 +92,7 @@ namespace Othello
         /// Reset player status for a new game.
         public void Reset()
         {
-            canPlay = true;
+            CanPlay = true;
             _roundsPlayed = 0;
         }
 
@@ -145,13 +144,13 @@ namespace Othello
                 try
                 {
                     Console.Write("  Give disk position (x,y): ");
-                    var coords = Console.ReadLine();
+                    string coords = Console.ReadLine();
                     if (string.IsNullOrEmpty(coords) || coords.Length != 3 || coords[1] != ',')
                     {
                         throw new FormatException("Invalid coordinates");
                     }
-                    var x = int.Parse(coords[0..1]);
-                    var y = int.Parse(coords[2..3]);
+                    int x = int.Parse(coords[..1]);
+                    int y = int.Parse(coords[2..3]);
                     return new Square(x, y);
                 }
                 catch (FormatException)
