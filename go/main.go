@@ -97,7 +97,7 @@ func initFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&version, "version", "v", false, "Print version and exit")
 }
 
-func runGame(cmd *cobra.Command, args []string) {
+func runGame(_ *cobra.Command, args []string) {
 	if version {
 		fmt.Printf("Othello Go %s\n", othello.VersionInfo())
 		os.Exit(0)
