@@ -15,7 +15,7 @@ export class Settings {
         useDefaults: boolean,
         showHelpers: boolean,
         showLog: boolean,
-        testMode: boolean
+        testMode: boolean,
     ) {
         this.boardSize = boardSize;
         this.autoplayMode = autoplayMode;

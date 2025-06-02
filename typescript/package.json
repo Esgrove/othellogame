@@ -1,13 +1,15 @@
 {
-  "name": "othello_node",
+  "name": "othello_typescript",
   "version": "0.1.0",
   "description": "A simple Othello CLI game implementation",
   "type": "module",
   "exports": "./src/othello.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "othello": "bun src/othello.ts"
+    "build": "bun build ./src/othello.ts --outdir ./dist --target node",
+    "othello": "bun src/othello.ts",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,7 @@
     "node": ">=22"
   },
   "bin": {
-    "othello_node": "./src/othello.ts"
+    "othello": "./src/othello.ts"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^14.0.0",
@@ -31,10 +33,13 @@
     "commander": "^14.0.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.28.0",
     "@types/node": "^22.15.29",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
     "@typescript-eslint/parser": "^8.33.0",
     "eslint": "^9.28.0",
+    "globals": "^16.2.0",
     "prettier": "3.5.3",
     "typescript": "^5.8.3"
   }

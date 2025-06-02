@@ -4,14 +4,15 @@ TypeScript implementation using Bun.
 
 ## Build and run
 
-Using npm scripts:
+Using scripts:
 
 ```shell
 bun run build
-bun run othello
+bun othello
+bun othello --help
 ```
 
-Directly with Node:
+Directly with Bun:
 
 ```shell
 bun src/othello.ts --help
