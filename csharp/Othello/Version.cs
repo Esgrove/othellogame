@@ -4,9 +4,9 @@ namespace Othello
 {
     public static class Version
     {
-        public const string BuildTime = "2025-05-12_0816";
-        public const string GitBranch = "e0921f1";
+        public const string BuildTime = "2025-06-02_1455";
+        public const string GitBranch = "1c8597f";
         public const string GitCommit = "main";
-        public const string VersionNumber = "2.8.0";
+        public const string VersionNumber = "2.8.1";
     }
 }
