@@ -42,10 +42,10 @@ class Othello {
     gameLog: string[];
 
     constructor(settings: Settings) {
-        this.board = new Board(settings.boardSize);  // Initialize the board with the board size
+        this.board = new Board(settings.boardSize);
         this.settings = settings;
-        this.playerBlack = Player.black(settings.toPlayerSettings());  // Create black player
-        this.playerWhite = Player.white(settings.toPlayerSettings());  // Create white player
+        this.playerBlack = Player.black(settings.toPlayerSettings());
+        this.playerWhite = Player.white(settings.toPlayerSettings());
         this.roundsPlayed = 0;
         this.gamesPlayed = 0;
         this.gameLog = [];
@@ -80,11 +80,11 @@ try {
     boardSize = parseInt(sizeArgument);
     if (isNaN(boardSize)) {
       console.error(chalk.red(`Invalid board size: ${sizeArgument}`));
-      Deno.exit(1);
+      process.exit(1);
     }
     if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
       console.error(chalk.red(`Unsupported board size: ${boardSize}`));
-      Deno.exit(1);
+      process.exit(1);
     }
 
     console.log(chalk.blue(`Using board size: ${boardSize}`));
@@ -111,10 +111,10 @@ const settings = new Settings(
   const game = new Othello(settings);
   game.play();
 } catch (err) {
-  if (err instanceof Deno.errors.Interrupted) {
+  if (err instanceof Error && err.name === 'SIGINT') {
     // Catch Ctrl+C (SIGINT)
     console.log(chalk.yellow('\ncancelled...'));
-    Deno.exit(0);
+    process.exit(0);
   } else {
     throw err;
   }
