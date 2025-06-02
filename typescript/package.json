@@ -9,8 +9,10 @@
     "build": "bun build ./src/othello.ts --outdir ./dist --target node",
     "othello": "bun src/othello.ts",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs}\"",
+    "format-check": "prettier --check \"**/*.{ts,tsx,js,mjs}\"",
     "fmt": "bun format",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix"
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "lint-check": "eslint \"src/**/*.{ts,tsx}\""
   },
   "repository": {
     "type": "git",
