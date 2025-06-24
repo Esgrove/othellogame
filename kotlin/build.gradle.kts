@@ -75,7 +75,7 @@ val writeVersionFile by tasks.registering(WriteVersionTask::class) {
 version = "1.7.2"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.1.21"
+    id("org.jetbrains.kotlin.jvm") version "2.2.0"
     // https://github.com/GradleUp/shadow
     id("com.gradleup.shadow") version "8.3.6"
 
