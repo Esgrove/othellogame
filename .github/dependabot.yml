@@ -1,11 +1,6 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
-  # Maintain dependencies for GitHub Actions
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -16,51 +11,87 @@ updates:
     directory: "/python"
     schedule:
       interval: "daily"
+    groups:
+      python:
+        patterns:
+          - "*"
 
   # Rust
   - package-ecosystem: "cargo"
     directory: "/rust"
     schedule:
       interval: "daily"
+    groups:
+      rust:
+        patterns:
+          - "*"
 
   # Go
   - package-ecosystem: "gomod"
     directory: "/go"
     schedule:
       interval: "daily"
+    groups:
+      go:
+        patterns:
+          - "*"
 
   # Kotlin
   - package-ecosystem: "gradle"
     directory: "/kotlin"
     schedule:
       interval: "daily"
+    groups:
+      kotlin:
+        patterns:
+          - "*"
 
   # Java
   - package-ecosystem: "gradle"
     directory: "/java"
     schedule:
       interval: "daily"
+    groups:
+      java:
+        patterns:
+          - "*"
 
   # Swift
   - package-ecosystem: "swift"
     directory: "/swift"
     schedule:
       interval: "daily"
+    groups:
+      swift:
+        patterns:
+          - "*"
 
   # C#
   - package-ecosystem: "nuget"
     directory: "/csharp"
     schedule:
       interval: "daily"
+    groups:
+      csharp:
+        patterns:
+          - "*"
 
-  # .NET
+  # .NET SDK
   - package-ecosystem: "dotnet-sdk"
     directory: "/csharp"
     schedule:
       interval: "daily"
+    groups:
+      dotnet:
+        patterns:
+          - "*"
 
   # TypeScript
   - package-ecosystem: "bun"
     directory: "/typescript"
     schedule:
       interval: "daily"
+    groups:
+      typescript:
+        patterns:
+          - "*"
