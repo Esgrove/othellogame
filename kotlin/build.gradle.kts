@@ -140,7 +140,7 @@ tasks.named<Copy>("processResources") {
 spotless {
     ratchetFrom("origin/main")
     kotlin {
-        ktlint("1.6.0").setEditorConfigPath("$projectDir/.editorconfig")
+        ktlint("1.7.1").setEditorConfigPath("$projectDir/.editorconfig")
     }
 }
 
