@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Drawing;
+using System.Linq;
 using Pastel;
 
 namespace Othello
@@ -227,75 +228,80 @@ namespace Othello
 
             public static int Main(string[] args)
             {
-                Argument<int?> size = new(
-                    name: "size",
-                    description: $"Optional board size ({MinBoardSize}..{MaxBoardSize})",
-                    getDefaultValue: () => null
-                );
-
-                Option<bool> autoplay = new(
-                    name: "--autoplay",
-                    description: "Enable autoplay mode with computer control"
-                );
-                autoplay.AddAlias("-a");
-
-                Option<bool> checkMode = new(
-                    name: "--check",
-                    description: "Autoplay and only print result"
-                );
-                checkMode.AddAlias("-c");
-
-                Option<bool> useDefaultSettings = new(
-                    name: "--default",
-                    description: "Play with default settings"
-                );
-                useDefaultSettings.AddAlias("-d");
-
-                Option<bool> showLog = new(name: "--log", description: "Show game log at the end");
-                showLog.AddAlias("-l");
-
-                Option<bool> hideHelpers = new(
-                    name: "--no-helpers",
-                    description: "Hide disk placement hints"
-                );
-                hideHelpers.AddAlias("-n");
-
-                Option<bool> testMode = new(
-                    name: "--test",
-                    description: "Enable test mode with deterministic computer moves"
-                );
-                testMode.AddAlias("-t");
-
-                Option<bool> version = new(name: "-v", description: "Print version and exit");
-                // Can't add short alias since it conflicts with the default version flag.
-                // Haven't found a way to override the default version flag.
-                // Hopefully this would be supported in the future.
-                // version.AddAlias("--version");
-
-                RootCommand rootCommand = new("A simple Othello CLI game implementation in C#")
+                Argument<int?> sizePositional = new(name: "size")
                 {
-                    size,
-                    autoplay,
-                    checkMode,
-                    useDefaultSettings,
-                    showLog,
-                    hideHelpers,
-                    testMode,
-                    version,
+                    Description = $"Optional board size ({MinBoardSize}..{MaxBoardSize})",
                 };
 
-                rootCommand.SetHandler(
-                    (
-                        size,
-                        autoplay,
-                        checkMode,
-                        useDefaultSettings,
-                        hideHelpers,
-                        showLog,
-                        testMode,
-                        version
-                    ) =>
+                Option<bool> autoplayOption = new(name: "--autoplay", aliases: ["-a"])
+                {
+                    Description = "Enable autoplay mode with computer control",
+                };
+
+                Option<bool> checkModeOption = new(name: "--check", aliases: ["-c"])
+                {
+                    Description = "Autoplay and only print result",
+                };
+
+                Option<bool> useDefaultSettingsOption = new(name: "--default", aliases: ["-d"])
+                {
+                    Description = "Play with default settings",
+                };
+
+                Option<bool> showLogOption = new(name: "--log", aliases: ["-l"])
+                {
+                    Description = "Show game log at the end",
+                };
+
+                Option<bool> hideHelpersOption = new(name: "--no-helpers", aliases: ["-n"])
+                {
+                    Description = "Hide disk placement hints",
+                };
+
+                Option<bool> testModeOption = new(name: "--test", aliases: ["-t"])
+                {
+                    Description = "Enable test mode with deterministic computer moves",
+                };
+
+                Option<bool> versionFlag = new(name: "--version", aliases: ["-v"])
+                {
+                    Description = "Print version and exit",
+                };
+
+                RootCommand rootCommand = new("A simple Othello CLI game implementation in C#");
+
+                // Remove default version option
+                var defaultVersionOption = rootCommand.Options.FirstOrDefault(opt =>
+                    opt.Name == "--version"
+                    || opt.Aliases.Contains("--version")
+                    || opt.Aliases.Contains("-v")
+                );
+                if (defaultVersionOption != null)
+                {
+                    rootCommand.Options.Remove(defaultVersionOption);
+                }
+
+                rootCommand.Arguments.Add(sizePositional);
+                rootCommand.Options.Add(autoplayOption);
+                rootCommand.Options.Add(checkModeOption);
+                rootCommand.Options.Add(useDefaultSettingsOption);
+                rootCommand.Options.Add(showLogOption);
+                rootCommand.Options.Add(hideHelpersOption);
+                rootCommand.Options.Add(testModeOption);
+                rootCommand.Options.Add(versionFlag);
+
+                rootCommand.SetAction(
+                    (parseResult) =>
                     {
+                        var size = parseResult.GetValue(sizePositional);
+                        var autoplay = parseResult.GetValue(autoplayOption);
+                        var checkMode = parseResult.GetValue(checkModeOption);
+                        var useDefaultSettings = parseResult.GetValue(useDefaultSettingsOption);
+                        var showLog = parseResult.GetValue(showLogOption);
+                        var hideHelpers = parseResult.GetValue(hideHelpersOption);
+                        var testMode = parseResult.GetValue(testModeOption);
+                        var version = parseResult.GetValue(versionFlag);
+
                         if (version)
                         {
                             Console.WriteLine($"Othello C# {Utils.VersionInfo()}");
@@ -337,20 +343,13 @@ namespace Othello
                         );
 
                         new Othello(settings).Play();
-                    },
-                    size,
-                    autoplay,
-                    checkMode,
-                    hideHelpers,
-                    showLog,
-                    testMode,
-                    useDefaultSettings,
-                    version
+                    }
                 );
 
                 try
                 {
-                    return rootCommand.Invoke(args);
+                    ParseResult parseResult = rootCommand.Parse(args);
+                    return parseResult.Invoke();
                 }
                 catch (OperationCanceledException)
                 {
