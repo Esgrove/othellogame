@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Drawing;
+using System.Linq;
 using Pastel;
 
 namespace Othello
@@ -262,13 +263,24 @@ namespace Othello
                     Description = "Enable test mode with deterministic computer moves",
                 };
 
-                Option<bool> version = new(name: "-v") { Description = "Print version and exit" };
-                // Can't add short alias since it conflicts with the default version flag.
-                // Haven't found a way to override the default version flag.
-                // Hopefully this would be supported in the future.
-                // version.Aliases.Add("--version");
+                Option<bool> version = new(name: "--version", aliases: ["-v"])
+                {
+                    Description = "Print version and exit",
+                };
 
                 RootCommand rootCommand = new("A simple Othello CLI game implementation in C#");
+
+                // Remove default version option
+                var defaultVersionOption = rootCommand.Options.FirstOrDefault(opt =>
+                    opt.Name == "--version"
+                    || opt.Aliases.Contains("--version")
+                    || opt.Aliases.Contains("-v")
+                );
+                if (defaultVersionOption != null)
+                {
+                    rootCommand.Options.Remove(defaultVersionOption);
+                }
+
                 rootCommand.Arguments.Add(size);
                 rootCommand.Options.Add(autoplay);
                 rootCommand.Options.Add(checkMode);
