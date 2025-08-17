@@ -227,76 +227,70 @@ namespace Othello
 
             public static int Main(string[] args)
             {
-                Argument<int?> size = new(
-                    name: "size",
-                    description: $"Optional board size ({MinBoardSize}..{MaxBoardSize})",
-                    getDefaultValue: () => null
-                );
+                Argument<int?> size = new(name: "size")
+                {
+                    Description = $"Optional board size ({MinBoardSize}..{MaxBoardSize})",
+                };
 
-                Option<bool> autoplay = new(
-                    name: "--autoplay",
-                    description: "Enable autoplay mode with computer control"
-                );
-                autoplay.AddAlias("-a");
+                Option<bool> autoplay = new(name: "--autoplay", aliases: ["-a"])
+                {
+                    Description = "Enable autoplay mode with computer control",
+                };
 
-                Option<bool> checkMode = new(
-                    name: "--check",
-                    description: "Autoplay and only print result"
-                );
-                checkMode.AddAlias("-c");
+                Option<bool> checkMode = new(name: "--check", aliases: ["-c"])
+                {
+                    Description = "Autoplay and only print result",
+                };
 
-                Option<bool> useDefaultSettings = new(
-                    name: "--default",
-                    description: "Play with default settings"
-                );
-                useDefaultSettings.AddAlias("-d");
+                Option<bool> useDefaultSettings = new(name: "--default", aliases: ["-d"])
+                {
+                    Description = "Play with default settings",
+                };
 
-                Option<bool> showLog = new(name: "--log", description: "Show game log at the end");
-                showLog.AddAlias("-l");
+                Option<bool> showLog = new(name: "--log", aliases: ["-l"])
+                {
+                    Description = "Show game log at the end",
+                };
 
-                Option<bool> hideHelpers = new(
-                    name: "--no-helpers",
-                    description: "Hide disk placement hints"
-                );
-                hideHelpers.AddAlias("-n");
+                Option<bool> hideHelpers = new(name: "--no-helpers", aliases: ["-n"])
+                {
+                    Description = "Hide disk placement hints",
+                };
 
-                Option<bool> testMode = new(
-                    name: "--test",
-                    description: "Enable test mode with deterministic computer moves"
-                );
-                testMode.AddAlias("-t");
+                Option<bool> testMode = new(name: "--test", aliases: ["-t"])
+                {
+                    Description = "Enable test mode with deterministic computer moves",
+                };
 
-                Option<bool> version = new(name: "-v", description: "Print version and exit");
+                Option<bool> version = new(name: "-v") { Description = "Print version and exit" };
                 // Can't add short alias since it conflicts with the default version flag.
                 // Haven't found a way to override the default version flag.
                 // Hopefully this would be supported in the future.
-                // version.AddAlias("--version");
+                // version.Aliases.Add("--version");
 
-                RootCommand rootCommand = new("A simple Othello CLI game implementation in C#")
-                {
-                    size,
-                    autoplay,
-                    checkMode,
-                    useDefaultSettings,
-                    showLog,
-                    hideHelpers,
-                    testMode,
-                    version,
-                };
+                RootCommand rootCommand = new("A simple Othello CLI game implementation in C#");
+                rootCommand.Arguments.Add(size);
+                rootCommand.Options.Add(autoplay);
+                rootCommand.Options.Add(checkMode);
+                rootCommand.Options.Add(useDefaultSettings);
+                rootCommand.Options.Add(showLog);
+                rootCommand.Options.Add(hideHelpers);
+                rootCommand.Options.Add(testMode);
+                rootCommand.Options.Add(version);
 
-                rootCommand.SetHandler(
-                    (
-                        size,
-                        autoplay,
-                        checkMode,
-                        useDefaultSettings,
-                        hideHelpers,
-                        showLog,
-                        testMode,
-                        version
-                    ) =>
+                rootCommand.SetAction(
+                    (parseResult) =>
                     {
-                        if (version)
+                        var sizeValue = parseResult.GetValue(size);
+                        var autoplayValue = parseResult.GetValue(autoplay);
+                        var checkModeValue = parseResult.GetValue(checkMode);
+                        var useDefaultSettingsValue = parseResult.GetValue(useDefaultSettings);
+                        var hideHelpersValue = parseResult.GetValue(hideHelpers);
+                        var showLogValue = parseResult.GetValue(showLog);
+                        var testModeValue = parseResult.GetValue(testMode);
+                        var versionValue = parseResult.GetValue(version);
+
+                        if (versionValue)
                         {
                             Console.WriteLine($"Othello C# {Utils.VersionInfo()}");
                             Environment.Exit(0);
@@ -305,10 +299,10 @@ namespace Othello
                         ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
 
                         int boardSize;
-                        if (size != null)
+                        if (sizeValue != null)
                         {
                             // Try to read board size from command line args
-                            boardSize = size.Value;
+                            boardSize = sizeValue.Value;
                             if (boardSize is < MinBoardSize or > MaxBoardSize)
                             {
                                 ColorPrint.Error($"Unsupported board size: {boardSize}");
@@ -316,7 +310,7 @@ namespace Othello
                             }
                             Console.WriteLine($"Using board size: {boardSize}");
                         }
-                        else if (autoplay || useDefaultSettings)
+                        else if (autoplayValue || useDefaultSettingsValue)
                         {
                             boardSize = DefaultBoardSize;
                         }
@@ -328,29 +322,22 @@ namespace Othello
 
                         Settings settings = new(
                             boardSize,
-                            autoplay || checkMode,
-                            checkMode,
-                            !hideHelpers,
-                            showLog || checkMode,
-                            testMode || checkMode,
-                            useDefaultSettings
+                            autoplayValue || checkModeValue,
+                            checkModeValue,
+                            !hideHelpersValue,
+                            showLogValue || checkModeValue,
+                            testModeValue || checkModeValue,
+                            useDefaultSettingsValue
                         );
 
                         new Othello(settings).Play();
-                    },
-                    size,
-                    autoplay,
-                    checkMode,
-                    hideHelpers,
-                    showLog,
-                    testMode,
-                    useDefaultSettings,
-                    version
+                    }
                 );
 
                 try
                 {
-                    return rootCommand.Invoke(args);
+                    ParseResult parseResult = rootCommand.Parse(args);
+                    return parseResult.Invoke();
                 }
                 catch (OperationCanceledException)
                 {
