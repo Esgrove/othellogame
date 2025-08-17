@@ -228,42 +228,42 @@ namespace Othello
 
             public static int Main(string[] args)
             {
-                Argument<int?> size = new(name: "size")
+                Argument<int?> sizePositional = new(name: "size")
                 {
                     Description = $"Optional board size ({MinBoardSize}..{MaxBoardSize})",
                 };
 
-                Option<bool> autoplay = new(name: "--autoplay", aliases: ["-a"])
+                Option<bool> autoplayOption = new(name: "--autoplay", aliases: ["-a"])
                 {
                     Description = "Enable autoplay mode with computer control",
                 };
 
-                Option<bool> checkMode = new(name: "--check", aliases: ["-c"])
+                Option<bool> checkModeOption = new(name: "--check", aliases: ["-c"])
                 {
                     Description = "Autoplay and only print result",
                 };
 
-                Option<bool> useDefaultSettings = new(name: "--default", aliases: ["-d"])
+                Option<bool> useDefaultSettingsOption = new(name: "--default", aliases: ["-d"])
                 {
                     Description = "Play with default settings",
                 };
 
-                Option<bool> showLog = new(name: "--log", aliases: ["-l"])
+                Option<bool> showLogOption = new(name: "--log", aliases: ["-l"])
                 {
                     Description = "Show game log at the end",
                 };
 
-                Option<bool> hideHelpers = new(name: "--no-helpers", aliases: ["-n"])
+                Option<bool> hideHelpersOption = new(name: "--no-helpers", aliases: ["-n"])
                 {
                     Description = "Hide disk placement hints",
                 };
 
-                Option<bool> testMode = new(name: "--test", aliases: ["-t"])
+                Option<bool> testModeOption = new(name: "--test", aliases: ["-t"])
                 {
                     Description = "Enable test mode with deterministic computer moves",
                 };
 
-                Option<bool> version = new(name: "--version", aliases: ["-v"])
+                Option<bool> versionFlag = new(name: "--version", aliases: ["-v"])
                 {
                     Description = "Print version and exit",
                 };
@@ -281,28 +281,28 @@ namespace Othello
                     rootCommand.Options.Remove(defaultVersionOption);
                 }
 
-                rootCommand.Arguments.Add(size);
-                rootCommand.Options.Add(autoplay);
-                rootCommand.Options.Add(checkMode);
-                rootCommand.Options.Add(useDefaultSettings);
-                rootCommand.Options.Add(showLog);
-                rootCommand.Options.Add(hideHelpers);
-                rootCommand.Options.Add(testMode);
-                rootCommand.Options.Add(version);
+                rootCommand.Arguments.Add(sizePositional);
+                rootCommand.Options.Add(autoplayOption);
+                rootCommand.Options.Add(checkModeOption);
+                rootCommand.Options.Add(useDefaultSettingsOption);
+                rootCommand.Options.Add(showLogOption);
+                rootCommand.Options.Add(hideHelpersOption);
+                rootCommand.Options.Add(testModeOption);
+                rootCommand.Options.Add(versionFlag);
 
                 rootCommand.SetAction(
                     (parseResult) =>
                     {
-                        var sizeValue = parseResult.GetValue(size);
-                        var autoplayValue = parseResult.GetValue(autoplay);
-                        var checkModeValue = parseResult.GetValue(checkMode);
-                        var useDefaultSettingsValue = parseResult.GetValue(useDefaultSettings);
-                        var hideHelpersValue = parseResult.GetValue(hideHelpers);
-                        var showLogValue = parseResult.GetValue(showLog);
-                        var testModeValue = parseResult.GetValue(testMode);
-                        var versionValue = parseResult.GetValue(version);
+                        var size = parseResult.GetValue(sizePositional);
+                        var autoplay = parseResult.GetValue(autoplayOption);
+                        var checkMode = parseResult.GetValue(checkModeOption);
+                        var useDefaultSettings = parseResult.GetValue(useDefaultSettingsOption);
+                        var showLog = parseResult.GetValue(showLogOption);
+                        var hideHelpers = parseResult.GetValue(hideHelpersOption);
+                        var testMode = parseResult.GetValue(testModeOption);
+                        var version = parseResult.GetValue(versionFlag);
 
-                        if (versionValue)
+                        if (version)
                         {
                             Console.WriteLine($"Othello C# {Utils.VersionInfo()}");
                             Environment.Exit(0);
@@ -311,10 +311,10 @@ namespace Othello
                         ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
 
                         int boardSize;
-                        if (sizeValue != null)
+                        if (size != null)
                         {
                             // Try to read board size from command line args
-                            boardSize = sizeValue.Value;
+                            boardSize = size.Value;
                             if (boardSize is < MinBoardSize or > MaxBoardSize)
                             {
                                 ColorPrint.Error($"Unsupported board size: {boardSize}");
@@ -322,7 +322,7 @@ namespace Othello
                             }
                             Console.WriteLine($"Using board size: {boardSize}");
                         }
-                        else if (autoplayValue || useDefaultSettingsValue)
+                        else if (autoplay || useDefaultSettings)
                         {
                             boardSize = DefaultBoardSize;
                         }
@@ -334,12 +334,12 @@ namespace Othello
 
                         Settings settings = new(
                             boardSize,
-                            autoplayValue || checkModeValue,
-                            checkModeValue,
-                            !hideHelpersValue,
-                            showLogValue || checkModeValue,
-                            testModeValue || checkModeValue,
-                            useDefaultSettingsValue
+                            autoplay || checkMode,
+                            checkMode,
+                            !hideHelpers,
+                            showLog || checkMode,
+                            testMode || checkMode,
+                            useDefaultSettings
                         );
 
                         new Othello(settings).Play();
