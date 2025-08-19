@@ -33,7 +33,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Pastel" Version="6.0.1" />
+    <PackageReference Include="Pastel" Version="7.0.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta7.25380.108" />
   </ItemGroup>
 </Project>
