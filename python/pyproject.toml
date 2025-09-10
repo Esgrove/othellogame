@@ -14,11 +14,11 @@ colorama = "^0.4.6"
 python = "^3.11"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.12.12"
+ruff = "^0.13.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.4.2"
-pytest-cov = "^6.3.0"
+pytest-cov = "^7.0.0"
 
 [tool.poetry.scripts]
 othello = "othello.othello:main"
