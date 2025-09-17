@@ -15,6 +15,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(APPLE)
+    # Use libc++ on macOS when using brew LLVM
+    # Otherwise can get linker errors if mixing brew clang and system libc++
+    if("${CMAKE_CXX_COMPILER}" MATCHES "/opt/homebrew/opt/llvm/bin/clang\\+\\+" OR "${CMAKE_CXX_COMPILER}" MATCHES "/usr/local/opt/llvm/bin/clang\\+\\+")
+        if(EXISTS "/opt/homebrew/opt/llvm")
+            set(LLVM_ROOT "/opt/homebrew/opt/llvm")
+        else()
+            set(LLVM_ROOT "/usr/local/opt/llvm")
+        endif()
+
+        add_compile_options(-stdlib=libc++)
+        add_link_options(-stdlib=libc++ -L${LLVM_ROOT}/lib -Wl,-rpath,${LLVM_ROOT}/lib)
+
+        set(CMAKE_INSTALL_RPATH "${LLVM_ROOT}/lib")
+        set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+        set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
+    endif()
     set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0")
     # Create universal binary.
     # Disabled due to OpenSSL being arch specific by default...
