@@ -18,9 +18,7 @@
 // Concept: checks if T can be streamed into std::ostream
 template<typename T>
 concept Streamable = requires(std::ostream& os, T a) {
-    {
-        os << a
-    } -> std::same_as<std::ostream&>;
+    { os << a } -> std::same_as<std::ostream&>;
 };
 
 namespace othello

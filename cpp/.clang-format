@@ -12,9 +12,9 @@ AlignTrailingComments: true
 AllowAllArgumentsOnNextLine: true
 AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Always
+AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: Inline
+AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: false
@@ -22,21 +22,24 @@ BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBraces: Custom
 BraceWrapping:
+    AfterCaseLabel: false
     AfterClass: true
     AfterControlStatement: MultiLine
     AfterEnum: false
+    AfterExternBlock: false
     AfterFunction: true
     AfterNamespace: true
     AfterObjCDeclaration: false
     AfterStruct: false
     AfterUnion: false
-    AfterExternBlock: false
     BeforeCatch: false
     BeforeElse: false
+    BeforeLambdaBody: false
+    BeforeWhile: false
     IndentBraces: false
     SplitEmptyFunction: false
-    SplitEmptyRecord: false
     SplitEmptyNamespace: false
+    SplitEmptyRecord: false
 BreakBeforeConceptDeclarations: Allowed
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: AfterColon

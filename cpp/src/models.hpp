@@ -24,9 +24,18 @@ struct Step {
 
     friend std::ostream& operator<<(std::ostream& out, const Step& step);
 
-    bool operator<(const Step& other) const { return x < other.x || (x <= other.x && y < other.y); }
-    bool operator==(const Step& other) const { return x == other.x && y == other.y; }
-    Step operator+(const Step& other) const { return {x + other.x, y + other.y}; }
+    bool operator<(const Step& other) const
+    {
+        return x < other.x || (x <= other.x && y < other.y);
+    }
+    bool operator==(const Step& other) const
+    {
+        return x == other.x && y == other.y;
+    }
+    Step operator+(const Step& other) const
+    {
+        return {x + other.x, y + other.y};
+    }
     Step& operator+=(const Step& other)
     {
         x += other.x;
@@ -49,15 +58,24 @@ struct Square {
     {
         return x < other.x || (x <= other.x && y < other.y);
     }
-    bool operator==(const Square& other) const { return x == other.x && y == other.y; }
-    Square operator+(const Square& other) const { return {x + other.x, y + other.y}; }
+    bool operator==(const Square& other) const
+    {
+        return x == other.x && y == other.y;
+    }
+    Square operator+(const Square& other) const
+    {
+        return {x + other.x, y + other.y};
+    }
     Square& operator+=(const Square& other)
     {
         x += other.x;
         y += other.y;
         return *this;
     }
-    Square operator+(const Step& other) const { return {x + other.x, y + other.y}; }
+    Square operator+(const Step& other) const
+    {
+        return {x + other.x, y + other.y};
+    }
     Square& operator+=(const Step& other)
     {
         x += other.x;
