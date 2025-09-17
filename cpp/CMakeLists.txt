@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 project("Othello C++"
-    VERSION 2.11.1
+    VERSION 2.12.0
     DESCRIPTION "A simple Othello CLI game implementation in C++"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -35,15 +35,17 @@ message(STATUS "CMake source dir: ${CMAKE_SOURCE_DIR}")
 
 # Get git hash
 execute_process(
-    COMMAND bash -c "git rev-parse --short HEAD"
+    COMMAND git rev-parse --short HEAD
     OUTPUT_VARIABLE GIT_COMMIT
     OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
 )
 # Get git branch
 execute_process(
-    COMMAND bash -c "git branch --show-current"
+    COMMAND git branch --show-current
     OUTPUT_VARIABLE GIT_BRANCH
     OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
 )
 
 string(TIMESTAMP BUILD_TIME "%Y-%m-%d_%H%M" UTC)
@@ -104,7 +106,7 @@ endif(CCACHE_EXECUTABLE)
 message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 11.2.0
+    GIT_TAG 12.0.0
 )
 FetchContent_MakeAvailable(fmt)
 
