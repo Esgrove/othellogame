@@ -73,7 +73,8 @@ void print(T object, const bool newline = true, std::ostream& out = std::cout)
 ///
 /// Requires that the stream insertion operator `<<` has been implemented for the given object.
 /// Workaround for custom types without formatter specialisation for fmt.
-template<Streamable T> std::string to_string(const T& object)
+template<Streamable T>
+std::string to_string(const T& object)
 {
     std::ostringstream stream;
     stream << object;

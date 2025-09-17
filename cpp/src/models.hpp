@@ -104,9 +104,12 @@ struct Move {
 }  // namespace othello
 
 // Formatter specialization: simply use overridden ostream operator
-template<> struct fmt::formatter<othello::Step> : ostream_formatter {};
-template<> struct fmt::formatter<othello::Square> : ostream_formatter {};
-template<> struct fmt::formatter<othello::Move> : ostream_formatter {};
+template<>
+struct fmt::formatter<othello::Step> : ostream_formatter {};
+template<>
+struct fmt::formatter<othello::Square> : ostream_formatter {};
+template<>
+struct fmt::formatter<othello::Move> : ostream_formatter {};
 
 // Other option would be to customize based on std::string for example:
 // template<> struct fmt::formatter<othello::Square> : fmt::formatter<std::string> {

@@ -77,4 +77,5 @@ private:
 
 }  // namespace othello
 
-template<> struct fmt::formatter<othello::Player> : ostream_formatter {};
+template<>
+struct fmt::formatter<othello::Player> : ostream_formatter {};

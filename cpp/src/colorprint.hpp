@@ -14,8 +14,8 @@
 #include <fmt/ranges.h>
 #include <fmt/std.h>
 
-#include <cctype>  // std::isspace
-#include <concepts>
+#include <cctype>    // std::isspace
+#include <concepts>  // template concepts
 #include <iostream>  // std::cout
 #include <string>    // std::string
 #include <utility>   // std::pair
@@ -35,7 +35,8 @@ inline std::pair<std::string, std::string> split_leading_whitespace(const std::s
 template<typename T> concept Formattable = fmt::is_formattable<T>::value;
 
 /// Format string with colour using fmt.
-template<Formattable T> std::string get_color(const T& object, const fmt::terminal_color color)
+template<Formattable T>
+std::string get_color(const T& object, const fmt::terminal_color color)
 {
     return fmt::format(fmt::fg(color), "{}", object);
 }
@@ -55,7 +56,8 @@ void print_bold(const T& object, const fmt::terminal_color color = fmt::terminal
 }
 
 /// Print text in green.
-template<Formattable T> void print_green(const T& object, bool bold = false)
+template<Formattable T>
+void print_green(const T& object, bool bold = false)
 {
     if (bold) {
         print_bold(object, fmt::terminal_color::green);
@@ -65,7 +67,8 @@ template<Formattable T> void print_green(const T& object, bool bold = false)
 }
 
 /// Print text in yellow.
-template<Formattable T> void print_yellow(const T& object, bool bold = false)
+template<Formattable T>
+void print_yellow(const T& object, bool bold = false)
 {
     if (bold) {
         print_bold(object, fmt::terminal_color::yellow);
@@ -75,7 +78,8 @@ template<Formattable T> void print_yellow(const T& object, bool bold = false)
 }
 
 /// Print text in red.
-template<Formattable T> void print_red(const T& object, bool bold = false)
+template<Formattable T>
+void print_red(const T& object, bool bold = false)
 {
     if (bold) {
         print_bold(object, fmt::terminal_color::red);

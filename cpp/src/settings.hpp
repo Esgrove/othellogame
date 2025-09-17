@@ -112,5 +112,7 @@ struct Settings {
 };
 }  // namespace othello
 
-template<> struct fmt::formatter<othello::Settings> : ostream_formatter {};
-template<> struct fmt::formatter<othello::PlayerSettings> : ostream_formatter {};
+template<>
+struct fmt::formatter<othello::Settings> : ostream_formatter {};
+template<>
+struct fmt::formatter<othello::PlayerSettings> : ostream_formatter {};
