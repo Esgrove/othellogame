@@ -13,7 +13,7 @@ import ColorizeSwift
 import Foundation
 
 struct OthelloSwift: ParsableCommand {
-    static var configuration = CommandConfiguration(
+    static let configuration = CommandConfiguration(
         abstract: "A simple Othello CLI game implementation in Swift",
         usage: "othello_swift [options] [size]"
     )
