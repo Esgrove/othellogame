@@ -92,7 +92,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.google.guava:guava:33.4.8-jre")
+    implementation("com.google.guava:guava:33.5.0-jre")
     // https://github.com/ajalt/clikt
     implementation("com.github.ajalt.clikt:clikt:5.0.3")
     // https://github.com/square/okio
