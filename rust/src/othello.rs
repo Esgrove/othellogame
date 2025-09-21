@@ -178,19 +178,20 @@ impl Othello {
     pub fn get_board_size() -> usize {
         print!("Choose board size (default is {DEFAULT_BOARD_SIZE}): ");
         let mut input = String::new();
-        if io::stdout().flush().is_ok() && io::stdin().read_line(&mut input).is_ok() {
-            if let Ok(board_size) = input.trim().parse::<usize>() {
-                if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&board_size) {
-                    println!(
-                        "{}",
-                        format!(
-                            "Limiting board size to valid range {MIN_BOARD_SIZE}..{MAX_BOARD_SIZE}"
-                        )
-                        .yellow()
-                    );
-                }
-                return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
+        if io::stdout().flush().is_ok()
+            && io::stdin().read_line(&mut input).is_ok()
+            && let Ok(board_size) = input.trim().parse::<usize>()
+        {
+            if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&board_size) {
+                println!(
+                    "{}",
+                    format!(
+                        "Limiting board size to valid range {MIN_BOARD_SIZE}..{MAX_BOARD_SIZE}"
+                    )
+                    .yellow()
+                );
             }
+            return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         }
         print_warn(format!("Invalid size, defaulting to {DEFAULT_BOARD_SIZE}...").as_str());
         DEFAULT_BOARD_SIZE

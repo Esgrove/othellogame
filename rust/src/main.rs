@@ -68,23 +68,20 @@ struct Args {
 }
 
 fn main() -> Result<()> {
-    // Set to 1 to display backtraces for panics for debugging
-    // std::env::set_var("RUST_BACKTRACE", "1");
-
-    // Parse command line arguments using clap
     let args = Args::parse();
 
     if args.version {
         println!("{}", version::version_info());
         return Ok(());
     }
+
     println!("{}", "OTHELLO GAME - RUST".green().bold());
 
     let board_size: usize = {
         // Try to read board size from command line args
         if let Some(size) = args.size {
             if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&size) {
-                anyhow::bail!("Unsupported board size: {}", size)
+                anyhow::bail!("Unsupported board size: {size}")
             }
             println!("Using board size: {size}");
             size

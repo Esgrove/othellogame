@@ -256,7 +256,7 @@ impl Board {
         // Initialize game board with empty disks
         let mut board = vec![Disk::Empty; size * size];
         // Set starting positions
-        let row = if size % 2 == 0 {
+        let row = if size.is_multiple_of(2) {
             (size - 1) / 2
         } else {
             (size - 1) / 2 - 1
