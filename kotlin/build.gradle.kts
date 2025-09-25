@@ -77,10 +77,10 @@ version = "1.7.2"
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.2.20"
     // https://github.com/GradleUp/shadow
-    id("com.gradleup.shadow") version "9.1.0"
+    id("com.gradleup.shadow") version "9.2.1"
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "7.2.1"
+    id("com.diffplug.spotless") version "8.0.0"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
