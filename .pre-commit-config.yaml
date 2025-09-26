@@ -1,7 +1,7 @@
 exclude: ^(.idea|.vscode)/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     # https://github.com/pre-commit/pre-commit-hooks
     hooks:
       - id: check-added-large-files
@@ -26,7 +26,7 @@ repos:
         exclude: "kotlin/gradlew"
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.11.10
+    rev: v0.13.2
     hooks:
       - id: ruff
         name: python ruff lint
@@ -38,7 +38,7 @@ repos:
         args: [--check, --config, python/pyproject.toml]
 
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v20.1.5
+    rev: v21.1.2
     hooks:
       - id: clang-format
         name: C++ Clang-format
