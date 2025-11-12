@@ -17,7 +17,7 @@ python = "^3.11"
 ruff = "^0.14.4"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^9.0.0"
+pytest = "^9.0.1"
 pytest-cov = "^7.0.0"
 
 [tool.poetry.scripts]
