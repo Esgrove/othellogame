@@ -94,8 +94,7 @@ namespace Othello {
             foreach (Square square in _emptySquares) {
                 int value = 0;
                 List<(Step, int)> directions = [];
-                foreach (Step dir in StepDirections) {
-                    Square step = new(dir.X, dir.Y);
+                foreach (Step step in StepDirections) {
                     Square pos = square + step;
                     // Next square in this directions needs to be opponents disk
                     if (GetSquare(pos) != other) {
@@ -112,13 +111,13 @@ namespace Othello {
                         continue;
                     }
                     value += numSteps;
-                    directions.Add((dir, numSteps));
+                    directions.Add((step, numSteps));
                 }
                 if (value > 0) {
                     moves.Add(new Move(square, value, color, directions));
                 }
             }
-            if (moves.Count != 0) {
+            if (moves.Count > 0) {
                 moves.Sort();
             }
             return moves;
