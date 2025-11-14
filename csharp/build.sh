@@ -49,7 +49,7 @@ init_options() {
         fi
     elif [ "$BASH_PLATFORM" = windows ]; then
         RUNTIME="win-x64"
-        EXECUTABLE="othello_csharp.exe"
+        EXECUTABLE+=".exe"
     else
         RUNTIME="linux-x64"
     fi
