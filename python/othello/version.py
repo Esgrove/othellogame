@@ -6,7 +6,7 @@ Akseli Lukkarila
 """
 
 # Updated by build script, do not edit manually!
-GIT_BRANCH = "main"
-GIT_COMMIT = "debcf66"
-BUILD_TIME = "2025-04-01_1225"
-VERSION_NUMBER = "2.4.0"
+GIT_BRANCH = "python-uv"
+GIT_COMMIT = "17a99a1"
+BUILD_TIME = "2025-11-14_2344"
+VERSION_NUMBER = "3.0.0"

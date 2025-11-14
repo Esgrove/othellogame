@@ -1,4 +1,4 @@
 @echo off
 cd /d "%~dp0"
-python othello/othello.py
+uv run othello/othello.py
 pause

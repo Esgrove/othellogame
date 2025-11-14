@@ -52,7 +52,7 @@ Python 3.11+.
 Uses the [colorama](https://pypi.org/project/colorama/) package for coloured text in the terminal.
 Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 79.
 Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
-Dependencies are handled by [Poetry](https://github.com/python-poetry/poetry).
+Dependencies are handled by [uv](https://github.com/astral-sh/uv).
 Formatting and linting with [ruff](https://github.com/astral-sh/ruff).
 
 ### C++

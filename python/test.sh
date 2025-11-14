@@ -8,8 +8,8 @@ source "$DIR/../common.sh"
 
 cd "$REPO_ROOT/python"
 
-if [ -z "$(command -v poetry)" ]; then
-    print_error_and_exit "poetry not found in path"
+if [ -z "$(command -v uv)" ]; then
+    print_error_and_exit "uv not found in path"
 fi
 
-poetry run pytest --cov=othello tests
+uv run pytest --cov=othello tests

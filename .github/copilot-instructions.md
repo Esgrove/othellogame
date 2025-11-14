@@ -30,7 +30,7 @@ All language implementations follow this consistent structure:
 ### Python (3.11+)
 - Use type hints extensively
 - Follow PEP8 style (max line length: 100 chars, not 79)
-- Use Poetry for dependency management
+- Use uv for dependency management
 - Format with ruff
 - Lint with ruff
 - Use colorama for terminal colors
