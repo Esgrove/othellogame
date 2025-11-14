@@ -40,7 +40,7 @@ All implementations follow this overall architecture:
 - _models_: Shared classes and enums.
 - _settings_: Game and player settings.
 - _utils_: Helper functions.
-- _colorprint_: Helper methods for terminal color printing and string formatting (if needed).
+- _colorprint_: Helper methods for terminal colour printing and string formatting (if needed).
 
 ## Languages
 
@@ -49,7 +49,7 @@ Listed in order of implementation from oldest to newest.
 ### Python
 
 Python 3.11+.
-Uses the [colorama](https://pypi.org/project/colorama/) package for colored text in the terminal.
+Uses the [colorama](https://pypi.org/project/colorama/) package for coloured text in the terminal.
 Formatting follows [PEP8](https://www.python.org/dev/peps/pep-0008/) except for the outdated max line length of 79.
 Uses [type hints](https://docs.python.org/3/library/typing.html#module-typing) heavily.
 Dependencies are handled by [Poetry](https://github.com/python-poetry/poetry).
@@ -59,39 +59,39 @@ Formatting and linting with [ruff](https://github.com/astral-sh/ruff).
 
 C++23.
 Uses [CMake](https://cmake.org/) as the build system,
-and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and colored text.
+and [fmt](https://github.com/fmtlib/fmt) library for sensible string formatting and coloured text.
 Follows the [ISO](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rl-camel) recommended naming style (_snake_case_).
 Code formatting is handled by [ClangFormat](https://clang.llvm.org/docs/ClangFormat.html).
 
 ### C\#
 
-.NET 9 and C# 11.
-Uses [Pastel](https://github.com/silkfire/Pastel) for colored text in the terminal.
-Follows the [C# style guide](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) (_PascalCase_),
+.NET 10 and C# 14.
+Uses [Pastel](https://github.com/silkfire/Pastel) for coloured text in the terminal.
+Follows the [C# style guide](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) (_PascalCase_)
 but with line length limit of 100.
-Code formatting with [CSharpier](https://github.com/belav/csharpier).
+Code formatting with dotnet format.
 
 ### Swift
 
 Swift 6.
-Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for colored text in the terminal.
+Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for coloured text in the terminal.
 Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/),
-meaning there is no Xcode project and it works on all platforms.
+meaning there is no Xcode project, and it works on all platforms.
 
 ### Rust
 
 Rust 2024 edition.
-Uses the [colored](https://crates.io/crates/colored) crate for colored text in the terminal.
+Uses the [colored](https://crates.io/crates/colored) crate for coloured text in the terminal.
 
 ### Go
 
 Go 1.21+.
-Uses [Aurora](https://github.com/logrusorgru/aurora) for colored text.
+Uses [Aurora](https://github.com/logrusorgru/aurora) for coloured text.
 
 ### Kotlin
 
-Kotlin 1.9+ and [Gradle](https://gradle.org/kotlin/).
+Kotlin 2 and [Gradle](https://gradle.org/kotlin/).
 
 ### Java
 
