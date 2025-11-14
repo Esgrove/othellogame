@@ -49,7 +49,7 @@ init_options() {
         fi
     elif [ "$BASH_PLATFORM" = windows ]; then
         RUNTIME="win-x64"
-        EXECUTABLE="othello_csharp.exe"
+        EXECUTABLE+=".exe"
     else
         RUNTIME="linux-x64"
     fi
@@ -69,13 +69,11 @@ update_version_info() {
     {
         echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
         echo ""
-        echo "namespace Othello"
-        echo "{"
-        echo "    public static class Version"
-        echo "    {"
+        echo "namespace Othello {"
+        echo "    public static class Version {"
         echo "        public const string BuildTime = \"$BUILD_TIME\";"
-        echo "        public const string GitBranch = \"$GIT_COMMIT\";"
-        echo "        public const string GitCommit = \"$GIT_BRANCH\";"
+        echo "        public const string GitBranch = \"$GIT_BRANCH\";"
+        echo "        public const string GitCommit = \"$GIT_COMMIT\";"
         echo "        public const string VersionNumber = \"$VERSION\";"
         echo "    }"
         echo "}"

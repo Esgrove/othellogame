@@ -5,57 +5,35 @@
 // 2019-2025
 //==========================================================
 
-namespace Othello
-{
+namespace Othello {
     /// Game settings.
-    public readonly struct Settings
-    {
-        public int BoardSize { get; }
-        public bool AutoplayMode { get; }
-        public bool CheckMode { get; }
-        public bool ShowHelpers { get; }
-        public bool ShowLog { get; }
-        public bool TestMode { get; }
-        public bool UseDefaults { get; }
-
-        public Settings(
-            int boardSize,
-            bool autoplayMode,
-            bool checkMode,
-            bool showHelpers,
-            bool showLog,
-            bool testMode,
-            bool useDefaultOptions
-        )
-        {
-            BoardSize = boardSize;
-            AutoplayMode = autoplayMode;
-            CheckMode = checkMode;
-            ShowHelpers = showHelpers;
-            ShowLog = showLog;
-            TestMode = testMode;
-            UseDefaults = useDefaultOptions;
-        }
+    public readonly struct Settings(
+        int boardSize,
+        bool autoplayMode,
+        bool checkMode,
+        bool showHelpers,
+        bool showLog,
+        bool testMode,
+        bool useDefaultOptions
+        ) {
+        public int BoardSize { get; } = boardSize;
+        public bool AutoplayMode { get; } = autoplayMode;
+        public bool CheckMode { get; } = checkMode;
+        public bool ShowHelpers { get; } = showHelpers;
+        public bool ShowLog { get; } = showLog;
+        public bool TestMode { get; } = testMode;
+        public bool UseDefaults { get; } = useDefaultOptions;
 
         /// Get player setting values from overall game settings.
-        public PlayerSettings ToPlayerSettings()
-        {
+        public PlayerSettings ToPlayerSettings() {
             return new PlayerSettings(CheckMode, ShowHelpers, TestMode);
         }
     }
 
     /// Player settings.
-    public readonly struct PlayerSettings
-    {
-        public bool CheckMode { get; }
-        public bool ShowHelpers { get; }
-        public bool TestMode { get; }
-
-        public PlayerSettings(bool checkMode, bool showHelpers, bool testMode)
-        {
-            CheckMode = checkMode;
-            ShowHelpers = showHelpers;
-            TestMode = testMode;
-        }
+    public readonly struct PlayerSettings(bool checkMode, bool showHelpers, bool testMode) {
+        public bool CheckMode { get; } = checkMode;
+        public bool ShowHelpers { get; } = showHelpers;
+        public bool TestMode { get; } = testMode;
     }
 }

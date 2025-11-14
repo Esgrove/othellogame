@@ -19,6 +19,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+    working-directory: csharp
+
 jobs:
   build:
     strategy:
@@ -34,7 +39,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "9.0"
+          global-json-file: csharp/global.json
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
@@ -43,20 +48,17 @@ jobs:
             ~/.nuget/packages
             !~/.nuget/packages/*/contentFiles
             !~/.nuget/packages/*/analyzers
-          key: ${{ runner.os }}-nuget-9-${{ hashFiles('**/*.csproj') }}
-          restore-keys: ${{ runner.os }}-nuget-9
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget
 
       - name: Restore dependencies
-        working-directory: csharp
         run: dotnet restore
 
       - name: Build
-        working-directory: csharp
         run: chmod +x build.sh && ./build.sh
         shell: bash
 
       - name: Run tests
-        working-directory: csharp
         run: dotnet test
 
   format:
@@ -68,10 +70,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "9.0"
-
-      - name: Install CSharpier
-        run: dotnet tool install --global CSharpier
+          global-json-file: csharp/global.json
 
       - name: Check code formatting
-        run: csharpier check csharp
+        run: dotnet format --verify-no-changes

@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <LangVersion>12</LangVersion>
+    <LangVersion>14</LangVersion>
     <OutputType>Exe</OutputType>
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
     <RuntimeIdentifiers>win-x64;osx-x64;osx-arm64;linux-x64</RuntimeIdentifiers>
     <SelfContained>false</SelfContained>
-    <TargetFramework>net9.0</TargetFramework>
-    <Version>2.9.0</Version>
+    <TargetFramework>net10.0</TargetFramework>
+    <Version>2.10.0</Version>
     <StartupObject>Othello.Program.Othello</StartupObject>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Esgrove/othellogame</RepositoryUrl>
@@ -16,12 +16,22 @@
     <Title>Othello C#</Title>
     <Description>A simple Othello CLI game implementation in C#</Description>
     <PackageProjectUrl>https://github.com/Esgrove/othellogame</PackageProjectUrl>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <WarningLevel>8</WarningLevel>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;1716</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <WarningLevel>8</WarningLevel>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;1716</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Program.cs" />
@@ -33,7 +43,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.11" />
     <PackageReference Include="Pastel" Version="7.0.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0" />
   </ItemGroup>

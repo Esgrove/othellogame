@@ -3,16 +3,15 @@
   "version": "0.1.0",
   "description": "A simple Othello CLI game implementation",
   "type": "module",
-  "exports": "./src/othello.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "bun build ./src/othello.ts --outdir ./dist --target node",
     "othello": "bun src/othello.ts",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs}\"",
-    "format-check": "prettier --check \"**/*.{ts,tsx,js,mjs}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs}\"",
     "fmt": "bun format",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
-    "lint-check": "eslint \"src/**/*.{ts,tsx}\""
+    "lint:check": "eslint \"src/**/*.{ts,tsx}\""
   },
   "repository": {
     "type": "git",
@@ -24,9 +23,6 @@
     "url": "https://github.com/Esgrove/othellogame/issues"
   },
   "homepage": "https://github.com/Esgrove/othellogame#readme",
-  "engines": {
-    "node": ">=22"
-  },
   "bin": {
     "othello": "./src/othello.ts"
   },

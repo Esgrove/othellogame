@@ -56,15 +56,8 @@ dotnet test
 
 ## Code formatting
 
-Using [CSharpier](https://github.com/belav/csharpier)
+Using [dotnet format](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-format)
 
 ```shell
-dotnet tool install --global csharpier
-
-csharpier format .
-csharpier check .
+dotnet format
 ```
-
-## TODO
-
-Use <https://github.com/commandlineparser/commandline>
