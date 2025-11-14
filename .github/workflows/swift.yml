@@ -22,7 +22,7 @@ concurrency:
 defaults:
   run:
     shell: bash
-    working-directory: rust
+    working-directory: swift
 
 jobs:
   build:
