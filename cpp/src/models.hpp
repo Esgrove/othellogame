@@ -87,7 +87,7 @@ struct Square {
     int y;
 };
 
-/// Represents one possible disk placement for the given disk color.
+/// Represents one possible disk placement for the given disk colour.
 struct Move {
     Move() : square(0, 0), disk(Disk::empty), value(0) {}
     Move(

@@ -3,6 +3,7 @@ package othello;
 import java.util.*;
 import java.util.stream.IntStream;
 
+import othello.Models.Direction;
 import othello.Models.Disk;
 import othello.Models.Move;
 import othello.Models.Square;
@@ -75,7 +76,7 @@ public class Board {
         }
         setSquare(start, move.disk());
         emptySquares.remove(start);
-        for (Step dir : move.directions()) {
+        for (Direction direction : move.directions()) {
             Square pos = start.add(dir);
             while (getSquare(pos) == move.disk().opponent()) {
                 setSquare(pos, move.disk());
@@ -90,7 +91,7 @@ public class Board {
         Disk other = color.opponent();
         for (Square square : emptySquares) {
             int value = 0;
-            List<Step> directions = new ArrayList<>();
+            List<Direction> directions = new ArrayList<>();
             for (Step step : stepDirections) {
                 Square pos = square.add(step);
                 // Next square in this direction needs to be the opposing disk
@@ -108,16 +109,15 @@ public class Board {
                     continue;
                 }
                 value += numSteps;
-                directions.add(step);
+                directions.add(new Direction(step, numSteps));
             }
             if (value > 0) {
                 moves.add(new Move(square, value, color, directions));
             }
         }
-
-        moves.sort(
-            null
-        );
+        if (!moves.isEmpty()) {
+            moves.sort(null);
+        }
         return moves;
     }
 

@@ -88,9 +88,9 @@ public class Models {
     }
 
     /**
-     * Represents one possible disk placement for given disk color.
+     * Represents one possible disk placement for given disk colour.
      */
-    public record Move(Square square, int value, Disk disk, List<Step> directions)
+    public record Move(Square square, int value, Disk disk, List<Direction> directions)
         implements
         Comparable<Move> {
         @Override
@@ -110,4 +110,12 @@ public class Models {
             return "Square: " + square + " -> value: " + value;
         }
     }
+
+    /**
+     * Represents a continuous line of squares in one direction.
+     *
+     * <p>The {@code step} component determines the direction on the board,
+     * and {@code count} describes how many consecutive squares in that direction there are.</p>
+     */
+    public record Direction(Step step, int count) {}
 }

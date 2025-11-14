@@ -39,7 +39,19 @@ pub struct Move {
     pub square: Square,
     pub disk: Disk,
     pub value: usize,
-    pub directions: Vec<(Step, usize)>,
+    pub directions: Vec<Direction>,
+}
+
+/// Represents a continuous line of squares in one direction.
+///
+/// The `step` field determines the direction on the board,
+/// and `count` describes how many consecutive squares in that direction there are.
+#[derive(Eq, Debug, Copy, Clone, Hash, PartialEq, Ord, PartialOrd)]
+pub struct Direction {
+    /// Direction of travel on the board
+    pub step: Step,
+    /// Number of consecutive same colour squares along this direction
+    pub count: usize,
 }
 
 impl Disk {
@@ -57,7 +69,7 @@ impl Disk {
         self.board_char().color(self.color())
     }
 
-    /// Return the associated color for this disk.
+    /// Return the associated colour for this disk.
     pub const fn color(self) -> Color {
         match self {
             Self::Black => Color::Magenta,
@@ -66,7 +78,7 @@ impl Disk {
         }
     }
 
-    /// Returns the disk formatted as a colored string.
+    /// Returns the disk formatted as a coloured string.
     pub fn disk_string(self) -> ColoredString {
         match self {
             Self::Black => "BLACK".color(self.color()),
@@ -94,9 +106,9 @@ impl Move {
     /// Get all the squares playing this move will change.
     pub fn affected_squares(&self) -> Vec<Square> {
         // Calculate the required size for the vector
-        let total_size: usize = self.directions.iter().map(|(_, size)| size).sum();
+        let total_size: usize = self.directions.iter().map(|dir| dir.count).sum();
         let mut paths: Vec<Square> = Vec::with_capacity(total_size);
-        for &(step, count) in &self.directions {
+        for &Direction { step, count } in &self.directions {
             let mut pos: Square = self.square + step;
             for _ in 0..count {
                 paths.push(pos);
@@ -113,6 +125,13 @@ impl Square {
     /// Get the index of this square on the board.
     pub const fn board_index(&self, board_size: usize) -> usize {
         self.y as usize * board_size + self.x as usize
+    }
+}
+
+impl Direction {
+    /// Create a new `Direction` from a step and a count.
+    pub const fn new(step: Step, count: usize) -> Self {
+        Self { step, count }
     }
 }
 
@@ -229,7 +248,7 @@ impl PartialOrd for Move {
 #[cfg(test)]
 mod tests {
 
-    use crate::models::{Disk, Move, Square, Step};
+    use crate::models::{Direction, Disk, Move, Square, Step};
 
     #[test]
     fn step_addition() {
@@ -333,7 +352,10 @@ mod tests {
             square: Square { x: 3, y: 2 },
             disk: Disk::Black,
             value: 10,
-            directions: vec![(Step { x: 1, y: 0 }, 10)],
+            directions: vec![Direction {
+                step: Step { x: 1, y: 0 },
+                count: 10,
+            }],
         };
         assert_eq!(b.log_entry(), "B:(3,2),10");
 
@@ -341,7 +363,10 @@ mod tests {
             square: Square { x: 0, y: 0 },
             disk: Disk::White,
             value: 1,
-            directions: vec![(Step { x: 1, y: 0 }, 1)],
+            directions: vec![Direction {
+                step: Step { x: 1, y: 0 },
+                count: 1,
+            }],
         };
         assert_eq!(w.log_entry(), "W:(0,0),1");
     }

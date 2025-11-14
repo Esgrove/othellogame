@@ -18,10 +18,9 @@ cd "$REPO_ROOT/rust"
 
 cargo build --release
 
+executable="othello_rust"
 if [ "$BASH_PLATFORM" = windows ]; then
-    executable="othello_rust.exe"
-else
-    executable="othello_rust"
+    executable+=".exe"
 fi
 
 rm -f "$executable"

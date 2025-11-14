@@ -10,7 +10,7 @@ use std::fmt;
 
 use colored::{ColoredString, Colorize};
 
-use crate::models::{Disk, Move, Square, Step};
+use crate::models::{Direction, Disk, Move, Square, Step};
 
 const UP: isize = 1;
 const DOWN: isize = -1;
@@ -85,7 +85,7 @@ impl Board {
         let opposing_disk = disk.opponent();
         for square in &self.empty_squares {
             let mut value: usize = 0;
-            let mut directions: Vec<(Step, usize)> = Vec::new();
+            let mut directions: Vec<Direction> = Vec::new();
             for step in &STEP_DIRECTIONS {
                 let mut pos = *square + *step;
                 // Next square in this direction needs to be the opposing disk
@@ -100,7 +100,7 @@ impl Board {
                 }
                 // Valid move only if a line of opposing disks ends in own disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) == disk {
-                    directions.push((*step, num_steps));
+                    directions.push(Direction::new(*step, num_steps));
                     value += num_steps;
                 }
             }
