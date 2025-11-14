@@ -18,9 +18,10 @@ namespace Othello {
     }
 
     /// Represents one step direction on the board.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Not revelant in this project")]
     public readonly struct Step(int x, int y) : IEquatable<Step> {
-        public readonly int X = x;
-        public readonly int Y = y;
+        public int X { get; } = x;
+        public int Y { get; } = y;
 
         public override int GetHashCode() {
             return HashCode.Combine(X, Y);
@@ -54,8 +55,8 @@ namespace Othello {
 
     /// Represents one square location on the board.
     public readonly struct Square(int x, int y) : IComparable<Square>, IEquatable<Square> {
-        public readonly int X = x;
-        public readonly int Y = y;
+        public int X { get; } = x;
+        public int Y { get; } = y;
 
         public static Square operator +(Square square, Step step) {
             return new Square(square.X + step.X, square.Y + step.Y);
@@ -117,10 +118,10 @@ namespace Othello {
 
     /// Represents one possible disk placement for the given disk color.
     public readonly struct Move(Square square, int value, Disk disk, List<(Step, int)> directions) : IComparable<Move> {
-        public readonly Square Square = square;
-        public readonly int Value = value;
-        public readonly Disk Disk = disk;
-        public readonly List<(Step step, int count)> Directions = directions;
+        public Square Square { get; } = square;
+        public int Value { get; } = value;
+        public Disk Disk { get; } = disk;
+        public List<(Step step, int count)> Directions { get; } = directions;
 
         /// Format move for log entry
         public string LogEntry() {

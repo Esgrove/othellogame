@@ -205,7 +205,7 @@ namespace Othello {
 
         /// Returns the total score (positive means more white disks and negative means more black disks).
         private int Score() {
-            return _board.Sum(static x => Convert.ToInt32(x));
+            return _board.Sum(static x => Convert.ToInt32(x, System.Globalization.CultureInfo.InvariantCulture));
         }
 
         /// Returns the state of the board (empty, white, black) at the given coordinates.

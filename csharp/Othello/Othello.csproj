@@ -22,14 +22,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
-    <WarningLevel>1</WarningLevel>
+    <WarningLevel>8</WarningLevel>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <NoWarn>1701;1702;1716</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
-    <WarningLevel>1</WarningLevel>
+    <WarningLevel>8</WarningLevel>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <NoWarn>1701;1702;1716</NoWarn>
   </PropertyGroup>

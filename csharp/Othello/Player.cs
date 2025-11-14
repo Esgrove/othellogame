@@ -114,8 +114,8 @@ namespace Othello {
                     if (string.IsNullOrEmpty(coords) || coords.Length != 3 || coords[1] != ',') {
                         throw new FormatException("Invalid coordinates");
                     }
-                    int x = int.Parse(coords[..1]);
-                    int y = int.Parse(coords[2..3]);
+                    int x = int.Parse(coords[..1], System.Globalization.CultureInfo.InvariantCulture);
+                    int y = int.Parse(coords[2..3], System.Globalization.CultureInfo.InvariantCulture);
                     return new Square(x, y);
                 } catch (FormatException) {
                     ColorPrint.Error("  Give coordinates in the form 'x,y'");

@@ -18,7 +18,7 @@ namespace Othello {
 
             StringBuilder builder = new();
             foreach (byte b in hashBytes) {
-                builder.Append(b.ToString("x2"));
+                builder.Append(b.ToString("x2", System.Globalization.CultureInfo.InvariantCulture));
             }
 
             return builder.ToString();
