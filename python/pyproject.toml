@@ -27,13 +27,6 @@ othello = "othello.othello:main"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
-line-length = 100
-target-version = ['py311', 'py312', 'py313']
-include = '\.pyi?$'
-extend-exclude = '''venv*'''
-
 [tool.ruff]
 # https://docs.astral.sh/ruff/configuration/
 include = ["*.py", "*.pyi", "**/pyproject.toml"]
