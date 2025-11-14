@@ -23,6 +23,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+    working-directory: cpp
+
 jobs:
   build:
     strategy:
@@ -31,10 +36,6 @@ jobs:
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        working-directory: cpp
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
@@ -87,10 +88,6 @@ jobs:
   clang-format:
     # Need to use mac since Ubuntu apt has an old clang-format version
     runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: cpp
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v5

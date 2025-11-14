@@ -23,14 +23,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+    working-directory: typescript
+
 jobs:
   check:
     name: Check
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: typescript
-        shell: bash
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
@@ -54,7 +55,7 @@ jobs:
         run: bun run build
 
       - name: Lint
-        run: bun lint-check
+        run: bun lint:check
 
       - name: Check formatting
-        run: bun format-check
+        run: bun format:check

@@ -19,6 +19,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+    working-directory: csharp
+
 jobs:
   build:
     strategy:
@@ -47,16 +52,13 @@ jobs:
           restore-keys: ${{ runner.os }}-nuget
 
       - name: Restore dependencies
-        working-directory: csharp
         run: dotnet restore
 
       - name: Build
-        working-directory: csharp
         run: chmod +x build.sh && ./build.sh
         shell: bash
 
       - name: Run tests
-        working-directory: csharp
         run: dotnet test
 
   format:
