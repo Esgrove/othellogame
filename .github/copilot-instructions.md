@@ -2,7 +2,8 @@
 
 ## Project Overview
 
-This is a polyglot implementation of Othello (Reversi) - a CLI game implemented in multiple programming languages for learning and comparison purposes. Each implementation follows the same architecture and logic while adhering to language-specific best practices.
+This is a polyglot implementation of Othello (Reversi) - a CLI game implemented in multiple programming languages for learning and comparison purposes.
+Each implementation follows the same architecture and logic while adhering to language-specific best practices.
 
 ## Project Goals
 
@@ -36,9 +37,9 @@ All language implementations follow this consistent structure:
 - Run tests with pytest
 
 ### C++ (C++23)
-- Use CMake as build system
+- Uses CMake
 - Follow ISO recommended naming style (snake_case)
-- Use fmt library for formatting and colors
+- Uses fmt library for formatting and colors
 - Format with ClangFormat
 - Lint with clang-tidy
 - Max line length: 100 chars
@@ -46,8 +47,7 @@ All language implementations follow this consistent structure:
 ### C# (.NET 9, C# 11)
 - Follow C# style guide (PascalCase)
 - Max line length: 100 chars
-- Use Pastel for terminal colors
-- Format with CSharpier
+- Format with dotnet format command
 
 ### Swift (Swift 6)
 - Use Swift Package Manager (no Xcode project)
@@ -59,12 +59,10 @@ All language implementations follow this consistent structure:
 - Use cargo for build and dependency management
 - Format with rustfmt
 - Lint with clippy
-- Use colored crate for terminal colors
 
 ### Go (1.21+)
 - Use go fmt for formatting
 - Use gofmt/golint for linting
-- Use Aurora for terminal colors
 - Follow standard Go project structure
 
 ### Kotlin (1.9+)
@@ -78,10 +76,9 @@ All language implementations follow this consistent structure:
 ### TypeScript
 - Follow TypeScript best practices
 - Use appropriate type definitions
-
-### Zig
-- Follow Zig conventions
-- Use zig build system
+- use Bun
+- Format with Prettier
+- Lint with ESLint
 
 ## Code Consistency Rules
 
@@ -130,9 +127,7 @@ All language implementations follow this consistent structure:
 
 ## Dependencies and Security
 
-- When adding or updating dependencies, ensure they're appropriate for the language
-- Check for security vulnerabilities in dependencies
-- Use version pinning where appropriate for each language's package manager
+- Don't add new dependencies unless they're absolutely necessary
 
 ## Making Changes
 
@@ -143,7 +138,6 @@ When asked to implement a feature or fix a bug:
 3. Make minimal, focused changes
 4. Test in the specific language environment
 5. Run formatting and linting tools
-6. Verify that CI checks will pass
 
 ## Editor Configuration
 
