@@ -100,11 +100,11 @@ namespace Othello {
         }
 
         public static bool operator <(Square left, Square right) {
-            return left.X < right.X || (left.X <= right.X && left.Y < right.Y);
+            return left.CompareTo(right) < 0;
         }
 
         public static bool operator >(Square left, Square right) {
-            return left.X > right.X || (left.X >= right.X && left.Y > right.Y);
+            return left.CompareTo(right) > 0;
         }
 
         public static bool operator <=(Square left, Square right) {
