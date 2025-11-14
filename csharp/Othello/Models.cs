@@ -18,7 +18,7 @@ namespace Othello {
     }
 
     /// Represents one step direction on the board.
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Not revelant in this project")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Not relevant in this project")]
     public readonly struct Step(int x, int y) : IEquatable<Step> {
         public int X { get; } = x;
         public int Y { get; } = y;
