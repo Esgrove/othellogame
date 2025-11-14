@@ -69,10 +69,8 @@ update_version_info() {
     {
         echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
         echo ""
-        echo "namespace Othello"
-        echo "{"
-        echo "    public static class Version"
-        echo "    {"
+        echo "namespace Othello {"
+        echo "    public static class Version {"
         echo "        public const string BuildTime = \"$BUILD_TIME\";"
         echo "        public const string GitBranch = \"$GIT_COMMIT\";"
         echo "        public const string GitCommit = \"$GIT_BRANCH\";"

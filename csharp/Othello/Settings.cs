@@ -5,8 +5,7 @@
 // 2019-2025
 //==========================================================
 
-namespace Othello
-{
+namespace Othello {
     /// Game settings.
     public readonly struct Settings(
         int boardSize,
@@ -16,8 +15,7 @@ namespace Othello
         bool showLog,
         bool testMode,
         bool useDefaultOptions
-        )
-    {
+        ) {
         public int BoardSize { get; } = boardSize;
         public bool AutoplayMode { get; } = autoplayMode;
         public bool CheckMode { get; } = checkMode;
@@ -27,15 +25,13 @@ namespace Othello
         public bool UseDefaults { get; } = useDefaultOptions;
 
         /// Get player setting values from overall game settings.
-        public PlayerSettings ToPlayerSettings()
-        {
+        public PlayerSettings ToPlayerSettings() {
             return new PlayerSettings(CheckMode, ShowHelpers, TestMode);
         }
     }
 
     /// Player settings.
-    public readonly struct PlayerSettings(bool checkMode, bool showHelpers, bool testMode)
-    {
+    public readonly struct PlayerSettings(bool checkMode, bool showHelpers, bool testMode) {
         public bool CheckMode { get; } = checkMode;
         public bool ShowHelpers { get; } = showHelpers;
         public bool TestMode { get; } = testMode;

@@ -1,12 +1,9 @@
 using System.Text;
 
-namespace Othello.Tests
-{
-    public class TestUtils
-    {
+namespace Othello.Tests {
+    public class TestUtils {
         [Fact]
-        public void CalculateSHA256_Basic()
-        {
+        public void CalculateSHA256_Basic() {
             const string input = "test";
             const string expectedHash =
                 "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
@@ -17,8 +14,7 @@ namespace Othello.Tests
         }
 
         [Fact]
-        public void CalculateSHA256_log_line()
-        {
+        public void CalculateSHA256_log_line() {
             const string input = "01: B:(0,1),1;____BBB__BW_____";
             const string expectedHash =
                 "d087cd890b81b7153cc870fba7372396e91cdcd4b6d13b82bbc88b5a4eb889d1";
@@ -29,8 +25,7 @@ namespace Othello.Tests
         }
 
         [Fact]
-        public void CalculateSHA256_full_log()
-        {
+        public void CalculateSHA256_full_log() {
             StringBuilder testLog = new();
             testLog.Append("01: B:(0,1),1;____BBB__BW_____\n");
             testLog.Append("02: W:(0,0),1;W___BWB__BW_____\n");
