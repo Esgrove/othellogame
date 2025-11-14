@@ -295,7 +295,7 @@ namespace Othello {
                     Console.WriteLine("\ncancelled...");
                     return 1;
                 } catch (Exception ex) {
-                    ColorPrint.Error($"An exception occurred: {ex.Message}");
+                    ColorPrint.Error($"An exception occurred: {ex}");
                     return 1;
                 }
             }
