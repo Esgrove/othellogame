@@ -162,11 +162,19 @@ namespace Othello {
         }
 
         public override bool Equals(object obj) {
-            throw new NotImplementedException();
+            if (obj is Move other) {
+                return this.Square == other.Square && this.Value == other.Value;
+            }
+            return false;
         }
 
         public override int GetHashCode() {
-            throw new NotImplementedException();
+            unchecked {
+                int hash = 17;
+                hash = hash * 23 + Square.GetHashCode();
+                hash = hash * 23 + Value.GetHashCode();
+                return hash;
+            }
         }
 
         public static bool operator ==(Move left, Move right) {
