@@ -13,23 +13,14 @@ using System.Threading;
 namespace Othello
 {
     /// Defines one player that can be either human or computer controlled.
-    internal class Player
+    internal sealed class Player(Disk color, PlayerSettings settings)
     {
-        public bool CanPlay;
-        private bool _isHuman;
+        public bool CanPlay = true;
+        private bool _isHuman = true;
         private int _roundsPlayed;
-        private readonly Disk _disk;
-        private readonly Random _random;
-        private readonly PlayerSettings _settings;
-
-        public Player(Disk color, PlayerSettings settings)
-        {
-            CanPlay = true;
-            _disk = color;
-            _isHuman = true;
-            _random = new Random();
-            _settings = settings;
-        }
+        private readonly Disk _disk = color;
+        private readonly Random _random = new();
+        private readonly PlayerSettings _settings = settings;
 
         /// Shorthand to initialize a new player for black disks.
         public static Player Black(PlayerSettings settings)
@@ -97,7 +88,7 @@ namespace Othello
         }
 
         /// Return move chosen by computer.
-        private Move GetComputerMove(IReadOnlyList<Move> moves)
+        private Move GetComputerMove(List<Move> moves)
         {
             if (!_settings.CheckMode)
             {

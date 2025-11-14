@@ -28,7 +28,7 @@ namespace Othello
         private const int Still = 0;
 
         private static readonly Step[] StepDirections =
-        {
+        [
             new(Up, Left),
             new(Up, Still),
             new(Up, Right),
@@ -37,14 +37,14 @@ namespace Othello
             new(Down, Left),
             new(Down, Still),
             new(Down, Right),
-        };
+        ];
 
         public Board(int size)
         {
             _size = size;
             int numSquares = _size * _size;
             // Init game board with empty disks
-            _board = Enumerable.Repeat(Disk.Empty, numSquares).ToList();
+            _board = [.. Enumerable.Repeat(Disk.Empty, numSquares)];
 
             // Set starting positions
             int row = _size % 2 == 0 ? (_size - 1) / 2 : (_size - 1) / 2 - 1;
@@ -55,7 +55,7 @@ namespace Othello
             _board[col * _size + col] = Disk.White;
 
             // Index list (0..size) to avoid repeating same range in for loops
-            _indices = Enumerable.Range(0, _size).ToList();
+            _indices = [.. Enumerable.Range(0, _size)];
 
             // Keep track of empty squares on board to avoid checking already filled positions
             _emptySquares = new List<Square>(numSquares);
@@ -99,12 +99,12 @@ namespace Othello
         /// Returns a list of possible moves for the given player.
         public List<Move> PossibleMoves(Disk color)
         {
-            List<Move> moves = new();
+            List<Move> moves = [];
             Disk other = color.Opponent();
             foreach (Square square in _emptySquares)
             {
                 int value = 0;
-                List<(Step, int)> directions = new();
+                List<(Step, int)> directions = [];
                 foreach (Step dir in StepDirections)
                 {
                     Square step = new(dir.X, dir.Y);
@@ -236,7 +236,7 @@ namespace Othello
         /// Returns the total score (positive means more white disks and negative means more black disks).
         private int Score()
         {
-            return _board.Sum(x => Convert.ToInt32(x));
+            return _board.Sum(static x => Convert.ToInt32(x));
         }
 
         /// Returns the state of the board (empty, white, black) at the given coordinates.

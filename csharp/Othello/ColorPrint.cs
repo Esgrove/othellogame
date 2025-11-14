@@ -5,9 +5,9 @@
 // 2019-2025
 //==========================================================
 
+using Pastel;
 using System;
 using System.Drawing;
-using Pastel;
 
 namespace Othello
 {

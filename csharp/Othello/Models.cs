@@ -20,16 +20,10 @@ namespace Othello
     }
 
     /// Represents one step direction on the board.
-    public readonly struct Step : IEquatable<Step>
+    public readonly struct Step(int x, int y) : IEquatable<Step>
     {
-        public readonly int X;
-        public readonly int Y;
-
-        public Step(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
+        public readonly int X = x;
+        public readonly int Y = y;
 
         public override int GetHashCode()
         {
@@ -69,16 +63,10 @@ namespace Othello
     }
 
     /// Represents one square location on the board.
-    public readonly struct Square : IComparable<Square>, IEquatable<Square>
+    public readonly struct Square(int x, int y) : IComparable<Square>, IEquatable<Square>
     {
-        public readonly int X;
-        public readonly int Y;
-
-        public Square(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
+        public readonly int X = x;
+        public readonly int Y = y;
 
         public static Square operator +(Square square, Step step)
         {
@@ -140,23 +128,25 @@ namespace Othello
         {
             return left.X > right.X || (left.X >= right.X && left.Y > right.Y);
         }
+
+        public static bool operator <=(Square left, Square right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >=(Square left, Square right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
     }
 
     /// Represents one possible disk placement for the given disk color.
-    public readonly struct Move : IComparable<Move>
+    public readonly struct Move(Square square, int value, Disk disk, List<(Step, int)> directions) : IComparable<Move>
     {
-        public readonly Square Square;
-        public readonly int Value;
-        public readonly Disk Disk;
-        public readonly List<(Step step, int count)> Directions;
-
-        public Move(Square square, int value, Disk disk, List<(Step, int)> directions)
-        {
-            Square = square;
-            Value = value;
-            Disk = disk;
-            Directions = directions;
-        }
+        public readonly Square Square = square;
+        public readonly int Value = value;
+        public readonly Disk Disk = disk;
+        public readonly List<(Step step, int count)> Directions = directions;
 
         /// Format move for log entry
         public string LogEntry()
@@ -167,7 +157,7 @@ namespace Othello
         /// Get all the squares playing this move will change.
         public List<Square> AffectedSquares()
         {
-            List<Square> paths = new();
+            List<Square> paths = [];
             foreach (var (step, num) in Directions)
             {
                 Square pos = Square + step;
@@ -202,6 +192,36 @@ namespace Othello
         {
             return left.Value < right.Value
                 || (left.Value == right.Value && left.Square > right.Square);
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(Move left, Move right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Move left, Move right)
+        {
+            return !(left == right);
+        }
+
+        public static bool operator <=(Move left, Move right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >=(Move left, Move right)
+        {
+            return left.CompareTo(right) >= 0;
         }
     }
 

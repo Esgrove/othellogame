@@ -7,7 +7,7 @@
     <PublishTrimmed>true</PublishTrimmed>
     <RuntimeIdentifiers>win-x64;osx-x64;osx-arm64;linux-x64</RuntimeIdentifiers>
     <SelfContained>false</SelfContained>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Version>2.9.0</Version>
     <StartupObject>Othello.Program.Othello</StartupObject>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -16,12 +16,20 @@
     <Title>Othello C#</Title>
     <Description>A simple Othello CLI game implementation in C#</Description>
     <PackageProjectUrl>https://github.com/Esgrove/othellogame</PackageProjectUrl>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <WarningLevel>7</WarningLevel>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <WarningLevel>7</WarningLevel>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Program.cs" />

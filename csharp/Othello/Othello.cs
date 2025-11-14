@@ -6,12 +6,12 @@
 // 2019-2025
 //==========================================================
 
+using Pastel;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Drawing;
 using System.Linq;
-using Pastel;
 
 namespace Othello
 {
@@ -205,7 +205,7 @@ namespace Othello
                 Console.Write($"{question} ({yes}/{no})? ");
                 string answer = Console.ReadLine();
                 return !string.IsNullOrEmpty(answer)
-                    && string.Equals(answer, yes, StringComparison.CurrentCultureIgnoreCase);
+                    && string.Equals(answer, yes, StringComparison.OrdinalIgnoreCase);
             }
 
             /// Ask and return the desired board size.
