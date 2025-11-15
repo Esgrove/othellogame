@@ -48,7 +48,7 @@ repos:
         description: Run spotless format on files included in the commit.
         entry: bash -c 'cd java && ./gradlew spotlessApply'
         pass_filenames: false
-        types: [file]
+        types: [file, java]
         language: system
         files: ^java/
 
@@ -57,7 +57,7 @@ repos:
         description: Run spotless format on files included in the commit.
         entry: bash -c 'cd kotlin && ./gradlew spotlessApply'
         pass_filenames: false
-        types: [file]
+        types: [file, kotlin]
         language: system
         files: ^kotlin/
 
@@ -66,7 +66,7 @@ repos:
         description: Run dotnet format on files included in the commit.
         entry: bash -c 'cd csharp && dotnet format'
         pass_filenames: false
-        types: [file]
+        types: [file, c#]
         language: system
         files: ^csharp/
 
@@ -75,7 +75,7 @@ repos:
         description: Run Ruff format and lint on files included in the commit.
         entry: bash -c 'cd python && uv run ruff format && uv run ruff check --fix'
         pass_filenames: false
-        types: [file]
+        types: [file, python]
         language: system
         files: ^python/
 
@@ -101,5 +101,7 @@ repos:
         name: Swift format
         description: Run swiftformat on files included in the commit.
         entry: bash -c 'cd swift && swiftformat --lint .'
+        pass_filenames: false
+        types: [file, swift]
         language: system
         files: ^swift/
