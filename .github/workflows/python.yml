@@ -39,18 +39,11 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      - name: Load cached uv cache
-        id: cached-uv-dependencies
-        uses: actions/cache@v4
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
         with:
-          path: ~/.cache/uv
-          key: uv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('python/pyproject.toml', 'python/uv.lock') }}
-          restore-keys: uv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
+          version: "latest"
+          working-directory: python
 
       - name: Sync dependencies
         run: uv sync --all-groups --frozen
