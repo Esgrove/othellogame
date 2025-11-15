@@ -34,6 +34,20 @@ data class Step(val x: Int, val y: Int) {
 }
 
 /**
+ * Represents a continuous line of squares in one direction.
+ *
+ * The [step] component determines the direction on the board,
+ * and [count] describes how many consecutive squares in that direction there are.
+ */
+data class Direction(val step: Step, val count: Int) : Comparable<Direction> {
+    override fun compareTo(other: Direction): Int = when {
+        step < other.step || (step == other.step && count < other.count) -> -1
+        step > other.step || (step == other.step && count > other.count) -> 1
+        else -> 0
+    }
+}
+
+/**
  * Represents one square location on the board.
  */
 data class Square(val x: Int, val y: Int) : Comparable<Square> {
@@ -70,8 +84,12 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
 /**
  * Represents one possible disk placement for given disk color.
  */
-data class Move(val square: Square, val value: Int, val disk: Disk, val directions: List<Step>) :
-    Comparable<Move> {
+data class Move(
+    val square: Square,
+    val value: Int,
+    val disk: Disk,
+    val directions: List<Direction>,
+) : Comparable<Move> {
     override fun compareTo(other: Move): Int = when {
         value > other.value || (value == other.value && square < other.square) -> -1
         value < other.value || (value == other.value && square > other.square) -> 1
@@ -79,6 +97,21 @@ data class Move(val square: Square, val value: Int, val disk: Disk, val directio
     }
 
     fun logEntry(): String = "${disk.boardChar(color = false)}:$square,$value"
+
+    /**
+     * Get all the squares playing this move will change.
+     */
+    fun affectedSquares(): List<Square> {
+        val paths = mutableListOf<Square>()
+        for (direction in directions) {
+            var pos = square + direction.step
+            for (i in 0 until direction.count) {
+                paths.add(pos)
+                pos += direction.step
+            }
+        }
+        return paths.sorted()
+    }
 
     override fun toString(): String = "Square: $square -> value: $value"
 }

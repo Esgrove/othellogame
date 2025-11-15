@@ -72,7 +72,7 @@ std::vector<Move> Board::possible_moves(Disk disk) const
     const Disk opposing_disk = opponent(disk);
     for (const Square& square : empty_squares) {
         size_t value {0};
-        std::vector<std::pair<Step, size_t>> directions;
+        std::vector<Direction> directions;
         for (const auto& step : STEP_DIRECTIONS) {
             Square pos {square + step};
             // Next square in this direction needs to be the opposing disk

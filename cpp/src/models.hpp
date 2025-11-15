@@ -47,6 +47,26 @@ struct Step {
     int y;
 };
 
+/// Represents a continuous line of squares in one direction.
+///
+/// The step component determines the direction on the board,
+/// and count describes how many consecutive squares in that direction there are.
+struct Direction {
+    constexpr Direction(const Step step, const size_t count) : step(step), count(count) {}
+
+    bool operator<(const Direction& other) const
+    {
+        return step < other.step || (step == other.step && count < other.count);
+    }
+    bool operator==(const Direction& other) const
+    {
+        return step == other.step && count == other.count;
+    }
+
+    Step step;
+    size_t count;
+};
+
 /// Represents one square location on the board.
 struct Square {
     Square() : x(0), y(0) {}
@@ -94,7 +114,7 @@ struct Move {
         const Square square,
         const Disk disk,
         const size_t value,
-        std::vector<std::pair<Step, size_t>> directions
+        std::vector<Direction> directions
     ) :
         square(square),
         disk(disk),
@@ -116,7 +136,7 @@ struct Move {
     Square square;
     Disk disk;
     size_t value;
-    std::vector<std::pair<Step, size_t>> directions;
+    std::vector<Direction> directions;
 };
 
 }  // namespace othello

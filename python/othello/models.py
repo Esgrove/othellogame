@@ -9,9 +9,9 @@ from enum import IntEnum
 from typing import Self
 
 try:
-    from othello.colorprint import get_color, Color
+    from othello.colorprint import Color, get_color
 except ModuleNotFoundError:
-    from colorprint import get_color, Color
+    from colorprint import Color, get_color
 
 
 class Disk(IntEnum):
@@ -146,6 +146,54 @@ class Step:
         return str(self)
 
 
+class Direction:
+    """Represents a continuous line of squares in one direction.
+
+    The step field determines the direction on the board,
+    and count describes how many consecutive squares in that direction there are.
+    """
+
+    def __init__(self, step: Step, count: int):
+        self.step: Step = step
+        self.count: int = count
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step == other.step and self.count == other.count
+        return NotImplemented
+
+    def __ne__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step != other.step or self.count != other.count
+        return NotImplemented
+
+    def __lt__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step < other.step or (self.step == other.step and self.count < other.count)
+        return NotImplemented
+
+    def __le__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step <= other.step and self.count <= other.count
+        return NotImplemented
+
+    def __gt__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step > other.step or (self.step == other.step and self.count > other.count)
+        return NotImplemented
+
+    def __ge__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step >= other.step and self.count >= other.count
+        return NotImplemented
+
+    def __hash__(self) -> int:
+        return hash((self.step, self.count))
+
+    def __str__(self) -> str:
+        return f"{self.step}:{self.count}"
+
+
 class Square:
     """Represents one square location on the board."""
 
@@ -235,7 +283,7 @@ class Move:
         self.square: Square = square
         self.disk: Disk = disk
         self.value: int = value
-        self.directions: list[tuple[Step, int]] = directions
+        self.directions: list[Direction] = directions if directions is not None else []
 
     def log_entry(self) -> str:
         """Format move for log entry."""
@@ -244,11 +292,11 @@ class Move:
     def affected_squares(self) -> list[Square]:
         """Get all the squares playing this move will change."""
         paths = []
-        for step, count in self.directions:
-            pos = self.square + step
-            for _ in range(count):
+        for direction in self.directions:
+            pos = self.square + direction.step
+            for _ in range(direction.count):
                 paths.append(pos)
-                pos += step
+                pos += direction.step
 
         return sorted(paths)
 

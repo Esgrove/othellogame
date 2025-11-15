@@ -116,6 +116,63 @@ namespace Othello {
         }
     }
 
+    /// Represents a continuous line of squares in one direction.
+    ///
+    /// The step component determines the direction on the board,
+    /// and count describes how many consecutive squares in that direction there are.
+    public readonly struct Direction(Step step, int count) : IEquatable<Direction>, IComparable<Direction> {
+        public Step Step { get; } = step;
+        public int Count { get; } = count;
+
+        public override int GetHashCode() {
+            return HashCode.Combine(Step, Count);
+        }
+
+        public override bool Equals(object obj) {
+            return obj is Direction other && Equals(other);
+        }
+
+        public bool Equals(Direction other) {
+            return Step == other.Step && Count == other.Count;
+        }
+
+        public override string ToString() {
+            return $"{Step}:{Count}";
+        }
+
+        public int CompareTo(Direction other) {
+            int stepX = Step.X.CompareTo(other.Step.X);
+            if (stepX != 0) return stepX;
+            int stepY = Step.Y.CompareTo(other.Step.Y);
+            if (stepY != 0) return stepY;
+            return Count.CompareTo(other.Count);
+        }
+
+        public static bool operator ==(Direction left, Direction right) {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Direction left, Direction right) {
+            return !(left == right);
+        }
+
+        public static bool operator <(Direction left, Direction right) {
+            return left.CompareTo(right) < 0;
+        }
+
+        public static bool operator >(Direction left, Direction right) {
+            return left.CompareTo(right) > 0;
+        }
+
+        public static bool operator <=(Direction left, Direction right) {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >=(Direction left, Direction right) {
+            return left.CompareTo(right) >= 0;
+        }
+    }
+
     /// Represents one possible disk placement for the given disk color.
     public readonly struct Move(Square square, int value, Disk disk, List<(Step, int)> directions) : IComparable<Move> {
         public Square Square { get; } = square;

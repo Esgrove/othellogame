@@ -105,6 +105,22 @@ public class Models {
             return disk.boardChar(false) + ":" + square + "," + value;
         }
 
+        /**
+         * Get all the squares playing this move will change.
+         */
+        public List<Square> affectedSquares() {
+            List<Square> paths = new java.util.ArrayList<>();
+            for (Direction direction : directions) {
+                Square pos = square.add(direction.step());
+                for (int i = 0; i < direction.count(); i++) {
+                    paths.add(pos);
+                    pos = pos.add(direction.step());
+                }
+            }
+            paths.sort(Square::compareTo);
+            return paths;
+        }
+
         @Override
         public String toString() {
             return "Square: " + square + " -> value: " + value;
@@ -114,8 +130,10 @@ public class Models {
     /**
      * Represents a continuous line of squares in one direction.
      *
-     * <p>The {@code step} component determines the direction on the board,
-     * and {@code count} describes how many consecutive squares in that direction there are.</p>
+     * <p>
+     * The {@code step} component determines the direction on the board, and {@code count} describes how many
+     * consecutive squares in that direction there are.
+     * </p>
      */
     public record Direction(Step step, int count) {}
 }
