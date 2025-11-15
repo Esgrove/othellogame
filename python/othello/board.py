@@ -184,7 +184,7 @@ class Board:
 
     @staticmethod
     def _initialize_board(size: int) -> list[Disk]:
-        """Initialize game board with starting disk positions."""
+        """Initialize the game board with starting disk positions."""
         # Initialize game board with empty disks
         board = [Disk.EMPTY for _ in range(size * size)]
         # Set starting positions

@@ -30,7 +30,7 @@ std::vector<Square> Move::affected_squares() const
     // Insert directly to container since it has been pre-allocated to the correct size.
     // This way avoids the overhead of dynamically resizing the container.
     auto paths_iterator = paths.begin();
-    for (const Direction& direction : directions) {
+    for (const auto& [step, count] : directions) {
         Square pos = square + direction.step;
         for (auto i = 0u; i < direction.count; ++i) {
             *paths_iterator++ = pos;

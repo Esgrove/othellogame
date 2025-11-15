@@ -292,11 +292,11 @@ class Move:
     def affected_squares(self) -> list[Square]:
         """Get all the squares playing this move will change."""
         paths = []
-        for direction in self.directions:
-            pos = self.square + direction.step
-            for _ in range(direction.count):
+        for (step, count) in self.directions:
+            pos = self.square + step
+            for _ in range(count):
                 paths.append(pos)
-                pos += direction.step
+                pos += step
 
         return sorted(paths)
 
