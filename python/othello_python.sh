@@ -12,10 +12,10 @@ VERSION_FILE="$PROJECT_PATH/othello/version.py"
 # Read Python project version number from pyproject.toml
 get_pyproject_version_number() {
     # note: `tomllib` requires Python 3.11+
-    $PYTHON -c 'with open("pyproject.toml", "rb") as f: \
+    uv run python -c 'with open("pyproject.toml", "rb") as f: \
                 import tomllib; \
                 project = tomllib.load(f); \
-                print(project["tool"]["poetry"]["version"])'
+                print(project["project"]["version"])'
 }
 
 update_version_information() {
@@ -39,13 +39,12 @@ update_version_information() {
 
 cd "$PROJECT_PATH"
 
-if [ -z "$(command -v poetry)" ]; then
-    print_error_and_exit "poetry not found in path"
+if [ -z "$(command -v uv)" ]; then
+    print_error_and_exit "uv not found in path"
 fi
 
-check_and_set_python
 update_version_information
 
 # Pass arguments to program
-poetry install --sync --quiet
-poetry run python othello/othello.py "$@"
+uv sync --all-groups --quiet
+uv run othello/othello.py "$@"

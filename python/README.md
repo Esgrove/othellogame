@@ -1,6 +1,5 @@
 # Othello Python
 
-[![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 ## Usage
@@ -27,24 +26,18 @@ Options:
 
 Requires Python 3.11+
 
-Dependencies are managed by [Poetry](https://python-poetry.org/docs/).
+Dependencies are managed with uv.
 
 Install dependencies:
 
 ```shell
-poetry install
+uv sync --all-groups
 ```
 
 Update dependencies:
 
 ```shell
-poetry update
-```
-
-Activate virtual env:
-
-```shell
-poetry shell
+uv sync --all-groups --upgrade
 ```
 
 ## Run
@@ -52,10 +45,10 @@ poetry shell
 ```shell
 # with virtual env active
 python3 othello/othello.py
-# with poetry
-poetry run python othello/othello.py
-# with poetry script
-poetry run othello
+# with script
+uv run othello
+# with uv
+uv run othello/othello.py
 # or with helper script
 ./othello_python.sh
 # executing directly also works in a unix shell
@@ -70,18 +63,24 @@ There is a Batch script [othello.bat](./othello.bat) for easily running it on Wi
 ## Tests
 
 ```shell
-poetry run pytest -v
+uv run pytest -v
 # with coverage
-poetry run pytest --cov=othello tests
+uv run pytest --cov=othello tests
 ```
 
-Shortcut:
+Script:
 
 ```shell
 ./test.sh
 ```
 
+## Formatting and linting
+
+````bash
+uv run ruff format
+uv run ruff check --fix
+````
+
 ## TODO
 
-- Swap from Poetry to uv
 - Add more test cases

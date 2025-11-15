@@ -7,13 +7,13 @@ on:
     paths:
       - ".github/workflows/python.yml"
       - "python/**.py"
-      - "python/poetry.lock"
+      - "python/uv.lock"
       - "python/pyproject.toml"
   pull_request:
     paths:
       - ".github/workflows/python.yml"
       - "python/**.py"
-      - "python/poetry.lock"
+      - "python/uv.lock"
       - "python/pyproject.toml"
 
 # Cancel previous runs for PRs but not pushes to main
@@ -39,39 +39,20 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
         with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
+          version: "latest"
+          working-directory: python
 
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v4
-        with:
-          path: python/.venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('python/poetry.lock') }}
-          restore-keys: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
-
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
-      - name: Install project
-        run: poetry install --no-interaction
+      - name: Sync dependencies
+        run: uv sync --all-groups --frozen
 
       - name: Ruff format
-        uses: astral-sh/ruff-action@v3
-        with:
-          src: python
-          args: format --check --verbose
+        run: uv run ruff format --check
 
       - name: Ruff lint
-        uses: astral-sh/ruff-action@v3
-        with:
-          src: python
-          args: check --verbose
+        run: uv run ruff check --diff
 
       - name: Run tests
-        run: poetry run pytest -v --cov=othello tests
+        run: uv run pytest --verbose --cov=othello tests

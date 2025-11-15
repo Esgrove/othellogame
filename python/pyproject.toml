@@ -1,38 +1,40 @@
-[tool.poetry]
+[project]
 name = "othello_python"
-version = "2.4.0"
+version = "3.0.0"
 description = "A simple Othello CLI game implementation in Python"
-authors = ["Akseli Lukkarila <esgrove@outlook.com>"]
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/Esgrove/othellogame"
-packages = [{ include = "othello" }]
+requires-python = ">=3.11"
+authors = [
+    { name = "Akseli Lukkarila", email = "esgrove@outlook.com" },
+]
+dependencies = [
+    "click",
+    "colorama",
+]
 
-[tool.poetry.dependencies]
-click = "^8.3.0"
-colorama = "^0.4.6"
-python = "^3.11"
+[project.urls]
+Repository = "https://github.com/Esgrove/othellogame"
 
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.14.5"
-
-[tool.poetry.group.test.dependencies]
-pytest = "^9.0.1"
-pytest-cov = "^7.0.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 othello = "othello.othello:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build"]
+build-backend = "uv_build"
 
-[tool.black]
-# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
-line-length = 100
-target-version = ['py311', 'py312', 'py313']
-include = '\.pyi?$'
-extend-exclude = '''venv*'''
+[dependency-groups]
+dev = [
+    "ruff"
+]
+lint = [
+    "pytest",
+    "pytest-cov"
+]
+
+[tool.uv.build-backend]
+module-name = "othello"
+module-root = ""
 
 [tool.ruff]
 # https://docs.astral.sh/ruff/configuration/
