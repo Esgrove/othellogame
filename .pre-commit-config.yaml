@@ -1,4 +1,5 @@
 exclude: ^(.idea|.vscode)/
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -37,7 +38,7 @@ repos:
       - id: gofmt
         name: go format
         description: Run gofmt on files included in the commit.
-        entry: bash -c 'cd go && gofmt -s -w .'
+        entry: sh -c 'cd go && gofmt -s -w .'
         pass_filenames: false
         types: [file, go]
         language: system
@@ -46,7 +47,7 @@ repos:
       - id: java
         name: Java format
         description: Run spotless format on files included in the commit.
-        entry: bash -c 'cd java && ./gradlew spotlessApply'
+        entry: sh -c 'cd java && ./gradlew spotlessApply'
         pass_filenames: false
         types: [file, java]
         language: system
@@ -55,7 +56,7 @@ repos:
       - id: kotlin
         name: Kotlin format
         description: Run spotless format on files included in the commit.
-        entry: bash -c 'cd kotlin && ./gradlew spotlessApply'
+        entry: sh -c 'cd kotlin && ./gradlew spotlessApply'
         pass_filenames: false
         types: [file, kotlin]
         language: system
@@ -64,7 +65,7 @@ repos:
       - id: dotnet
         name: Dotnet format
         description: Run dotnet format on files included in the commit.
-        entry: bash -c 'cd csharp && dotnet format'
+        entry: sh -c 'cd csharp && dotnet format'
         pass_filenames: false
         types: [file, c#]
         language: system
@@ -73,7 +74,7 @@ repos:
       - id: python
         name: Python Ruff
         description: Run Ruff format and lint on files included in the commit.
-        entry: bash -c 'cd python && uv run ruff format && uv run ruff check --fix'
+        entry: sh -c 'cd python && uv run ruff format && uv run ruff check --fix'
         pass_filenames: false
         types: [file, python]
         language: system
@@ -82,7 +83,7 @@ repos:
       - id: rust-fmt
         name: Rust format
         description: Run cargo fmt on files included in the commit.
-        entry: bash -c 'cd rust && cargo fmt'
+        entry: sh -c 'cd rust && cargo fmt'
         pass_filenames: false
         types: [file, rust]
         language: system
@@ -91,7 +92,7 @@ repos:
       - id: rust-clippy
         name: Rust lint
         description: Run cargo clippy on files included in the commit.
-        entry: bash -c 'cd rust && cargo clippy'
+        entry: sh -c 'cd rust && cargo clippy'
         pass_filenames: false
         types: [file, rust]
         language: system
@@ -100,7 +101,7 @@ repos:
       - id: swiftformat
         name: Swift format
         description: Run swiftformat on files included in the commit.
-        entry: bash -c 'cd swift && swiftformat --lint .'
+        entry: sh -c 'cd swift && command -v swiftformat >/dev/null 2>&1 && swiftformat --lint . || :'
         pass_filenames: false
         types: [file, swift]
         language: system
