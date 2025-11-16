@@ -33,15 +33,6 @@ pub struct Square {
     pub y: isize,
 }
 
-/// Represents one possible disk placement for the given disk colour.
-#[derive(Clone, Debug)]
-pub struct Move {
-    pub square: Square,
-    pub disk: Disk,
-    pub value: usize,
-    pub directions: Vec<Direction>,
-}
-
 /// Represents a continuous line of squares in one direction.
 ///
 /// The `step` field determines the direction on the board,
@@ -52,6 +43,15 @@ pub struct Direction {
     pub step: Step,
     /// Number of consecutive same colour squares along this direction
     pub count: usize,
+}
+
+/// Represents one possible disk placement for the given disk colour.
+#[derive(Clone, Debug)]
+pub struct Move {
+    pub square: Square,
+    pub disk: Disk,
+    pub value: usize,
+    pub directions: Vec<Direction>,
 }
 
 impl Disk {

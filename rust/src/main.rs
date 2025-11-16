@@ -77,7 +77,7 @@ fn main() -> Result<()> {
 
     println!("{}", "OTHELLO GAME - RUST".green().bold());
 
-    let board_size = get_board_size(&args)?;
+    let board_size = resolve_board_size(&args)?;
 
     let settings = Settings {
         board_size,
@@ -93,7 +93,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn get_board_size(args: &Args) -> Result<usize> {
+fn resolve_board_size(args: &Args) -> Result<usize> {
     // Try to read board size from command line args
     if let Some(size) = args.size {
         if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&size) {
