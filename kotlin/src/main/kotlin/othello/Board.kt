@@ -48,7 +48,7 @@ class Board(private val size: Int) {
         }
     }
 
-    /** Return true if board contains empty squares.*/
+    /** Return true if the board contains empty squares.*/
     fun canPlay(): Boolean = emptySquares.isNotEmpty()
 
     /** Update board for given disk placement.*/
@@ -59,12 +59,8 @@ class Board(private val size: Int) {
         }
         setSquare(start, move.disk)
         emptySquares.remove(start)
-        for (direction in move.directions) {
-            var pos = start + direction.step
-            for (i in 0 until direction.count) {
-                setSquare(pos, move.disk)
-                pos += direction.step
-            }
+        for (square in move.affectedSquares()) {
+            setSquare(square, move.disk.opponent())
         }
     }
 

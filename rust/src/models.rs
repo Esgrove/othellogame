@@ -33,7 +33,7 @@ pub struct Square {
     pub y: isize,
 }
 
-/// Represents one possible disk placement for the given disk color.
+/// Represents one possible disk placement for the given disk colour.
 #[derive(Clone, Debug)]
 pub struct Move {
     pub square: Square,
@@ -87,7 +87,7 @@ impl Disk {
         }
     }
 
-    /// Return the opposing disk color for this disk.
+    /// Return the opposing disk colour for this disk.
     pub const fn opponent(self) -> Self {
         match self {
             Self::Black => Self::White,

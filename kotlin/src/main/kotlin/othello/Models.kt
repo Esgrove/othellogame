@@ -34,20 +34,6 @@ data class Step(val x: Int, val y: Int) {
 }
 
 /**
- * Represents a continuous line of squares in one direction.
- *
- * The [step] component determines the direction on the board,
- * and [count] describes how many consecutive squares in that direction there are.
- */
-data class Direction(val step: Step, val count: Int) : Comparable<Direction> {
-    override fun compareTo(other: Direction): Int = when {
-        step < other.step || (step == other.step && count < other.count) -> -1
-        step > other.step || (step == other.step && count > other.count) -> 1
-        else -> 0
-    }
-}
-
-/**
  * Represents one square location on the board.
  */
 data class Square(val x: Int, val y: Int) : Comparable<Square> {
@@ -82,7 +68,21 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
 }
 
 /**
- * Represents one possible disk placement for given disk color.
+ * Represents a continuous line of squares in one direction.
+ *
+ * The [step] component determines the direction on the board,
+ * and [count] describes how many consecutive squares in that direction there are.
+ */
+data class Direction(val step: Step, val count: Int) : Comparable<Direction> {
+    override fun compareTo(other: Direction): Int = when (step) {
+        other.step if count < other.count -> -1
+        other.step if count > other.count -> 1
+        else -> 0
+    }
+}
+
+/**
+ * Represents one possible disk placement for given disk colour.
  */
 data class Move(
     val square: Square,
@@ -103,11 +103,11 @@ data class Move(
      */
     fun affectedSquares(): List<Square> {
         val paths = mutableListOf<Square>()
-        for (direction in directions) {
-            var pos = square + direction.step
-            for (i in 0 until direction.count) {
+        for ((step, count) in directions) {
+            var pos = square + step
+            repeat(count) {
                 paths.add(pos)
-                pos += direction.step
+                pos += step
             }
         }
         return paths.sorted()
