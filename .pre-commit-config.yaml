@@ -29,9 +29,18 @@ repos:
   - repo: local
     hooks:
       - id: gofmt
-        name: go format
+        name: Go format
         description: Run gofmt on files included in the commit.
         entry: sh -c 'cd go && gofmt -s -w .'
+        pass_filenames: false
+        types: [file, go]
+        language: system
+        files: ^go/
+
+      - id: golint
+        name: Go lint
+        description: Run golangci-lint on files included in the commit.
+        entry: sh -c 'cd go && golangci-lint run'
         pass_filenames: false
         types: [file, go]
         language: system
@@ -56,7 +65,7 @@ repos:
         files: ^kotlin/
 
       - id: dotnet
-        name: Dotnet format
+        name: C# format
         description: Run dotnet format on files included in the commit.
         entry: sh -c 'cd csharp && dotnet format'
         pass_filenames: false
