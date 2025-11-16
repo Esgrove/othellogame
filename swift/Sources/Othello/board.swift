@@ -10,7 +10,9 @@ class Board {
     let size: Int
     var board: [Disk]
     var emptySquares = Set<Square>()
-    let stepDirections = [[0, -1], [0, 1], [1, 0], [-1, 0], [1, -1], [1, 1], [-1, 1], [-1, -1]]
+    let stepDirections = [
+        [0, -1], [0, 1], [1, 0], [-1, 0], [1, -1], [1, 1], [-1, 1], [-1, -1],
+    ]
 
     init(size: Int) {
         self.size = size
@@ -57,7 +59,7 @@ class Board {
         let other: Disk = disk.opponent()
         for square in self.emptySquares {
             var value = 0
-            var directions = [(Square, Int)]()
+            var directions = [Direction]()
             for dir in self.stepDirections {
                 let step = Square(dir[0], dir[1])
                 var pos = square + step
@@ -75,7 +77,7 @@ class Board {
                 if self.getSquare(pos) != disk {
                     continue
                 }
-                directions.append((step, num_steps))
+                directions.append(Direction(step, num_steps))
                 value += num_steps
             }
             if value > 0 {
@@ -165,7 +167,8 @@ class Board {
 
     /// Returns the state of the board (empty, white, black) at the given square.
     private func getSquare(_ square: Square) -> Disk? {
-        self.checkCoordinates(square.x, square.y) ? self
+        self.checkCoordinates(square.x, square.y)
+            ? self
             .board[square.y * self.size + square.x] : nil
     }
 

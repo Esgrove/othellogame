@@ -8,17 +8,17 @@
 import ColorizeSwift
 
 /// Format string with colour.
-func getColor<T>(_ message: T, _ color: TerminalColor, bold: Bool = false) -> String {
+func getColor(_ message: some Any, _ color: TerminalColor, bold: Bool = false) -> String {
     bold ? "\(message)".foregroundColor(color).bold() : "\(message)".foregroundColor(color)
 }
 
 /// Print text with specified colour.
-func printColor<T>(_ message: T, _ color: TerminalColor, bold: Bool = false) {
+func printColor(_ message: some Any, _ color: TerminalColor, bold: Bool = false) {
     print(getColor(message, color, bold: bold))
 }
 
 /// Print bold text with specified colour.
-func printBold<T>(_ message: T, color: TerminalColor = TerminalColor.white) {
+func printBold(_ message: some Any, color: TerminalColor = TerminalColor.white) {
     print(getColor(message, color, bold: true))
 }
 

@@ -21,12 +21,12 @@ class Player {
 
     /// Shorthand to initialize a new player for black disks.
     static func black(_ settings: PlayerSettings) -> Player {
-        return Player(Disk.black, settings)
+        Player(Disk.black, settings)
     }
 
     /// Shorthand to initialize a new player for white disks.
     static func white(_ settings: PlayerSettings) -> Player {
-        return Player(Disk.white, settings)
+        Player(Disk.white, settings)
     }
 
     /// Play one round as this player.

@@ -21,7 +21,7 @@ struct Settings: CustomStringConvertible {
 
     // Get player setting values from overall game settings.
     func toPlayerSettings() -> PlayerSettings {
-        return PlayerSettings(
+        PlayerSettings(
             checkMode: self.checkMode,
             showHelpers: self.showHelpers,
             testMode: self.testMode
@@ -29,7 +29,7 @@ struct Settings: CustomStringConvertible {
     }
 
     var description: String {
-        return """
+        """
         Settings:
           boardSize: \(self.boardSize)
           autoplayMode: \(self.autoplayMode)
