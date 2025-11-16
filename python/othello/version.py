@@ -6,7 +6,7 @@ Akseli Lukkarila
 """
 
 # Updated by build script, do not edit manually!
-GIT_BRANCH = "python-uv"
-GIT_COMMIT = "17a99a1"
-BUILD_TIME = "2025-11-14_2344"
-VERSION_NUMBER = "3.0.0"
+GIT_BRANCH = "direction"
+GIT_COMMIT = "f205553"
+BUILD_TIME = "2025-11-16_2150"
+VERSION_NUMBER = "3.1.0"

@@ -20,14 +20,14 @@ const STILL: isize = 0;
 
 /// All possible step directions for a square on the board.
 static STEP_DIRECTIONS: [Step; 8] = [
-    Step { x: UP, y: LEFT },
-    Step { x: UP, y: STILL },
-    Step { x: UP, y: RIGHT },
+    Step { x: DOWN, y: LEFT },
+    Step { x: DOWN, y: RIGHT },
+    Step { x: DOWN, y: STILL },
     Step { x: STILL, y: LEFT },
     Step { x: STILL, y: RIGHT },
-    Step { x: DOWN, y: LEFT },
-    Step { x: DOWN, y: STILL },
-    Step { x: DOWN, y: RIGHT },
+    Step { x: UP, y: LEFT },
+    Step { x: UP, y: RIGHT },
+    Step { x: UP, y: STILL },
 ];
 
 /// Handles game board state and logic.
@@ -40,14 +40,14 @@ pub struct Board {
 
 impl Board {
     pub fn new(size: usize) -> Self {
-        let board = Self::initialize_board(size);
+        let board = Self::init_board(size);
         // Index list (0...size) to avoid repeating same range in loops.
         // Not really needed in Rust but kept here to more closely match other implementations...
         // Could just use `0..self.size` directly.
         let indices = (0..size).collect::<Vec<_>>().into_boxed_slice();
 
         // Keep track of empty squares on board to avoid checking already filled positions.
-        let empty_squares = Self::initialize_empty_squares(size, &board);
+        let empty_squares = Self::init_empty_squares(size, &board);
 
         Self {
             board,
@@ -63,8 +63,8 @@ impl Board {
     }
 
     /// Update board for given disk placement.
-    pub fn place_disk(&mut self, player_move: &Move) {
-        let start = player_move.square;
+    pub fn place_disk(&mut self, chosen_move: &Move) {
+        let start = chosen_move.square;
         if self
             .get_square(&start)
             .unwrap_or_else(|| panic!("Invalid coordinates: {start}"))
@@ -72,10 +72,10 @@ impl Board {
         {
             panic!("Trying to place disk to an occupied square: {start}!");
         }
-        self.set_square(&start, player_move.disk);
+        self.set_square(&start, chosen_move.disk);
         self.empty_squares.remove(&start);
-        for square in &player_move.affected_squares() {
-            self.set_square(square, player_move.disk);
+        for square in &chosen_move.affected_squares() {
+            self.set_square(square, chosen_move.disk);
         }
     }
 
@@ -252,7 +252,7 @@ impl Board {
     }
 
     /// Initialize game board with starting disk positions.
-    fn initialize_board(size: usize) -> Vec<Disk> {
+    fn init_board(size: usize) -> Vec<Disk> {
         // Initialize game board with empty disks
         let mut board = vec![Disk::Empty; size * size];
         // Set starting positions
@@ -269,8 +269,8 @@ impl Board {
         board
     }
 
-    /// Initialize a set of empty squares for the board.
-    fn initialize_empty_squares(size: usize, board: &[Disk]) -> HashSet<Square> {
+    /// Initialize empty squares for the board.
+    fn init_empty_squares(size: usize, board: &[Disk]) -> HashSet<Square> {
         (0..board.len())
             .filter_map(|i| {
                 if board[i] == Disk::Empty {
@@ -347,6 +347,10 @@ mod tests {
         // Rest of the board should be empty
         assert_eq!(
             board.get_square(&Square { x: 0, y: 0 }).unwrap(),
+            Disk::Empty
+        );
+        assert_eq!(
+            board.get_square(&Square { x: 7, y: 7 }).unwrap(),
             Disk::Empty
         );
     }

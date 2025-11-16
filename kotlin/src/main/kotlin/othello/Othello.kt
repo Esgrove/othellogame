@@ -35,16 +35,16 @@ class Othello(private val settings: Settings) {
         }
         if (settings.autoplayMode) {
             // Computer plays both
-            playerBlack.setHuman(false)
-            playerWhite.setHuman(false)
+            playerBlack.setComputer()
+            playerWhite.setComputer()
         } else if (settings.useDefaults) {
             // Default: play as black against white computer player
-            playerWhite.setHuman(false)
+            playerWhite.setComputer()
         } else if (getAnswer("Would you like to play against the computer")) {
             if (getAnswer("Would you like to play as black or white", "b", "w")) {
-                playerWhite.setHuman(false)
+                playerWhite.setComputer()
             } else {
-                playerBlack.setHuman(false)
+                playerBlack.setComputer()
             }
         }
         if (!settings.checkMode) {

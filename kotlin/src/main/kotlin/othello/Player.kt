@@ -3,16 +3,21 @@ package othello
 import kotlin.random.Random
 
 /** Defines one player that can be either human or computer controlled.*/
-class Player(private val disk: Disk, private val settings: PlayerSettings) {
-    var canPlay = true
-    private var isHuman = true
-    private var roundsPlayed = 0
+class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
+    internal var canPlay = true
+    internal var isHuman = true
+    internal var roundsPlayed = 0
     private val random = Random
 
     companion object {
         fun black(settings: PlayerSettings): Player = Player(Disk.Black, settings)
 
         fun white(settings: PlayerSettings): Player = Player(Disk.White, settings)
+
+        fun default(): Player = Player(
+            disk = Disk.Black,
+            settings = PlayerSettings.default(),
+        )
     }
 
     /** Play one round as this player.*/
@@ -50,9 +55,14 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
         canPlay = true
     }
 
-    /** Set the player as human or computer controlled.*/
-    fun setHuman(isHuman: Boolean) {
-        this.isHuman = isHuman
+    /** Set the player as human controlled.*/
+    fun setHuman() {
+        this.isHuman = true
+    }
+
+    /** Set the player as computer controlled.*/
+    fun setComputer() {
+        this.isHuman = false
     }
 
     /** Return move chosen by computer.*/
@@ -97,8 +107,8 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
                     throw IllegalArgumentException()
                 }
 
-                val x = coordinates.substring(0, 1).toInt()
-                val y = coordinates.substring(2, 3).toInt()
+                val x = coordinates[0].code
+                val y = coordinates[2].code
 
                 return Square(x, y)
             } catch (_: IllegalArgumentException) {
@@ -108,7 +118,7 @@ class Player(private val disk: Disk, private val settings: PlayerSettings) {
     }
 
     /** Return player type description string.*/
-    private fun typeString(): String = if (isHuman) "Human   " else "Computer"
+    internal fun typeString(): String = if (isHuman) "Human   " else "Computer"
 
     override fun toString(): String = "${disk.name()} | ${typeString()} | Moves: $roundsPlayed"
 }

@@ -177,3 +177,11 @@ tasks.register("version") {
 tasks.named("build") {
     dependsOn("version")
 }
+
+tasks.test {
+    testLogging {
+        events("PASSED", "FAILED", "SKIPPED")
+        showStandardStreams = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+    }
+}

@@ -239,6 +239,14 @@ class Direction:
         self.step: Step = step
         self.count: int = count
 
+    def __getitem__(self, key):
+        # Enable iteration so values can be unpacked: step, count = Direction
+        if key == 0:
+            return self.step
+        elif key == 1:
+            return self.count
+        raise IndexError
+
     def __eq__(self, other) -> bool:
         if isinstance(other, Direction):
             return self.step == other.step and self.count == other.count

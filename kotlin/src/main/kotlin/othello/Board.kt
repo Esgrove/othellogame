@@ -1,30 +1,45 @@
 package othello
 
 /** Handles game board state and logic.*/
-class Board(private val size: Int) {
-
+class Board(internal val size: Int) {
     private val board: MutableList<Disk>
     private var emptySquares: HashSet<Square>
     private val indices: List<Int>
 
     companion object {
+        private const val UP: Int = 1
+        private const val DOWN: Int = -1
+        private const val LEFT: Int = -1
+        private const val RIGHT: Int = 1
+        private const val STILL: Int = 0
+
         // Store all possible step directions on board
         val stepDirections = arrayOf(
-            Step(-1, -1),
-            Step(-1, 0),
-            Step(-1, 1),
-            Step(0, -1),
-            Step(0, 1),
-            Step(1, -1),
-            Step(1, 0),
-            Step(1, 1),
+            Step(DOWN, LEFT),
+            Step(DOWN, RIGHT),
+            Step(DOWN, STILL),
+            Step(STILL, LEFT),
+            Step(STILL, RIGHT),
+            Step(UP, LEFT),
+            Step(UP, RIGHT),
+            Step(UP, STILL),
         )
     }
 
     init {
+        board = initBoard()
+
+        // Index list (0...size) to avoid repeating the same range in loops
+        indices = (0 until size).toList()
+
+        // Keep track of empty squares on board to avoid checking already filled positions
+        emptySquares = initEmptySquares()
+    }
+
+    /** Initialize game board with starting disk positions.*/
+    private fun initBoard(): MutableList<Disk> {
         // Initialize game board with empty disks
-        val numSquares = size * size
-        board = MutableList(numSquares) { Disk.Empty }
+        val board = MutableList(size * size) { Disk.Empty }
 
         // Set starting positions
         val row = if (size % 2 == 0) (size - 1) / 2 else (size - 1) / 2 - 1
@@ -34,11 +49,12 @@ class Board(private val size: Int) {
         board[col * size + row] = Disk.Black
         board[col * size + col] = Disk.White
 
-        // Index list (0...size) to avoid repeating the same range in loops
-        indices = (0 until size).toList()
+        return board
+    }
 
-        // Keep track of empty squares on board to avoid checking already filled positions
-        emptySquares = HashSet()
+    /** Initialize empty squares for the board.*/
+    private fun initEmptySquares(): HashSet<Square> {
+        val emptySquares: HashSet<Square> = HashSet()
         for (y in indices) {
             for (x in indices) {
                 if (board[y * size + x] == Disk.Empty) {
@@ -46,6 +62,7 @@ class Board(private val size: Int) {
                 }
             }
         }
+        return emptySquares
     }
 
     /** Return true if the board contains empty squares.*/
@@ -60,7 +77,7 @@ class Board(private val size: Int) {
         setSquare(start, move.disk)
         emptySquares.remove(start)
         for (square in move.affectedSquares()) {
-            setSquare(square, move.disk.opponent())
+            setSquare(square, move.disk)
         }
     }
 
@@ -153,7 +170,7 @@ class Board(private val size: Int) {
     private fun checkCoordinates(x: Int, y: Int): Boolean = x in 0..<size && y in 0..<size
 
     /** Returns the state of the board (empty, white, black) at the given coordinates.*/
-    private fun getSquare(square: Square): Disk? {
+    internal fun getSquare(square: Square): Disk? {
         val (x, y) = square
         return if (checkCoordinates(x, y)) {
             board[y * size + x]
@@ -163,7 +180,7 @@ class Board(private val size: Int) {
     }
 
     /** Count and return the number of black and white disks.*/
-    private fun playerScores(): Pair<Int, Int> {
+    internal fun playerScores(): Pair<Int, Int> {
         var black = 0
         var white = 0
         for (disk in board) {
@@ -180,7 +197,7 @@ class Board(private val size: Int) {
      * Returns the total score.
      * Positive value means more white disks and negative means more black disks.
      */
-    private fun score(): Int = board.sumOf { it.value }
+    internal fun score(): Int = board.sumOf { it.value }
 
     /** Sets the given square to given value.*/
     private fun setSquare(square: Square, disk: Disk) {

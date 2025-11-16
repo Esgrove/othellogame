@@ -27,7 +27,15 @@ data class Settings(
 }
 
 /** Player settings.*/
-data class PlayerSettings(val checkMode: Boolean, val showHelpers: Boolean, val testMode: Boolean)
+data class PlayerSettings(val checkMode: Boolean, val showHelpers: Boolean, val testMode: Boolean) {
+    companion object {
+        fun default(): PlayerSettings = PlayerSettings(
+            checkMode = false,
+            showHelpers = true,
+            testMode = false,
+        )
+    }
+}
 
 /** Get player setting values from overall game settings.*/
 fun Settings.toPlayerSettings(): PlayerSettings = PlayerSettings(

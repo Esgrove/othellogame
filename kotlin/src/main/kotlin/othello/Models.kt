@@ -30,6 +30,8 @@ data class Step(val x: Int, val y: Int) {
         return true
     }
 
+    operator fun plus(other: Step): Step = Step(x + other.x, y + other.y)
+
     override fun toString(): String = "[$x,$y]"
 }
 
