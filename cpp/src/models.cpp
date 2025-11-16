@@ -22,7 +22,7 @@ std::vector<Square> Move::affected_squares() const
         this->directions.begin(),
         this->directions.end(),
         size_t {0},
-        [](size_t sum, const Direction& dir) { return sum + dir.count; }
+        [](const size_t sum, const Direction& dir) { return sum + dir.count; }
     );
 
     std::vector<Square> paths(total_size);
@@ -31,10 +31,10 @@ std::vector<Square> Move::affected_squares() const
     // This way avoids the overhead of dynamically resizing the container.
     auto paths_iterator = paths.begin();
     for (const auto& [step, count] : directions) {
-        Square pos = square + direction.step;
-        for (auto i = 0u; i < direction.count; ++i) {
+        Square pos = square + step;
+        for (auto i = 0u; i < count; ++i) {
             *paths_iterator++ = pos;
-            pos += direction.step;
+            pos += step;
         }
     }
     std::sort(paths.begin(), paths.end());
