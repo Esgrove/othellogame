@@ -72,7 +72,7 @@ val writeVersionFile by tasks.registering(WriteVersionTask::class) {
     execOps.set(execHelper.map { it.execOps })
 }
 
-version = "1.7.2"
+version = "1.8.0"
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.2.21"
