@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 4.0)
 
 project("Othello C++"
-    VERSION 2.12.0
+    VERSION 2.13.0
     DESCRIPTION "A simple Othello CLI game implementation in C++"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
