@@ -107,8 +107,8 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
                     throw IllegalArgumentException()
                 }
 
-                val x = coordinates[0].code
-                val y = coordinates[2].code
+                val x = coordinates[0].digitToInt()
+                val y = coordinates[2].digitToInt()
 
                 return Square(x, y)
             } catch (_: IllegalArgumentException) {
