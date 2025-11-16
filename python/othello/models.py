@@ -146,54 +146,6 @@ class Step:
         return str(self)
 
 
-class Direction:
-    """Represents a continuous line of squares in one direction.
-
-    The step field determines the direction on the board,
-    and count describes how many consecutive squares in that direction there are.
-    """
-
-    def __init__(self, step: Step, count: int):
-        self.step: Step = step
-        self.count: int = count
-
-    def __eq__(self, other) -> bool:
-        if isinstance(other, Direction):
-            return self.step == other.step and self.count == other.count
-        return NotImplemented
-
-    def __ne__(self, other) -> bool:
-        if isinstance(other, Direction):
-            return self.step != other.step or self.count != other.count
-        return NotImplemented
-
-    def __lt__(self, other) -> bool:
-        if isinstance(other, Direction):
-            return self.step < other.step or (self.step == other.step and self.count < other.count)
-        return NotImplemented
-
-    def __le__(self, other) -> bool:
-        if isinstance(other, Direction):
-            return self.step <= other.step and self.count <= other.count
-        return NotImplemented
-
-    def __gt__(self, other) -> bool:
-        if isinstance(other, Direction):
-            return self.step > other.step or (self.step == other.step and self.count > other.count)
-        return NotImplemented
-
-    def __ge__(self, other) -> bool:
-        if isinstance(other, Direction):
-            return self.step >= other.step and self.count >= other.count
-        return NotImplemented
-
-    def __hash__(self) -> int:
-        return hash((self.step, self.count))
-
-    def __str__(self) -> str:
-        return f"{self.step}:{self.count}"
-
-
 class Square:
     """Represents one square location on the board."""
 
@@ -276,6 +228,54 @@ class Square:
         return f"({self.x},{self.y})"
 
 
+class Direction:
+    """Represents a continuous line of squares in one direction.
+
+    The step field determines the direction on the board,
+    and count describes how many consecutive squares in that direction there are.
+    """
+
+    def __init__(self, step: Step, count: int):
+        self.step: Step = step
+        self.count: int = count
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step == other.step and self.count == other.count
+        return NotImplemented
+
+    def __ne__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step != other.step or self.count != other.count
+        return NotImplemented
+
+    def __lt__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step < other.step or (self.step == other.step and self.count < other.count)
+        return NotImplemented
+
+    def __le__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step <= other.step and self.count <= other.count
+        return NotImplemented
+
+    def __gt__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step > other.step or (self.step == other.step and self.count > other.count)
+        return NotImplemented
+
+    def __ge__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step >= other.step and self.count >= other.count
+        return NotImplemented
+
+    def __hash__(self) -> int:
+        return hash((self.step, self.count))
+
+    def __str__(self) -> str:
+        return f"{self.step}:{self.count}"
+
+
 class Move:
     """Represents one possible disk placement for the given disk color."""
 
@@ -292,7 +292,7 @@ class Move:
     def affected_squares(self) -> list[Square]:
         """Get all the squares playing this move will change."""
         paths = []
-        for (step, count) in self.directions:
+        for step, count in self.directions:
             pos = self.square + step
             for _ in range(count):
                 paths.append(pos)
