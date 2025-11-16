@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Game settings.
+// Settings Game settings.
 type Settings struct {
 	BoardSize    int
 	AutoplayMode bool
@@ -15,7 +15,7 @@ type Settings struct {
 	UseDefaults  bool
 }
 
-// Player settings.
+// PlayerSettings Player settings.
 type PlayerSettings struct {
 	ShowHelpers bool
 	CheckMode   bool
@@ -45,13 +45,6 @@ func NewSettings(
 	}
 }
 
-func DefaultSettings() Settings {
-	return NewSettings(8, false, false, false, false, true, false)
-}
-
-func DefaultPlayerSettings() PlayerSettings {
-	return NewPlayerSettings(true, false, false)
-}
 func (s Settings) ToPlayerSettings() PlayerSettings {
 	return NewPlayerSettings(s.ShowHelpers, s.CheckMode, s.TestMode)
 }

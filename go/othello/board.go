@@ -27,7 +27,7 @@ var StepDirections = [8]Step{
 	{X: 1, Y: 1},
 }
 
-// Handles game board state and logic.
+// Board Handles game board state and logic.
 type Board struct {
 	board        []Disk
 	size         int
@@ -86,12 +86,12 @@ func initBoard(size int) []Disk {
 	return board
 }
 
-// Return true if board contains empty squares.
+// CanPlay Return true if board contains empty squares.
 func (b *Board) CanPlay() bool {
 	return b.emptySquares.Cardinality() > 0
 }
 
-// Update board for given disk placement.
+// PlaceDisk Update board for given disk placement.
 func (b *Board) PlaceDisk(playerMove *Move) {
 	start := playerMove.Square
 	if b.getSquare(&start) != Empty {
@@ -108,7 +108,7 @@ func (b *Board) PlaceDisk(playerMove *Move) {
 	}
 }
 
-// Returns a list of possible moves for the given disk colour.
+// PossibleMoves Returns a list of possible moves for the given disk colour.
 func (b *Board) PossibleMoves(disk Disk) []Move {
 	var moves []Move
 	opposingDisk := disk.Opponent()
@@ -175,7 +175,7 @@ func (b *Board) printPossibleMoves(moves []Move) {
 	fmt.Println()
 }
 
-// Print current score for both players.
+// PrintScore Print current score for both players.
 func (b *Board) PrintScore() {
 	black, white := b.playerScores()
 	fmt.Println()
@@ -183,7 +183,7 @@ func (b *Board) PrintScore() {
 	fmt.Printf("Score: %d | %d\n", aurora.Magenta(black), aurora.Cyan(white))
 }
 
-// Returns the winner disk color.
+// Result Returns the winner disk color.
 func (b *Board) Result() Disk {
 	sum := b.score()
 	switch {
@@ -210,7 +210,8 @@ func (b *Board) checkCoordinates(x, y int) bool {
 }
 
 // Returns the state of the board (empty, white, black) at the given coordinates.
-// nolint:unused
+//
+//nolint:unused
 func (b *Board) get(x, y int) (Disk, error) {
 	if b.checkCoordinates(x, y) {
 		return b.board[y*b.size+x], nil
@@ -230,7 +231,7 @@ func (b *Board) getSquare(square *Square) Disk {
 	return Empty
 }
 
-// Get all the squares playing this move will change
+// Get all the squares playing this move will change.
 func (b *Board) squareIndex(square *Square) int {
 	return square.Y*b.size + square.X
 }
@@ -268,7 +269,7 @@ func (b *Board) setSquare(square *Square, disk Disk) {
 	b.board[index] = disk
 }
 
-// Format game board to string
+// String Format game board to string.
 func (b *Board) String() string {
 	text := " "
 	// Horizontal indices

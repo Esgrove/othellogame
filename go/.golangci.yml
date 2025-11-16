@@ -8,6 +8,13 @@ linters:
   default: fast
   enable:
     - lll # Long Line Linter
+  disable:
+    - depguard
+    - dupword
+    - funcorder
+    - mnd
+    - nlreturn
+    - wsl
   settings:
     lll:
       line-length: 100
