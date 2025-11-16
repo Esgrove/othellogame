@@ -1,7 +1,7 @@
 namespace Othello.Tests {
     public class TestModels {
         [Fact]
-        public void Step_Equals() {
+        public void StepEquals() {
             Step step1 = new(1, 1);
             Step step2 = new(1, 1);
 
@@ -9,7 +9,7 @@ namespace Othello.Tests {
         }
 
         [Fact]
-        public void Step_NotEquals() {
+        public void StepNotEquals() {
             Step step1 = new(1, 1);
             Step step2 = new(2, 2);
 
@@ -17,7 +17,7 @@ namespace Othello.Tests {
         }
 
         [Fact]
-        public void Square_AddStep() {
+        public void SquareAddStep() {
             Square square = new(4, 4);
             Step step = new(-1, 1);
 
@@ -27,7 +27,7 @@ namespace Othello.Tests {
         }
 
         [Fact]
-        public void Square_CompareToSquare() {
+        public void SquareCompareToSquare() {
             Square square1 = new(1, 2);
             Square square2 = new(2, 1);
 
@@ -36,7 +36,7 @@ namespace Othello.Tests {
         }
 
         [Fact]
-        public void Square_AdditionWithStep() {
+        public void SquareAdditionWithStep() {
             Square square = new(4, 4);
             Step step = new(-1, 1);
             Square expectedSquare = new(3, 5);
@@ -55,7 +55,7 @@ namespace Othello.Tests {
         [InlineData(1, -1, 2, 0)]
         [InlineData(1, 0, 2, 1)]
         [InlineData(1, 1, 2, 2)]
-        public void Square_StepDirections(int stepX, int stepY, int expectedX, int expectedY) {
+        public void SquareStepDirections(int stepX, int stepY, int expectedX, int expectedY) {
             Square origin = new(1, 1);
             Step step = new(stepX, stepY);
             Square expectedResult = new(expectedX, expectedY);

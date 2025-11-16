@@ -98,7 +98,7 @@ impl Board {
                     num_steps += 1;
                     pos += *step;
                 }
-                // Valid move only if a line of opposing disks ends in own disk
+                // Valid move only if a line of opposing disks ends with own disk
                 if self.get_square(&pos).unwrap_or(Disk::Empty) == disk {
                     directions.push(Direction::new(*step, num_steps));
                     value += num_steps;

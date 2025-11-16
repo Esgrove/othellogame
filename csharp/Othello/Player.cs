@@ -12,13 +12,11 @@ using System.Threading;
 
 namespace Othello {
     /// Defines one player that can be either human or computer controlled.
-    internal sealed class Player(Disk color, PlayerSettings settings) {
+    internal sealed class Player(Disk disk, PlayerSettings settings) {
         public bool CanPlay = true;
         private bool _isHuman = true;
         private int _roundsPlayed;
-        private readonly Disk _disk = color;
         private readonly Random _random = new();
-        private readonly PlayerSettings _settings = settings;
 
         /// Shorthand to initialize a new player for black disks.
         public static Player Black(PlayerSettings settings) {
@@ -33,29 +31,29 @@ namespace Othello {
 #nullable enable
         /// Play one round as this player.
         public string? PlayOneMove(Board board) {
-            if (!_settings.CheckMode) {
-                Console.WriteLine($"Turn: {_disk.Name()}");
+            if (!settings.CheckMode) {
+                Console.WriteLine($"Turn: {disk.Name()}");
             }
-            List<Move>? moves = board.PossibleMoves(_disk);
+            List<Move>? moves = board.PossibleMoves(disk);
             if (moves.Count != 0) {
                 CanPlay = true;
-                if (_isHuman && _settings is { ShowHelpers: true, CheckMode: false }) {
+                if (_isHuman && settings is { ShowHelpers: true, CheckMode: false }) {
                     board.PrintPossibleMoves(moves);
                 }
                 Move chosenMove = _isHuman ? GetHumanMove(moves) : GetComputerMove(moves);
-                board.PlaceDisc(chosenMove);
-                if (!_settings.CheckMode) {
+                board.PlaceDisk(chosenMove);
+                if (!settings.CheckMode) {
                     board.PrintScore();
                 }
                 ++_roundsPlayed;
-                if (!_settings.TestMode) {
+                if (!settings.TestMode) {
                     Thread.Sleep(1000);
                 }
                 return chosenMove.LogEntry();
             }
 
             CanPlay = false;
-            if (!_settings.CheckMode) {
+            if (!settings.CheckMode) {
                 ColorPrint.WriteLine("  No moves available...", Color.Yellow);
             }
             return null;
@@ -76,18 +74,18 @@ namespace Othello {
 
         /// Return move chosen by computer.
         private Move GetComputerMove(List<Move> moves) {
-            if (!_settings.CheckMode) {
+            if (!settings.CheckMode) {
                 Console.WriteLine("  Computer plays...");
             }
             Move chosenMove;
-            if (_settings.TestMode) {
+            if (settings.TestMode) {
                 chosenMove = moves[0];
             } else {
                 // Wait a bit and pick a random move
                 Thread.Sleep(_random.Next(1000, 2000));
                 chosenMove = moves[_random.Next(moves.Count)];
             }
-            if (!_settings.CheckMode) {
+            if (!settings.CheckMode) {
                 Console.WriteLine($"  {chosenMove.Square} -> {chosenMove.Value}");
             }
             return chosenMove;
@@ -96,16 +94,16 @@ namespace Othello {
         /// Return move chosen by a human player.
         private Move GetHumanMove(List<Move> moves) {
             while (true) {
-                var square = GetSquare();
-                // check if given square is one of the possible moves
+                Square square = GetSquare();
+                // Check if the given square is one of the possible moves
                 if (moves.Exists(x => square.Equals(x.Square))) {
                     return moves.Find(x => square.Equals(x.Square));
                 }
-                ColorPrint.Error($"  Can't place a {_disk.Name()} disk in square {square}!");
+                ColorPrint.Error($"  Can't place a {disk.Name()} disk in square {square}!");
             }
         }
 
-        /// Ask human player for square coordinates.
+        /// Ask a human player for square coordinates.
         private static Square GetSquare() {
             while (true) {
                 try {
@@ -129,7 +127,7 @@ namespace Othello {
         }
 
         public override string ToString() {
-            return $"{_disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
+            return $"{disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
         }
     }
 }

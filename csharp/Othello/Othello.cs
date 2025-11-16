@@ -53,7 +53,7 @@ namespace Othello {
                 }
             }
 
-            /// Initialize game board and players for a new game.
+            /// Initialise game board and players for a new game.
             private void InitGame() {
                 if (_gamesPlayed > 0) {
                     _board = new Board(_settings.BoardSize);
@@ -188,41 +188,41 @@ namespace Othello {
 
             public static int Main(string[] args) {
                 Argument<int?> sizePositional = new(name: "size") {
-                    Description = $"Optional board size ({MinBoardSize}..{MaxBoardSize})",
+                    Description = $"Optional board size ({MinBoardSize}..{MaxBoardSize})"
                 };
 
                 Option<bool> autoplayOption = new(name: "--autoplay", aliases: ["-a"]) {
-                    Description = "Enable autoplay mode with computer control",
+                    Description = "Enable autoplay mode with computer control"
                 };
 
                 Option<bool> checkModeOption = new(name: "--check", aliases: ["-c"]) {
-                    Description = "Autoplay and only print result",
+                    Description = "Autoplay and only print result"
                 };
 
                 Option<bool> useDefaultSettingsOption = new(name: "--default", aliases: ["-d"]) {
-                    Description = "Play with default settings",
+                    Description = "Play with default settings"
                 };
 
                 Option<bool> showLogOption = new(name: "--log", aliases: ["-l"]) {
-                    Description = "Show game log at the end",
+                    Description = "Show game log at the end"
                 };
 
                 Option<bool> hideHelpersOption = new(name: "--no-helpers", aliases: ["-n"]) {
-                    Description = "Hide disk placement hints",
+                    Description = "Hide disk placement hints"
                 };
 
                 Option<bool> testModeOption = new(name: "--test", aliases: ["-t"]) {
-                    Description = "Enable test mode with deterministic computer moves",
+                    Description = "Enable test mode with deterministic computer moves"
                 };
 
                 Option<bool> versionFlag = new(name: "--version", aliases: ["-v"]) {
-                    Description = "Print version and exit",
+                    Description = "Print version and exit"
                 };
 
                 RootCommand rootCommand = new("A simple Othello CLI game implementation in C#");
 
                 // Remove default version option
-                var defaultVersionOption = rootCommand.Options.FirstOrDefault(opt =>
+                Option defaultVersionOption = rootCommand.Options.FirstOrDefault(opt =>
                     opt.Name == "--version"
                     || opt.Aliases.Contains("--version")
                     || opt.Aliases.Contains("-v")
@@ -241,15 +241,15 @@ namespace Othello {
                 rootCommand.Options.Add(versionFlag);
 
                 rootCommand.SetAction(
-                    (parseResult) => {
-                        var size = parseResult.GetValue(sizePositional);
-                        var autoplay = parseResult.GetValue(autoplayOption);
-                        var checkMode = parseResult.GetValue(checkModeOption);
-                        var useDefaultSettings = parseResult.GetValue(useDefaultSettingsOption);
-                        var showLog = parseResult.GetValue(showLogOption);
-                        var hideHelpers = parseResult.GetValue(hideHelpersOption);
-                        var testMode = parseResult.GetValue(testModeOption);
-                        var version = parseResult.GetValue(versionFlag);
+                    parseResult => {
+                        int? size = parseResult.GetValue(sizePositional);
+                        bool autoplay = parseResult.GetValue(autoplayOption);
+                        bool checkMode = parseResult.GetValue(checkModeOption);
+                        bool useDefaultSettings = parseResult.GetValue(useDefaultSettingsOption);
+                        bool showLog = parseResult.GetValue(showLogOption);
+                        bool hideHelpers = parseResult.GetValue(hideHelpersOption);
+                        bool testMode = parseResult.GetValue(testModeOption);
+                        bool version = parseResult.GetValue(versionFlag);
 
                         if (version) {
                             Console.WriteLine($"Othello C# {Utils.VersionInfo()}");
@@ -258,21 +258,7 @@ namespace Othello {
 
                         ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
 
-                        int boardSize;
-                        if (size != null) {
-                            // Try to read board size from command line args
-                            boardSize = size.Value;
-                            if (boardSize is < MinBoardSize or > MaxBoardSize) {
-                                ColorPrint.Error($"Unsupported board size: {boardSize}");
-                                Environment.Exit(1);
-                            }
-                            Console.WriteLine($"Using board size: {boardSize}");
-                        } else if (autoplay || useDefaultSettings) {
-                            boardSize = DefaultBoardSize;
-                        } else {
-                            // Otherwise ask user for board size
-                            boardSize = GetBoardSize();
-                        }
+                        int boardSize = ResolveBoardSize(size, autoplay, useDefaultSettings);
 
                         Settings settings = new(
                             boardSize,
@@ -298,6 +284,26 @@ namespace Othello {
                     ColorPrint.Error($"An exception occurred: {ex}");
                     return 1;
                 }
+            }
+
+            private static int ResolveBoardSize(int? size, bool autoplay, bool useDefaultSettings) {
+                if (size != null) {
+                    // Try to read board size from command line args
+                    int boardSize = size.Value;
+                    if (boardSize is < MinBoardSize or > MaxBoardSize) {
+                        ColorPrint.Error($"Unsupported board size: {boardSize}");
+                        Environment.Exit(1);
+                    }
+                    Console.WriteLine($"Using board size: {boardSize}");
+                    return boardSize;
+                }
+
+                if (autoplay || useDefaultSettings) {
+                    return DefaultBoardSize;
+                }
+
+                // Otherwise ask user for board size
+                return GetBoardSize();
             }
         }
     }

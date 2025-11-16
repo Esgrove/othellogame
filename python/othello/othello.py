@@ -162,7 +162,7 @@ class Othello:
     required=False,
     # Could let click handle board size automatically,
     # but doing it manually to match other implementations.
-    # type=click.IntRange(MIN_BOARD_SIZE, MAX_BOARD_SIZE, clamp=True),
+    # type=click.IntRange(MIN_BOARD_SIZE, MAX_BOARD_SIZE, clamp=True)
     type=click.INT,
 )
 @click.option(
@@ -215,20 +215,7 @@ def main(size, autoplay, check, default, log, no_helpers, test, version):
 
     print_bold("OTHELLO GAME - PYTHON", Color.green)
     try:
-        # try to read board size from command line args
-        if size is not None:
-            board_size = size
-            if board_size < MIN_BOARD_SIZE or board_size > MAX_BOARD_SIZE:
-                print_error(f"Unsupported board size: {board_size}")
-                sys.exit(1)
-
-            print(f"Using board size: {board_size}")
-        elif autoplay or default:
-            board_size = DEFAULT_BOARD_SIZE
-        else:
-            # Otherwise ask user for board size
-            board_size = Othello.get_board_size()
-
+        board_size = resolve_board_size(size, autoplay, default)
         settings = Settings(
             board_size=board_size,
             autoplay_mode=autoplay or check,
@@ -238,11 +225,26 @@ def main(size, autoplay, check, default, log, no_helpers, test, version):
             test_mode=test or check,
             use_defaults=default,
         )
-
         Othello(settings).play()
     except KeyboardInterrupt:
         # Catches CTRL-C
         sys.exit("\naborted...")
+
+
+def resolve_board_size(size: int | None, autoplay: bool, default: bool) -> int:
+    # try to read board size from command line args
+    if size is not None:
+        if size < MIN_BOARD_SIZE or size > MAX_BOARD_SIZE:
+            print_error(f"Unsupported board size: {size}")
+            sys.exit(1)
+
+        print(f"Using board size: {size}")
+        return size
+    elif autoplay or default:
+        return DEFAULT_BOARD_SIZE
+    else:
+        # Otherwise ask the user for board size
+        return Othello.get_board_size()
 
 
 if __name__ == "__main__":

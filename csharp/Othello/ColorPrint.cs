@@ -25,13 +25,13 @@ namespace Othello {
 
         /// Print error message with red colour.
         public static void Error(string message) {
-            var (indent, text) = SplitLeadingWhitespace(message);
+            (string indent, string text) = SplitLeadingWhitespace(message);
             Console.WriteLine($"{indent}Error: {text}".Pastel(Color.Red));
         }
 
         /// Print warning message with yellow colour.
         public static void Warn(string message) {
-            var (indent, text) = SplitLeadingWhitespace(message);
+            (string indent, string text) = SplitLeadingWhitespace(message);
             Console.WriteLine($"{indent}Warning: {text}".Pastel(Color.Yellow));
         }
 
@@ -40,10 +40,11 @@ namespace Othello {
             // Find the index of the first non-whitespace character.
             int indentSize = 0;
             foreach (char c in message) {
-                if (char.IsWhiteSpace(c))
+                if (char.IsWhiteSpace(c)) {
                     indentSize++;
-                else
+                } else {
                     break;
+                }
             }
 
             return (message[..indentSize], message[indentSize..]);
