@@ -10,7 +10,7 @@
 #include "colorprint.hpp"
 
 #include <string>   // string
-#include <utility>  // move, pair
+#include <utility>  // move
 #include <vector>
 
 namespace othello
@@ -87,14 +87,34 @@ struct Square {
     int y;
 };
 
-/// Represents one possible disk placement for the given disk color.
+/// Represents a continuous line of squares in one direction.
+///
+/// The step component determines the direction on the board,
+/// and count describes how many consecutive squares in that direction there are.
+struct Direction {
+    constexpr Direction(const Step step, const size_t count) : step(step), count(count) {}
+
+    bool operator<(const Direction& other) const
+    {
+        return step < other.step || (step == other.step && count < other.count);
+    }
+    bool operator==(const Direction& other) const
+    {
+        return step == other.step && count == other.count;
+    }
+
+    Step step;
+    size_t count;
+};
+
+/// Represents one possible disk placement for the given disk colour.
 struct Move {
     Move() : square(0, 0), disk(Disk::empty), value(0) {}
     Move(
         const Square square,
         const Disk disk,
         const size_t value,
-        std::vector<std::pair<Step, size_t>> directions
+        std::vector<Direction> directions
     ) :
         square(square),
         disk(disk),
@@ -116,7 +136,7 @@ struct Move {
     Square square;
     Disk disk;
     size_t value;
-    std::vector<std::pair<Step, size_t>> directions;
+    std::vector<Direction> directions;
 };
 
 }  // namespace othello

@@ -19,6 +19,6 @@ func calculateSHA256(_ text: String) -> String {
 
 extension Comparable {
     func clamp(min: Self, max: Self) -> Self {
-        return Swift.max(min, Swift.min(self, max))
+        Swift.max(min, Swift.min(self, max))
     }
 }

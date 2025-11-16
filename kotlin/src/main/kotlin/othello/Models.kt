@@ -30,6 +30,8 @@ data class Step(val x: Int, val y: Int) {
         return true
     }
 
+    operator fun plus(other: Step): Step = Step(x + other.x, y + other.y)
+
     override fun toString(): String = "[$x,$y]"
 }
 
@@ -68,10 +70,28 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
 }
 
 /**
- * Represents one possible disk placement for given disk color.
+ * Represents a continuous line of squares in one direction.
+ *
+ * The [step] component determines the direction on the board,
+ * and [count] describes how many consecutive squares in that direction there are.
  */
-data class Move(val square: Square, val value: Int, val disk: Disk, val directions: List<Step>) :
-    Comparable<Move> {
+data class Direction(val step: Step, val count: Int) : Comparable<Direction> {
+    override fun compareTo(other: Direction): Int = when (step) {
+        other.step if count < other.count -> -1
+        other.step if count > other.count -> 1
+        else -> 0
+    }
+}
+
+/**
+ * Represents one possible disk placement for given disk colour.
+ */
+data class Move(
+    val square: Square,
+    val value: Int,
+    val disk: Disk,
+    val directions: List<Direction>,
+) : Comparable<Move> {
     override fun compareTo(other: Move): Int = when {
         value > other.value || (value == other.value && square < other.square) -> -1
         value < other.value || (value == other.value && square > other.square) -> 1
@@ -79,6 +99,21 @@ data class Move(val square: Square, val value: Int, val disk: Disk, val directio
     }
 
     fun logEntry(): String = "${disk.boardChar(color = false)}:$square,$value"
+
+    /**
+     * Get all the squares playing this move will change.
+     */
+    fun affectedSquares(): List<Square> {
+        val paths = mutableListOf<Square>()
+        for ((step, count) in directions) {
+            var pos = square + step
+            repeat(count) {
+                paths.add(pos)
+                pos += step
+            }
+        }
+        return paths.sorted()
+    }
 
     override fun toString(): String = "Square: $square -> value: $value"
 }

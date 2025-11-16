@@ -10,7 +10,7 @@ PROJECT_PATH="$REPO_ROOT/swift"
 VERSION_HEADER="$PROJECT_PATH/Sources/VersionInfo/versionInfo.swift"
 
 # Define poject version number here since Swift Package Manager does not provide a way :(
-VERSION_NUMBER="2.6.0"
+VERSION_NUMBER="2.7.0"
 
 print_magenta "Building Othello Swift..."
 
@@ -39,14 +39,13 @@ cd "$PROJECT_PATH"
 
 swift build --configuration release
 
+executable="othello_swift"
 if [ "$BASH_PLATFORM" = windows ]; then
-    executable="othello_swift.exe"
-else
-    executable="othello_swift"
+    executable+=".exe"
 fi
 
 rm -f "$executable"
-executable_path="$(find .build -type d -maxdepth 2 -mindepth 2 -path ".build/*/release" -print -quit)/$executable"
+executable_path="$(find .build -maxdepth 2 -mindepth 2 -type d -path ".build/*/release" -print -quit)/$executable"
 mv "$executable_path" "$executable"
 file "$executable"
 ./"$executable" --version

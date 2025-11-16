@@ -37,19 +37,7 @@ class OthelloKotlin : CliktCommand() {
 
         printBold("OTHELLO GAME - KOTLIN", AnsiColor.GREEN)
 
-        // Try to read board size from command line args
-        val boardSize = if (size != null) {
-            if (size!! < MIN_BOARD_SIZE || size!! > MAX_BOARD_SIZE) {
-                printError("Unsupported board size: $size")
-                exitProcess(1)
-            }
-            println("Using board size: $size")
-            size!!
-        } else if (autoplay || default) {
-            DEFAULT_BOARD_SIZE
-        } else {
-            getBoardSize()
-        }
+        val boardSize = resolveBoardSize()
 
         val settings = Settings(
             boardSize,
@@ -62,6 +50,23 @@ class OthelloKotlin : CliktCommand() {
         )
 
         Othello(settings).play()
+    }
+
+    private fun resolveBoardSize(): Int {
+        // Try to read board size from command line args
+        if (size != null) {
+            val boardSize = size!!
+            if (boardSize !in MIN_BOARD_SIZE..MAX_BOARD_SIZE) {
+                printError("Unsupported board size: $boardSize")
+                exitProcess(1)
+            }
+            println("Using board size: $boardSize")
+            return boardSize
+        } else if (autoplay || default) {
+            return DEFAULT_BOARD_SIZE
+        } else {
+            return getBoardSize()
+        }
     }
 }
 

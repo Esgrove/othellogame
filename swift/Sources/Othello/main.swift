@@ -50,20 +50,7 @@ struct OthelloSwift: ParsableCommand {
 
         print("OTHELLO GAME - SWIFT".bold().green())
 
-        // Try to read board size from command line args
-        var boardSize: Int = self.size ?? 0
-        if boardSize != 0 {
-            if boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE {
-                printError("Unsupported board size: \(boardSize)")
-                Self.exit(withError: ExitCode.failure)
-            }
-            print("Using board size: \(boardSize)")
-        } else if self.autoplay || self.useDefaultSettings {
-            boardSize = DEFAULT_BOARD_SIZE
-        } else {
-            // Otherwise ask user for board size
-            boardSize = Othello.getBoardSize()
-        }
+        let boardSize = self.resolveBoardSize()
 
         let settings = Settings(
             boardSize: boardSize,
@@ -76,6 +63,24 @@ struct OthelloSwift: ParsableCommand {
         )
 
         Othello(settings).play()
+    }
+
+    private func resolveBoardSize() -> Int {
+        // Try to read board size from command line args
+        let boardSize: Int = self.size ?? 0
+        if boardSize != 0 {
+            if boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE {
+                printError("Unsupported board size: \(boardSize)")
+                Self.exit(withError: ExitCode.failure)
+            }
+            print("Using board size: \(boardSize)")
+            return boardSize
+        } else if self.autoplay || self.useDefaultSettings {
+            return DEFAULT_BOARD_SIZE
+        } else {
+            // Otherwise ask user for board size
+            return Othello.getBoardSize()
+        }
     }
 }
 

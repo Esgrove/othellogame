@@ -9,9 +9,9 @@ from enum import IntEnum
 from typing import Self
 
 try:
-    from othello.colorprint import get_color, Color
+    from othello.colorprint import Color, get_color
 except ModuleNotFoundError:
-    from colorprint import get_color, Color
+    from colorprint import Color, get_color
 
 
 class Disk(IntEnum):
@@ -228,6 +228,62 @@ class Square:
         return f"({self.x},{self.y})"
 
 
+class Direction:
+    """Represents a continuous line of squares in one direction.
+
+    The step field determines the direction on the board,
+    and count describes how many consecutive squares in that direction there are.
+    """
+
+    def __init__(self, step: Step, count: int):
+        self.step: Step = step
+        self.count: int = count
+
+    def __getitem__(self, key):
+        # Enable iteration so values can be unpacked: step, count = Direction
+        if key == 0:
+            return self.step
+        elif key == 1:
+            return self.count
+        raise IndexError
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step == other.step and self.count == other.count
+        return NotImplemented
+
+    def __ne__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step != other.step or self.count != other.count
+        return NotImplemented
+
+    def __lt__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step < other.step or (self.step == other.step and self.count < other.count)
+        return NotImplemented
+
+    def __le__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step <= other.step and self.count <= other.count
+        return NotImplemented
+
+    def __gt__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step > other.step or (self.step == other.step and self.count > other.count)
+        return NotImplemented
+
+    def __ge__(self, other) -> bool:
+        if isinstance(other, Direction):
+            return self.step >= other.step and self.count >= other.count
+        return NotImplemented
+
+    def __hash__(self) -> int:
+        return hash((self.step, self.count))
+
+    def __str__(self) -> str:
+        return f"{self.step}:{self.count}"
+
+
 class Move:
     """Represents one possible disk placement for the given disk color."""
 
@@ -235,7 +291,7 @@ class Move:
         self.square: Square = square
         self.disk: Disk = disk
         self.value: int = value
-        self.directions: list[tuple[Step, int]] = directions
+        self.directions: list[Direction] = directions if directions is not None else []
 
     def log_entry(self) -> str:
         """Format move for log entry."""

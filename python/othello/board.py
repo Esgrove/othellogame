@@ -7,10 +7,10 @@ Akseli Lukkarila
 
 try:
     from othello.colorprint import Color, get_color, print_color
-    from othello.models import Disk, Move, Step, Square
+    from othello.models import Direction, Disk, Move, Square, Step
 except ModuleNotFoundError:
     from colorprint import Color, get_color, print_color
-    from models import Disk, Move, Step, Square
+    from models import Direction, Disk, Move, Square, Step
 
 
 class Board:
@@ -85,7 +85,7 @@ class Board:
                 # Valid move only if a line of opposing disks ends in own disk
                 if self._get_square(pos) == disk:
                     value += num_steps
-                    directions.append((step, num_steps))
+                    directions.append(Direction(step, num_steps))
 
             if value:
                 moves.append(Move(square, disk, value, directions))
@@ -184,7 +184,7 @@ class Board:
 
     @staticmethod
     def _initialize_board(size: int) -> list[Disk]:
-        """Initialize game board with starting disk positions."""
+        """Initialize the game board with starting disk positions."""
         # Initialize game board with empty disks
         board = [Disk.EMPTY for _ in range(size * size)]
         # Set starting positions

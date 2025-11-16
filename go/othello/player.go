@@ -15,7 +15,7 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
-// Defines one player (human or computer).
+// Player Defines one player (human or computer).
 type Player struct {
 	CanPlay      bool
 	color        Disk
@@ -41,39 +41,41 @@ func WhitePlayer(settings PlayerSettings) *Player {
 	return NewPlayer(White, settings)
 }
 
-// Play one round as this player.
+// PlayOneMove Play one round as this player.
 func (p *Player) PlayOneMove(board *Board) *string {
 	if !p.settings.CheckMode {
 		fmt.Printf("Turn: %s\n", p.color.DiskString())
 	}
 	moves := board.PossibleMoves(p.color)
-	if len(moves) > 0 {
-		p.CanPlay = true
-		if p.human && p.settings.ShowHelpers {
-			board.printPossibleMoves(moves)
-		}
-		var chosenMove Move
-		if p.human {
-			chosenMove = p.getHumanMove(moves)
-		} else {
-			chosenMove = p.getComputerMove(moves)
-		}
-		board.PlaceDisk(&chosenMove)
+	if len(moves) == 0 {
+		p.CanPlay = false
 		if !p.settings.CheckMode {
-			board.PrintScore()
+			fmt.Println("  No moves available...")
 		}
-		p.roundsPlayed++
-		if !p.settings.TestMode {
-			time.Sleep(time.Second)
-		}
-		logEntry := chosenMove.LogEntry()
-		return &logEntry
+		return nil
 	}
-	p.CanPlay = false
+
+	p.CanPlay = true
+	if p.human && p.settings.ShowHelpers {
+		board.printPossibleMoves(moves)
+	}
+	var chosenMove Move
+	if p.human {
+		chosenMove = p.getHumanMove(moves)
+	} else {
+		chosenMove = p.getComputerMove(moves)
+	}
+	board.PlaceDisk(&chosenMove)
 	if !p.settings.CheckMode {
-		fmt.Println("  No moves available...")
+		board.PrintScore()
 	}
-	return nil
+	p.roundsPlayed++
+	if !p.settings.TestMode {
+		time.Sleep(time.Second)
+	}
+	logEntry := chosenMove.LogEntry()
+
+	return &logEntry
 }
 
 // Return move chosen by computer.
@@ -128,7 +130,7 @@ func (p *Player) Reset() {
 	p.roundsPlayed = 0
 }
 
-// Set the player as human or computer controlled.
+// SetHuman Set the player as human or computer controlled.
 func (p *Player) SetHuman(isHuman bool) {
 	p.human = isHuman
 }

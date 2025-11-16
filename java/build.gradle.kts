@@ -58,7 +58,7 @@ abstract class WriteVersionTask : DefaultTask() {
     }
 }
 
-version = "1.0.0"
+version = "1.1.0"
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
@@ -79,6 +79,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:6.0.1"))
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // https://mvnrepository.com/artifact/com.google.guava/guava
     implementation("com.google.guava:guava:33.5.0-jre")
@@ -132,6 +133,18 @@ tasks.named<ProcessResources>("processResources") {
 
 tasks.test {
     useJUnitPlatform()
+
+    testLogging {
+        events(
+            org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
+        )
+
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+        showCauses = true
+        showStackTraces = false
+    }
 }
 
 spotless {

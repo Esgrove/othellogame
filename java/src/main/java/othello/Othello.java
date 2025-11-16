@@ -20,7 +20,7 @@ public class Othello {
 
     public Othello(Settings settings) {
         this.settings = settings;
-        this.board = new Board(settings.getBoardSize());
+        this.board = new Board(settings.boardSize());
         PlayerSettings playerSettings = settings.toPlayerSettings();
         this.playerBlack = Player.black(playerSettings);
         this.playerWhite = Player.white(playerSettings);
@@ -41,7 +41,7 @@ public class Othello {
     /** Initialize game board and players for a new game. */
     private void initGame() {
         if (gamesPlayed > 0) {
-            board = new Board(settings.getBoardSize());
+            board = new Board(settings.boardSize());
             playerBlack.reset();
             playerWhite.reset();
             roundsPlayed = 0;

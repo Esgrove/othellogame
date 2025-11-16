@@ -27,11 +27,11 @@ enum Disk: Int, CustomStringConvertible {
     func color() -> TerminalColor {
         switch self {
             case .black:
-                return TerminalColor.magenta1
+                TerminalColor.magenta1
             case .white:
-                return TerminalColor.cyan1
+                TerminalColor.cyan1
             case .empty:
-                return TerminalColor.white
+                TerminalColor.white
         }
     }
 
@@ -39,22 +39,22 @@ enum Disk: Int, CustomStringConvertible {
     func opponent() -> Disk {
         switch self {
             case .black:
-                return .white
+                .white
             case .white:
-                return .black
+                .black
             case .empty:
-                return .empty
+                .empty
         }
     }
 
     var description: String {
         switch self {
             case .black:
-                return "BLACK".foregroundColor(self.color())
+                "BLACK".foregroundColor(self.color())
             case .white:
-                return "WHITE".foregroundColor(self.color())
+                "WHITE".foregroundColor(self.color())
             case .empty:
-                return "EMPTY"
+                "EMPTY"
         }
     }
 }
@@ -75,14 +75,34 @@ struct Square {
     }
 }
 
+/// Represents a continuous line of squares in one direction.
+///
+/// The `step` field determines the direction on the board,
+/// and `count` describes how many consecutive squares in that direction there are.
+struct Direction {
+    /// Direction of travel on the board
+    var step: Square
+    /// Number of consecutive same colour squares along this direction
+    var count: Int
+
+    init(_ step: Square, _ count: Int) {
+        self.step = step
+        self.count = count
+    }
+
+    func unpack() -> (Square, Int) {
+        (self.step, self.count)
+    }
+}
+
 /// Represents one possible disk placement for the given disk color.
 struct Move {
     var square: Square
     var disk: Disk
     var value: Int
-    var directions: [(square: Square, count: Int)]
+    var directions: [Direction]
 
-    init(_ square: Square, _ value: Int, _ disk: Disk, _ directions: [(Square, Int)]) {
+    init(_ square: Square, _ value: Int, _ disk: Disk, _ directions: [Direction]) {
         self.square = square
         self.disk = disk
         self.value = value
@@ -91,13 +111,14 @@ struct Move {
 
     /// Format move for log entry
     func logEntry() -> String {
-        return "\(self.disk.boardChar(color: false)):\(self.square),\(self.value)"
+        "\(self.disk.boardChar(color: false)):\(self.square),\(self.value)"
     }
 
     /// Get all the squares playing this move will change.
     func affectedSquares() -> [Square] {
         var paths: [Square] = []
-        for (step, count) in self.directions {
+        for direction in self.directions {
+            let (step, count) = direction.unpack()
             var pos: Square = self.square + step
             for _ in 0 ..< count {
                 paths.append(pos)

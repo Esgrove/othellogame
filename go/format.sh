@@ -15,6 +15,7 @@ OPTIONS: All options are optional
   -c | --check        Check formatting
   -x | --verbose      Display commands being executed
 "
+export USAGE
 
 CHECK=false
 while [ $# -gt 0 ]; do

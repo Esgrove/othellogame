@@ -72,7 +72,7 @@ val writeVersionFile by tasks.registering(WriteVersionTask::class) {
     execOps.set(execHelper.map { it.execOps })
 }
 
-version = "1.7.2"
+version = "1.8.0"
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.2.21"
@@ -176,4 +176,12 @@ tasks.register("version") {
 
 tasks.named("build") {
     dependsOn("version")
+}
+
+tasks.test {
+    testLogging {
+        events("PASSED", "FAILED", "SKIPPED")
+        showStandardStreams = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+    }
 }

@@ -41,12 +41,19 @@ With shell script:
 ./build.sh
 ```
 
-The build script will produce a standalone jar using [Shadow](https://github.com/johnrengelman/shadow)
+The build script will produce a standalone jar
+using [Shadow](https://github.com/johnrengelman/shadow)
 that can then be run with:
 
 ```shell
 java -jar othello_kotlin.jar
 ```
+
+## Unit tests
+
+````shell
+./gradlew test
+````
 
 ## Code formatting
 

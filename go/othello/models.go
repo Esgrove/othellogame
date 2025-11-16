@@ -7,7 +7,7 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
-// Disk enum
+// Disk enum.
 type Disk int
 
 const (
@@ -16,36 +16,38 @@ const (
 	White Disk = 1
 )
 
-// Represents a step direction on the board.
+// Step Represents a step direction on the board.
 type Step struct {
 	X int
 	Y int
 }
 
-// Represents one square location on the board.
+// Square Represents one square location on the board.
 type Square struct {
 	X int
 	Y int
 }
 
-// Represents one possible disk placement for the given disk colour.
+// Direction Represents a continuous line of squares in one direction.
+type Direction struct {
+	// The direction of travel on the board
+	Step Step
+	// Number of consecutive same colour squares along this direction
+	Count int
+}
+
+// Move Represents one possible disk placement for the given disk colour.
 type Move struct {
 	Square     Square
 	Disk       Disk
 	Value      int
-	Directions []StepCount
+	Directions []Direction
 }
 
-// Implements sort.Interface for a slice of Square objects
+// Squares Implements sort.Interface for a slice of Square objects.
 type Squares []Square
 
-// Hold Step and number of steps since Go lacks a tuple / pair construct
-type StepCount struct {
-	Step  Step
-	Count int
-}
-
-// Implements sort.Interface with custom sort order.
+// MovesDescending Implements sort.Interface with custom sort order.
 type MovesDescending []Move
 
 func (m MovesDescending) Len() int      { return len(m) }
@@ -75,7 +77,7 @@ func (d Disk) BoardChar() string {
 	}
 }
 
-// Returns a single character identifier string for the given disk.
+// BoardCharWithColor Returns a single character identifier string for the given disk.
 func (d Disk) BoardCharWithColor() string {
 	switch d {
 	case Black:
@@ -87,7 +89,7 @@ func (d Disk) BoardCharWithColor() string {
 	}
 }
 
-// Returns the disk formatted as a coloured string.
+// DiskString Returns the disk formatted as a coloured string.
 func (d Disk) DiskString() string {
 	switch d {
 	case Black:
@@ -99,7 +101,7 @@ func (d Disk) DiskString() string {
 	}
 }
 
-// Returns the opposing disk colour for this disk.
+// Opponent Returns the opposing disk colour for this disk.
 func (d Disk) Opponent() Disk {
 	if d == Black {
 		return White
@@ -117,7 +119,7 @@ func (s Square) Add(step Step) Square {
 	return Square{X: s.X + step.X, Y: s.Y + step.Y}
 }
 
-// Custom comparison method since can't overload '<' operator in Go :(
+// IsLessThan Custom comparison method since can't overload '<' operator in Go.
 func (s Square) IsLessThan(other Square) bool {
 	if s.X < other.X {
 		return true
@@ -139,12 +141,12 @@ func (m Move) LogEntry() string {
 	return fmt.Sprintf("%s:%s,%d", m.Disk.BoardChar(), m.Square, m.Value)
 }
 
-// Get all the squares playing this move will change
+// AffectedSquares Get all the squares playing this move will change.
 func (m Move) AffectedSquares() []Square {
 	var paths Squares
 	for _, direction := range m.Directions {
 		pos := m.Square.Add(direction.Step)
-		for i := 0; i < int(direction.Count); i++ {
+		for i := 0; i < direction.Count; i++ {
 			paths = append(paths, pos)
 			pos = pos.Add(direction.Step)
 		}

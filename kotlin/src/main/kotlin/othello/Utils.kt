@@ -14,8 +14,6 @@ fun calculateSha256(input: String): String {
     val buffer = Buffer()
     val hashingSink = HashingSink.sha256(buffer)
     val bufferedSink = hashingSink.buffer()
-
     bufferedSink.use { sink -> sink.writeUtf8(input) }
-
     return hashingSink.hash.hex()
 }

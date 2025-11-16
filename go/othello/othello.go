@@ -15,7 +15,7 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
-// Gameplay loop and main logic.
+// Othello Gameplay loop and main logic.
 type Othello struct {
 	board        Board
 	settings     Settings
@@ -26,7 +26,7 @@ type Othello struct {
 	gameLog      []string
 }
 
-// Initialize Othello game.
+// InitOthello Initialize Othello game.
 func InitOthello(settings Settings) Othello {
 	return Othello{
 		board:        NewBoard(settings.BoardSize),
@@ -53,7 +53,7 @@ func (o *Othello) Play() {
 	}
 }
 
-// Initialize game board and players for a new game.
+// Initialise game board and players for a new game.
 func (o *Othello) initGame() {
 	if o.gamesPlayed > 0 {
 		o.board = NewBoard(o.settings.BoardSize)
@@ -127,7 +127,6 @@ func (o *Othello) printLog() {
 
 // Print ending status and winner info.
 func (o *Othello) printResult() {
-
 	PrintBold("\nResult:")
 	o.printStatus()
 	fmt.Println()
@@ -147,7 +146,7 @@ func (o *Othello) printStatus() {
 	fmt.Println(o.board.String())
 }
 
-// Ask a question with two options, and return bool from user answer.
+// GetAnswer Ask a question with two options, and return bool from user answer.
 func GetAnswer(text, yes, no string) bool {
 	fmt.Printf("%s (%s/%s)? ", text, yes, no)
 	var input string
@@ -157,7 +156,7 @@ func GetAnswer(text, yes, no string) bool {
 	return false
 }
 
-// Ask and return the desired board size.
+// GetBoardSize Ask and return the desired board size.
 func GetBoardSize() int {
 	fmt.Printf("Choose board size (default is %d): ", DefaultBoardSize)
 	var input int

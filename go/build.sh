@@ -7,7 +7,7 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 source "$DIR/../common.sh"
 
 # Define project version here, normally would use git tags for this...
-PROJECT_VERSION="1.8.0"
+PROJECT_VERSION="1.9.0"
 
 USAGE="Usage: $(basename "$0") [OPTIONS]
 
@@ -40,10 +40,9 @@ init_options() {
     REPO_ROOT=$(git rev-parse --show-toplevel || (cd "$(dirname "../${BASH_SOURCE[0]}")" && pwd))
     PROJECT_PATH="$REPO_ROOT/go"
 
+    EXECUTABLE="othello_go"
     if [ "$BASH_PLATFORM" = windows ]; then
-        EXECUTABLE="othello_go.exe"
-    else
-        EXECUTABLE="othello_go"
+        EXECUTABLE+=".exe"
     fi
 }
 

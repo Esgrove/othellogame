@@ -51,7 +51,7 @@ namespace Othello {
             _board[col * _size + row] = Disk.Black;
             _board[col * _size + col] = Disk.White;
 
-            // Index list (0..size) to avoid repeating same range in for loops
+            // Index list (0..size) to avoid repeating the same range in for loops
             _indices = [.. Enumerable.Range(0, _size)];
 
             // Keep track of empty squares on board to avoid checking already filled positions
@@ -65,25 +65,21 @@ namespace Othello {
             }
         }
 
-        /// Return true if board contains empty squares.
+        /// Return true if the board contains empty squares.
         public bool CanPlay() {
             return _emptySquares.Count != 0;
         }
 
         /// Update board for given disk placement.
-        public void PlaceDisc(Move move) {
+        public void PlaceDisk(Move move) {
             Square start = move.Square;
             if (GetSquare(start) != Disk.Empty) {
                 throw new ArgumentException($"Trying to place disk to an occupied square {start}!");
             }
             SetSquare(start, move.Disk);
             _emptySquares.Remove(start);
-            foreach (var (step, count) in move.Directions) {
-                Square pos = start + step;
-                foreach (int _ in Enumerable.Range(0, count)) {
-                    SetSquare(pos, move.Disk);
-                    pos += step;
-                }
+            foreach (Square square in move.AffectedSquares()) {
+                SetSquare(square, move.Disk);
             }
         }
 
@@ -93,25 +89,25 @@ namespace Othello {
             Disk other = color.Opponent();
             foreach (Square square in _emptySquares) {
                 int value = 0;
-                List<(Step, int)> directions = [];
+                List<Direction> directions = [];
                 foreach (Step step in StepDirections) {
                     Square pos = square + step;
-                    // Next square in this directions needs to be opponents disk
+                    // Next square in this direction needs to be the opposing disk
                     if (GetSquare(pos) != other) {
                         continue;
                     }
                     int numSteps = 0;
-                    // Keep stepping forward while opponents disks are found
+                    // Keep stepping over opponents disks
                     while (GetSquare(pos) == other) {
                         ++numSteps;
                         pos += step;
                     }
-                    // Valid move if a line of opponents disks ends in own disk
+                    // Valid move only if a line of opposing disks ends with own disk
                     if (GetSquare(pos) != color) {
                         continue;
                     }
                     value += numSteps;
-                    directions.Add((step, numSteps));
+                    directions.Add(new Direction(step, numSteps));
                 }
                 if (value > 0) {
                     moves.Add(new Move(square, value, color, directions));
@@ -131,7 +127,7 @@ namespace Othello {
             formattedBoard.AddRange(_board.Select(disk => disk.BoardChar()));
             foreach (Move move in moves) {
                 Console.WriteLine($"  {move}");
-                var (x, y) = move.Square;
+                (int x, int y) = move.Square;
                 formattedBoard[y * _size + x] = ColorPrint.Get(move.Value, Color.Yellow);
             }
             // Print board with move positions
@@ -148,9 +144,9 @@ namespace Othello {
             Console.WriteLine("");
         }
 
-        /// Print current score for both players.
+        /// Print the current score for both players.
         public void PrintScore() {
-            var (black, white) = PlayerScores();
+            (int black, int white) = PlayerScores();
             Console.WriteLine($"\n{this}");
             Console.WriteLine(
                 $"Score: {ColorPrint.Get(black, Disk.Black.DiskColor())} | "
@@ -209,16 +205,16 @@ namespace Othello {
 
         /// Returns the state of the board (empty, white, black) at the given coordinates.
         private Disk? GetSquare(Square square) {
-            var (x, y) = square;
+            (int x, int y) = square;
             if (!CheckCoordinates(x, y)) {
                 return null;
             }
             return _board[y * _size + x];
         }
 
-        /// Sets the given square to given value.
+        /// Sets the given square to the given value.
         private void SetSquare(Square square, Disk disk) {
-            var (x, y) = square;
+            (int x, int y) = square;
             if (!CheckCoordinates(x, y)) {
                 throw new ArgumentException($"Invalid coordinates ({x},{y})!");
             }

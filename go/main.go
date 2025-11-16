@@ -22,7 +22,7 @@ import (
 	"othello_go/othello"
 )
 
-// CLI flags
+// CLI flags.
 var (
 	autoplay        bool
 	check           bool
@@ -34,7 +34,8 @@ var (
 )
 
 // Args initializes the CLI commands and flags
-// nolint:lll
+//
+//nolint:lll
 func Args() *cobra.Command {
 	// Have to override usage template so can have positional argument info there :(
 	customUsageTemplate := fmt.Sprintf(`Usage:{{if .Runnable}}
@@ -86,7 +87,8 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 }
 
 // initFlags registers CLI flags
-// nolint:lll
+//
+//nolint:lll
 func initFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&autoplay, "autoplay", "a", false, "Enable autoplay mode with computer control")
 	cmd.Flags().BoolVarP(&check, "check", "c", false, "Autoplay and only print result")
@@ -105,25 +107,7 @@ func runGame(_ *cobra.Command, args []string) {
 
 	fmt.Println(aurora.Green("OTHELLO GAME - GO").Bold())
 
-	// Try to read board size from command line args
-	var boardSize int
-	if len(args) == 1 {
-		size, err := strconv.Atoi(args[0])
-		if err != nil {
-			othello.PrintError("Invalid board size")
-			os.Exit(1)
-		} else if size < othello.MinBoardSize || size > othello.MaxBoardSize {
-			othello.PrintError("Unsupported board size: %d", size)
-			os.Exit(1)
-		}
-		boardSize = size
-		fmt.Printf("Using board size: %d\n", boardSize)
-	} else if autoplay || defaultSettings {
-		boardSize = othello.DefaultBoardSize
-	} else {
-		// Otherwise ask user for board size
-		boardSize = othello.GetBoardSize()
-	}
+	boardSize := resolveBoardSize(args)
 
 	settings := othello.NewSettings(
 		boardSize,
@@ -137,6 +121,27 @@ func runGame(_ *cobra.Command, args []string) {
 
 	game := othello.InitOthello(settings)
 	game.Play()
+}
+
+func resolveBoardSize(args []string) int {
+	// Try to read board size from command line args
+	if len(args) == 1 {
+		size, err := strconv.Atoi(args[0])
+		if err != nil {
+			othello.PrintError("Invalid board size")
+			os.Exit(1)
+		} else if size < othello.MinBoardSize || size > othello.MaxBoardSize {
+			othello.PrintError("Unsupported board size: %d", size)
+			os.Exit(1)
+		}
+		fmt.Printf("Using board size: %d\n", size)
+		return size
+	} else if autoplay || defaultSettings {
+		return othello.DefaultBoardSize
+	} else {
+		// Otherwise ask user for board size
+		return othello.GetBoardSize()
+	}
 }
 
 func main() {

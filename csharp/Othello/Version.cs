@@ -2,9 +2,9 @@
 
 namespace Othello {
     public static class Version {
-        public const string BuildTime = "2025-11-14_2125";
-        public const string GitBranch = "9ad4abe";
-        public const string GitCommit = "dotnet-10";
-        public const string VersionNumber = "2.10.0";
+        public const string BuildTime = "2025-11-16_2148";
+        public const string GitBranch = "direction";
+        public const string GitCommit = "f205553";
+        public const string VersionNumber = "2.11.0";
     }
 }

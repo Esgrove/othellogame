@@ -92,7 +92,7 @@ build_project() {
         echo "dotnet $(dotnet --version)"
     fi
 
-    print_magenta "Building Othello C# $BUILD_TYPE for $RUNTIME"
+    echo "Building Othello C# $BUILD_TYPE for $RUNTIME"
     time dotnet publish \
         Othello/Othello.csproj \
         --configuration "$BUILD_TYPE" \

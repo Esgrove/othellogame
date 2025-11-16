@@ -77,21 +77,7 @@ fn main() -> Result<()> {
 
     println!("{}", "OTHELLO GAME - RUST".green().bold());
 
-    let board_size: usize = {
-        // Try to read board size from command line args
-        if let Some(size) = args.size {
-            if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&size) {
-                anyhow::bail!("Unsupported board size: {size}")
-            }
-            println!("Using board size: {size}");
-            size
-        } else if args.autoplay || args.default {
-            DEFAULT_BOARD_SIZE
-        } else {
-            // Otherwise ask user for board size
-            Othello::get_board_size()
-        }
-    };
+    let board_size = resolve_board_size(&args)?;
 
     let settings = Settings {
         board_size,
@@ -105,4 +91,20 @@ fn main() -> Result<()> {
 
     Othello::new(settings).play();
     Ok(())
+}
+
+fn resolve_board_size(args: &Args) -> Result<usize> {
+    // Try to read board size from command line args
+    if let Some(size) = args.size {
+        if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&size) {
+            anyhow::bail!("Unsupported board size: {size}")
+        }
+        println!("Using board size: {size}");
+        Ok(size)
+    } else if args.autoplay || args.default {
+        Ok(DEFAULT_BOARD_SIZE)
+    } else {
+        // Otherwise ask user for board size
+        Ok(Othello::get_board_size())
+    }
 }

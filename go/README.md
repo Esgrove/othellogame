@@ -44,7 +44,8 @@ Manually:
 go build -v
 ```
 
-Note that version information only works when building with script since that sets the required variables.
+Note that version information only works when building with the script since that sets the required
+variables.
 
 ## Install
 
@@ -52,7 +53,7 @@ Note that version information only works when building with script since that se
 go install
 ```
 
-Check binary install target:
+Check binary installation target:
 
 ```shell
 go list -f '{{.Target}}'
@@ -72,6 +73,7 @@ Using [golangci-lint](https://golangci-lint.run/)
 
 ```shell
 brew install golangci-lint
+scoop install main/golangci-lint
 
 golangci-lint run
 ```
