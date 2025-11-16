@@ -45,5 +45,8 @@ jobs:
       - name: Check Swift version
         run: swift --version
 
+      - name: Install dependencies
+        run: swift package --only-use-versions-from-resolved-file resolve
+
       - name: Build
         run: chmod +x build.sh && ./build.sh
