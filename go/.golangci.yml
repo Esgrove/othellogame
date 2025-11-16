@@ -1,10 +1,13 @@
+# https://golangci-lint.run/docs/configuration/
+version: "2"
+
 run:
   timeout: 1m
 
 linters:
+  default: fast
   enable:
     - lll # Long Line Linter
-
-linters-settings:
-  lll:
-    line-length: 100
+  settings:
+    lll:
+      line-length: 100

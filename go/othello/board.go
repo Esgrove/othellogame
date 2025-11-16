@@ -16,7 +16,7 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
-var STEP_DIRECTIONS = [8]Step{
+var StepDirections = [8]Step{
 	{X: -1, Y: -1},
 	{X: -1, Y: 0},
 	{X: -1, Y: 1},
@@ -114,8 +114,8 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 	opposingDisk := disk.Opponent()
 	for square := range b.emptySquares.Iter() {
 		var value int
-		var directions []StepCount
-		for _, step := range STEP_DIRECTIONS {
+		var directions []Direction
+		for _, step := range StepDirections {
 			pos := square.Add(step)
 			// Next square in this direction needs to be the opposing disk
 			if b.getSquare(&pos) != opposingDisk {
@@ -129,7 +129,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 			// Valid move only if a line of opposing disks ends in own disk
 			if b.getSquare(&pos) == disk {
 				value += numSteps
-				directions = append(directions, StepCount{step, numSteps})
+				directions = append(directions, Direction{step, numSteps})
 			}
 		}
 		if value > 0 {

@@ -28,22 +28,24 @@ type Square struct {
 	Y int
 }
 
+// Represents a continuous line of squares in one direction.
+type Direction struct {
+	// The direction of travel on the board
+	Step Step
+	// Number of consecutive same colour squares along this direction
+	Count int
+}
+
 // Represents one possible disk placement for the given disk colour.
 type Move struct {
 	Square     Square
 	Disk       Disk
 	Value      int
-	Directions []StepCount
+	Directions []Direction
 }
 
 // Implements sort.Interface for a slice of Square objects
 type Squares []Square
-
-// Hold Step and number of steps since Go lacks a tuple / pair construct
-type StepCount struct {
-	Step  Step
-	Count int
-}
 
 // Implements sort.Interface with custom sort order.
 type MovesDescending []Move
@@ -144,7 +146,7 @@ func (m Move) AffectedSquares() []Square {
 	var paths Squares
 	for _, direction := range m.Directions {
 		pos := m.Square.Add(direction.Step)
-		for i := 0; i < int(direction.Count); i++ {
+		for i := 0; i < direction.Count; i++ {
 			paths = append(paths, pos)
 			pos = pos.Add(direction.Step)
 		}
