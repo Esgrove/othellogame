@@ -58,7 +58,7 @@ abstract class WriteVersionTask : DefaultTask() {
     }
 }
 
-version = "1.0.0"
+version = "1.0.1"
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.

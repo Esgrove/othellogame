@@ -76,12 +76,8 @@ public class Board {
         }
         setSquare(start, move.disk());
         emptySquares.remove(start);
-        for (Direction direction : move.directions()) {
-            Square pos = start.add(dir);
-            while (getSquare(pos) == move.disk().opponent()) {
-                setSquare(pos, move.disk());
-                pos = pos.add(dir);
-            }
+        for (Square square : move.affectedSquares()) {
+            setSquare(square, move.disk());
         }
     }
 

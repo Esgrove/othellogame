@@ -302,7 +302,7 @@ namespace Othello {
                     return DefaultBoardSize;
                 }
 
-                // Otherwise ask user for board size
+                // Otherwise ask the user for board size
                 return GetBoardSize();
             }
         }

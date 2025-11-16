@@ -31,7 +31,7 @@ public class Main implements Callable<Integer> {
         paramLabel = "size",
         arity = "0..1"
     )
-    private Integer boardSize;
+    private Integer size;
 
     @Option(names = {
         "-a", "--autoplay"
@@ -79,20 +79,7 @@ public class Main implements Callable<Integer> {
     public Integer call() {
         printBold("OTHELLO GAME - JAVA", AnsiColor.GREEN);
 
-        // Try to read board size from command line args
-        if (boardSize != null) {
-            if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
-                printError("Unsupported board size: " + boardSize);
-                return 1;
-            }
-            System.out.println("Using board size: " + boardSize);
-
-        } else if (autoplay || useDefaults) {
-            boardSize = DEFAULT_BOARD_SIZE;
-        } else {
-            // Otherwise ask user for board size
-            boardSize = getBoardSize();
-        }
+        Integer boardSize = resolveBoardSize(size, autoplay, useDefaults);
 
         Settings settings = new Settings(
             boardSize,
@@ -108,7 +95,7 @@ public class Main implements Callable<Integer> {
         return 0;
     }
 
-    public static int getBoardSize() {
+    private static int getBoardSize() {
         System.out.printf("Choose board size (default is %d): ", DEFAULT_BOARD_SIZE);
 
         String input = System.console() != null ? System.console().readLine() : new Scanner(System.in).nextLine();
@@ -131,6 +118,23 @@ public class Main implements Callable<Integer> {
 
         printWarn("Invalid size, defaulting to " + DEFAULT_BOARD_SIZE + "...");
         return DEFAULT_BOARD_SIZE;
+    }
+
+    private Integer resolveBoardSize(Integer size, boolean autoplay, boolean useDefaults) {
+        // Try to read board size from command line args
+        if (size != null) {
+            if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
+                printError("Unsupported board size: " + size);
+                System.exit(1);
+            }
+            System.out.println("Using board size: " + size);
+            return size;
+        } else if (autoplay || useDefaults) {
+            return DEFAULT_BOARD_SIZE;
+        } else {
+            // Otherwise ask the user for board size
+            return getBoardSize();
+        }
     }
 
     public static void main(String[] args) {

@@ -71,15 +71,15 @@ namespace Othello {
         }
 
         /// Update board for given disk placement.
-        public void PlaceDisk(Move playerMove) {
-            Square start = playerMove.Square;
+        public void PlaceDisk(Move move) {
+            Square start = move.Square;
             if (GetSquare(start) != Disk.Empty) {
                 throw new ArgumentException($"Trying to place disk to an occupied square {start}!");
             }
-            SetSquare(start, playerMove.Disk);
+            SetSquare(start, move.Disk);
             _emptySquares.Remove(start);
-            foreach (Square square in playerMove.AffectedSquares()) {
-                SetSquare(square, playerMove.Disk);
+            foreach (Square square in move.AffectedSquares()) {
+                SetSquare(square, move.Disk);
             }
         }
 
