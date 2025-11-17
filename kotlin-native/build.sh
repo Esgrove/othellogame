@@ -18,12 +18,13 @@ rm -rf build/bin/native/releaseExecutable/*.kexe
 executable="othello_kotlin"
 if [ "$BASH_PLATFORM" = windows ]; then
     executable+=".exe"
+    output="build/bin/native/releaseExecutable/othello_kotlin.exe"
+else
+    output="build/bin/native/releaseExecutable/othello_kotlin.kexe"
 fi
 
 rm -f "$executable"
-find build -iname "*.exe"
-find build -iname "*.kexe"
-mv build/bin/native/releaseExecutable/othello_kotlin.kexe "$executable"
+mv "$output" "$executable"
 file "$executable"
 ./"$executable" --version
 ./"$executable" -h || :
