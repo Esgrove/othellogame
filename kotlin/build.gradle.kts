@@ -67,12 +67,12 @@ val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper
 
 val writeVersionFile by tasks.registering(WriteVersionTask::class) {
     outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/kotlin"))
-    appName.set(project.name)
+    appName.set("Othello Kotlin")
     appVersion.set(project.version.toString())
     execOps.set(execHelper.map { it.execOps })
 }
 
-version = "1.8.0"
+version = "1.8.1"
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.2.21"

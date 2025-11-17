@@ -10,7 +10,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import kotlin.system.exitProcess
 
-class OthelloKotlin : CliktCommand() {
+class OthelloKotlin : CliktCommand("othello_kotlin") {
     private val size by argument(
         "size",
         help = "Optional board size ($MIN_BOARD_SIZE..$MAX_BOARD_SIZE)",

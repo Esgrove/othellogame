@@ -6,7 +6,7 @@ Akseli Lukkarila
 """
 
 # Updated by build script, do not edit manually!
-GIT_BRANCH = "direction"
-GIT_COMMIT = "f205553"
-BUILD_TIME = "2025-11-16_2150"
+GIT_BRANCH = "main"
+GIT_COMMIT = "a782db0"
+BUILD_TIME = "2025-11-17_0941"
 VERSION_NUMBER = "3.1.0"
