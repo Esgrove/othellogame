@@ -26,8 +26,7 @@ class OthelloKotlin : CliktCommand("othello_kotlin") {
     private val test by option("-t", "--test", help = "Enable test mode with deterministic computer moves").flag()
     private val version by option("-v", "--version", help = "Print version and exit").flag()
 
-    override fun help(context: Context) =
-        "A simple Othello CLI game implementation in Kotlin\n\njava -jar othello_kotlin.jar"
+    override fun help(context: Context) = "A simple Othello CLI game implementation in Kotlin"
 
     override fun run() {
         if (version) {

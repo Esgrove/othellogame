@@ -1,13 +1,14 @@
-# Othello Kotlin
+# Othello Kotlin Native
 
 Requires Gradle.
+Uses Kotlin Native to produce a native executable.
 
 Uses [Clikt](https://github.com/ajalt/clikt) for the CLI.
 
 ## Usage
 
 ```console
-Usage: othello-kotlin [<options>] [<size>]
+Usage: othello_kotlin [<options>] [<size>]
 
   A simple Othello CLI game implementation in Kotlin
 
@@ -28,14 +29,19 @@ Arguments:
 ## Build and run
 
 ```shell
-./gradlew build
-./gradlew run
+./gradlew nativeBinaries
 ```
 
 With shell script:
 
 ```shell
 ./build.sh
+```
+
+## Unit tests
+
+```shell
+./gradlew nativeTest
 ```
 
 ## Code formatting
