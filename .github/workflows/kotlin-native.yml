@@ -27,13 +27,14 @@ defaults:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
-        with:
-          # Fetch all history including 'origin/main' so Spotless can detect the changes
-          fetch-depth: 0
 
       - name: Cache Gradle wrapper and build outputs
         uses: actions/cache@v4
@@ -47,8 +48,27 @@ jobs:
       - name: Build
         run: chmod +x build.sh && ./build.sh
 
-      - name: Lint
-        run: ./gradlew spotlessCheck
-
       - name: Test
         run: ./gradlew nativeTest
+
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          # Fetch all history including 'origin/main' so Spotless can detect the changes
+          fetch-depth: 0
+
+      - name: Cache Gradle wrapper and build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            kotlin/.gradle
+            kotlin/build
+          key: gradle-wrapper-kotlin-${{ runner.os }}-${{ hashFiles('kotlin/gradle/wrapper/gradle-wrapper.properties', 'kotlin/build.gradle.kts') }}
+          restore-keys: gradle-wrapper-kotlin-${{ runner.os }}-
+
+      - name: Lint
+        run: ./gradlew spotlessCheck
