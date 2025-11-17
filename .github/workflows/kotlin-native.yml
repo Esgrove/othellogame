@@ -1,17 +1,17 @@
-name: Java
+name: Kotlin Native
 
 on:
   push:
     branches:
       - main
     paths:
-      - ".github/workflows/java.yml"
-      - "java/**"
+      - ".github/workflows/kotlin-native.yml"
+      - "kotlin-native/**"
       - "!README.md"
   pull_request:
     paths:
-      - ".github/workflows/java.yml"
-      - "java/**"
+      - ".github/workflows/kotlin-native.yml"
+      - "kotlin-native/**"
       - "!README.md"
 
 # Cancel previous runs for PRs but not pushes to main
@@ -22,7 +22,7 @@ concurrency:
 defaults:
   run:
     shell: bash
-    working-directory: java
+    working-directory: kotlin-native
 
 jobs:
   build:
@@ -35,27 +35,20 @@ jobs:
           # Fetch all history including 'origin/main' so Spotless can detect the changes
           fetch-depth: 0
 
-      - name: Set up JDK
-        uses: actions/setup-java@v5
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: "gradle"
-
       - name: Cache Gradle wrapper and build outputs
         uses: actions/cache@v4
         with:
           path: |
-            java/.gradle
-            java/build
-          key: gradle-wrapper-java-${{ runner.os }}-${{ hashFiles('java/gradle/wrapper/gradle-wrapper.properties', 'java/build.gradle.kts') }}
-          restore-keys: gradle-wrapper-java-${{ runner.os }}-
+            kotlin-native/.gradle
+            kotlin-native/build
+          key: gradle-wrapper-kotlin-native-${{ runner.os }}-${{ hashFiles('kotlin-native/gradle/wrapper/gradle-wrapper.properties', 'kotlin-native/build.gradle.kts') }}
+          restore-keys: gradle-wrapper-kotlin-native-${{ runner.os }}-
 
-      - name: Build with Gradle
+      - name: Build
         run: chmod +x build.sh && ./build.sh
 
       - name: Lint
         run: ./gradlew spotlessCheck
 
       - name: Test
-        run: ./gradlew test
+        run: ./gradlew nativeTest
