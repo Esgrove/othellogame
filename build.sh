@@ -18,12 +18,14 @@ if [ "$BASH_PLATFORM" = windows ]; then
     ./go/othello_go.exe --version
     ./rust/othello_rust.exe --version
     ./swift/othello_swift.exe --version
+    ./kotlin-native/othello_kotlin.exe --version
 else
     ./cpp/othello_cpp --version
     ./csharp/othello_csharp --version
     ./go/othello_go --version
     ./rust/othello_rust --version
     ./swift/othello_swift --version
+    ./kotlin-native/othello_kotlin --version
 fi
 
 java -jar kotlin/othello_kotlin.jar --version
