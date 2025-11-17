@@ -21,6 +21,8 @@ if [ "$BASH_PLATFORM" = windows ]; then
 fi
 
 rm -f "$executable"
+find build -iname "*.exe"
+find build -iname "*.kexe"
 mv build/bin/native/releaseExecutable/othello_kotlin.kexe "$executable"
 file "$executable"
 ./"$executable" --version
