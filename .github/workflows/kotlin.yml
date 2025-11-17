@@ -6,15 +6,13 @@ on:
       - main
     paths:
       - ".github/workflows/kotlin.yml"
-      - "kotlin/**.kt"
-      - "kotlin/**.kts"
-      - "kotlin/**.sh"
+      - "kotlin/**"
+      - "!README.md"
   pull_request:
     paths:
       - ".github/workflows/kotlin.yml"
-      - "kotlin/**.kt"
-      - "kotlin/**.kts"
-      - "kotlin/**.sh"
+      - "kotlin/**"
+      - "!README.md"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:

@@ -26,7 +26,7 @@ namespace Othello {
 
         /// Return version info string
         public static string VersionInfo() {
-            return $"{Version.VersionNumber} {Version.BuildTime} {Version.GitCommit} {Version.GitBranch}";
+            return $"{Version.VersionNumber} {Version.BuildTime} {Version.GitBranch} {Version.GitCommit}";
         }
     }
 }

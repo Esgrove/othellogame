@@ -13,6 +13,7 @@ if [ "$BASH_PLATFORM" = windows ]; then
         cpp/othello_cpp.exe
         csharp/othello_csharp.exe
         go/othello_go.exe
+        kotlin-native/othello_kotlin.exe
         rust/othello_rust.exe
         swift/othello_swift.exe
         kotlin/othello_kotlin.sh
@@ -23,6 +24,7 @@ else
         cpp/othello_cpp
         csharp/othello_csharp
         go/othello_go
+        kotlin-native/othello_kotlin
         rust/othello_rust
         swift/othello_swift
         kotlin/othello_kotlin.sh

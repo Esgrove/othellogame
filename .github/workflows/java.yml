@@ -6,15 +6,13 @@ on:
       - main
     paths:
       - ".github/workflows/java.yml"
-      - "java/**.java"
-      - "java/**.kts"
-      - "java/**.sh"
+      - "java/**"
+      - "!README.md"
   pull_request:
     paths:
       - ".github/workflows/java.yml"
-      - "java/**.java"
-      - "java/**.kts"
-      - "java/**.sh"
+      - "java/**"
+      - "!README.md"
 
 # Cancel previous runs for PRs but not pushes to main
 concurrency:
