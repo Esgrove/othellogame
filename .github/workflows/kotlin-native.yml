@@ -36,7 +36,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v5
 
-      - name: Cache Gradle wrapper and build outputs
+      - name: Cache Gradle wrapper
         uses: actions/cache@v4
         with:
           path: |
@@ -61,14 +61,14 @@ jobs:
           # Fetch all history including 'origin/main' so Spotless can detect the changes
           fetch-depth: 0
 
-      - name: Cache Gradle wrapper and build outputs
+      - name: Cache Gradle wrapper
         uses: actions/cache@v4
         with:
           path: |
-            kotlin/.gradle
-            kotlin/build
-          key: gradle-wrapper-kotlin-${{ runner.os }}-${{ hashFiles('kotlin/gradle/wrapper/gradle-wrapper.properties', 'kotlin/build.gradle.kts') }}
-          restore-keys: gradle-wrapper-kotlin-${{ runner.os }}-
+            kotlin-native/.gradle
+            kotlin-native/build
+          key: gradle-wrapper-kotlin-native-${{ runner.os }}-${{ hashFiles('kotlin-native/gradle/wrapper/gradle-wrapper.properties', 'kotlin-native/build.gradle.kts') }}
+          restore-keys: gradle-wrapper-kotlin-native-${{ runner.os }}-
 
       - name: Lint
         run: ./gradlew spotlessCheck
