@@ -80,7 +80,7 @@ plugins {
     id("com.gradleup.shadow") version "9.2.2"
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.0.0"
+    id("com.diffplug.spotless") version "8.1.0"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
