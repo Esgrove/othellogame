@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # Fetch all history including 'origin/main' so Spotless can detect the changes
           fetch-depth: 0
