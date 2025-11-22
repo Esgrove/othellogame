@@ -52,7 +52,7 @@ jobs:
 
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
-        run: choco install --no-progress cmake ninja openssl
+        run: choco upgrade --no-progress cmake ninja openssl
         shell: powershell
 
       - name: Install dependencies (macOS)
@@ -84,7 +84,7 @@ jobs:
         run: ./build.sh --msvc --test
 
   clang-format:
-    # Need to use mac since Ubuntu apt has an old clang-format version
+    # Need to use macOS since Ubuntu apt has an old clang-format version
     runs-on: macos-latest
     steps:
       - name: Check out repository
