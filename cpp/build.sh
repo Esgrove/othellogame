@@ -163,7 +163,9 @@ move_exe_to_root() {
     find "$CMAKE_BUILD_DIR" -type f -name "$executable" | head -n 1 | xargs -I {} mv {} "$executable"
     file "$executable"
     # Run executable to check it works and print the version info
+    print_magenta "Version:"
     ./"$executable" --version
+    print_magenta "Usage:"
     ./"$executable" -h || :
 }
 

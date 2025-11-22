@@ -13,9 +13,9 @@ VERSION_FILE="$PROJECT_PATH/othello/version.py"
 get_pyproject_version_number() {
     # note: `tomllib` requires Python 3.11+
     uv run python -c 'with open("pyproject.toml", "rb") as f: \
-                import tomllib; \
-                project = tomllib.load(f); \
-                print(project["project"]["version"])'
+        import tomllib; \
+        project = tomllib.load(f); \
+        print(project["project"]["version"])'
 }
 
 update_version_information() {

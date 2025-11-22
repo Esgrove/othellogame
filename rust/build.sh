@@ -26,5 +26,7 @@ fi
 rm -f "$executable"
 mv ./target/release/"$executable" "$executable"
 file "$executable"
+print_magenta "Version:"
 ./"$executable" --version
+print_magenta "Usage:"
 ./"$executable" -h || :
