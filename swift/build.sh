@@ -48,5 +48,7 @@ rm -f "$executable"
 executable_path="$(find .build -maxdepth 2 -mindepth 2 -type d -path ".build/*/release" -print -quit)/$executable"
 mv "$executable_path" "$executable"
 file "$executable"
+print_magenta "Version:"
 ./"$executable" --version
+print_magenta "Usage:"
 ./"$executable" -h || :

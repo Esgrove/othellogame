@@ -50,18 +50,18 @@ bool Board::can_play() const
 }
 
 /// Update board for given disk placement.
-void Board::place_disk(const Move& player_move)
+void Board::place_disk(const Move& move)
 {
-    auto start = player_move.square;
+    auto start = move.square;
     if (get_square(start) != Disk::empty) {
         throw std::invalid_argument(
             fmt::format("Trying to place disk to an occupied square {}!", start)
         );
     }
-    set_square(start, player_move.disk);
+    set_square(start, move.disk);
     empty_squares.erase(start);
-    for (const auto& square : player_move.affected_squares()) {
-        set_square(square, player_move.disk);
+    for (const auto& square : move.affected_squares()) {
+        set_square(square, move.disk);
     }
 }
 

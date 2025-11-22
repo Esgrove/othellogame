@@ -67,9 +67,12 @@ build_project() {
     cd "$PROJECT_PATH"
     rm -f "$EXECUTABLE"
     time go build -v -ldflags "$VERSION_INFO"
+    print_green "Build successful"
 
     file "$EXECUTABLE"
+    print_magenta "Version:"
     ./"$EXECUTABLE" --version
+    print_magenta "Usage:"
     ./"$EXECUTABLE" -h || :
 }
 

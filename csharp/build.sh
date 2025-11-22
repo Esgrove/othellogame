@@ -108,7 +108,9 @@ build_project() {
         mv "$(find "$BUILD_DIR" -type f -name Othello)" $EXECUTABLE
     fi
     file "$EXECUTABLE"
-    ./"$EXECUTABLE" -v
+    print_magenta "Version:"
+    ./"$EXECUTABLE" --version
+    print_magenta "Usage:"
     ./"$EXECUTABLE" -h || :
 }
 

@@ -96,12 +96,12 @@ Move Player::get_computer_move(const std::vector<Move>& moves)
     } else {
         // Wait a bit and pick a random move
         std::uniform_int_distribution rand_time(1000, 2000);
-        const auto sleep_duration = std::chrono::milliseconds(rand_time(this->rand_gen));
+        const auto sleep_duration = std::chrono::milliseconds(rand_time(this->random));
         std::this_thread::sleep_for(sleep_duration);
 
-        std::uniform_int_distribution<size_t> rand_item(0, moves.size() - 1);
+        std::uniform_int_distribution<size_t> random_item(0, moves.size() - 1);
         // C++17 std::sample is even more convoluted here :(
-        chosen_move = moves[rand_item(this->rand_gen)];
+        chosen_move = moves[random_item(this->random)];
     }
     if (!this->settings.check_mode) {
         fmt::print("  {} -> {}\n", chosen_move.square, chosen_move.value);
@@ -115,10 +115,9 @@ Move Player::get_human_move(const std::vector<Move>& moves) const
     while (true) {
         auto square = get_square();
         // Check if given square is one of the possible moves
-        if (auto move
+        auto move
             = std::ranges::find_if(moves, [&square](const Move& m) { return m.square == square; });
-            move != moves.end())
-        {
+        if (move != moves.end()) {
             // Dereference iterator to get value
             return *move;
         }

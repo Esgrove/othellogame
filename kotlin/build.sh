@@ -20,5 +20,7 @@ executable="othello_kotlin.jar"
 rm -f "$executable"
 mv "$jar" "$executable"
 file "$executable"
+print_magenta "Version:"
 java -jar "$executable" --version
+print_magenta "Usage:"
 java -jar "$executable" -h || :
