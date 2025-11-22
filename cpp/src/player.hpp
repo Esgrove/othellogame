@@ -72,7 +72,7 @@ private:
     PlayerType player_type {PlayerType::Human};
     int rounds_played {0};
 
-    std::mt19937 rand_gen {std::mt19937 {std::random_device {}()}};
+    std::mt19937 random {std::mt19937 {std::random_device {}()}};
 };
 
 }  // namespace othello
