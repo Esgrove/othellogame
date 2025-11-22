@@ -10,7 +10,7 @@ OPTIONS: All options are optional
     -b | --build-type <type>    Specify build type for CMake. Default is 'Release'.
     -c | --clean                Clean temporary files before building.
     -m | --msvc                 Use Visual Studio generator on Windows.
-    -t | --test                 Build tests.
+    -t | --test                 Build and run tests.
     -v | --verbose              Display commands being executed.
 "
 
@@ -93,7 +93,7 @@ generate_msvc_project() {
         print_error_and_exit "Visual Studio generator can't be used on $BASH_PLATFORM"
     fi
     cmake -B "$CMAKE_BUILD_DIR" \
-        -G "Visual Studio 17 2022" \
+        -G "Visual Studio 18 2026" \
         -A x64 \
         -S "$PROJECT_PATH" \
         -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \

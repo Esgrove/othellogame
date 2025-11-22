@@ -52,13 +52,14 @@ jobs:
 
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
-        run: choco install --no-progress ninja openssl
+        run: choco install --no-progress cmake ninja openssl
         shell: powershell
 
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
         # cmake and openssl should be installed already
         run: |
+          brew update --quiet
           brew install ccache
           brew install llvm
           brew install ninja
@@ -78,11 +79,9 @@ jobs:
         run: |
           chmod +x build.sh
           ./build.sh --msvc
-        shell: bash
 
       - name: Test
         run: ./build.sh --msvc --test
-        shell: bash
 
   clang-format:
     # Need to use mac since Ubuntu apt has an old clang-format version
