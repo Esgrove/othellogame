@@ -3,12 +3,16 @@ updates:
   # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
 
   # Python
   - package-ecosystem: "pip"
     directory: "/python"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
@@ -19,6 +23,8 @@ updates:
   # Rust
   - package-ecosystem: "cargo"
     directory: "/rust"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
@@ -29,6 +35,8 @@ updates:
   # Go
   - package-ecosystem: "gomod"
     directory: "/go"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
@@ -39,6 +47,8 @@ updates:
   # Kotlin
   - package-ecosystem: "gradle"
     directory: "/kotlin"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
@@ -49,6 +59,8 @@ updates:
   # Java
   - package-ecosystem: "gradle"
     directory: "/java"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
@@ -59,6 +71,8 @@ updates:
   # Swift
   - package-ecosystem: "swift"
     directory: "/swift"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
@@ -69,6 +83,8 @@ updates:
   # C#
   - package-ecosystem: "nuget"
     directory: "/csharp"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
@@ -79,6 +95,8 @@ updates:
   # .NET SDK
   - package-ecosystem: "dotnet-sdk"
     directory: "/csharp"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
@@ -89,6 +107,8 @@ updates:
   # TypeScript
   - package-ecosystem: "bun"
     directory: "/typescript"
+    commit-message:
+      prefix: ""
     schedule:
       interval: "daily"
     groups:
