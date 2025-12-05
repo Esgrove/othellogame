@@ -77,7 +77,7 @@ version = "1.8.1"
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.2.21"
     // https://github.com/GradleUp/shadow
-    id("com.gradleup.shadow") version "9.2.2"
+    id("com.gradleup.shadow") version "9.3.0"
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
     id("com.diffplug.spotless") version "8.1.0"
