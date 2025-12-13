@@ -15,7 +15,7 @@ mod utils;
 mod version;
 
 use anyhow::Result;
-use clap::{Parser, arg};
+use clap::Parser;
 use colored::Colorize;
 
 use crate::othello::Othello;
