@@ -43,7 +43,7 @@ jobs:
           cache: "gradle"
 
       - name: Cache Gradle wrapper and build outputs
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             kotlin/.gradle
