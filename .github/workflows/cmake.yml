@@ -78,10 +78,10 @@ jobs:
       - name: Build
         run: |
           chmod +x build.sh
-          ./build.sh --msvc
+          ./build.sh
 
       - name: Test
-        run: ./build.sh --msvc --test
+        run: ./build.sh --test
 
   clang-format:
     # Need to use macOS since Ubuntu apt has an old clang-format version
