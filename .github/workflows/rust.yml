@@ -19,7 +19,7 @@ on:
 # Cancel previous runs for PRs but not pushes to main
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request }}
 
 env:
   CARGO_TERM_COLOR: always
@@ -46,18 +46,10 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        continue-on-error: false
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            rust/target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+          workspaces: "rust -> target"
 
       - name: Build
         run: cargo build
@@ -77,18 +69,10 @@ jobs:
           toolchain: stable
           components: clippy, rustfmt
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        continue-on-error: false
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            rust/target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+          workspaces: "rust -> target"
 
       - name: Check formatting
         run: cargo fmt --check --verbose
