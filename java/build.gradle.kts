@@ -76,7 +76,7 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.junit/junit-bom
-    testImplementation(platform("org.junit:junit-bom:6.0.1"))
+    testImplementation(platform("org.junit:junit-bom:6.0.2"))
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
