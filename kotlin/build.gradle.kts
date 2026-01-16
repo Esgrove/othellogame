@@ -94,7 +94,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:33.5.0-jre")
     // https://github.com/ajalt/clikt
-    implementation("com.github.ajalt.clikt:clikt:5.0.3")
+    implementation("com.github.ajalt.clikt:clikt:5.1.0")
     // https://github.com/square/okio
     implementation("com.squareup.okio:okio:3.16.4")
 }
