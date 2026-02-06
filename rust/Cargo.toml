@@ -13,7 +13,7 @@ build = "build.rs"
 rust-version = "1.91"
 
 [dependencies]
-anyhow = "1.0.100"
+anyhow = "1.0.101"
 base16ct = { version = "1.0.0", features = ["alloc"] }
 clap = { version = "4.5.57", features = ["derive"] }
 colored = "3.1.1"
