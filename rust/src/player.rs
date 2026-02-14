@@ -9,7 +9,7 @@ use std::{fmt, io};
 use std::{thread, time::Duration};
 
 use colored::Colorize;
-use rand::{self, Rng};
+use rand::{self, RngExt};
 
 use crate::board::Board;
 use crate::colorprint::print_error;
