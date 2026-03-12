@@ -96,7 +96,7 @@ dependencies {
     // https://github.com/ajalt/clikt
     implementation("com.github.ajalt.clikt:clikt:5.1.0")
     // https://github.com/square/okio
-    implementation("com.squareup.okio:okio:3.16.4")
+    implementation("com.squareup.okio:okio:3.17.0")
 }
 
 sourceSets["main"].kotlin {
