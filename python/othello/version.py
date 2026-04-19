@@ -7,6 +7,6 @@ Akseli Lukkarila
 
 # Updated by build script, do not edit manually!
 GIT_BRANCH = "main"
-GIT_COMMIT = "a782db0"
-BUILD_TIME = "2025-11-17_0941"
+GIT_COMMIT = "568207f"
+BUILD_TIME = "2026-04-19_1627"
 VERSION_NUMBER = "3.1.0"
