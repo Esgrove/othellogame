@@ -46,6 +46,16 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
             path: "Sources/Othello",
+            exclude: [
+                "board.swift",
+                "colorprint.swift",
+                "models.swift",
+                "othello.swift",
+                "player.swift",
+                "settings.swift",
+                "utils.swift",
+                "version.swift",
+            ],
             sources: ["main.swift"]
         ),
         .testTarget(
