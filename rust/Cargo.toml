@@ -2,7 +2,7 @@
 
 [package]
 name = "othello_rust"
-version = "1.11.0"
+version = "1.12.0"
 authors = ["Esgrove <esgrove@outlook.com>"]
 description = "A simple Othello CLI game implementation in Rust"
 edition = "2024"
@@ -10,7 +10,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/Esgrove/othellogame"
 build = "build.rs"
-rust-version = "1.91"
+rust-version = "1.94"
 
 [dependencies]
 anyhow = "1.0.102"
