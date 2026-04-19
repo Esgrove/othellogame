@@ -23,7 +23,7 @@ func printBold(_ message: some Any, color: TerminalColor = TerminalColor.white) 
 }
 
 /// Print error message with red colour.
-func printError(_ message: String) {
+public func printError(_ message: String) {
     let (indent, text) = splitLeadingWhitespace(message)
     print("\(indent)Error: \(text)".red())
 }

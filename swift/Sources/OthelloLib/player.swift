@@ -15,19 +15,19 @@ class Player {
     var roundsPlayed: Int = 0
     var settings: PlayerSettings
 
-    init(_ disk: Disk, _ settings: PlayerSettings) {
+    init(disk: Disk, settings: PlayerSettings) {
         self.disk = disk
         self.settings = settings
     }
 
     /// Shorthand to initialize a new player for black disks.
     static func black(_ settings: PlayerSettings) -> Player {
-        Player(Disk.black, settings)
+        Player(disk: Disk.black, settings: settings)
     }
 
     /// Shorthand to initialize a new player for white disks.
     static func white(_ settings: PlayerSettings) -> Player {
-        Player(Disk.white, settings)
+        Player(disk: Disk.white, settings: settings)
     }
 
     /// Play one round as this player.
@@ -126,7 +126,7 @@ class Player {
             if let pos = readLine() {
                 let coordinates = pos.components(separatedBy: ",").compactMap { Int($0) }
                 if coordinates.count == 2 {
-                    return Square(coordinates[0], coordinates[1])
+                    return Square(x: coordinates[0], y: coordinates[1])
                 }
             }
             printError("  Give coordinates in the form 'x,y'")

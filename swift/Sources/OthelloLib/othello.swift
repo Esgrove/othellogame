@@ -9,7 +9,7 @@
 import ColorizeSwift
 
 /// Gameplay loop and main logic.
-class Othello {
+public class Othello {
     var board: Board
     var settings: Settings
     var playerBlack: Player
@@ -18,7 +18,7 @@ class Othello {
     var gamesPlayed: Int = 0
     var gameLog: [String] = []
 
-    init(_ settings: Settings) {
+    public init(_ settings: Settings) {
         self.board = Board(size: settings.boardSize)
         self.settings = settings
         self.playerBlack = Player.black(settings.toPlayerSettings())
@@ -26,7 +26,7 @@ class Othello {
     }
 
     /// Play one full game of Othello.
-    func play() {
+    public func play() {
         while true {
             self.initGame()
             self.gameLoop()
@@ -105,7 +105,7 @@ class Othello {
             index += 1
         }
 
-        let hexHash = calculateSHA256(formattedLog)
+        let hexHash = calculateSha256(formattedLog)
 
         if !self.settings.checkMode {
             printBold("Game log:", color: TerminalColor.yellow)
@@ -144,7 +144,7 @@ class Othello {
     }
 
     /// Ask and return the desired board size.
-    class func getBoardSize() -> Int {
+    public class func getBoardSize() -> Int {
         while true {
             print("Choose board size (default is \(DEFAULT_BOARD_SIZE)): ", terminator: "")
             if let input = readLine(), let size = Int(input) {

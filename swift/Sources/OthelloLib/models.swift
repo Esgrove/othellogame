@@ -82,7 +82,7 @@ struct Square {
     var x: Int
     var y: Int
 
-    init(_ x: Int, _ y: Int) {
+    init(x: Int, y: Int) {
         self.x = x
         self.y = y
     }
@@ -97,11 +97,6 @@ struct Square {
 struct Step {
     var x: Int
     var y: Int
-
-    init(_ x: Int, _ y: Int) {
-        self.x = x
-        self.y = y
-    }
 }
 
 /// Represents a continuous line of squares in one direction.
@@ -114,11 +109,6 @@ struct Direction {
     /// Number of consecutive same colour squares along this direction
     var count: Int
 
-    init(_ step: Step, _ count: Int) {
-        self.step = step
-        self.count = count
-    }
-
     func unpack() -> (Step, Int) {
         (self.step, self.count)
     }
@@ -130,13 +120,6 @@ struct Move {
     var disk: Disk
     var value: Int
     var directions: [Direction]
-
-    init(_ square: Square, _ value: Int, _ disk: Disk, _ directions: [Direction]) {
-        self.square = square
-        self.disk = disk
-        self.value = value
-        self.directions = directions
-    }
 
     /// Format move for log entry
     func logEntry() -> String {
@@ -183,7 +166,7 @@ extension Square {
     }
 
     static func + (left: Square, right: Step) -> Square {
-        Square(left.x + right.x, left.y + right.y)
+        Square(x: left.x + right.x, y: left.y + right.y)
     }
 
     static func += (left: inout Square, right: Step) {

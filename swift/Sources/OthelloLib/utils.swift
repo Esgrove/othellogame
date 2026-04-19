@@ -10,7 +10,7 @@ import Crypto
 import Foundation
 
 /// Calculate SHA256 hash for the given string.
-func calculateSHA256(_ text: String) -> String {
+public func calculateSha256(_ text: String) -> String {
     let data = text.data(using: .utf8)!
     let hash = SHA256.hash(data: data)
 

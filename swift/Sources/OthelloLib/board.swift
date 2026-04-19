@@ -17,14 +17,14 @@ class Board {
     var board: [Disk]
     var emptySquares = Set<Square>()
     let stepDirections: [Step] = [
-        Step(down, left),
-        Step(down, right),
-        Step(down, still),
-        Step(still, left),
-        Step(still, right),
-        Step(up, left),
-        Step(up, right),
-        Step(up, still),
+        Step(x: down, y: left),
+        Step(x: down, y: right),
+        Step(x: down, y: still),
+        Step(x: still, y: left),
+        Step(x: still, y: right),
+        Step(x: up, y: left),
+        Step(x: up, y: right),
+        Step(x: up, y: still),
     ]
 
     init(size: Int) {
@@ -45,7 +45,7 @@ class Board {
         for y in 0 ..< self.size {
             for x in 0 ..< self.size {
                 if self.board[y * self.size + x] == Disk.empty {
-                    self.emptySquares.insert(Square(x, y))
+                    self.emptySquares.insert(Square(x: x, y: y))
                 }
             }
         }
@@ -89,11 +89,11 @@ class Board {
                 if self.getSquare(pos) != disk {
                     continue
                 }
-                directions.append(Direction(step, num_steps))
+                directions.append(Direction(step: step, count: num_steps))
                 value += num_steps
             }
             if value > 0 {
-                moves.append(Move(square, value, disk, directions))
+                moves.append(Move(square: square, disk: disk, value: value, directions: directions))
             }
         }
         return moves.sorted()
