@@ -15,15 +15,21 @@ Build Othello Go binary.
 
 OPTIONS: All options are optional
     -h | --help       Display these instructions.
+    -t | --test       Run tests.
     -v | --verbose    Display commands being executed.
 "
 
 init_options() {
+    RUN_TESTS=false
+
     while [ $# -gt 0 ]; do
         case "$1" in
             -h | --help)
                 echo "$USAGE"
                 exit 1
+                ;;
+            -t | --test)
+                RUN_TESTS=true
                 ;;
             -v | --verbose)
                 set -x
@@ -79,3 +85,9 @@ build_project() {
 init_options "$@"
 set_version_info
 build_project
+
+if [ "$RUN_TESTS" = true ]; then
+    cd "$PROJECT_PATH"
+    print_magenta "Running tests..."
+    go test ./othello/ -v
+fi

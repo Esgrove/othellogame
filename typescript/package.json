@@ -4,7 +4,7 @@
   "description": "A simple Othello CLI game implementation",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "bun test",
     "build": "bun build ./src/othello.ts --outdir ./dist --target node",
     "othello": "bun src/othello.ts",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs}\"",

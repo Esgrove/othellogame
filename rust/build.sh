@@ -6,6 +6,15 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
+RUN_TESTS=false
+for arg in "$@"; do
+    case "$arg" in
+        -t | --test)
+            RUN_TESTS=true
+            ;;
+    esac
+done
+
 print_magenta "Building Othello Rust..."
 
 if [ -z "$(command -v cargo)" ]; then
@@ -30,3 +39,8 @@ print_magenta "Version:"
 ./"$executable" --version
 print_magenta "Usage:"
 ./"$executable" -h || :
+
+if [ "$RUN_TESTS" = true ]; then
+    print_magenta "Running tests..."
+    cargo test --no-fail-fast
+fi

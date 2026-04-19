@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import othello.Models.Disk;
 import othello.Models.Move;
+import othello.Models.PlayerType;
 import othello.Models.Square;
 
 /**
@@ -15,7 +16,7 @@ public class Player {
     private final Disk disk;
     private final PlayerSettings settings;
     private boolean canPlay = true;
-    private boolean isHuman = true;
+    private PlayerType playerType = PlayerType.HUMAN;
     private int roundsPlayed = 0;
 
     private static final Random random = new Random();
@@ -51,10 +52,10 @@ public class Player {
         List<Move> moves = board.possibleMoves(disk);
         if (!moves.isEmpty()) {
             canPlay = true;
-            if (isHuman && settings.showHelpers() && !settings.checkMode()) {
+            if (human() && settings.showHelpers() && !settings.checkMode()) {
                 board.printPossibleMoves(moves);
             }
-            Move chosenMove = isHuman ? getHumanMove(moves) : getComputerMove(moves);
+            Move chosenMove = human() ? getHumanMove(moves) : getComputerMove(moves);
             board.placeDisk(chosenMove);
             if (!settings.checkMode()) {
                 board.printScore();
@@ -83,10 +84,38 @@ public class Player {
     }
 
     /**
-     * Set the player as human or computer controlled.
+     * Returns true if the player is human.
      */
-    public void setHuman(boolean isHuman) {
-        this.isHuman = isHuman;
+    public boolean human() {
+        return playerType.human();
+    }
+
+    /**
+     * Returns true if the player is controlled by computer.
+     */
+    public boolean computer() {
+        return playerType.computer();
+    }
+
+    /**
+     * Set the player as human controlled.
+     */
+    public void setHuman() {
+        this.playerType = PlayerType.HUMAN;
+    }
+
+    /**
+     * Set the player as computer controlled.
+     */
+    public void setComputer() {
+        this.playerType = PlayerType.COMPUTER;
+    }
+
+    /**
+     * Set the player type.
+     */
+    public void setPlayerType(PlayerType playerType) {
+        this.playerType = playerType;
     }
 
     /**
@@ -155,7 +184,7 @@ public class Player {
      * Return player type description string.
      */
     private String typeString() {
-        return isHuman ? "Human   " : "Computer";
+        return playerType.toString();
     }
 
     @Override

@@ -14,7 +14,7 @@ namespace Othello {
     /// Defines one player that can be either human or computer controlled.
     internal sealed class Player(Disk disk, PlayerSettings settings) {
         public bool CanPlay = true;
-        private bool _isHuman = true;
+        private PlayerType _playerType = PlayerType.Human;
         private int _roundsPlayed;
         private readonly Random _random = new();
 
@@ -37,10 +37,10 @@ namespace Othello {
             List<Move>? moves = board.PossibleMoves(disk);
             if (moves.Count != 0) {
                 CanPlay = true;
-                if (_isHuman && settings is { ShowHelpers: true, CheckMode: false }) {
+                if (Human() && settings is { ShowHelpers: true, CheckMode: false }) {
                     board.PrintPossibleMoves(moves);
                 }
-                Move chosenMove = _isHuman ? GetHumanMove(moves) : GetComputerMove(moves);
+                Move chosenMove = Human() ? GetHumanMove(moves) : GetComputerMove(moves);
                 board.PlaceDisk(chosenMove);
                 if (!settings.CheckMode) {
                     board.PrintScore();
@@ -61,9 +61,29 @@ namespace Othello {
 
 #nullable disable
 
-        /// Set player to be controlled by human or computer.
-        public void SetHuman(bool isHuman) {
-            _isHuman = isHuman;
+        /// Returns true if the player is human.
+        public bool Human() {
+            return _playerType == PlayerType.Human;
+        }
+
+        /// Returns true if the player is controlled by computer.
+        public bool Computer() {
+            return _playerType == PlayerType.Computer;
+        }
+
+        /// Set player to be controlled by human.
+        public void SetHuman() {
+            _playerType = PlayerType.Human;
+        }
+
+        /// Set player to be controlled by computer.
+        public void SetComputer() {
+            _playerType = PlayerType.Computer;
+        }
+
+        /// Set player type.
+        public void SetPlayerType(PlayerType playerType) {
+            _playerType = playerType;
         }
 
         /// Reset player status for a new game.
@@ -123,7 +143,7 @@ namespace Othello {
 
         /// Return player type description string.
         private string TypeString() {
-            return _isHuman ? "Human   " : "Computer";
+            return Human() ? "Human   " : "Computer";
         }
 
         public override string ToString() {

@@ -11,7 +11,7 @@ import Foundation
 class Player {
     var canPlay: Bool = true
     var disk: Disk
-    var isHuman: Bool = true
+    var playerType: PlayerType = .human
     var roundsPlayed: Int = 0
     var settings: PlayerSettings
 
@@ -38,10 +38,10 @@ class Player {
         let moves = board.possibleMoves(disk: self.disk)
         if !moves.isEmpty {
             self.canPlay = true
-            if self.isHuman && self.settings.showHelpers && !self.settings.checkMode {
+            if self.human() && self.settings.showHelpers && !self.settings.checkMode {
                 board.printPossibleMoves(moves)
             }
-            let chosenMove = self.isHuman ? self.getHumanMove(moves) : self.getComputerMove(moves)
+            let chosenMove = self.human() ? self.getHumanMove(moves) : self.getComputerMove(moves)
             board.placeDisk(move: chosenMove)
             if !self.settings.testMode {
                 board.printScore()
@@ -63,9 +63,29 @@ class Player {
         self.roundsPlayed = 0
     }
 
-    /// Set player to be controlled by human or computer.
-    func setHuman(_ isHuman: Bool) {
-        self.isHuman = isHuman
+    /// Returns true if the player is human.
+    func human() -> Bool {
+        self.playerType.isHuman()
+    }
+
+    /// Returns true if the player is controlled by computer.
+    func computer() -> Bool {
+        self.playerType.isComputer()
+    }
+
+    /// Set player to be controlled by human.
+    func setHuman() {
+        self.playerType = .human
+    }
+
+    /// Set player to be controlled by computer.
+    func setComputer() {
+        self.playerType = .computer
+    }
+
+    /// Set the player type.
+    func setPlayerType(_ playerType: PlayerType) {
+        self.playerType = playerType
     }
 
     /// Return move chosen by computer.
@@ -115,7 +135,7 @@ class Player {
 
     /// Return player type description string.
     func typeString() -> String {
-        self.isHuman ? "Human   " : "Computer"
+        self.playerType.description
     }
 }
 

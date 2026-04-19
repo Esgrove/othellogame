@@ -1,5 +1,16 @@
 package othello
 
+/** Player can be controlled either by a human or computer. */
+enum class PlayerType {
+    Human,
+    Computer;
+
+    fun human(): Boolean = this == Human
+    fun computer(): Boolean = this == Computer
+
+    override fun toString(): String = if (this == Human) "Human   " else "Computer"
+}
+
 /**
  * Represents one game piece or lack of one.
  */

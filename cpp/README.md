@@ -74,8 +74,15 @@ On Windows, use Git Bash provided by [Git For Windows](https://gitforwindows.org
 You will also need to have `bash` in PATH on Windows for the version info generation to work fully.
 Add `C:\Program Files\Git\bin` to the system PATH environment variable.
 
+## Tests
+
+Tests use [Google Test](https://github.com/google/googletest).
+
+```shell
+./build.sh --test
+```
+
 ## TODO
 
 * Use C++20 modules
 * Replace fmt with C++20/23 standard library methods (`std::format` / `std::print`)
-* Write more tests

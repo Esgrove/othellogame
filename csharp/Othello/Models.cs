@@ -10,6 +10,12 @@ using System.Collections.Generic;
 using System.Drawing;
 
 namespace Othello {
+    /// Player can be controlled either by a human or computer.
+    public enum PlayerType {
+        Human,
+        Computer,
+    }
+
     /// Represents one game piece or lack of one.
     public enum Disk {
         Black = -1,

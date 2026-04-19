@@ -173,7 +173,6 @@ run_tests() {
     cd "$CMAKE_BUILD_DIR"
     print_magenta "Running tests..."
     ctest --output-on-failure
-    print_green "Tests successful"
 }
 
 init_options "$@"

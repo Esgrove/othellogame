@@ -7,6 +7,14 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
+// PlayerType Player can be controlled either by a human or computer.
+type PlayerType int
+
+const (
+	Human    PlayerType = 0
+	Computer PlayerType = 1
+)
+
 // Disk enum.
 type Disk int
 

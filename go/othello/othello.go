@@ -65,16 +65,16 @@ func (o *Othello) initGame() {
 
 	if o.settings.AutoplayMode {
 		// Computer plays both
-		o.playerBlack.SetHuman(false)
-		o.playerWhite.SetHuman(false)
+		o.playerBlack.SetComputer()
+		o.playerWhite.SetComputer()
 	} else if o.settings.UseDefaults {
 		// Default: play as black against white computer player
-		o.playerWhite.SetHuman(false)
+		o.playerWhite.SetComputer()
 	} else if GetAnswer("Would you like to play against the computer", "y", "n") {
 		if GetAnswer("Would you like to play as black or white", "b", "w") {
-			o.playerWhite.SetHuman(false)
+			o.playerWhite.SetComputer()
 		} else {
-			o.playerBlack.SetHuman(false)
+			o.playerBlack.SetComputer()
 		}
 	}
 	if !o.settings.CheckMode {
@@ -121,7 +121,7 @@ func (o *Othello) printLog() {
 		fmt.Println(aurora.Yellow("Game log:").Bold())
 		fmt.Println(formattedLog)
 	}
-	hexHash := calculateSHA256(formattedLog)
+	hexHash := CalculateSHA256(formattedLog)
 	fmt.Println(hexHash)
 }
 

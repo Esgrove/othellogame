@@ -2,7 +2,7 @@
 Models
 Basic types and methods
 Akseli Lukkarila
-2019-2025
+2019-2026
 """
 
 from enum import IntEnum
@@ -55,6 +55,24 @@ class Disk(IntEnum):
     def __str__(self) -> str:
         """Format disk name string with color."""
         return get_color(self.name, self.disk_color())
+
+
+class PlayerType(IntEnum):
+    """Player can be controlled either by a human or computer."""
+
+    HUMAN = 0
+    COMPUTER = 1
+
+    def human(self) -> bool:
+        """Check if this is a human player type."""
+        return self == PlayerType.HUMAN
+
+    def computer(self) -> bool:
+        """Check if this is a computer player type."""
+        return self == PlayerType.COMPUTER
+
+    def __str__(self) -> str:
+        return "Human   " if self == PlayerType.HUMAN else "Computer"
 
 
 class Step:

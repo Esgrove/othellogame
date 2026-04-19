@@ -1,4 +1,5 @@
 #include "models.hpp"
+#include "utils.hpp"
 
 #include <gtest/gtest.h>
 
@@ -136,6 +137,22 @@ TEST(square, step_directions)
         Square result = origin + step_directions[i];
         ASSERT_EQ(result, expected_results[i]) << "Failed at index: " << i;
     }
+}
+
+TEST(disk, board_char)
+{
+    EXPECT_EQ(board_char(Disk::black, false), "B");
+    EXPECT_EQ(board_char(Disk::empty, false), "_");
+    EXPECT_EQ(board_char(Disk::white, false), "W");
+}
+
+TEST(move, log_entry)
+{
+    Move b(Square {3, 2}, Disk::black, 10, {Direction(Step {1, 0}, 10)});
+    EXPECT_EQ(b.log_entry(), "B:(3,2),10");
+
+    Move w(Square {0, 0}, Disk::white, 1, {Direction(Step {1, 0}, 1)});
+    EXPECT_EQ(w.log_entry(), "W:(0,0),1");
 }
 
 }  // namespace othello

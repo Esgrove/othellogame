@@ -19,7 +19,7 @@ import (
 type Player struct {
 	CanPlay      bool
 	disk         Disk
-	human        bool
+	playerType   PlayerType
 	roundsPlayed int
 	settings     PlayerSettings
 }
@@ -27,10 +27,10 @@ type Player struct {
 // NewPlayer Initialize new player for the given disk.
 func NewPlayer(disk Disk, settings PlayerSettings) *Player {
 	return &Player{
-		disk:     disk,
-		human:    true,
-		CanPlay:  true,
-		settings: settings,
+		disk:       disk,
+		playerType: Human,
+		CanPlay:    true,
+		settings:   settings,
 	}
 }
 
@@ -59,11 +59,11 @@ func (p *Player) PlayOneMove(board *Board) *string {
 	}
 
 	p.CanPlay = true
-	if p.human && p.settings.ShowHelpers {
+	if p.Human() && p.settings.ShowHelpers {
 		board.printPossibleMoves(moves)
 	}
 	var chosenMove Move
-	if p.human {
+	if p.Human() {
 		chosenMove = p.getHumanMove(moves)
 	} else {
 		chosenMove = p.getComputerMove(moves)
@@ -133,9 +133,29 @@ func (p *Player) Reset() {
 	p.roundsPlayed = 0
 }
 
-// SetHuman Set the player as human or computer controlled.
-func (p *Player) SetHuman(isHuman bool) {
-	p.human = isHuman
+// Human Return whether the player is human controlled.
+func (p *Player) Human() bool {
+	return p.playerType == Human
+}
+
+// IsComputer Return whether the player is computer controlled.
+func (p *Player) IsComputer() bool {
+	return p.playerType == Computer
+}
+
+// SetHuman Set the player as human controlled.
+func (p *Player) SetHuman() {
+	p.playerType = Human
+}
+
+// SetComputer Set the player as computer controlled.
+func (p *Player) SetComputer() {
+	p.playerType = Computer
+}
+
+// SetPlayerType Set the player type.
+func (p *Player) SetPlayerType(playerType PlayerType) {
+	p.playerType = playerType
 }
 
 // String Return formatted player info string.
@@ -145,7 +165,7 @@ func (p *Player) String() string {
 
 // Return player type description string.
 func (p *Player) typeString() string {
-	if p.human {
+	if p.playerType == Human {
 		return "Human   "
 	}
 	return "Computer"

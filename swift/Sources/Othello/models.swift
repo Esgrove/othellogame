@@ -7,6 +7,24 @@
 
 import ColorizeSwift
 
+/// Player can be controlled either by a human or computer.
+enum PlayerType: CustomStringConvertible {
+    case human
+    case computer
+
+    func isHuman() -> Bool {
+        self == .human
+    }
+
+    func isComputer() -> Bool {
+        self == .computer
+    }
+
+    var description: String {
+        self == .human ? "Human   " : "Computer"
+    }
+}
+
 /// Represents one game piece or lack of one.
 enum Disk: Int, CustomStringConvertible {
     case black = -1

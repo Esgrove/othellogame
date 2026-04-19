@@ -11,6 +11,7 @@
 import ArgumentParser
 import ColorizeSwift
 import Foundation
+import OthelloLib
 
 struct OthelloSwift: ParsableCommand {
     static let configuration = CommandConfiguration(

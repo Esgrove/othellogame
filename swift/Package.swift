@@ -18,15 +18,51 @@ let package = Package(
         .target(
             name: "VersionInfo"
         ),
-        .executableTarget(
-            name: "othello_swift",
+        .target(
+            name: "OthelloLib",
             dependencies: [
                 .target(name: "VersionInfo"),
                 .product(name: "ColorizeSwift", package: "ColorizeSwift"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Crypto", package: "swift-crypto"),
             ],
-            path: "Sources/Othello"
+            path: "Sources/OthelloLib",
+            sources: [
+                "board.swift",
+                "colorprint.swift",
+                "models.swift",
+                "othello.swift",
+                "player.swift",
+                "settings.swift",
+                "utils.swift",
+                "version.swift",
+            ]
+        ),
+        .executableTarget(
+            name: "othello_swift",
+            dependencies: [
+                .target(name: "OthelloLib"),
+                .product(name: "ColorizeSwift", package: "ColorizeSwift"),
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ],
+            path: "Sources/Othello",
+            exclude: [
+                "board.swift",
+                "colorprint.swift",
+                "models.swift",
+                "othello.swift",
+                "player.swift",
+                "settings.swift",
+                "utils.swift",
+                "version.swift",
+            ],
+            sources: ["main.swift"]
+        ),
+        .testTarget(
+            name: "OthelloTests",
+            dependencies: [
+                .target(name: "OthelloLib"),
+            ]
         ),
     ]
 )

@@ -51,16 +51,16 @@ class Othello {
 
         if self.settings.autoplayMode {
             // Computer plays both
-            self.playerWhite.setHuman(false)
-            self.playerBlack.setHuman(false)
+            self.playerWhite.setComputer()
+            self.playerBlack.setComputer()
         } else if self.settings.useDefaults {
             // Default: play as black against white computer player
-            self.playerWhite.setHuman(false)
+            self.playerWhite.setComputer()
         } else if self.getAnswer("Would you like to play against the computer") {
             if self.getAnswer("Would you like to play as black or white", yes: "b", no: "w") {
-                self.playerWhite.setHuman(false)
+                self.playerWhite.setComputer()
             } else {
-                self.playerBlack.setHuman(false)
+                self.playerBlack.setComputer()
             }
         }
 

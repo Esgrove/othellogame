@@ -15,9 +15,13 @@ FetchContent_MakeAvailable(googletest)
 add_executable(othello_tests)
 
 target_sources(othello_tests PRIVATE
+  ${CMAKE_SOURCE_DIR}/src/board.cpp
   ${CMAKE_SOURCE_DIR}/src/models.cpp
+  ${CMAKE_SOURCE_DIR}/src/player.cpp
   ${CMAKE_SOURCE_DIR}/src/utils.cpp
+  test_board.cpp
   test_models.cpp
+  test_player.cpp
   test_utils.cpp
 )
 

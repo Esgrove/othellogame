@@ -57,3 +57,6 @@ jobs:
 
       - name: Build
         run: chmod +x build.sh && ./build.sh
+
+      - name: Test
+        run: swift test

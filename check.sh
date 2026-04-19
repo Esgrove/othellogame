@@ -15,7 +15,7 @@ if [ "$BASH_PLATFORM" = windows ]; then
         go/othello_go.exe
         kotlin-native/othello_kotlin.exe
         rust/othello_rust.exe
-        swift/othello_swift.exe
+        #swift/othello_swift.exe
         kotlin/othello_kotlin.sh
         python/othello_python.sh
     )

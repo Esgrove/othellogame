@@ -2,7 +2,7 @@
 Class Player
 Defines one player for Othello
 Akseli Lukkarila
-2019-2025
+2019-2026
 """
 
 import random
@@ -12,34 +12,34 @@ from typing import Self
 try:
     from othello.board import Board
     from othello.colorprint import Color, print_color, print_error
-    from othello.models import Disk, Square, Move
+    from othello.models import Disk, Square, Move, PlayerType
     from othello.settings import PlayerSettings
 except ModuleNotFoundError:
     from board import Board
     from colorprint import Color, print_color, print_error
-    from models import Disk, Move, Square
+    from models import Disk, Move, PlayerType, Square
     from settings import PlayerSettings
 
 
 class Player:
     """Defines one player that can be either human or computer controlled."""
 
-    def __init__(self, disk: Disk, settings=PlayerSettings.default(), is_human=True):
+    def __init__(self, disk: Disk, settings=PlayerSettings.default(), player_type=PlayerType.HUMAN):
         self.can_play: bool = True
         self._disk: Disk = disk
-        self._human: bool = is_human
+        self._player_type: PlayerType = player_type
         self._rounds_played: int = 0
         self._settings: PlayerSettings = settings
 
     @classmethod
     def black(cls, settings: PlayerSettings) -> Self:
         """Shorthand to initialize a new player for black disks."""
-        return Player(Disk.BLACK, settings)
+        return Player(Disk.BLACK, settings, PlayerType.HUMAN)
 
     @classmethod
     def white(cls, settings: PlayerSettings) -> Self:
         """Shorthand to initialize a new player for white disks."""
-        return Player(Disk.WHITE, settings)
+        return Player(Disk.WHITE, settings, PlayerType.COMPUTER)
 
     def play_one_move(self, board: Board) -> str | None:
         """Play one round as this player."""
@@ -48,11 +48,11 @@ class Player:
 
         if moves := board.possible_moves(self._disk):
             self.can_play = True
-            if self._human and self._settings.show_helpers and not self._settings.check_mode:
+            if self.human() and self._settings.show_helpers and not self._settings.check_mode:
                 board.print_possible_moves(moves)
 
             chosen_move = (
-                self._get_human_move(moves) if self._human else self._get_computer_move(moves)
+                self._get_human_move(moves) if self.human() else self._get_computer_move(moves)
             )
             board.place_disk(chosen_move)
             if not self._settings.check_mode:
@@ -69,14 +69,30 @@ class Player:
 
         return None
 
+    def human(self) -> bool:
+        """Returns true if the player is human."""
+        return self._player_type.human()
+
+    def computer(self) -> bool:
+        """Returns true if the player is controlled by computer."""
+        return self._player_type.computer()
+
     def reset(self) -> None:
         """Reset player status for a new game."""
         self.can_play = True
         self._rounds_played = 0
 
-    def set_human(self, is_human: bool) -> None:
-        """Set the player as human or computer controlled."""
-        self._human = is_human
+    def set_human(self) -> None:
+        """Set the player as human controlled."""
+        self._player_type = PlayerType.HUMAN
+
+    def set_computer(self) -> None:
+        """Set the player as computer controlled."""
+        self._player_type = PlayerType.COMPUTER
+
+    def set_player_type(self, player_type: PlayerType) -> None:
+        """Set the player type."""
+        self._player_type = player_type
 
     def _get_computer_move(self, moves: list[Move]) -> Move:
         """Return move chosen by computer."""
@@ -119,7 +135,7 @@ class Player:
 
     def _type_string(self) -> str:
         """Return player type description string."""
-        return "Human   " if self._human else "Computer"
+        return str(self._player_type)
 
     def __str__(self) -> str:
         return f"{str(self._disk)} | {self._type_string()} | Moves: {self._rounds_played}"

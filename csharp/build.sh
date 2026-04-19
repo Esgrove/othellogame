@@ -8,6 +8,7 @@ Build Othello C# binary.
 OPTIONS: All options are optional
     -h | --help                 Display these instructions.
     -b | --build-type <type>    Specify build type. Default is 'Release'.
+    -t | --test                 Run tests.
     -v | --verbose              Display commands being executed.
 "
 
@@ -18,6 +19,7 @@ source "$DIR/../common.sh"
 
 init_options() {
     BUILD_TYPE="Release"
+    RUN_TESTS=false
 
     while [ $# -gt 0 ]; do
         case "$1" in
@@ -28,6 +30,9 @@ init_options() {
             -b | --build-type)
                 BUILD_TYPE="$2"
                 shift
+                ;;
+            -t | --test)
+                RUN_TESTS=true
                 ;;
             -v | --verbose)
                 set -x
@@ -114,6 +119,16 @@ build_project() {
     ./"$EXECUTABLE" -h || :
 }
 
+run_tests() {
+    cd "$PROJECT_PATH"
+    print_magenta "Running tests..."
+    dotnet test --verbosity normal
+}
+
 init_options "$@"
 update_version_info
 build_project
+
+if [ "$RUN_TESTS" = true ]; then
+    run_tests
+fi
