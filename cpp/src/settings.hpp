@@ -2,7 +2,7 @@
 // Settings header
 // Defines game and player settings.
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #pragma once

@@ -2,7 +2,7 @@
 // Class Board source
 // Defines the game board
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #include "board.hpp"

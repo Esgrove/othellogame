@@ -3,7 +3,7 @@
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 using Pastel;

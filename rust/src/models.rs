@@ -2,7 +2,7 @@
 //! Basic types and methods.
 //!
 //! Akseli Lukkarila
-//! 2019-2025
+//! 2019-2026
 
 use std::cmp::Ordering;
 use std::fmt;

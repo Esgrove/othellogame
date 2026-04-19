@@ -2,7 +2,7 @@
 // Settings
 // Defines game and player settings.
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 let MIN_BOARD_SIZE: Int = 4

@@ -2,7 +2,7 @@
 // Settings
 // Defines game settings
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 namespace Othello {

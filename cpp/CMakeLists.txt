@@ -1,10 +1,10 @@
 # Othello C++
 # Akseli Lukkarila
-# 2019-2025
+# 2019-2026
 cmake_minimum_required(VERSION 3.31)
 
 project("Othello C++"
-    VERSION 2.13.0
+    VERSION 2.13.1
     DESCRIPTION "A simple Othello CLI game implementation in C++"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX

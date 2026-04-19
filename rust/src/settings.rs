@@ -2,7 +2,7 @@
 //! Defines game settings
 //!
 //! Akseli Lukkarila
-//! 2019-2025
+//! 2019-2026
 
 use std::fmt;
 use std::fmt::Display;
