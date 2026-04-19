@@ -17,10 +17,6 @@ namespace Othello {
     public class Program {
         /// Gameplay loop and main logic.
         internal sealed class Othello {
-            private const int MinBoardSize = 4;
-            private const int MaxBoardSize = 10;
-            private const int DefaultBoardSize = 8;
-
             private Board _board;
             private readonly Player _playerBlack;
             private readonly Player _playerWhite;
@@ -152,7 +148,7 @@ namespace Othello {
                 Console.WriteLine(
                     winner == Disk.Empty
                         ? "The game ended in a tie...\n"
-                        : $"The winner is {winner.Name()}!\n"
+                        : $"The winner is {winner.DiskString()}!\n"
                 );
             }
 
@@ -173,22 +169,22 @@ namespace Othello {
 
             /// Ask and return the desired board size.
             private static int GetBoardSize() {
-                Console.Write($"Choose board size (default is {DefaultBoardSize}): ");
+                Console.Write($"Choose board size (default is {Settings.DefaultBoardSize}): ");
                 if (int.TryParse(Console.ReadLine(), out int boardSize)) {
-                    if (boardSize is < MinBoardSize or > MaxBoardSize) {
+                    if (boardSize is < Settings.MinBoardSize or > Settings.MaxBoardSize) {
                         ColorPrint.Warn(
-                            $"Limiting board size to valid range {MinBoardSize}...{MaxBoardSize}"
+                            $"Limiting board size to valid range {Settings.MinBoardSize}...{Settings.MaxBoardSize}"
                         );
                     }
-                    return Math.Max(MinBoardSize, Math.Min(boardSize, MaxBoardSize));
+                    return Math.Max(Settings.MinBoardSize, Math.Min(boardSize, Settings.MaxBoardSize));
                 }
-                ColorPrint.Warn($"Invalid size, defaulting to {DefaultBoardSize}...");
-                return DefaultBoardSize;
+                ColorPrint.Warn($"Invalid size, defaulting to {Settings.DefaultBoardSize}...");
+                return Settings.DefaultBoardSize;
             }
 
             public static int Main(string[] args) {
                 Argument<int?> sizePositional = new(name: "size") {
-                    Description = $"Optional board size ({MinBoardSize}..{MaxBoardSize})"
+                    Description = $\"Optional board size ({Settings.MinBoardSize}..{Settings.MaxBoardSize})\"
                 };
 
                 Option<bool> autoplayOption = new(name: "--autoplay", aliases: ["-a"]) {
@@ -290,7 +286,7 @@ namespace Othello {
                 if (size != null) {
                     // Try to read board size from command line args
                     int boardSize = size.Value;
-                    if (boardSize is < MinBoardSize or > MaxBoardSize) {
+                    if (boardSize is < Settings.MinBoardSize or > Settings.MaxBoardSize) {
                         ColorPrint.Error($"Unsupported board size: {boardSize}");
                         Environment.Exit(1);
                     }
@@ -299,7 +295,7 @@ namespace Othello {
                 }
 
                 if (autoplay || useDefaultSettings) {
-                    return DefaultBoardSize;
+                    return Settings.DefaultBoardSize;
                 }
 
                 // Otherwise ask the user for board size

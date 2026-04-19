@@ -114,7 +114,7 @@ class Othello(private val settings: Settings) {
         if (winner == Disk.Empty) {
             printBold("The game ended in a tie...\n")
         } else {
-            printBold("The winner is ${winner.name()}!\n")
+            printBold("The winner is ${winner.diskString()}!\n")
         }
     }
 

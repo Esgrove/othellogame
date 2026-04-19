@@ -14,6 +14,7 @@ const program = new Command()
     .description('A simple Othello CLI game implementation.')
     .argument('[SIZE]', `Optional board size (${MIN_BOARD_SIZE}..${MAX_BOARD_SIZE})`)
     .option('-a, --autoplay', 'Enable autoplay mode', false)
+    .option('-c, --check', 'Autoplay and only print result', false)
     .option('-d, --default', 'Play with default settings', false)
     .option('-l, --log', 'Show log after a game', false)
     .option('-n, --no-helpers', 'Hide disk placement hints', false)
@@ -92,7 +93,7 @@ try {
             process.exit(1);
         }
         console.log(chalk.blue(`Using board size: ${boardSize}`));
-    } else if (options.autoplay || options.default) {
+    } else if (options.autoplay || options.check || options.default) {
         boardSize = DEFAULT_BOARD_SIZE;
         console.log(chalk.blue(`Using default board size: ${boardSize}`));
     } else {
@@ -102,6 +103,7 @@ try {
     const settings = new Settings(
         boardSize,
         options.autoplay,
+        options.check,
         options.default,
         !options.helpers,
         options.log,

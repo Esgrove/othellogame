@@ -82,9 +82,9 @@ class Board(internal val size: Int) {
     }
 
     /** Returns a list of possible moves for the given player.*/
-    fun possibleMoves(color: Disk): List<Move> {
+    fun possibleMoves(disk: Disk): List<Move> {
         val moves = mutableListOf<Move>()
-        val other = color.opponent()
+        val other = disk.opponent()
         for (square in emptySquares) {
             var value = 0
             val directions = mutableListOf<Direction>()
@@ -101,14 +101,14 @@ class Board(internal val size: Int) {
                     pos += step
                 }
                 // Valid move only if a line of opposing disks ends in own disk
-                if (getSquare(pos) != color) {
+                if (getSquare(pos) != disk) {
                     continue
                 }
                 value += numSteps
                 directions.add(Direction(step, numSteps))
             }
             if (value > 0) {
-                moves.add(Move(square, value, color, directions))
+                moves.add(Move(square, value, disk, directions))
             }
         }
         return moves.sortedWith(

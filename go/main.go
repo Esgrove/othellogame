@@ -119,7 +119,7 @@ func runGame(_ *cobra.Command, args []string) {
 		defaultSettings,
 	)
 
-	game := othello.InitOthello(settings)
+	game := othello.NewOthello(settings)
 	game.Play()
 }
 

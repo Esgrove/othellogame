@@ -26,8 +26,8 @@ type Othello struct {
 	gameLog      []string
 }
 
-// InitOthello Initialize Othello game.
-func InitOthello(settings Settings) Othello {
+// NewOthello Initialize Othello game.
+func NewOthello(settings Settings) Othello {
 	return Othello{
 		board:        NewBoard(settings.BoardSize),
 		settings:     settings,

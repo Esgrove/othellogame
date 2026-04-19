@@ -26,9 +26,9 @@ class Disk(IntEnum):
         if self.value == self.EMPTY:
             return "_"
 
-        return get_color(self.name[0], self.color()) if color else self.name[0]
+        return get_color(self.name[0], self.disk_color()) if color else self.name[0]
 
-    def color(self) -> Color:
+    def disk_color(self) -> Color:
         """Return the associated colour for this disk."""
         match self:
             case self.BLACK:
@@ -54,7 +54,7 @@ class Disk(IntEnum):
 
     def __str__(self) -> str:
         """Format disk name string with color."""
-        return get_color(self.name, self.color())
+        return get_color(self.name, self.disk_color())
 
 
 class Step:

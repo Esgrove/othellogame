@@ -16,6 +16,10 @@ namespace Othello {
         bool testMode,
         bool useDefaultOptions
         ) {
+        public const int MinBoardSize = 4;
+        public const int MaxBoardSize = 10;
+        public const int DefaultBoardSize = 8;
+
         public int BoardSize { get; } = boardSize;
         public bool AutoplayMode { get; } = autoplayMode;
         public bool CheckMode { get; } = checkMode;

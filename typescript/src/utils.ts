@@ -3,6 +3,7 @@ import { PlayerSettings } from './player.ts';
 export class Settings {
     boardSize: number;
     autoplayMode: boolean;
+    checkMode: boolean;
     useDefaults: boolean;
     showHelpers: boolean;
     showLog: boolean;
@@ -12,6 +13,7 @@ export class Settings {
     constructor(
         boardSize: number,
         autoplayMode: boolean,
+        checkMode: boolean,
         useDefaults: boolean,
         showHelpers: boolean,
         showLog: boolean,
@@ -19,6 +21,7 @@ export class Settings {
     ) {
         this.boardSize = boardSize;
         this.autoplayMode = autoplayMode;
+        this.checkMode = checkMode;
         this.useDefaults = useDefaults;
         this.showHelpers = showHelpers;
         this.showLog = showLog;
@@ -27,12 +30,12 @@ export class Settings {
 
     // Static method to return default settings
     static default(): Settings {
-        return new Settings(8, false, false, true, false, false);
+        return new Settings(8, false, false, false, true, false, false);
     }
 
     // Method to convert settings to player-specific settings
     toPlayerSettings(): PlayerSettings {
-        return new PlayerSettings(this.showHelpers, this.testMode);
+        return new PlayerSettings(this.showHelpers, this.checkMode, this.testMode);
     }
 }
 

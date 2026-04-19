@@ -13,10 +13,6 @@ import (
 	"encoding/hex"
 )
 
-const MinBoardSize int = 4
-const MaxBoardSize int = 10
-const DefaultBoardSize int = 8
-
 // Calculate SHA256 hash for the given string.
 func calculateSHA256(input string) string {
 	data := []byte(input)

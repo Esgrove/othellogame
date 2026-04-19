@@ -12,6 +12,9 @@ import static othello.ColorPrint.printBold;
 import static othello.ColorPrint.printError;
 import static othello.ColorPrint.printColor;
 import static othello.ColorPrint.printWarn;
+import static othello.Settings.DEFAULT_BOARD_SIZE;
+import static othello.Settings.MAX_BOARD_SIZE;
+import static othello.Settings.MIN_BOARD_SIZE;
 
 @Command(
     name = "othello_java",
@@ -21,13 +24,10 @@ import static othello.ColorPrint.printWarn;
     customSynopsis = "java -jar othello_java [<options>] [<size>]\n"
 )
 public class Main implements Callable<Integer> {
-    private static final int MIN_BOARD_SIZE = 4;
-    private static final int MAX_BOARD_SIZE = 10;
-    private static final int DEFAULT_BOARD_SIZE = 8;
-
     @Parameters(
         index = "0",
-        description = "Optional board size (" + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE + ")",
+        description = "Optional board size (" + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE
+            + ")",
         paramLabel = "size",
         arity = "0..1"
     )

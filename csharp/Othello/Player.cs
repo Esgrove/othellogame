@@ -32,7 +32,7 @@ namespace Othello {
         /// Play one round as this player.
         public string? PlayOneMove(Board board) {
             if (!settings.CheckMode) {
-                Console.WriteLine($"Turn: {disk.Name()}");
+                Console.WriteLine($"Turn: {disk.DiskString()}");
             }
             List<Move>? moves = board.PossibleMoves(disk);
             if (moves.Count != 0) {
@@ -99,7 +99,7 @@ namespace Othello {
                 if (moves.Exists(x => square.Equals(x.Square))) {
                     return moves.Find(x => square.Equals(x.Square));
                 }
-                ColorPrint.Error($"  Can't place a {disk.Name()} disk in square {square}!");
+                ColorPrint.Error($"  Can't place a {disk.DiskString()} disk in square {square}!");
             }
         }
 
@@ -127,7 +127,7 @@ namespace Othello {
         }
 
         public override string ToString() {
-            return $"{disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
+            return $"{disk.DiskString()} | {TypeString()} | Moves: {_roundsPlayed}";
         }
     }
 }

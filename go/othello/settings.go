@@ -4,6 +4,10 @@ import (
 	"fmt"
 )
 
+const MinBoardSize int = 4
+const MaxBoardSize int = 10
+const DefaultBoardSize int = 8
+
 // Settings Game settings.
 type Settings struct {
 	BoardSize    int

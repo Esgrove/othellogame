@@ -13,6 +13,10 @@ public record Settings(
     boolean useDefaults
 ) {
 
+    public static final int MIN_BOARD_SIZE = 4;
+    public static final int MAX_BOARD_SIZE = 10;
+    public static final int DEFAULT_BOARD_SIZE = 8;
+
     public PlayerSettings toPlayerSettings() {
         return new PlayerSettings(this.checkMode, this.showHelpers, this.testMode);
     }

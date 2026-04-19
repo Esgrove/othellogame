@@ -270,7 +270,7 @@ namespace Othello {
                 return disk == Disk.White ? Disk.Black : Disk.White;
             }
 
-            public string Name() {
+            public string DiskString() {
                 return ColorPrint.Get(disk.ToString().ToUpperInvariant(), disk.DiskColor());
             }
 
