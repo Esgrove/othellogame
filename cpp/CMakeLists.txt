@@ -139,6 +139,7 @@ message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
     GIT_TAG 12.1.0
+    SYSTEM
 )
 FetchContent_MakeAvailable(fmt)
 
@@ -148,6 +149,7 @@ message(STATUS "Fetching cxxopts library")
 FetchContent_Declare(cxxopts
     GIT_REPOSITORY https://github.com/jarro2783/cxxopts
     GIT_TAG v3.3.1
+    SYSTEM
 )
 FetchContent_MakeAvailable(cxxopts)
 
@@ -197,11 +199,11 @@ endif()
 if(MSVC)
     # https://learn.microsoft.com/en-us/cpp/build/reference/permissive-standards-conformance?view=msvc-170
     target_compile_options(othello_cpp PRIVATE
-        /W4 /permissive-
+        /W4 /WX /permissive-
     )
 else()
     target_compile_options(othello_cpp PRIVATE
-        -Wall -Wextra -pedantic
+        -Wall -Wextra -Werror -pedantic
     )
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         target_compile_options(othello_cpp PRIVATE
