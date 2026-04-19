@@ -5,7 +5,7 @@ import kotlin.random.Random
 /** Defines one player that can be either human or computer controlled.*/
 class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
     internal var canPlay = true
-    internal var isHuman = true
+    internal var playerType = PlayerType.Human
     internal var roundsPlayed = 0
     private val random = Random
 
@@ -28,10 +28,10 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
         val moves = board.possibleMoves(disk)
         if (moves.isNotEmpty()) {
             canPlay = true
-            if (isHuman && settings.showHelpers && !settings.checkMode) {
+            if (human() && settings.showHelpers && !settings.checkMode) {
                 board.printPossibleMoves(moves)
             }
-            val chosenMove = if (isHuman) getHumanMove(moves) else getComputerMove(moves)
+            val chosenMove = if (human()) getHumanMove(moves) else getComputerMove(moves)
             board.placeDisk(chosenMove)
             if (!settings.checkMode) {
                 board.printScore()
@@ -55,14 +55,25 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
         canPlay = true
     }
 
+    /** Returns true if the player is human. */
+    fun human(): Boolean = playerType.human()
+
+    /** Returns true if the player is controlled by computer. */
+    fun computer(): Boolean = playerType.computer()
+
     /** Set the player as human controlled.*/
     fun setHuman() {
-        this.isHuman = true
+        this.playerType = PlayerType.Human
     }
 
     /** Set the player as computer controlled.*/
     fun setComputer() {
-        this.isHuman = false
+        this.playerType = PlayerType.Computer
+    }
+
+    /** Set the player type.*/
+    fun setPlayerType(playerType: PlayerType) {
+        this.playerType = playerType
     }
 
     /** Return move chosen by computer.*/
@@ -118,7 +129,7 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
     }
 
     /** Return player type description string.*/
-    internal fun typeString(): String = if (isHuman) "Human   " else "Computer"
+    internal fun typeString(): String = playerType.toString()
 
     override fun toString(): String = "${disk.diskString()} | ${typeString()} | Moves: $roundsPlayed"
 }

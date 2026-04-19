@@ -48,15 +48,15 @@ public class Othello {
             gameLog.clear();
         }
         if (settings.autoplayMode()) {
-            playerBlack.setHuman(false);
-            playerWhite.setHuman(false);
+            playerBlack.setComputer();
+            playerWhite.setComputer();
         } else if (settings.useDefaults()) {
-            playerWhite.setHuman(false);
+            playerWhite.setComputer();
         } else if (getAnswer("Would you like to play against the computer")) {
             if (getAnswer("Would you like to play as black or white", "b", "w")) {
-                playerWhite.setHuman(false);
+                playerWhite.setComputer();
             } else {
-                playerBlack.setHuman(false);
+                playerBlack.setComputer();
             }
         }
         if (!settings.checkMode()) {

@@ -61,16 +61,16 @@ namespace Othello {
 
                 if (_settings.AutoplayMode) {
                     // Computer plays both
-                    _playerWhite.SetHuman(false);
-                    _playerBlack.SetHuman(false);
+                    _playerWhite.SetComputer();
+                    _playerBlack.SetComputer();
                 } else if (_settings.UseDefaults) {
                     // Default: play as black against white computer player
-                    _playerWhite.SetHuman(false);
+                    _playerWhite.SetComputer();
                 } else if (GetAnswer("Would you like to play against the computer")) {
                     if (GetAnswer("Would you like to play as black or white", "b", "w")) {
-                        _playerWhite.SetHuman(false);
+                        _playerWhite.SetComputer();
                     } else {
-                        _playerBlack.SetHuman(false);
+                        _playerBlack.SetComputer();
                     }
                 }
 

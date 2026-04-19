@@ -4,7 +4,7 @@ Class Othello and main
 Play Othello (Reversi) on the command line
 https://en.wikipedia.org/wiki/Reversi
 Akseli Lukkarila
-2019-2025
+2019-2026
 """
 
 import sys
@@ -61,16 +61,16 @@ class Othello:
 
         if self.settings.autoplay_mode:
             # Computer plays both
-            self.player_white.set_human(False)
-            self.player_black.set_human(False)
+            self.player_white.set_computer()
+            self.player_black.set_computer()
         elif self.settings.use_defaults:
             # Default: play as black against white computer player
-            self.player_white.set_human(False)
+            self.player_white.set_computer()
         elif self.get_answer("Would you like to play against the computer"):
             if self.get_answer("Would you like to play as black or white", yes="b", no="w"):
-                self.player_white.set_human(False)
+                self.player_white.set_computer()
             else:
-                self.player_black.set_human(False)
+                self.player_black.set_computer()
 
         if not self.settings.check_mode:
             print_bold("\nPlayers:")

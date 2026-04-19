@@ -12,6 +12,15 @@ VERSION_HEADER="$PROJECT_PATH/Sources/VersionInfo/versionInfo.swift"
 # Define poject version number here since Swift Package Manager does not provide a way :(
 VERSION_NUMBER="2.7.0"
 
+RUN_TESTS=false
+for arg in "$@"; do
+    case "$arg" in
+        -t | --test)
+            RUN_TESTS=true
+            ;;
+    esac
+done
+
 print_magenta "Building Othello Swift..."
 
 echo "Writing version information..."
@@ -52,3 +61,9 @@ print_magenta "Version:"
 ./"$executable" --version
 print_magenta "Usage:"
 ./"$executable" -h || :
+
+if [ "$RUN_TESTS" = true ]; then
+    cd "$PROJECT_PATH"
+    print_magenta "Running tests..."
+    swift test
+fi

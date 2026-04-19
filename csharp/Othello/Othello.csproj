@@ -37,6 +37,9 @@
     <Compile Remove="Program.cs" />
   </ItemGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Othello.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

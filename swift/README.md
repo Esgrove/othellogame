@@ -37,6 +37,14 @@ Or using script:
 ./build.sh
 ```
 
+## Tests
+
+Tests use [Swift Testing](https://developer.apple.com/documentation/testing).
+
+```shell
+swift test
+```
+
 ## Format
 
 ```shell

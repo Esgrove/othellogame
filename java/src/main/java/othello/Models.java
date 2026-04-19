@@ -6,6 +6,27 @@ import java.util.List;
 public class Models {
 
     /**
+     * Player can be controlled either by a human or computer.
+     */
+    public enum PlayerType {
+        HUMAN,
+        COMPUTER;
+
+        public boolean human() {
+            return this == HUMAN;
+        }
+
+        public boolean computer() {
+            return this == COMPUTER;
+        }
+
+        @Override
+        public String toString() {
+            return this == HUMAN ? "Human   " : "Computer";
+        }
+    }
+
+    /**
      * Represents one game piece or lack of one.
      */
     public enum Disk {

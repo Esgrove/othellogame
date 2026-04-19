@@ -1,6 +1,6 @@
 import pytest
 
-from othello.models import Disk, Square, Move
+from othello.models import Disk, Square, Move, Step, Direction
 
 
 @pytest.fixture
@@ -84,3 +84,54 @@ def test_square_addition(square):
     assert square + square == square_two
     square_two += square_minus_one
     assert square_two == square
+
+
+def test_step_directions():
+    origin = Square(1, 1)
+    step_directions = [
+        Step(-1, -1),
+        Step(-1, 0),
+        Step(-1, 1),
+        Step(0, -1),
+        Step(0, 1),
+        Step(1, -1),
+        Step(1, 0),
+        Step(1, 1),
+    ]
+    expected_results = [
+        Square(0, 0),
+        Square(0, 1),
+        Square(0, 2),
+        Square(1, 0),
+        Square(1, 2),
+        Square(2, 0),
+        Square(2, 1),
+        Square(2, 2),
+    ]
+    for step, expected in zip(step_directions, expected_results):
+        result = origin + step
+        assert result == expected, f"Step direction: {step}"
+
+
+def test_disk_board_char():
+    assert Disk.BLACK.board_char(color=False) == "B"
+    assert Disk.EMPTY.board_char(color=False) == "_"
+    assert Disk.WHITE.board_char(color=False) == "W"
+
+
+def test_move_log_entry():
+    b = Move(
+        square=Square(3, 2),
+        disk=Disk.BLACK,
+        value=10,
+        directions=[Direction(Step(1, 0), 10)],
+    )
+    assert b.log_entry() == "B:(3,2),10"
+
+    w = Move(
+        square=Square(0, 0),
+        disk=Disk.WHITE,
+        value=1,
+        directions=[Direction(Step(1, 0), 1)],
+    )
+    assert w.log_entry() == "W:(0,0),1"

@@ -8,7 +8,21 @@ source "$DIR/common.sh"
 
 cd "$DIR"
 
-find . -mindepth 2 -maxdepth 2 -name "build.sh" -print -exec bash {} \;
+RUN_TESTS=false
+for arg in "$@"; do
+    case "$arg" in
+        -t | --test)
+            RUN_TESTS=true
+            ;;
+    esac
+done
+
+TEST_FLAG=""
+if [ "$RUN_TESTS" = true ]; then
+    TEST_FLAG="--test"
+fi
+
+find . -mindepth 2 -maxdepth 2 -name "build.sh" -print -exec bash {} $TEST_FLAG \;
 
 echo ""
 print_magenta "Checking versions:"
@@ -17,7 +31,7 @@ if [ "$BASH_PLATFORM" = windows ]; then
     ./csharp/othello_csharp.exe --version
     ./go/othello_go.exe --version
     ./rust/othello_rust.exe --version
-    ./swift/othello_swift.exe --version
+    #./swift/othello_swift.exe --version
     ./kotlin-native/othello_kotlin.exe --version
 else
     ./cpp/othello_cpp --version

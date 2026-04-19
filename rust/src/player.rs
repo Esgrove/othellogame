@@ -101,7 +101,7 @@ impl Player {
     }
 
     /// Returns true if player is controlled by computer.
-    #[allow(unused)]
+    #[allow(dead_code)]
     pub fn computer(&self) -> bool {
         self.player_type.computer()
     }
@@ -112,7 +112,7 @@ impl Player {
     }
 
     /// Set the player as human controlled.
-    #[allow(unused)]
+    #[allow(dead_code)]
     pub const fn set_human(&mut self) {
         self.set_player_type(PlayerType::Human);
     }
@@ -213,6 +213,7 @@ impl PlayerType {
     }
 
     /// Check if the player is controlled by a computer.
+    #[allow(dead_code)]
     pub fn computer(&self) -> bool {
         *self == Self::Computer
     }

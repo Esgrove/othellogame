@@ -13,8 +13,8 @@ import (
 	"encoding/hex"
 )
 
-// Calculate SHA256 hash for the given string.
-func calculateSHA256(input string) string {
+// CalculateSHA256 returns the SHA256 hash for the given string.
+func CalculateSHA256(input string) string {
 	data := []byte(input)
 	hash := sha256.Sum256(data)
 	hashString := hex.EncodeToString(hash[:])

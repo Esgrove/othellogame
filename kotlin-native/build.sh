@@ -8,6 +8,15 @@ source "$DIR/../common.sh"
 
 cd "$DIR"
 
+RUN_TESTS=false
+for arg in "$@"; do
+    case "$arg" in
+        -t | --test)
+            RUN_TESTS=true
+            ;;
+    esac
+done
+
 print_magenta "Building Othello Kotlin..."
 
 rm -rf build/bin/native/releaseExecutable/*.kexe
@@ -30,3 +39,8 @@ print_magenta "Version:"
 ./"$executable" --version
 print_magenta "Usage:"
 ./"$executable" -h || :
+
+if [ "$RUN_TESTS" = true ]; then
+    print_magenta "Running tests..."
+    ./gradlew allTests
+fi

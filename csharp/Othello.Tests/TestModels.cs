@@ -64,5 +64,38 @@ namespace Othello.Tests {
 
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void DiskBoardChar() {
+            Assert.Equal("B", Disk.Black.BoardChar(color: false));
+            Assert.Equal("_", Disk.Empty.BoardChar(color: false));
+            Assert.Equal("W", Disk.White.BoardChar(color: false));
+        }
+
+        [Fact]
+        public void DiskOpponent() {
+            Assert.Equal(Disk.White, Disk.Black.Opponent());
+            Assert.Equal(Disk.Empty, Disk.Empty.Opponent());
+            Assert.Equal(Disk.Black, Disk.White.Opponent());
+        }
+
+        [Fact]
+        public void MoveLogEntry() {
+            Move b = new(
+                new Square(3, 2),
+                10,
+                Disk.Black,
+                [new Direction(new Step(1, 0), 10)]
+            );
+            Assert.Equal("B:(3,2),10", b.LogEntry());
+
+            Move w = new(
+                new Square(0, 0),
+                1,
+                Disk.White,
+                [new Direction(new Step(1, 0), 1)]
+            );
+            Assert.Equal("W:(0,0),1", w.LogEntry());
+        }
     }
 }

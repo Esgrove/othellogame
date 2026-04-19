@@ -59,6 +59,12 @@ Check binary installation target:
 go list -f '{{.Target}}'
 ```
 
+## Tests
+
+```shell
+go test ./othello/ -v
+```
+
 ## Format code
 
 Using [gofmt](https://pkg.go.dev/cmd/gofmt)

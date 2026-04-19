@@ -11,7 +11,8 @@ class PlayerTest {
         val player = Player.default()
 
         assertEquals(Disk.Black, player.disk)
-        assertTrue(player.isHuman)
+        assertTrue(player.human())
+        assertFalse(player.computer())
         assertTrue(player.canPlay)
         assertEquals(0, player.roundsPlayed)
         assertEquals(PlayerSettings.default(), player.settings)
@@ -28,16 +29,18 @@ class PlayerTest {
     }
 
     @Test
-    fun setHuman() {
+    fun setHumanAndComputer() {
         val player = Player.default()
 
-        assertTrue(player.isHuman)
+        assertTrue(player.human())
 
         player.setComputer()
-        assertFalse(player.isHuman)
+        assertTrue(player.computer())
+        assertFalse(player.human())
 
         player.setHuman()
-        assertTrue(player.isHuman)
+        assertTrue(player.human())
+        assertFalse(player.computer())
     }
 
     @Test
