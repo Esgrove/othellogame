@@ -82,12 +82,7 @@ message(STATUS "Build name: ${APP_BUILD_NAME}")
 
 if(WIN32)
     # Set OpenSSL search path for Windows
-    execute_process(
-        COMMAND powershell.exe -Command "[System.Environment]::GetEnvironmentVariable('USERPROFILE')"
-        OUTPUT_VARIABLE USERPROFILE
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    set(SCOOP_OPENSSL_PATH "${USERPROFILE}/scoop/apps/openssl/current")
+    set(SCOOP_OPENSSL_PATH "$ENV{USERPROFILE}/scoop/apps/openssl/current")
     if(EXISTS "${SCOOP_OPENSSL_PATH}")
         set(OPENSSL_ROOT_DIR "${SCOOP_OPENSSL_PATH}")
         set(OPENSSL_INCLUDE_DIR "${SCOOP_OPENSSL_PATH}/include")
