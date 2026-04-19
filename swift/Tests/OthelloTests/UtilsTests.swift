@@ -1,6 +1,5 @@
-import Testing
-
 @testable import OthelloLib
+import Testing
 
 @Test func calculateSha256Simple() {
     let input = "test"
@@ -16,19 +15,19 @@ import Testing
 
 @Test func calculateSha256FullLog() {
     let input = """
-        01: B:(0,1),1;____BBB__BW_____
-        02: W:(0,0),1;W___BWB__BW_____
-        03: B:(1,0),1;WB__BBB__BW_____
-        04: W:(0,2),2;WB__WBB_WWW_____
-        05: B:(0,3),1;WB__WBB_WBW_B___
-        06: W:(2,0),3;WWW_WWW_WBW_B___
-        07: B:(3,0),1;WWWBWWB_WBW_B___
-        08: W:(1,3),1;WWWBWWB_WWW_BW__
-        09: B:(2,3),2;WWWBWWB_WWB_BBB_
-        10: W:(3,2),2;WWWBWWW_WWWWBBB_
-        11: B:(3,1),1;WWWBWWWBWWBWBBB_
-        12: W:(3,3),1;WWWBWWWBWWWWBBBW
-        """
+    01: B:(0,1),1;____BBB__BW_____
+    02: W:(0,0),1;W___BWB__BW_____
+    03: B:(1,0),1;WB__BBB__BW_____
+    04: W:(0,2),2;WB__WBB_WWW_____
+    05: B:(0,3),1;WB__WBB_WBW_B___
+    06: W:(2,0),3;WWW_WWW_WBW_B___
+    07: B:(3,0),1;WWWBWWB_WBW_B___
+    08: W:(1,3),1;WWWBWWB_WWW_BW__
+    09: B:(2,3),2;WWWBWWB_WWB_BBB_
+    10: W:(3,2),2;WWWBWWW_WWWWBBB_
+    11: B:(3,1),1;WWWBWWWBWWBWBBB_
+    12: W:(3,3),1;WWWBWWWBWWWWBBBW
+    """
     let expected = "ad4679949110ed7997aa1bf09441a7eb491b498189c03685ffdd6ddbb70e3c22"
     #expect(calculateSha256(input) == expected)
 }

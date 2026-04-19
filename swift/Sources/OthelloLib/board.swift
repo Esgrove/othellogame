@@ -158,7 +158,7 @@ class Board {
 
     /// Count and return the number of black and white disks.
     private func playerScores() -> (black: Int, white: Int) {
-        let counts = self.board.reduce(into: (black: 0, white: 0)) { result, disk in
+        self.board.reduce(into: (black: 0, white: 0)) { result, disk in
             switch disk {
                 case .white:
                     result.white += 1
@@ -168,7 +168,6 @@ class Board {
                     break
             }
         }
-        return counts
     }
 
     /// Returns the total score.

@@ -1,6 +1,5 @@
-import Testing
-
 @testable import OthelloLib
+import Testing
 
 @Test func boardCanPlay() {
     let board = Board(size: 8)

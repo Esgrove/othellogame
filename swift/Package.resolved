@@ -1,5 +1,5 @@
 {
-  "originHash" : "5ebe0976810ec7b1042be789bd47db1cd87634704d776830d0378da90d1633d6",
+  "originHash" : "2a2c6256c0107392dd2338bc35ca92c55e3c2f91b97903128feb0e8f23623aef",
   "pins" : [
     {
       "identity" : "colorizeswift",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
       "state" : {
-        "revision" : "40d25bbb2fc5b557a9aa8512210bded327c0f60d",
-        "version" : "1.5.0"
+        "revision" : "eb50cbd14606a9161cbc5d452f18797c90ef0bab",
+        "version" : "1.7.0"
       }
     },
     {

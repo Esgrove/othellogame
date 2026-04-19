@@ -1,6 +1,5 @@
-import Testing
-
 @testable import OthelloLib
+import Testing
 
 @Test func newPlayer() {
     let settings = PlayerSettings(showHelpers: true, checkMode: false, testMode: true)

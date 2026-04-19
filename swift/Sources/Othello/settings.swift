@@ -19,7 +19,7 @@ struct Settings: CustomStringConvertible {
     var testMode: Bool
     var useDefaults: Bool
 
-    // Get player setting values from overall game settings.
+    /// Get player setting values from overall game settings.
     func toPlayerSettings() -> PlayerSettings {
         PlayerSettings(
             checkMode: self.checkMode,

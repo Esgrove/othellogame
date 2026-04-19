@@ -1,6 +1,5 @@
-import Testing
-
 @testable import OthelloLib
+import Testing
 
 @Test func stepDirections() {
     let origin = Square(x: 1, y: 1)
