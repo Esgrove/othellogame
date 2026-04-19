@@ -15,6 +15,9 @@ case "$(uname -s)" in
     "MSYS"*)
         BASH_PLATFORM="windows"
         ;;
+    "Windows_NT"*)
+        BASH_PLATFORM="windows"
+        ;;
     *)
         BASH_PLATFORM="linux"
         ;;
