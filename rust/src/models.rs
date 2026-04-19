@@ -2,7 +2,7 @@
 //! Basic types and methods.
 //!
 //! Akseli Lukkarila
-//! 2019-2025
+//! 2019-2026
 
 use std::cmp::Ordering;
 use std::fmt;
@@ -66,11 +66,11 @@ impl Disk {
 
     /// Returns a single character identifier string for the given disk.
     pub fn board_char_with_color(self) -> ColoredString {
-        self.board_char().color(self.color())
+        self.board_char().color(self.disk_color())
     }
 
     /// Return the associated colour for this disk.
-    pub const fn color(self) -> Color {
+    pub const fn disk_color(self) -> Color {
         match self {
             Self::Black => Color::Magenta,
             Self::Empty => Color::White,
@@ -81,9 +81,9 @@ impl Disk {
     /// Returns the disk formatted as a coloured string.
     pub fn disk_string(self) -> ColoredString {
         match self {
-            Self::Black => "BLACK".color(self.color()),
-            Self::Empty => "EMPTY".color(self.color()),
-            Self::White => "WHITE".color(self.color()),
+            Self::Black => "BLACK".color(self.disk_color()),
+            Self::Empty => "EMPTY".color(self.disk_color()),
+            Self::White => "WHITE".color(self.disk_color()),
         }
     }
 

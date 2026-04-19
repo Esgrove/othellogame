@@ -22,7 +22,7 @@ public class Board {
     private final Set<Square> emptySquares;
     private final List<Integer> indices;
 
-    // Store all possible step directions on board
+    /** All possible step directions for a square on the board. */
     public static final Step[] stepDirections = new Step[] {
         new Step(-1, -1),
         new Step(-1, 0),
@@ -52,7 +52,8 @@ public class Board {
             .boxed()
             .toList();
 
-        // Keep track of empty squares on board to avoid checking already filled positions
+        // Keep track of empty squares on board to avoid checking already filled
+        // positions
         this.emptySquares = new HashSet<>();
         for (int y : indices) {
             for (int x : indices) {
@@ -82,9 +83,9 @@ public class Board {
     }
 
     /** Returns a list of possible moves for the given player. */
-    public List<Move> possibleMoves(Disk color) {
+    public List<Move> possibleMoves(Disk disk) {
         List<Move> moves = new ArrayList<>();
-        Disk other = color.opponent();
+        Disk other = disk.opponent();
         for (Square square : emptySquares) {
             int value = 0;
             List<Direction> directions = new ArrayList<>();
@@ -101,14 +102,14 @@ public class Board {
                     pos = pos.add(step);
                 }
                 // Valid move only if a line of opposing disks ends in own disk
-                if (getSquare(pos) != color) {
+                if (getSquare(pos) != disk) {
                     continue;
                 }
                 value += numSteps;
                 directions.add(new Direction(step, numSteps));
             }
             if (value > 0) {
-                moves.add(new Move(square, value, color, directions));
+                moves.add(new Move(square, value, disk, directions));
             }
         }
         if (!moves.isEmpty()) {
@@ -117,7 +118,9 @@ public class Board {
         return moves;
     }
 
-    /** Print board with available move coordinates and the resulting points gained. */
+    /**
+     * Print board with available move coordinates and the resulting points gained.
+     */
     public void printPossibleMoves(Collection<Move> moves) {
         printColor("  Possible moves (" + moves.size() + "):", AnsiColor.YELLOW);
         // Convert board from Disk enums to strings
@@ -182,7 +185,9 @@ public class Board {
         return x >= 0 && x < size && y >= 0 && y < size;
     }
 
-    /** Returns the state of the board (empty, white, black) at the given coordinates. */
+    /**
+     * Returns the state of the board (empty, white, black) at the given coordinates.
+     */
     private Disk getSquare(Square square) {
         int x = square.x();
         int y = square.y();

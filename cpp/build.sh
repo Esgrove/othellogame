@@ -9,7 +9,7 @@ OPTIONS: All options are optional
     -h | --help                 Display these instructions.
     -b | --build-type <type>    Specify build type for CMake. Default is 'Release'.
     -c | --clean                Clean temporary files before building.
-    -m | --msvc                 Use Visual Studio generator on Windows.
+    -n | --ninja                Use Ninja generator instead of Visual Studio on Windows.
     -t | --test                 Build and run tests.
     -v | --verbose              Display commands being executed.
 "
@@ -25,7 +25,7 @@ init_options() {
     BUILD_TESTS_FLAG=OFF
     BUILD_TYPE="Release"
     CLEAN=false
-    USE_VISUAL_STUDIO=false
+    USE_NINJA=false
 
     while [ $# -gt 0 ]; do
         case "$1" in
@@ -42,8 +42,8 @@ init_options() {
                 print_magenta "Cleaning..."
                 git -C "$DIR" clean -fdx
                 ;;
-            -m | --msvc)
-                USE_VISUAL_STUDIO=true
+            -n | --ninja)
+                USE_NINJA=true
                 ;;
             -t | --test)
                 BUILD_TARGET=othello_tests
@@ -63,7 +63,7 @@ init_options() {
 
     PROJECT_PATH="$REPO_ROOT/cpp"
     CMAKE_BUILD_DIR="$PROJECT_PATH/cmake-build-$BASH_PLATFORM"
-    if [ "$BASH_PLATFORM" = windows ] && [ "$USE_VISUAL_STUDIO" = true ]; then
+    if [ "$BASH_PLATFORM" = windows ] && [ "$USE_NINJA" = false ]; then
         CMAKE_BUILD_DIR+="-vs"
     else
         CMAKE_BUILD_DIR+="-ninja"
@@ -129,7 +129,7 @@ build_project() {
 
     print_magenta "Building Othello C++..."
 
-    if [ "$BASH_PLATFORM" = windows ] && [ "$USE_VISUAL_STUDIO" = true ]; then
+    if [ "$BASH_PLATFORM" = windows ] && [ "$USE_NINJA" = false ]; then
         echo "Generating Visual Studio project..."
         if ! generate_msvc_project; then
             print_yellow "CMake failed, removing existing cache and trying again..."

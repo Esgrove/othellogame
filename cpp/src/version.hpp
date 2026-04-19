@@ -2,7 +2,7 @@
 // Version header
 // Version information is set in preprocessor definitions
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #pragma once

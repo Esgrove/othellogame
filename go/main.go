@@ -3,7 +3,7 @@
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 package main
@@ -119,7 +119,7 @@ func runGame(_ *cobra.Command, args []string) {
 		defaultSettings,
 	)
 
-	game := othello.InitOthello(settings)
+	game := othello.NewOthello(settings)
 	game.Play()
 }
 

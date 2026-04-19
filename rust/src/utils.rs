@@ -2,7 +2,7 @@
 //! Helper utilities.
 //!
 //! Akseli Lukkarila
-//! 2019-2025
+//! 2019-2026
 
 use sha2::{Digest, Sha256};
 

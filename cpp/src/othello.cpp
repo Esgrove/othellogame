@@ -3,7 +3,7 @@
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #include "othello.hpp"
@@ -55,8 +55,9 @@ void Othello::init_game()
         // Computer plays both
         player_black.set_computer();
         player_white.set_computer();
-    } else if (!this->settings.use_defaults
-               && get_answer("Would you like to play against the computer"))
+    } else if (
+        !this->settings.use_defaults && get_answer("Would you like to play against the computer")
+    )
     {
         if (get_answer("Would you like to play as black or white", "b", "w")) {
             player_white.set_computer();

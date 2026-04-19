@@ -3,7 +3,7 @@
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #include "cxxopts.hpp"
@@ -94,8 +94,7 @@ int main(const int argc, const char* argv[])
              show_log,
              test_mode,
              use_defaults,
-             usage]
-            = Args(argc, argv);
+             usage] = Args(argc, argv);
 
         if (version) {
             othello::print_version();

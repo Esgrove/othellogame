@@ -2,7 +2,7 @@
 // Utils header
 // Helper utilities for Othello game
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #pragma once

@@ -3,7 +3,7 @@
 // Play Othello (Reversi) on the command line
 // https://en.wikipedia.org/wiki/Reversi
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 package othello
@@ -26,8 +26,8 @@ type Othello struct {
 	gameLog      []string
 }
 
-// InitOthello Initialize Othello game.
-func InitOthello(settings Settings) Othello {
+// NewOthello Initialize Othello game.
+func NewOthello(settings Settings) Othello {
 	return Othello{
 		board:        NewBoard(settings.BoardSize),
 		settings:     settings,

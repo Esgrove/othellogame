@@ -137,7 +137,7 @@ fun Disk.boardChar(color: Boolean = true): String = when (this) {
 }
 
 /** Returns the disk formatted as a coloured string. */
-fun Disk.name(): String = getColor(this.name.uppercase(), this.diskColor())
+fun Disk.diskString(): String = getColor(this.name.uppercase(), this.diskColor())
 
 /** Returns the opposing disk colour. */
 fun Disk.opponent(): Disk = when (this) {

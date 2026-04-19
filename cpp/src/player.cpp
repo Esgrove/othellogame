@@ -2,7 +2,7 @@
 // Class Player source
 // Defines one player for Othello
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #include "player.hpp"
@@ -147,6 +147,7 @@ Square Player::get_square()
     }
 }
 
+/// Return player type description string.
 std::string Player::type_string() const
 {
     switch (this->player_type) {

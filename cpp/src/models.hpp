@@ -2,7 +2,7 @@
 // Models header
 // Basic types and methods.
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #pragma once

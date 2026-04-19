@@ -2,11 +2,12 @@
 // Player
 // Defines one player for Othello
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 import Foundation
 
+/// Defines one player that can be either human or computer controlled.
 class Player {
     var canPlay: Bool = true
     var disk: Disk

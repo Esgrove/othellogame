@@ -2,7 +2,7 @@
 // Colorprint header
 // Interface for colored printing
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #pragma once

@@ -2,7 +2,7 @@
 Class Board
 Defines the game board
 Akseli Lukkarila
-2019-2025
+2019-2026
 """
 
 try:
@@ -117,7 +117,7 @@ class Board:
         black, white = self._player_scores()
         print(f"\n{self}")
         print(
-            f"Score: {get_color(str(black), Disk.BLACK.color())} | {get_color(str(white), Disk.WHITE.color())}"
+            f"Score: {get_color(str(black), Disk.BLACK.disk_color())} | {get_color(str(white), Disk.WHITE.disk_color())}"
         )
 
     def result(self) -> Disk:

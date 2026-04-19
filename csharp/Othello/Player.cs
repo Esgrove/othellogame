@@ -2,7 +2,7 @@
 // Class Player
 // Defines one player for Othello
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 using System;
@@ -32,7 +32,7 @@ namespace Othello {
         /// Play one round as this player.
         public string? PlayOneMove(Board board) {
             if (!settings.CheckMode) {
-                Console.WriteLine($"Turn: {disk.Name()}");
+                Console.WriteLine($"Turn: {disk.DiskString()}");
             }
             List<Move>? moves = board.PossibleMoves(disk);
             if (moves.Count != 0) {
@@ -95,11 +95,11 @@ namespace Othello {
         private Move GetHumanMove(List<Move> moves) {
             while (true) {
                 Square square = GetSquare();
-                // Check if the given square is one of the possible moves
+                // Check that the chosen square is actually one of the possible moves
                 if (moves.Exists(x => square.Equals(x.Square))) {
                     return moves.Find(x => square.Equals(x.Square));
                 }
-                ColorPrint.Error($"  Can't place a {disk.Name()} disk in square {square}!");
+                ColorPrint.Error($"  Can't place a {disk.DiskString()} disk in square {square}!");
             }
         }
 
@@ -127,7 +127,7 @@ namespace Othello {
         }
 
         public override string ToString() {
-            return $"{disk.Name()} | {TypeString()} | Moves: {_roundsPlayed}";
+            return $"{disk.DiskString()} | {TypeString()} | Moves: {_roundsPlayed}";
         }
     }
 }

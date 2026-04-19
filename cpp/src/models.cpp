@@ -2,7 +2,7 @@
 // Models source
 // Basic types and methods.
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 #include "models.hpp"

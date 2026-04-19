@@ -26,14 +26,17 @@ public class Player {
         this.settings = settings;
     }
 
+    /** Shorthand to initialize a new player for black disks. */
     public static Player black(PlayerSettings settings) {
         return new Player(Disk.BLACK, settings);
     }
 
+    /** Shorthand to initialize a new player for white disks. */
     public static Player white(PlayerSettings settings) {
         return new Player(Disk.WHITE, settings);
     }
 
+    /** Return true if player can make a move. */
     public boolean canPlay() {
         return canPlay;
     }

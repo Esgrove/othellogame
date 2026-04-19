@@ -2,7 +2,7 @@
 // Models
 // Basic types and methods
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 import ColorizeSwift
@@ -17,14 +17,14 @@ enum Disk: Int, CustomStringConvertible {
     func boardChar(color: Bool = true) -> String {
         let character = (self == .empty) ? "_" : (self == .black ? "B" : "W")
         if color {
-            return character.foregroundColor(self.color())
+            return character.foregroundColor(self.diskColor())
         } else {
             return character
         }
     }
 
     /// Return the associated color for this disk.
-    func color() -> TerminalColor {
+    func diskColor() -> TerminalColor {
         switch self {
             case .black:
                 TerminalColor.magenta1
@@ -50,9 +50,9 @@ enum Disk: Int, CustomStringConvertible {
     var description: String {
         switch self {
             case .black:
-                "BLACK".foregroundColor(self.color())
+                "BLACK".foregroundColor(self.diskColor())
             case .white:
-                "WHITE".foregroundColor(self.color())
+                "WHITE".foregroundColor(self.diskColor())
             case .empty:
                 "EMPTY"
         }
@@ -75,22 +75,33 @@ struct Square {
     }
 }
 
+/// Represents one step direction on the board.
+struct Step {
+    var x: Int
+    var y: Int
+
+    init(_ x: Int, _ y: Int) {
+        self.x = x
+        self.y = y
+    }
+}
+
 /// Represents a continuous line of squares in one direction.
 ///
 /// The `step` field determines the direction on the board,
 /// and `count` describes how many consecutive squares in that direction there are.
 struct Direction {
     /// Direction of travel on the board
-    var step: Square
+    var step: Step
     /// Number of consecutive same colour squares along this direction
     var count: Int
 
-    init(_ step: Square, _ count: Int) {
+    init(_ step: Step, _ count: Int) {
         self.step = step
         self.count = count
     }
 
-    func unpack() -> (Square, Int) {
+    func unpack() -> (Step, Int) {
         (self.step, self.count)
     }
 }
@@ -150,6 +161,14 @@ extension Square {
     }
 
     static func += (left: inout Square, right: Square) {
+        left = left + right
+    }
+
+    static func + (left: Square, right: Step) -> Square {
+        Square(left.x + right.x, left.y + right.y)
+    }
+
+    static func += (left: inout Square, right: Step) {
         left = left + right
     }
 }

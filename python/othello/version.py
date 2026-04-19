@@ -2,7 +2,7 @@
 Version
 Version information definitions
 Akseli Lukkarila
-2019-2025
+2019-2026
 """
 
 # Updated by build script, do not edit manually!

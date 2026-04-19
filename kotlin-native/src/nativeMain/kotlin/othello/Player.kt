@@ -23,7 +23,7 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
     /** Play one round as this player.*/
     fun playOneMove(board: Board): String? {
         if (!settings.checkMode) {
-            println("Turn: ${disk.name()}")
+            println("Turn: ${disk.diskString()}")
         }
         val moves = board.possibleMoves(disk)
         if (moves.isNotEmpty()) {
@@ -92,7 +92,7 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
             if (validMove != null) {
                 return validMove
             }
-            printError("  Can't place a ${disk.name()} disk in square $square")
+            printError("  Can't place a ${disk.diskString()} disk in square $square")
         }
     }
 
@@ -120,5 +120,5 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
     /** Return player type description string.*/
     internal fun typeString(): String = if (isHuman) "Human   " else "Computer"
 
-    override fun toString(): String = "${disk.name()} | ${typeString()} | Moves: $roundsPlayed"
+    override fun toString(): String = "${disk.diskString()} | ${typeString()} | Moves: $roundsPlayed"
 }

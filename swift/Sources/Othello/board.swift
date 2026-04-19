@@ -2,16 +2,29 @@
 // Board
 // Defines the game board
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
+
+private let up = 1
+private let down = -1
+private let left = -1
+private let right = 1
+private let still = 0
 
 /// Handles game board state and logic.
 class Board {
     let size: Int
     var board: [Disk]
     var emptySquares = Set<Square>()
-    let stepDirections = [
-        [0, -1], [0, 1], [1, 0], [-1, 0], [1, -1], [1, 1], [-1, 1], [-1, -1],
+    let stepDirections: [Step] = [
+        Step(down, left),
+        Step(down, right),
+        Step(down, still),
+        Step(still, left),
+        Step(still, right),
+        Step(up, left),
+        Step(up, right),
+        Step(up, still),
     ]
 
     init(size: Int) {
@@ -60,8 +73,7 @@ class Board {
         for square in self.emptySquares {
             var value = 0
             var directions = [Direction]()
-            for dir in self.stepDirections {
-                let step = Square(dir[0], dir[1])
+            for step in self.stepDirections {
                 var pos = square + step
                 // Next square in this directions needs to be opponents disk
                 if self.getSquare(pos) != other {
@@ -128,8 +140,8 @@ class Board {
         let score = self.playerScores()
         print("\n\(self)")
         print(
-            "Score: \(getColor(score.black, Disk.black.color())) |",
-            "\(getColor(score.white, Disk.white.color()))"
+            "Score: \(getColor(score.black, Disk.black.diskColor())) |",
+            "\(getColor(score.white, Disk.white.diskColor()))"
         )
     }
 

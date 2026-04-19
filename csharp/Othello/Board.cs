@@ -2,7 +2,7 @@
 // Class Board
 // Defines the game board
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 using System;
@@ -19,22 +19,22 @@ namespace Othello {
         private readonly List<int> _indices;
         private readonly int _size;
 
-        private const int Up = -1;
-        private const int Down = 1;
+        private const int Up = 1;
+        private const int Down = -1;
         private const int Left = -1;
         private const int Right = 1;
         private const int Still = 0;
 
         private static readonly Step[] StepDirections =
         [
-            new(Up, Left),
-            new(Up, Still),
-            new(Up, Right),
-            new(Still, Left),
-            new(Still, Right),
             new(Down, Left),
             new(Down, Still),
             new(Down, Right),
+            new(Still, Left),
+            new(Still, Right),
+            new(Up, Left),
+            new(Up, Still),
+            new(Up, Right),
         ];
 
         public Board(int size) {

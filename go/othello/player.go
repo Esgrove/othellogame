@@ -2,7 +2,7 @@
 // Player
 // Defines one player for Othello
 // Akseli Lukkarila
-// 2019-2025
+// 2019-2026
 //==========================================================
 
 package othello
@@ -18,25 +18,28 @@ import (
 // Player Defines one player (human or computer).
 type Player struct {
 	CanPlay      bool
-	color        Disk
+	disk         Disk
 	human        bool
 	roundsPlayed int
 	settings     PlayerSettings
 }
 
-func NewPlayer(color Disk, settings PlayerSettings) *Player {
+// NewPlayer Initialize new player for the given disk.
+func NewPlayer(disk Disk, settings PlayerSettings) *Player {
 	return &Player{
-		color:    color,
+		disk:     disk,
 		human:    true,
 		CanPlay:  true,
 		settings: settings,
 	}
 }
 
+// BlackPlayer Shorthand to initialize a new player for black disks.
 func BlackPlayer(settings PlayerSettings) *Player {
 	return NewPlayer(Black, settings)
 }
 
+// WhitePlayer Shorthand to initialize a new player for white disks.
 func WhitePlayer(settings PlayerSettings) *Player {
 	return NewPlayer(White, settings)
 }
@@ -44,9 +47,9 @@ func WhitePlayer(settings PlayerSettings) *Player {
 // PlayOneMove Play one round as this player.
 func (p *Player) PlayOneMove(board *Board) *string {
 	if !p.settings.CheckMode {
-		fmt.Printf("Turn: %s\n", p.color.DiskString())
+		fmt.Printf("Turn: %s\n", p.disk.DiskString())
 	}
-	moves := board.PossibleMoves(p.color)
+	moves := board.PossibleMoves(p.disk)
 	if len(moves) == 0 {
 		p.CanPlay = false
 		if !p.settings.CheckMode {
@@ -107,7 +110,7 @@ func (p *Player) getHumanMove(moves []Move) Move {
 				return validMove
 			}
 		}
-		fmt.Printf("  Can't place a %s disk in square %s!\n", p.color.DiskString(), square)
+		fmt.Printf("  Can't place a %s disk in square %s!\n", p.disk.DiskString(), square)
 	}
 }
 
@@ -135,8 +138,9 @@ func (p *Player) SetHuman(isHuman bool) {
 	p.human = isHuman
 }
 
+// String Return formatted player info string.
 func (p *Player) String() string {
-	return fmt.Sprintf("%s | %s | Moves: %d", p.color.DiskString(), p.typeString(), p.roundsPlayed)
+	return fmt.Sprintf("%s | %s | Moves: %d", p.disk.DiskString(), p.typeString(), p.roundsPlayed)
 }
 
 // Return player type description string.

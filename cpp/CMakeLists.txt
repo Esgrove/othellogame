@@ -1,10 +1,10 @@
 # Othello C++
 # Akseli Lukkarila
-# 2019-2025
+# 2019-2026
 cmake_minimum_required(VERSION 3.31)
 
 project("Othello C++"
-    VERSION 2.13.0
+    VERSION 2.13.1
     DESCRIPTION "A simple Othello CLI game implementation in C++"
     HOMEPAGE_URL "https://github.com/Esgrove/othellogame"
     LANGUAGES CXX
@@ -82,20 +82,26 @@ message(STATUS "Build name: ${APP_BUILD_NAME}")
 
 if(WIN32)
     # Set OpenSSL search path for Windows
-    execute_process(
-        COMMAND powershell.exe -Command "[System.Environment]::GetEnvironmentVariable('USERPROFILE')"
-        OUTPUT_VARIABLE USERPROFILE
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    set(SCOOP_OPENSSL_PATH "${USERPROFILE}/scoop/apps/openssl/current")
+    set(SCOOP_OPENSSL_PATH "$ENV{USERPROFILE}/scoop/apps/openssl/current")
     if(EXISTS "${SCOOP_OPENSSL_PATH}")
         set(OPENSSL_ROOT_DIR "${SCOOP_OPENSSL_PATH}")
         set(OPENSSL_INCLUDE_DIR "${SCOOP_OPENSSL_PATH}/include")
         message(STATUS "Found OpenSSL installed via Scoop")
+    elseif(EXISTS "C:/Program Files/OpenSSL/include")
+        set(OPENSSL_ROOT_DIR "C:/Program Files/OpenSSL")
+        set(OPENSSL_INCLUDE_DIR "C:/Program Files/OpenSSL/include")
+        # The slproweb Win64OpenSSL installer (used by Chocolatey) places libraries
+        # in subdirectories that CMake's FindOpenSSL doesn't search by default
+        list(APPEND CMAKE_LIBRARY_PATH
+            "C:/Program Files/OpenSSL/lib/VC/x64/MD"
+            "C:/Program Files/OpenSSL/lib/VC/x64/MT"
+            "C:/Program Files/OpenSSL/lib/VC"
+            "C:/Program Files/OpenSSL/lib/MinGW/x64"
+            "C:/Program Files/OpenSSL/lib"
+        )
+        message(STATUS "Found OpenSSL at: ${OPENSSL_ROOT_DIR}")
     else()
-        set(OPENSSL_ROOT_DIR "C:\\Program Files\\OpenSSL\\")
-        set(OPENSSL_INCLUDE_DIR "C:\\Program Files\\OpenSSL\\include")
-        message(STATUS "Using default OpenSSL path: ${OPENSSL_ROOT_DIR}")
+        message(STATUS "OpenSSL not found in common Windows locations")
     endif()
 endif()
 
@@ -133,6 +139,7 @@ message(STATUS "Fetching fmt library")
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt
     GIT_TAG 12.1.0
+    SYSTEM
 )
 FetchContent_MakeAvailable(fmt)
 
@@ -142,6 +149,7 @@ message(STATUS "Fetching cxxopts library")
 FetchContent_Declare(cxxopts
     GIT_REPOSITORY https://github.com/jarro2783/cxxopts
     GIT_TAG v3.3.1
+    SYSTEM
 )
 FetchContent_MakeAvailable(cxxopts)
 
@@ -191,11 +199,11 @@ endif()
 if(MSVC)
     # https://learn.microsoft.com/en-us/cpp/build/reference/permissive-standards-conformance?view=msvc-170
     target_compile_options(othello_cpp PRIVATE
-        /W4 /permissive-
+        /W4 /WX /permissive-
     )
 else()
     target_compile_options(othello_cpp PRIVATE
-        -Wall -Wextra -pedantic
+        -Wall -Wextra -Werror -pedantic
     )
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         target_compile_options(othello_cpp PRIVATE
