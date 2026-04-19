@@ -76,6 +76,8 @@ build_project() {
     fi
 
     echo "Building Othello C# $BUILD_TYPE for $RUNTIME"
+    # Touch main file to trigger rebuild so version info gets updated
+    touch Othello/Othello.cs
     time dotnet publish \
         Othello/Othello.csproj \
         --configuration "$BUILD_TYPE" \

@@ -76,10 +76,10 @@ Script:
 
 ## Formatting and linting
 
-````bash
+```bash
 uv run ruff format
 uv run ruff check --fix
-````
+```
 
 ## TODO
 

@@ -127,6 +127,9 @@ build_project() {
 
     export CCACHE_DIR="$CMAKE_BUILD_DIR/ccache"
 
+    # Touch main file to trigger rebuild so version info gets updated
+    touch "$PROJECT_PATH/src/main.cpp"
+
     print_magenta "Building Othello C++..."
 
     if [ "$BASH_PLATFORM" = windows ] && [ "$USE_NINJA" = false ]; then

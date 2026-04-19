@@ -19,6 +19,9 @@ done
 
 print_magenta "Building Othello Java..."
 
+# Touch main file to trigger rebuild so version info gets updated
+touch src/main/java/othello/Main.java
+
 rm -rf build/libs/othello_java-*-all.jar
 
 ./gradlew fatJar

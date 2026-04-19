@@ -30,6 +30,9 @@ fi
 
 cd "$PROJECT_PATH"
 
+# Touch main source file to trigger rebuild so version info gets updated
+touch Sources/Othello/main.swift
+
 swift build --configuration release
 
 executable="othello_swift"

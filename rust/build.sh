@@ -25,6 +25,9 @@ fi
 
 cd "$REPO_ROOT/rust"
 
+# Touch main source file to ensure rebuild and updated version info
+touch src/main.rs
+
 cargo build --release
 
 executable="othello_rust"

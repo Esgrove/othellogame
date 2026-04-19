@@ -19,6 +19,9 @@ done
 
 print_magenta "Building Othello Kotlin..."
 
+# Touch main file to trigger rebuild so version info gets updated
+touch src/nativeMain/kotlin/othello/Main.kt
+
 rm -rf build/bin/native/releaseExecutable/*.kexe
 
 ./gradlew nativeBinaries

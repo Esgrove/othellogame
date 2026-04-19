@@ -102,7 +102,7 @@ int main(const int argc, const char* argv[])
         }
         if (help) {
             fmt::print("{}", usage);
-            return 1;
+            return 0;
         }
 
         print_green("OTHELLO GAME - C++\n", true);

@@ -72,6 +72,7 @@ build_project() {
 
     cd "$PROJECT_PATH"
     rm -f "$EXECUTABLE"
+    touch main.go
     time go build -v -ldflags "$VERSION_INFO"
     print_green "Build successful"
 

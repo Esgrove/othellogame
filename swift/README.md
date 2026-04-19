@@ -13,7 +13,7 @@ ARGUMENTS:
 OPTIONS:
   -a, --autoplay          Enable autoplay mode with computer control
   -c, --check             Autoplay and only print result
-  -u, --default           Play with default settings
+  -d, --default           Play with default settings
   -l, --log               Show game log at the end
   -n, --no-helpers        Hide disk placement hints
   -t, --test              Enable test mode with deterministic computer moves

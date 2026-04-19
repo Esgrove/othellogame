@@ -29,7 +29,7 @@ struct OthelloSwift: ParsableCommand {
     var check: Bool = false
 
     @Flag(name: [.short, .customLong("default")], help: "Play with default settings")
-    var useDefaultSettings: Bool = false
+    var defaultSettings: Bool = false
 
     @Flag(name: .shortAndLong, help: "Show game log at the end")
     var log: Bool = false
@@ -60,7 +60,7 @@ struct OthelloSwift: ParsableCommand {
             showHelpers: !self.noHelpers,
             showLog: self.log || self.check,
             testMode: self.test || self.check,
-            useDefaults: self.useDefaultSettings
+            useDefaults: self.defaultSettings
         )
 
         Othello(settings).play()
@@ -76,7 +76,7 @@ struct OthelloSwift: ParsableCommand {
             }
             print("Using board size: \(boardSize)")
             return boardSize
-        } else if self.autoplay || self.useDefaultSettings {
+        } else if self.autoplay || self.defaultSettings {
             return DEFAULT_BOARD_SIZE
         } else {
             // Otherwise ask user for board size

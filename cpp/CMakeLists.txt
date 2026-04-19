@@ -41,7 +41,7 @@ if(APPLE)
     endif()
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
     set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0" CACHE STRING "" FORCE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "15.0" CACHE STRING "" FORCE)
     # Create universal binary.
     # Disabled due to OpenSSL being arch specific by default...
     # set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)

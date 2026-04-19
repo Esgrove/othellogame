@@ -10,7 +10,7 @@ Usage:
   othello_csharp [<size>] [options]
 
 Arguments:
-  <size>  Optional board size (4..10) []
+  <size>  Optional board size (4..10)
 
 Options:
   -a, --autoplay    Enable autoplay mode with computer control
@@ -19,15 +19,14 @@ Options:
   -l, --log         Show game log at the end
   -n, --no-helpers  Hide disk placement hints
   -t, --test        Enable test mode with deterministic computer moves
-  -v                Print version and exit
-  --version         Show version information
+  -v, --version     Print version and exit
   -?, -h, --help    Show help and usage information
 ```
 
 ## Dependencies
 
-* [System.CommandLine](https://github.com/dotnet/command-line-api)
-* [Pastel](https://github.com/silkfire/Pastel)
+- [System.CommandLine](https://github.com/dotnet/command-line-api)
+- [Pastel](https://github.com/silkfire/Pastel)
 
 ## Build
 

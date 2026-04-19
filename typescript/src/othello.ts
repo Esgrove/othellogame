@@ -10,7 +10,7 @@ const MAX_BOARD_SIZE = 10;
 const DEFAULT_BOARD_SIZE = 8;
 
 const program = new Command()
-    .name('Othello Node')
+    .name('Othello TypeScript')
     .description('A simple Othello CLI game implementation.')
     .argument('[SIZE]', `Optional board size (${MIN_BOARD_SIZE}..${MAX_BOARD_SIZE})`)
     .option('-a, --autoplay', 'Enable autoplay mode', false)

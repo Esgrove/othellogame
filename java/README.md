@@ -1,5 +1,23 @@
 # Othello Java
 
+## Usage
+
+```console
+Usage: java -jar othello_java [<options>] [<size>]
+
+A simple Othello CLI game implementation in Java
+
+      [size]         Optional board size (4..10)
+  -a, --autoplay     Enable autoplay mode with computer control
+  -c, --check        Autoplay and only print result
+  -d, --default      Play with default settings
+  -h, --help         Show this help message and exit.
+  -l, --log          Show game log at the end
+  -n, --no-helpers   Hide disk placement hints
+  -t, --test         Enable test mode with deterministic computer moves
+  -V, --version      Print version information and exit.
+```
+
 ## Run
 
 ```shell
