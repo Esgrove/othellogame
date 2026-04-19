@@ -87,10 +87,21 @@ if(WIN32)
         set(OPENSSL_ROOT_DIR "${SCOOP_OPENSSL_PATH}")
         set(OPENSSL_INCLUDE_DIR "${SCOOP_OPENSSL_PATH}/include")
         message(STATUS "Found OpenSSL installed via Scoop")
+    elseif(EXISTS "C:/Program Files/OpenSSL/include")
+        set(OPENSSL_ROOT_DIR "C:/Program Files/OpenSSL")
+        set(OPENSSL_INCLUDE_DIR "C:/Program Files/OpenSSL/include")
+        # The slproweb Win64OpenSSL installer (used by Chocolatey) places libraries
+        # in subdirectories that CMake's FindOpenSSL doesn't search by default
+        list(APPEND CMAKE_LIBRARY_PATH
+            "C:/Program Files/OpenSSL/lib/VC/x64/MD"
+            "C:/Program Files/OpenSSL/lib/VC/x64/MT"
+            "C:/Program Files/OpenSSL/lib/VC"
+            "C:/Program Files/OpenSSL/lib/MinGW/x64"
+            "C:/Program Files/OpenSSL/lib"
+        )
+        message(STATUS "Found OpenSSL at: ${OPENSSL_ROOT_DIR}")
     else()
-        set(OPENSSL_ROOT_DIR "C:\\Program Files\\OpenSSL\\")
-        set(OPENSSL_INCLUDE_DIR "C:\\Program Files\\OpenSSL\\include")
-        message(STATUS "Using default OpenSSL path: ${OPENSSL_ROOT_DIR}")
+        message(STATUS "OpenSSL not found in common Windows locations")
     endif()
 endif()
 
