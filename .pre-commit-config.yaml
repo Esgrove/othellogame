@@ -13,7 +13,7 @@ repos:
       - id: check-merge-conflict
       - id: check-toml
       - id: check-yaml
-        args: [ --allow-multiple-documents ]
+        args: [--allow-multiple-documents]
       - id: debug-statements
       - id: end-of-file-fixer
       - id: mixed-line-ending
@@ -33,7 +33,7 @@ repos:
         description: Run gofmt on files included in the commit.
         entry: sh -c 'cd go && gofmt -s -w .'
         pass_filenames: false
-        types: [ file, go ]
+        types: [file, go]
         language: system
         files: ^go/
 
@@ -42,7 +42,7 @@ repos:
         description: Run golangci-lint on files included in the commit.
         entry: sh -c 'cd go && golangci-lint run'
         pass_filenames: false
-        types: [ file, go ]
+        types: [file, go]
         language: system
         files: ^go/
 
@@ -51,7 +51,7 @@ repos:
         description: Run spotless format on files included in the commit.
         entry: sh -c 'cd java && ./gradlew spotlessApply'
         pass_filenames: false
-        types: [ file, java ]
+        types: [file, java]
         language: system
         files: ^java/
 
@@ -60,7 +60,7 @@ repos:
         description: Run spotless format on files included in the commit.
         entry: sh -c 'cd kotlin && ./gradlew spotlessApply'
         pass_filenames: false
-        types: [ file, kotlin ]
+        types: [file, kotlin]
         language: system
         files: ^kotlin/
 
@@ -69,7 +69,7 @@ repos:
         description: Run dotnet format on files included in the commit.
         entry: sh -c 'cd csharp && dotnet format'
         pass_filenames: false
-        types: [ file, c# ]
+        types: [file, c#]
         language: system
         files: ^csharp/
 
@@ -78,7 +78,7 @@ repos:
         description: Run Ruff format and lint on files included in the commit.
         entry: sh -c 'cd python && uv run ruff format && uv run ruff check --fix'
         pass_filenames: false
-        types: [ file, python ]
+        types: [file, python]
         language: system
         files: ^python/
 
@@ -87,7 +87,7 @@ repos:
         description: Run cargo fmt on files included in the commit.
         entry: sh -c 'cd rust && cargo fmt'
         pass_filenames: false
-        types: [ file, rust ]
+        types: [file, rust]
         language: system
         files: ^rust/
 
@@ -96,16 +96,15 @@ repos:
         description: Run cargo clippy on files included in the commit.
         entry: sh -c 'cd rust && cargo clippy'
         pass_filenames: false
-        types: [ file, rust ]
+        types: [file, rust]
         language: system
         files: ^rust/
 
       - id: swiftformat
         name: Swift format
         description: Run swiftformat on files included in the commit.
-        entry: sh -c 'cd swift && command -v swiftformat >/dev/null 2>&1 && swiftformat
-          --lint . || :'
+        entry: sh -c 'cd swift && command -v swiftformat >/dev/null 2>&1 && swiftformat --lint . || :'
         pass_filenames: false
-        types: [ file, swift ]
+        types: [file, swift]
         language: system
         files: ^swift/
