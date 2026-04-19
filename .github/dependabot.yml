@@ -6,7 +6,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
   # Python
   - package-ecosystem: "pip"
@@ -14,7 +14,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       python:
         patterns:
@@ -26,7 +26,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       rust:
         patterns:
@@ -38,7 +38,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       go:
         patterns:
@@ -50,7 +50,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       kotlin:
         patterns:
@@ -62,7 +62,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       java:
         patterns:
@@ -74,7 +74,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       swift:
         patterns:
@@ -86,7 +86,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       csharp:
         patterns:
@@ -98,7 +98,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       dotnet:
         patterns:
@@ -110,7 +110,7 @@ updates:
     commit-message:
       prefix: ""
     schedule:
-      interval: "daily"
+      interval: "weekly"
     groups:
       typescript:
         patterns:
