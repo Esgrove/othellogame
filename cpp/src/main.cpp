@@ -94,8 +94,7 @@ int main(const int argc, const char* argv[])
              show_log,
              test_mode,
              use_defaults,
-             usage]
-            = Args(argc, argv);
+             usage] = Args(argc, argv);
 
         if (version) {
             othello::print_version();
