@@ -184,7 +184,7 @@ namespace Othello {
 
             public static int Main(string[] args) {
                 Argument<int?> sizePositional = new(name: "size") {
-                    Description = $\"Optional board size ({Settings.MinBoardSize}..{Settings.MaxBoardSize})\"
+                    Description = $"Optional board size ({Settings.MinBoardSize}..{Settings.MaxBoardSize})"
                 };
 
                 Option<bool> autoplayOption = new(name: "--autoplay", aliases: ["-a"]) {
