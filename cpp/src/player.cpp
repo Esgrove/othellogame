@@ -147,6 +147,7 @@ Square Player::get_square()
     }
 }
 
+/// Return player type description string.
 std::string Player::type_string() const
 {
     switch (this->player_type) {

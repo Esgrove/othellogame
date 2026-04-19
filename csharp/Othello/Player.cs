@@ -95,7 +95,7 @@ namespace Othello {
         private Move GetHumanMove(List<Move> moves) {
             while (true) {
                 Square square = GetSquare();
-                // Check if the given square is one of the possible moves
+                // Check that the chosen square is actually one of the possible moves
                 if (moves.Exists(x => square.Equals(x.Square))) {
                     return moves.Find(x => square.Equals(x.Square));
                 }

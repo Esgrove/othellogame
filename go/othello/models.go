@@ -111,10 +111,12 @@ func (d Disk) Opponent() Disk {
 	return Empty
 }
 
+// String Format step to string.
 func (s Step) String() string {
 	return fmt.Sprintf("[%d,%d]", s.X, s.Y)
 }
 
+// Add Return a new square from adding a step to a square.
 func (s Square) Add(step Step) Square {
 	return Square{X: s.X + step.X, Y: s.Y + step.Y}
 }
@@ -129,14 +131,17 @@ func (s Square) IsLessThan(other Square) bool {
 	return false
 }
 
+// String Format square to string.
 func (s Square) String() string {
 	return fmt.Sprintf("(%d,%d)", s.X, s.Y)
 }
 
+// String Format move to string.
 func (m Move) String() string {
 	return fmt.Sprintf("Square: %s -> value: %d", m.Square, m.Value)
 }
 
+// LogEntry Format move for log entry.
 func (m Move) LogEntry() string {
 	return fmt.Sprintf("%s:%s,%d", m.Disk.BoardChar(), m.Square, m.Value)
 }

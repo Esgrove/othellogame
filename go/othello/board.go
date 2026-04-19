@@ -16,6 +16,7 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
+// StepDirections contains all possible step directions for a square on the board.
 var StepDirections = [8]Step{
 	{X: -1, Y: -1},
 	{X: -1, Y: 0},
@@ -35,6 +36,7 @@ type Board struct {
 	indices      []int
 }
 
+// NewBoard Initialize a new game board with the given size.
 func NewBoard(size int) Board {
 	board := initBoard(size)
 
@@ -196,6 +198,7 @@ func (b *Board) Result() Disk {
 	}
 }
 
+// LogEntry Get board status string for game log.
 func (b *Board) LogEntry() string {
 	result := ""
 	for _, disk := range b.board {
@@ -231,7 +234,7 @@ func (b *Board) getSquare(square *Square) Disk {
 	return Empty
 }
 
-// Get all the squares playing this move will change.
+// Map square to board index.
 func (b *Board) squareIndex(square *Square) int {
 	return square.Y*b.size + square.X
 }

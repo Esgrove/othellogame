@@ -22,7 +22,7 @@ public class Board {
     private final Set<Square> emptySquares;
     private final List<Integer> indices;
 
-    // Store all possible step directions on board
+    /** All possible step directions for a square on the board. */
     public static final Step[] stepDirections = new Step[] {
         new Step(-1, -1),
         new Step(-1, 0),

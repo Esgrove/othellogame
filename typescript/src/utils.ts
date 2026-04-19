@@ -1,5 +1,6 @@
 import { PlayerSettings } from './player.ts';
 
+/** Game settings. */
 export class Settings {
     boardSize: number;
     autoplayMode: boolean;
@@ -28,17 +29,18 @@ export class Settings {
         this.testMode = testMode;
     }
 
-    // Static method to return default settings
+    /** Return default settings. */
     static default(): Settings {
         return new Settings(8, false, false, false, true, false, false);
     }
 
-    // Method to convert settings to player-specific settings
+    /** Convert settings to player-specific settings. */
     toPlayerSettings(): PlayerSettings {
         return new PlayerSettings(this.showHelpers, this.checkMode, this.testMode);
     }
 }
 
+/** Clamp value to the given range. */
 export function clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
 }
