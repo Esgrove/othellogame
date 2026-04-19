@@ -1,4 +1,4 @@
-// swift-tools-version:6.1
+// swift-tools-version:6.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -15,8 +15,13 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-crypto.git", from: "4.2.0"),
     ],
     targets: [
+        .plugin(
+            name: "VersionGeneratorPlugin",
+            capability: .buildTool()
+        ),
         .target(
-            name: "VersionInfo"
+            name: "VersionInfo",
+            plugins: [.plugin(name: "VersionGeneratorPlugin")]
         ),
         .target(
             name: "OthelloLib",

@@ -82,3 +82,10 @@ uv run ruff check --fix
 ````
 
 ## TODO
+
+## Version info
+
+Version number is defined in [pyproject.toml](./pyproject.toml).
+Version info (version number, git commit, branch, build time) is generated
+by the [othello_python.sh](./othello_python.sh) launcher script,
+which writes `othello/version.py` before each run.

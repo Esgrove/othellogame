@@ -71,3 +71,10 @@ cargo clippy --fix
 ```shell
 cargo update
 ```
+
+## Version info
+
+Version number is defined in [Cargo.toml](./Cargo.toml).
+Version info (version number, git commit, branch, build time) is injected at compile time
+by the [build.rs](./build.rs) build script via `cargo:rustc-env` directives,
+and read in source code using the `env!()` macro.

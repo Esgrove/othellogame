@@ -60,3 +60,19 @@ Configuration in [.swiftformat](./.swiftformat)
 swift package update
 swift package resolve
 ```
+
+## Update Swift version
+
+Update the `swift-tools-version` comment in [Package.swift](./Package.swift):
+
+```swift
+// swift-tools-version:6.3
+```
+
+## Version info
+
+The app version number is defined in a single source of truth: [VERSION](./VERSION).
+Version info (version number, git commit, branch, build time) is injected at compile time
+using a [SwiftPM build tool plugin](./Plugins/VersionGeneratorPlugin/plugin.swift)
+that invokes a [shell script](./Plugins/VersionGeneratorPlugin/generate_version.sh)
+to generate `versionInfo.swift` automatically during `swift build`.

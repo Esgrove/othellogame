@@ -68,3 +68,9 @@ ktlint --format
 ## Todo
 
 - Use [Arrow](https://arrow-kt.io) for Rust style error handling
+
+## Version info
+
+Version number is defined in [build.gradle.kts](./build.gradle.kts).
+Version info (version number, git commit, branch, build time) is generated at compile time
+by a custom Gradle `WriteVersionTask` that produces `VersionInfo.kt` into the build directory.

@@ -1,3 +1,9 @@
+//! # Version
+//! Version information.
+//!
+//! Akseli Lukkarila
+//! 2019-2026
+
 static VERSION_STRING: &str = concat!(
     "Othello Rust ",
     env!("VERSION_NUMBER"),

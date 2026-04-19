@@ -8,7 +8,7 @@
     <RuntimeIdentifiers>win-x64;osx-x64;osx-arm64;linux-x64</RuntimeIdentifiers>
     <SelfContained>false</SelfContained>
     <TargetFramework>net10.0</TargetFramework>
-    <Version>2.11.0</Version>
+    <Version>2.12.0</Version>
     <StartupObject>Othello.Program.Othello</StartupObject>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Esgrove/othellogame</RepositoryUrl>
@@ -49,4 +49,46 @@
     <PackageReference Include="Pastel" Version="7.0.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.6" />
   </ItemGroup>
+  <!-- Generate Version.g.cs with git and build info at compile time -->
+  <Target Name="GenerateVersionInfo" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <_GitTmpDir>$(IntermediateOutputPath)_git/</_GitTmpDir>
+    </PropertyGroup>
+    <MakeDir Directories="$(_GitTmpDir)" />
+    <Exec Command="git rev-parse --short HEAD &gt; $(_GitTmpDir)commit.tmp"
+          IgnoreExitCode="true" />
+    <Exec Command="git rev-parse --abbrev-ref HEAD &gt; $(_GitTmpDir)branch.tmp"
+          IgnoreExitCode="true" />
+    <ReadLinesFromFile File="$(_GitTmpDir)commit.tmp" Condition="Exists('$(_GitTmpDir)commit.tmp')">
+      <Output TaskParameter="Lines" ItemName="_GitCommitLines" />
+    </ReadLinesFromFile>
+    <ReadLinesFromFile File="$(_GitTmpDir)branch.tmp" Condition="Exists('$(_GitTmpDir)branch.tmp')">
+      <Output TaskParameter="Lines" ItemName="_GitBranchLines" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <GitCommit>@(_GitCommitLines)</GitCommit>
+      <GitBranch>@(_GitBranchLines)</GitBranch>
+      <GitCommit Condition="'$(GitCommit)' == ''">unknown</GitCommit>
+      <GitBranch Condition="'$(GitBranch)' == ''">unknown</GitBranch>
+      <BuildTime>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd_HHmm"))</BuildTime>
+      <_VersionFile>$(IntermediateOutputPath)Version.g.cs</_VersionFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <_VersionLines Include="// Generated automatically by MSBuild%3B DO NOT EDIT MANUALLY." />
+      <_VersionLines Include="namespace Othello {" />
+      <_VersionLines Include="    public static class Version {" />
+      <_VersionLines Include='        public const string BuildTime = "$(BuildTime)"%3B' />
+      <_VersionLines Include='        public const string GitBranch = "$(GitBranch)"%3B' />
+      <_VersionLines Include='        public const string GitCommit = "$(GitCommit)"%3B' />
+      <_VersionLines Include='        public const string VersionNumber = "$(Version)"%3B' />
+      <_VersionLines Include="    }" />
+      <_VersionLines Include="}" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(_VersionFile)" Lines="@(_VersionLines)"
+                     Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <Compile Include="$(_VersionFile)" Condition="!@(Compile->AnyHaveMetadataValue('Identity', '$(_VersionFile)'))" />
+      <FileWrites Include="$(_VersionFile)" />
+    </ItemGroup>
+  </Target>
 </Project>

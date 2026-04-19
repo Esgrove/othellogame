@@ -86,3 +86,9 @@ Tests use [Google Test](https://github.com/google/googletest).
 
 * Use C++20 modules
 * Replace fmt with C++20/23 standard library methods (`std::format` / `std::print`)
+
+## Version info
+
+Version number is defined in [CMakeLists.txt](./CMakeLists.txt) (`project(... VERSION x.y.z)`).
+Version info (version number, git commit, branch, build time) is resolved at CMake configure time
+and injected as C++ compile definitions via `target_compile_definitions`.

@@ -25,3 +25,8 @@ Tests use the built-in [Bun test runner](https://bun.sh/docs/cli/test).
 ```shell
 bun test
 ```
+
+## Version info
+
+Version number is defined in [package.json](./package.json).
+The version is read at runtime from `package.json`.

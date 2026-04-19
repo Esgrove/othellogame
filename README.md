@@ -73,7 +73,7 @@ Code formatting with dotnet format.
 
 ### Swift
 
-Swift 6.
+Swift 6.3.
 Uses [ColorizeSwift](https://github.com/mtynior/ColorizeSwift) for coloured text in the terminal.
 Formatting with [swiftformat](https://github.com/nicklockwood/SwiftFormat).
 Project is handled by the [Swift Package Manager](https://www.swift.org/package-manager/),

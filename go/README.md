@@ -97,3 +97,10 @@ go get -u ./...
 go mod tidy
 go mod verify
 ```
+
+## Version info
+
+Version number is defined in [build.sh](./build.sh) (`PROJECT_VERSION`).
+Version info (version number, git commit, branch, build time) is injected at build time
+via Go linker flags (`-ldflags -X`).
+Note that version information only works when building with the script.

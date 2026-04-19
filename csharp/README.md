@@ -61,3 +61,9 @@ Using [dotnet format](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet
 ```shell
 dotnet format
 ```
+
+## Version info
+
+Version number is defined in [Othello.csproj](./Othello/Othello.csproj) (`<Version>`).
+Version info (version number, git commit, branch, build time) is injected at compile time
+by an MSBuild target in the `.csproj` that generates `Version.g.cs` into the `obj/` directory.

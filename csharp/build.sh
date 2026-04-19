@@ -61,28 +61,6 @@ init_options() {
 
     PROJECT_PATH="$REPO_ROOT/csharp"
     BUILD_DIR="$PROJECT_PATH/dotnet-build-$BASH_PLATFORM-$(echo "$BUILD_TYPE" | tr '[:upper:]' '[:lower:]')"
-    VERSION_FILE="$PROJECT_PATH/Othello/Version.cs"
-}
-
-update_version_info() {
-    set_version_info
-    VERSION="$(awk -F'[<>]' '/<Version>/{print $3}' "$PROJECT_PATH/Othello/Othello.csproj")"
-    print_yellow "Writing version information with version $VERSION"
-    echo "BUILD_TIME: $BUILD_TIME"
-    echo "GIT_COMMIT: $GIT_COMMIT"
-    echo "GIT_BRANCH: $GIT_BRANCH"
-    {
-        echo "// Generated automatically by build script; DO NOT EDIT MANUALLY."
-        echo ""
-        echo "namespace Othello {"
-        echo "    public static class Version {"
-        echo "        public const string BuildTime = \"$BUILD_TIME\";"
-        echo "        public const string GitBranch = \"$GIT_BRANCH\";"
-        echo "        public const string GitCommit = \"$GIT_COMMIT\";"
-        echo "        public const string VersionNumber = \"$VERSION\";"
-        echo "    }"
-        echo "}"
-    } > "$VERSION_FILE"
 }
 
 build_project() {
@@ -126,7 +104,6 @@ run_tests() {
 }
 
 init_options "$@"
-update_version_info
 build_project
 
 if [ "$RUN_TESTS" = true ]; then
