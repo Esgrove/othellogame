@@ -7,7 +7,7 @@ import Testing
 }
 
 @Test func boardResult() {
-    var board = Board(size: 8)
+    let board = Board(size: 8)
     #expect(board.result() == .empty)
 
     let moves = board.possibleMoves(disk: .black)
@@ -17,10 +17,10 @@ import Testing
 }
 
 @Test func boardLogEntry() {
-    var board8 = Board(size: 8)
+    let board8 = Board(size: 8)
     #expect(board8.logEntry() == "___________________________WB______BW___________________________")
 
-    var board4 = Board(size: 4)
+    let board4 = Board(size: 4)
     #expect(board4.logEntry() == "_____WB__BW_____")
 
     let moves = board4.possibleMoves(disk: .black)
