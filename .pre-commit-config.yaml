@@ -19,15 +19,16 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
 
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v22.1.3
+  - repo: local
     hooks:
       - id: clang-format
         name: C++ Clang-format
+        description: Run clang-format on files included in the commit.
+        entry: clang-format -i --style=file
+        types_or: [c, c++]
+        language: system
         files: ^cpp/
 
-  - repo: local
-    hooks:
       - id: gofmt
         name: Go format
         description: Run gofmt on files included in the commit.
