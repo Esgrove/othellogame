@@ -66,7 +66,7 @@ plugins {
     java
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.4.0"
+    id("com.diffplug.spotless") version "8.5.1"
 }
 
 repositories {
@@ -76,7 +76,7 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.junit/junit-bom
-    testImplementation(platform("org.junit:junit-bom:6.0.3"))
+    testImplementation(platform("org.junit:junit-bom:6.1.0"))
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
