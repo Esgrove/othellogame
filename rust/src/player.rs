@@ -35,11 +35,11 @@ pub enum PlayerType {
 
 impl Player {
     /// Initialize new player for the given disk color.
-    pub const fn new(disk: Disk, settings: PlayerSettings, player_type: PlayerType) -> Self {
+    pub const fn new(disk: Disk, settings: PlayerSettings) -> Self {
         Self {
             can_play: true,
             disk,
-            player_type,
+            player_type: PlayerType::Human,
             rounds_played: 0,
             settings,
         }
@@ -47,12 +47,12 @@ impl Player {
 
     /// Shorthand to initialize a new player for black disks.
     pub const fn black(settings: PlayerSettings) -> Self {
-        Self::new(Disk::Black, settings, PlayerType::Human)
+        Self::new(Disk::Black, settings)
     }
 
     /// Shorthand to initialize a new player for white disks.
     pub const fn white(settings: PlayerSettings) -> Self {
-        Self::new(Disk::White, settings, PlayerType::Computer)
+        Self::new(Disk::White, settings)
     }
 
     /// Play one round as this player.
@@ -256,7 +256,7 @@ mod tests {
 
     #[test]
     fn reset_player() {
-        let mut player = Player::new(Disk::White, PlayerSettings::default(), PlayerType::Human);
+        let mut player = Player::new(Disk::White, PlayerSettings::default());
         player.can_play = false;
         player.rounds_played = 10;
         player.reset();
