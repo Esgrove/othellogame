@@ -4,7 +4,7 @@ const val MIN_BOARD_SIZE = 4
 const val MAX_BOARD_SIZE = 10
 const val DEFAULT_BOARD_SIZE = 8
 
-/** Game settings.*/
+/** Game settings. */
 data class Settings(
     val boardSize: Int,
     val autoplayMode: Boolean,
@@ -14,32 +14,48 @@ data class Settings(
     val testMode: Boolean,
     val useDefaults: Boolean,
 ) {
-    override fun toString(): String = """
-            Settings:
-              boardSize: $boardSize
-              autoplayMode: $autoplayMode
-              checkMode: $checkMode
-              showHelpers: $showHelpers
-              showLog: $showLog
-              testMode: $testMode
-              useDefaults: $useDefaults
-    """.trimIndent()
-}
-
-/** Player settings.*/
-data class PlayerSettings(val checkMode: Boolean, val showHelpers: Boolean, val testMode: Boolean) {
     companion object {
-        fun default(): PlayerSettings = PlayerSettings(
+        fun default(): Settings = Settings(
+            boardSize = DEFAULT_BOARD_SIZE,
+            autoplayMode = false,
             checkMode = false,
             showHelpers = true,
+            showLog = false,
+            testMode = false,
+            useDefaults = false,
+        )
+    }
+
+    override fun toString(): String = """
+        |Settings:
+        |  board_size: $boardSize
+        |  autoplay: $autoplayMode
+        |  check_mode: $checkMode
+        |  use_defaults: $useDefaults
+        |  show_helpers: $showHelpers
+        |  show_log: $showLog
+        |  test_mode: $testMode
+    """.trimMargin()
+}
+
+/** Player settings. */
+data class PlayerSettings(
+    val showHelpers: Boolean,
+    val checkMode: Boolean,
+    val testMode: Boolean,
+) {
+    companion object {
+        fun default(): PlayerSettings = PlayerSettings(
+            showHelpers = true,
+            checkMode = false,
             testMode = false,
         )
     }
 }
 
-/** Get player setting values from overall game settings.*/
+/** Get player setting values from overall game settings. */
 fun Settings.toPlayerSettings(): PlayerSettings = PlayerSettings(
-    checkMode = this.checkMode,
     showHelpers = this.showHelpers,
+    checkMode = this.checkMode,
     testMode = this.testMode,
 )

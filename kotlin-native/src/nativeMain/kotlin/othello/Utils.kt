@@ -4,15 +4,9 @@ import okio.Buffer
 import okio.HashingSink
 import okio.buffer
 import okio.use
-
 import platform.posix.usleep
 
-/**
- * Calculate the SHA-256 hash for the given string.
- *
- * @param input The input string to hash.
- * @return The SHA-256 hash as a hexadecimal string.
- */
+/** Calculate SHA256 hash for the given string. */
 fun calculateSha256(input: String): String {
     val buffer = Buffer()
     val hashingSink = HashingSink.sha256(buffer)
@@ -21,9 +15,7 @@ fun calculateSha256(input: String): String {
     return hashingSink.hash.hex()
 }
 
-/**
- * Blocking sleep (milliseconds).
- */
+/** Blocking sleep (milliseconds). */
 fun sleep(millis: Int) {
     require(millis >= 0) { "millis must be non-negative" }
     if (millis == 0) return

@@ -1,80 +1,66 @@
 package othello
 
-/** Player can be controlled either by a human or computer. */
-enum class PlayerType {
-    Human,
-    Computer;
-
-    fun human(): Boolean = this == Human
-    fun computer(): Boolean = this == Computer
-
-    override fun toString(): String = if (this == Human) "Human   " else "Computer"
-}
-
-/**
- * Represents one game piece or lack of one.
- */
+/** Represents one game piece or lack of one. */
 enum class Disk(val value: Int) {
     Black(-1),
     Empty(0),
     White(1),
+    ;
+
+    /** Returns a single character identifier string for the given disk. */
+    fun boardChar(): String = when (this) {
+        Black -> "B"
+        Empty -> "_"
+        White -> "W"
+    }
+
+    /** Returns a single character identifier string for the given disk. */
+    fun boardCharWithColor(): String = getColor(boardChar(), diskColor())
+
+    /** Return the associated colour for this disk. */
+    fun diskColor(): AnsiColor = when (this) {
+        Black -> AnsiColor.MAGENTA
+        Empty -> AnsiColor.WHITE
+        White -> AnsiColor.CYAN
+    }
+
+    /** Returns the disk formatted as a coloured string. */
+    fun diskString(): String = getColor(name.uppercase(), diskColor())
+
+    /** Return the opposing disk colour for this disk. */
+    fun opponent(): Disk = when (this) {
+        Black -> White
+        Empty -> Empty
+        White -> Black
+    }
 }
 
-/**
- * Represents a step direction on the board.
- */
-data class Step(val x: Int, val y: Int) {
-    override fun hashCode(): Int {
-        var result = 17
-        result = 31 * result + x.hashCode()
-        result = 31 * result + y.hashCode()
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Step) return false
-
-        if (x != other.x) return false
-        if (y != other.y) return false
-
-        return true
-    }
-
+/** Represents one step direction on the board. */
+data class Step(val x: Int, val y: Int) : Comparable<Step> {
     operator fun plus(other: Step): Step = Step(x + other.x, y + other.y)
 
-    override fun toString(): String = "[$x,$y]"
-}
-
-/**
- * Represents one square location on the board.
- */
-data class Square(val x: Int, val y: Int) : Comparable<Square> {
-    override fun hashCode(): Int {
-        var result = 17
-        result = 31 * result + x.hashCode()
-        result = 31 * result + y.hashCode()
-        return result
-    }
-
-    operator fun plus(step: Step): Square = Square(x + step.x, y + step.y)
-
-    operator fun plus(square: Square): Square = Square(x + square.x, y + square.y)
-
-    override fun compareTo(other: Square): Int = when {
+    override fun compareTo(other: Step): Int = when {
         x < other.x || (x <= other.x && y < other.y) -> -1
         x > other.x || (x >= other.x && y > other.y) -> 1
         else -> 0
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Square) return false
+    override fun toString(): String = "[$x,$y]"
+}
 
-        if (x != other.x) return false
-        if (y != other.y) return false
+/** Represents one square location on the board. */
+data class Square(val x: Int, val y: Int) : Comparable<Square> {
+    /** Get the index of this square on the board. */
+    fun boardIndex(boardSize: Int): Int = y * boardSize + x
 
-        return true
+    operator fun plus(other: Square): Square = Square(x + other.x, y + other.y)
+
+    operator fun plus(step: Step): Square = Square(x + step.x, y + step.y)
+
+    override fun compareTo(other: Square): Int = when {
+        x < other.x || (x <= other.x && y < other.y) -> -1
+        x > other.x || (x >= other.x && y > other.y) -> 1
+        else -> 0
     }
 
     override fun toString(): String = "($x,$y)"
@@ -83,29 +69,32 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
 /**
  * Represents a continuous line of squares in one direction.
  *
- * The [step] component determines the direction on the board,
+ * The [step] field determines the direction on the board,
  * and [count] describes how many consecutive squares in that direction there are.
  */
-data class Direction(val step: Step, val count: Int) : Comparable<Direction> {
-    override fun compareTo(other: Direction): Int = when (step) {
-        other.step if count < other.count -> -1
-        other.step if count > other.count -> 1
-        else -> 0
+data class Direction(
+    /** Direction of travel on the board */
+    val step: Step,
+    /** Number of consecutive same colour squares along this direction */
+    val count: Int,
+) : Comparable<Direction> {
+    override fun compareTo(other: Direction): Int = when {
+        step != other.step -> step.compareTo(other.step)
+        else -> count.compareTo(other.count)
     }
 }
 
-/**
- * Represents one possible disk placement for given disk colour.
- */
+/** Represents one possible disk placement for the given disk colour. */
 data class Move(
     val square: Square,
-    val value: Int,
     val disk: Disk,
+    val value: Int,
     val directions: List<Direction>,
 ) : Comparable<Move> {
-    /**
-     * Get all the squares playing this move will change.
-     */
+    /** Format move for log entry */
+    fun logEntry(): String = "${disk.boardChar()}:$square,$value"
+
+    /** Get all the squares playing this move will change. */
     fun affectedSquares(): List<Square> {
         val paths = mutableListOf<Square>()
         for ((step, count) in directions) {
@@ -118,41 +107,23 @@ data class Move(
         return paths.sorted()
     }
 
-    fun logEntry(): String = "${disk.boardChar(color = false)}:$square,$value"
-
     override fun compareTo(other: Move): Int = when {
         value > other.value || (value == other.value && square < other.square) -> -1
         value < other.value || (value == other.value && square > other.square) -> 1
         else -> 0
     }
 
+    override fun equals(other: Any?): Boolean = other is Move &&
+        square == other.square &&
+        value == other.value &&
+        disk == other.disk
+
+    override fun hashCode(): Int {
+        var result = square.hashCode()
+        result = 31 * result + value.hashCode()
+        result = 31 * result + disk.hashCode()
+        return result
+    }
+
     override fun toString(): String = "Square: $square -> value: $value"
-}
-
-/**
- * Returns the print colour for the given Disk.
- */
-fun Disk.diskColor(): AnsiColor = when (this) {
-    Disk.Empty -> AnsiColor.WHITE
-    Disk.White -> AnsiColor.CYAN
-    Disk.Black -> AnsiColor.MAGENTA
-}
-
-/**
- * Returns string character representing board status (black, white, empty).
- */
-fun Disk.boardChar(color: Boolean = true): String = when (this) {
-    Disk.Empty -> "_"
-    Disk.White -> if (color) getColor("W", this.diskColor()) else "W"
-    Disk.Black -> if (color) getColor("B", this.diskColor()) else "B"
-}
-
-/** Returns the disk formatted as a coloured string. */
-fun Disk.diskString(): String = getColor(this.name.uppercase(), this.diskColor())
-
-/** Returns the opposing disk colour. */
-fun Disk.opponent(): Disk = when (this) {
-    Disk.Empty -> Disk.Empty
-    Disk.White -> Disk.Black
-    Disk.Black -> Disk.White
 }
