@@ -43,9 +43,15 @@ struct OthelloSwift: ParsableCommand {
     @Flag(name: .shortAndLong, help: "Print version and exit")
     var version: Bool = false
 
+    mutating func validate() throws {
+        if self.autoplay, self.defaultSettings {
+            throw ValidationError("'--autoplay' cannot be used with '--default'")
+        }
+    }
+
     mutating func run() throws {
         if self.version {
-            print("Othello Swift \(versionInfo())")
+            print(versionInfo())
             Self.exit(withError: ExitCode.success)
         }
 

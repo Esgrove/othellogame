@@ -1,6 +1,13 @@
+//==========================================================
+// Version
+// Version information
+// Akseli Lukkarila
+// 2019-2026
+//==========================================================
+
 import VersionInfo
 
-/// Return formatted build version information.
+/// Return version info string
 public func versionInfo() -> String {
-    "\(VersionInfo.versionNumber) \(VersionInfo.buildTime) \(VersionInfo.gitBranch) \(VersionInfo.gitCommit)"
+    "Othello Swift \(VersionInfo.versionNumber) \(VersionInfo.buildTime) \(VersionInfo.gitBranch) \(VersionInfo.gitCommit)"
 }
