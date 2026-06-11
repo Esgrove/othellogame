@@ -23,65 +23,66 @@ std::optional<std::string> Player::play_one_move(Board& board)
     if (!this->settings.check_mode) {
         print("Turn: " + disk_string(disk));
     }
-    if (const auto moves = board.possible_moves(disk); !moves.empty()) {
-        can_play = true;
-        if (this->human() && this->settings.show_helpers && !this->settings.check_mode) {
-            board.print_possible_moves(moves);
-        }
-        const auto chosen_move = human() ? get_human_move(moves) : get_computer_move(moves);
-        board.place_disk(chosen_move);
+    const auto moves = board.possible_moves(disk);
+    if (moves.empty()) {
+        can_play = false;
         if (!this->settings.check_mode) {
-            board.print_score();
+            print_yellow("  No moves available...");
+            fmt::print("\n");
         }
-        ++rounds_played;
-        if (!this->settings.test_mode) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        }
-        return chosen_move.log_entry();
+        return std::nullopt;
     }
-
-    can_play = false;
+    can_play = true;
+    if (this->human() && this->settings.show_helpers && !this->settings.check_mode) {
+        board.print_possible_moves(moves);
+    }
+    const auto chosen_move = human() ? get_human_move(moves) : get_computer_move(moves);
+    board.place_disk(chosen_move);
     if (!this->settings.check_mode) {
-        print_color("  No moves available...\n", fmt::terminal_color::yellow);
+        board.print_score();
     }
-    return std::nullopt;
-}
-
-/// Check if the player is human.
-bool Player::human() const
-{
-    return this->player_type == PlayerType::Human;
-}
-
-/// Check if the player is a computer.
-bool Player::computer() const
-{
-    return this->player_type == PlayerType::Computer;
-}
-
-/// Set player to be controlled by human or computer.
-void Player::set_player_type(const PlayerType type)
-{
-    this->player_type = type;
-}
-
-/// Set the player to be controlled by a human.
-void Player::set_human()
-{
-    set_player_type(PlayerType::Human);
-}
-
-/// Set the player to be controlled by a computer.
-void Player::set_computer()
-{
-    set_player_type(PlayerType::Computer);
+    ++rounds_played;
+    if (!this->settings.test_mode) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+    return chosen_move.log_entry();
 }
 
 /// Reset player status for a new game.
 void Player::reset()
 {
-    this->rounds_played = 0;
     this->can_play = true;
+    this->rounds_played = 0;
+}
+
+/// Returns true if player is controlled by a human player.
+bool Player::human() const
+{
+    return othello::human(this->player_type);
+}
+
+/// Returns true if player is controlled by computer.
+bool Player::computer() const
+{
+    return othello::computer(this->player_type);
+}
+
+/// Set the player as human or computer controlled.
+void Player::set_player_type(const PlayerType type)
+{
+    this->player_type = type;
+}
+
+/// Set the player as human controlled.
+void Player::set_human()
+{
+    set_player_type(PlayerType::Human);
+}
+
+/// Set the player as computer controlled.
+void Player::set_computer()
+{
+    set_player_type(PlayerType::Computer);
 }
 
 /// Return move chosen by computer.
@@ -113,16 +114,16 @@ Move Player::get_computer_move(const std::vector<Move>& moves)
 Move Player::get_human_move(const std::vector<Move>& moves) const
 {
     while (true) {
-        auto square = get_square();
-        // Check if given square is one of the possible moves
-        auto move
+        const auto square = get_square();
+        // Check that the chosen square is actually one of the possible moves
+        const auto valid_move
             = std::ranges::find_if(moves, [&square](const Move& m) { return m.square == square; });
-        if (move != moves.end()) {
+        if (valid_move != moves.end()) {
             // Dereference iterator to get value
-            return *move;
+            return *valid_move;
         }
         print_error(
-            fmt::format("  Can't place a {} disk in square {}!\n", disk_string(disk), square)
+            fmt::format("  Can't place a {} disk in square {}!", disk_string(disk), square)
         );
     }
 }
@@ -130,37 +131,48 @@ Move Player::get_human_move(const std::vector<Move>& moves) const
 /// Ask human player for square coordinates.
 Square Player::get_square()
 {
-    std::string input;
     while (true) {
-        try {
-            print("  Give disk position (x,y): ", false);
-            std::cin >> input;
-            if (input.size() != 3 || input[1] != ',') {
-                throw std::invalid_argument("Invalid coordinates");
-            }
-            int x = std::stoi(input.substr(0, 1));
-            int y = std::stoi(input.substr(2, 1));
-            return {x, y};
-        } catch (const std::invalid_argument&) {
-            print_error("  Give coordinates in the form 'x,y'\n");
+        print("  Give disk position (x,y): ", false);
+        // Flush to ensure the message is displayed before reading input.
+        std::cout << std::flush;
+
+        std::string input;
+        if (!std::getline(std::cin, input)) {
+            print_error("  Input failed. Please try again.");
+            std::cin.clear();
+            continue;
         }
+
+        // Read coordinates, supporting multi-digit values.
+        // Parse failures and negative values are rejected, and the player is asked again.
+        const auto trimmed = trim(input);
+        if (const auto comma = trimmed.find(','); comma != std::string::npos) {
+            const auto parse_coordinate = [](const std::string& text) -> int {
+                try {
+                    size_t pos = 0;
+                    const int value = std::stoi(text, &pos);
+                    return pos == text.size() ? value : -1;
+                } catch (const std::exception&) {
+                    return -1;
+                }
+            };
+            const int x = parse_coordinate(trimmed.substr(0, comma));
+            const int y = parse_coordinate(trimmed.substr(comma + 1));
+            if (x >= 0 && y >= 0) {
+                return {x, y};
+            }
+        }
+        print_error("  Give coordinates in the form 'x,y'!");
     }
 }
 
 /// Return player type description string.
 std::string Player::type_string() const
 {
-    switch (this->player_type) {
-        case PlayerType::Human:
-            return "Human   ";
-        case PlayerType::Computer:
-            return "Computer";
-        default:
-            return "Unknown";
-    }
+    return to_string(this->player_type);
 }
 
-std::ostream& operator<<(std::ostream& out, Player& player)
+std::ostream& operator<<(std::ostream& out, const Player& player)
 {
     return out << fmt::format(
                "{} | {} | Moves: {}",

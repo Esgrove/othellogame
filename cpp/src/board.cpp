@@ -9,59 +9,47 @@
 
 #include "colorprint.hpp"
 
-#include <algorithm>  // std::remove, std::transform
+#include <algorithm>  // std::sort, std::transform
 #include <numeric>    // std::accumulate, std::iota
 #include <ranges>     // std::ranges::transform (requires C++20)
+#include <stdexcept>  // exceptions
 
 namespace othello
 {
-Board::Board(const size_t size) : indices(size), size(size)
+Board::Board(const size_t size) :
+    board(init_board(size)),
+    // Keep track of empty squares on board to avoid checking already filled positions.
+    empty_squares(init_empty_squares(size, board)),
+    indices(size),
+    size(size)
 {
-    // Init game board with empty disks.
-    board.resize(size * size, Disk::empty);
-
-    // Set starting positions
-    const size_t row = size % 2 == 0 ? (size - 1) / 2 : (size - 1) / 2 - 1;
-    const size_t col = size / 2;
-    board[row * size + row] = Disk::white;
-    board[row * size + col] = Disk::black;
-    board[col * size + row] = Disk::black;
-    board[col * size + col] = Disk::white;
-
-    // Index list (0..size) to avoid repeating same range in for loops
+    // Index list (0...size) to avoid repeating same range in loops.
     std::iota(indices.begin(), indices.end(), 0);
-
-    // Keep track of empty squares on board to avoid checking already filled positions
-    for (const auto y : indices) {
-        for (const auto x : indices) {
-            if (board[y * size + x] == Disk::empty) {
-                empty_squares.emplace(static_cast<int>(x), static_cast<int>(y));
-            }
-        }
-    }
 }
 
 /// Return true if board contains empty squares.
 bool Board::can_play() const
 {
-    // Without keeping track of empty squares:
-    // std::find(board.begin(), board.end(), Disk::empty) != board.end();
     return !empty_squares.empty();
 }
 
 /// Update board for given disk placement.
-void Board::place_disk(const Move& move)
+void Board::place_disk(const Move& chosen_move)
 {
-    auto start = move.square;
-    if (get_square(start) != Disk::empty) {
+    const auto start = chosen_move.square;
+    const auto square = get_square(start);
+    if (!square.has_value()) {
+        throw std::invalid_argument(fmt::format("Invalid coordinates: {}", start));
+    }
+    if (square.value() != Disk::empty) {
         throw std::invalid_argument(
-            fmt::format("Trying to place disk to an occupied square {}!", start)
+            fmt::format("Trying to place disk to an occupied square: {}!", start)
         );
     }
-    set_square(start, move.disk);
+    set_square(start, chosen_move.disk);
     empty_squares.erase(start);
-    for (const auto& square : move.affected_squares()) {
-        set_square(square, move.disk);
+    for (const auto& affected_square : chosen_move.affected_squares()) {
+        set_square(affected_square, chosen_move.disk);
     }
 }
 
@@ -80,15 +68,15 @@ std::vector<Move> Board::possible_moves(Disk disk) const
                 continue;
             }
             size_t num_steps {0};
-            // keep stepping forward while opponents disks are found
+            // Keep stepping over opponents disks
             while (get_square(pos) == opposing_disk) {
                 ++num_steps;
                 pos += step;
             }
-            // Valid move only if a line of opposing disks ends in own disk
+            // Valid move only if a line of opposing disks ends with own disk
             if (get_square(pos) == disk) {
-                value += num_steps;
                 directions.emplace_back(step, num_steps);
+                value += num_steps;
             }
         }
         if (value > 0) {
@@ -102,27 +90,28 @@ std::vector<Move> Board::possible_moves(Disk disk) const
 }
 
 /// Print board with available move coordinates and the resulting points gained.
-void Board::print_possible_moves(const std::vector<Move>& moves)
+void Board::print_possible_moves(const std::vector<Move>& moves) const
 {
-    print_yellow(fmt::format("  Possible moves ({}):\n", std::to_string(moves.size())));
+    print_yellow(fmt::format("  Possible moves ({}):", moves.size()));
+    fmt::print("\n");
     // Convert board from Disk enums to strings
     std::vector<std::string> formatted_board(board.size());
     std::ranges::transform(board, formatted_board.begin(), [&](const Disk& disk) {
-        return board_char(disk);
+        return board_char_with_color(disk);
     });
     // Add possible moves to board
-    for (const Move& move : moves) {
-        const auto index = square_index(move.square);
-        formatted_board[index] = get_color(move.value, fmt::terminal_color::yellow);
-        fmt::print("  {}\n", move);
+    for (const Move& possible_move : moves) {
+        const auto index = square_index(possible_move.square);
+        formatted_board[index] = get_color(possible_move.value, fmt::terminal_color::yellow);
+        fmt::print("  {}\n", possible_move);
     }
     // Print board with move positions
-    fmt::print("   ", false);
+    fmt::print("    ");
     for (const auto i : indices) {
-        fmt::print(fmt::emphasis::bold, " {}", i);
+        fmt::print(" {}", fmt::format(fmt::emphasis::bold, "{}", i));
     }
     for (const auto y : indices) {
-        fmt::print(fmt::emphasis::bold, "\n  {}", y);
+        fmt::print("\n  {}", fmt::format(fmt::emphasis::bold, "{}", y));
         for (const auto x : indices) {
             fmt::print(" {}", formatted_board[y * size + x]);
         }
@@ -133,9 +122,8 @@ void Board::print_possible_moves(const std::vector<Move>& moves)
 /// Print current score for both players.
 void Board::print_score() const
 {
-    auto [black, white] = player_scores();
-    fmt::print("");
-    print(*this);
+    const auto [black, white] = player_scores();
+    fmt::print("\n{}\n", *this);
     fmt::print(
         "Score: {} | {}\n",
         get_color(std::to_string(black), disk_color(Disk::black)),
@@ -147,11 +135,11 @@ void Board::print_score() const
 Disk Board::result() const
 {
     using enum Disk;
-    const int sum = score();
-    if (sum == 0) {
+    const int total_score = score();
+    if (total_score == 0) {
         return empty;
     }
-    return sum > 0 ? white : black;
+    return total_score > 0 ? white : black;
 }
 
 /// Get board status string for game log.
@@ -162,7 +150,7 @@ std::string Board::log_entry() const
         board.end(),
         std::string {},
         [](const std::string& accumulator, const Disk& disk) {
-            return accumulator + board_char(disk, false);
+            return accumulator + board_char(disk);
         }
     );
 }
@@ -171,6 +159,24 @@ std::string Board::log_entry() const
 bool Board::check_coordinates(const int& x, const int& y) const
 {
     return 0 <= x && x < static_cast<int>(size) && 0 <= y && y < static_cast<int>(size);
+}
+
+/// Check that the given square is valid (inside the board).
+bool Board::check_square(const Square& square) const
+{
+    return check_coordinates(square.x, square.y);
+}
+
+/// Returns the state of the board (empty, white, black) at the given square.
+std::optional<Disk> Board::get_square(const Square& square) const
+{
+    return check_square(square) ? std::optional {board[square_index(square)]} : std::nullopt;
+}
+
+/// Map square to board index.
+size_t Board::square_index(const Square& square) const
+{
+    return static_cast<size_t>(square.y) * size + static_cast<size_t>(square.x);
 }
 
 /// Count and return the number of black and white disks.
@@ -204,40 +210,53 @@ int Board::score() const
     });
 }
 
-/// Returns the state of the board (empty, white, black) at the given coordinates.
-std::optional<Disk> Board::get_square(const Square& square) const
-{
-    return check_coordinates(square.x, square.y) ? std::optional {board[square.y * size + square.x]}
-                                                 : std::nullopt;
-}
-
-/// Sets the given square to given value.
+/// Sets the given square to the given value.
 void Board::set_square(const Square& square, const Disk disk)
 {
-    if (!check_coordinates(square.x, square.y)) {
-        throw std::invalid_argument(fmt::format("Invalid coordinates: {}!", square));
+    if (!check_square(square)) {
+        throw std::invalid_argument(fmt::format("Invalid coordinates: {}", square));
     }
-    board[square.y * size + square.x] = disk;
+    board[square_index(square)] = disk;
 }
 
-/// Map square to index on board.
-size_t Board::square_index(const Square& square) const
+/// Initialize game board with starting disk positions.
+std::vector<Disk> Board::init_board(const size_t size)
 {
-    return static_cast<size_t>(square.y) * size + static_cast<size_t>(square.x);
+    // Initialize game board with empty disks
+    std::vector<Disk> board(size * size, Disk::empty);
+    // Set starting positions
+    const size_t row = size % 2 == 0 ? (size - 1) / 2 : (size - 1) / 2 - 1;
+    const size_t col = size / 2;
+    board[row * size + row] = Disk::white;
+    board[row * size + col] = Disk::black;
+    board[col * size + row] = Disk::black;
+    board[col * size + col] = Disk::white;
+    return board;
+}
+
+/// Initialize empty squares for the board.
+std::set<Square> Board::init_empty_squares(const size_t size, const std::vector<Disk>& board)
+{
+    std::set<Square> empty_squares;
+    for (size_t index = 0; index < board.size(); ++index) {
+        if (board[index] == Disk::empty) {
+            empty_squares.emplace(static_cast<int>(index % size), static_cast<int>(index / size));
+        }
+    }
+    return empty_squares;
 }
 
 /// Format game board to string
 std::ostream& operator<<(std::ostream& out, const Board& board)
 {
-    // Horizontal header indices
-    out << " " << fmt::format(fmt::emphasis::bold, " {}", fmt::join(board.indices, " "));
+    // Horizontal indices
+    out << "  " << fmt::format(fmt::emphasis::bold, "{}", fmt::join(board.indices, " "));
     for (const auto& y : board.indices) {
-        // Vertical header index
+        // Vertical index
         out << "\n" << fmt::format(fmt::emphasis::bold, "{}", y);
-        // Output row
+        // Row values
         for (const auto x : board.indices) {
-            auto disk = board.board[y * board.size + x];
-            out << " " << board_char(disk);
+            out << " " << board_char_with_color(board.board[y * board.size + x]);
         }
     }
     return out;

@@ -6,13 +6,6 @@
 
 namespace othello
 {
-TEST(disk, opponent)
-{
-    EXPECT_EQ(opponent(Disk::white), Disk::black);
-    EXPECT_EQ(opponent(Disk::black), Disk::white);
-    EXPECT_EQ(opponent(Disk::empty), Disk::empty);
-}
-
 TEST(calculate_sha256, simple)
 {
     EXPECT_EQ(

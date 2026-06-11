@@ -52,6 +52,12 @@ struct Square {
     Square() : x(0), y(0) {}
     Square(const int x, const int y) : x(x), y(y) {}
 
+    /// Get the index of this square on the board.
+    [[nodiscard]] constexpr size_t board_index(const size_t board_size) const
+    {
+        return static_cast<size_t>(y) * board_size + static_cast<size_t>(x);
+    }
+
     friend std::ostream& operator<<(std::ostream& out, const Square& square);
 
     bool operator<(const Square& other) const
@@ -89,8 +95,8 @@ struct Square {
 
 /// Represents a continuous line of squares in one direction.
 ///
-/// The step component determines the direction on the board,
-/// and count describes how many consecutive squares in that direction there are.
+/// The `step` field determines the direction on the board,
+/// and `count` describes how many consecutive squares in that direction there are.
 struct Direction {
     constexpr Direction(const Step step, const size_t count) : step(step), count(count) {}
 
@@ -103,7 +109,9 @@ struct Direction {
         return step == other.step && count == other.count;
     }
 
+    /// Direction of travel on the board
     Step step;
+    /// Number of consecutive same colour squares along this direction
     size_t count;
 };
 
@@ -138,6 +146,38 @@ struct Move {
     size_t value;
     std::vector<Direction> directions;
 };
+
+/// Returns a single character identifier string for the given disk.
+[[nodiscard]] std::string board_char(const Disk& disk);
+
+/// Returns a single character identifier string for the given disk.
+[[nodiscard]] std::string board_char_with_color(const Disk& disk);
+
+/// Return the associated colour for this disk.
+[[nodiscard]] fmt::terminal_color disk_color(const Disk& disk);
+
+/// Returns the disk formatted as a coloured string.
+[[nodiscard]] std::string disk_string(const Disk& disk);
+
+/// Return the opposing disk colour for this disk.
+[[nodiscard]] constexpr Disk opponent(const Disk& disk)
+{
+    switch (disk) {
+        case Disk::black:
+            return Disk::white;
+        case Disk::empty:
+            return Disk::empty;
+        case Disk::white:
+            return Disk::black;
+        default:
+            return Disk::empty;
+    }
+}
+
+inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
+{
+    return out << disk_string(disk);
+}
 
 }  // namespace othello
 

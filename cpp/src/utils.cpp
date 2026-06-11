@@ -16,15 +16,7 @@
 
 namespace othello
 {
-std::string board_char(const Disk& disk, const bool color)
-{
-    if (disk == Disk::empty) {
-        return "_";
-    }
-    std::string identifier = disk == Disk::white ? "W" : "B";
-    return color ? get_color(identifier, disk_color(disk)) : identifier;
-}
-
+/// Calculate SHA256 hash for the given string.
 std::string calculate_sha256(const std::string& text)
 {
     // Code adapted from:
@@ -47,29 +39,5 @@ std::string calculate_sha256(const std::string& text)
     }
 
     return stream.str();
-}
-
-fmt::terminal_color disk_color(const Disk& disk)
-{
-    using enum fmt::terminal_color;
-    if (disk == Disk::empty) {
-        return white;
-    }
-    return disk == Disk::white ? cyan : magenta;
-}
-
-std::string disk_string(const Disk& disk)
-{
-    const auto color = disk_color(disk);
-    switch (disk) {
-        case Disk::empty:
-            return get_color("EMPTY", color);
-        case Disk::black:
-            return get_color("BLACK", color);
-        case Disk::white:
-            return get_color("WHITE", color);
-        default:
-            return "UNKNOWN";
-    }
 }
 }  // namespace othello

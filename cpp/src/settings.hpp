@@ -25,6 +25,8 @@ struct PlayerSettings {
 
     PlayerSettings() : show_helpers(true), check_mode(false), test_mode(false) {}
 
+    bool operator==(const PlayerSettings& other) const = default;
+
     friend std::ostream& operator<<(std::ostream& out, const PlayerSettings& player_settings)
     {
         out << std::format(
@@ -84,20 +86,20 @@ struct Settings {
     {
         out << std::format(
             "Settings:\n"
-            "  board_size:    {}\n"
-            "  autoplay_mode: {}\n"
-            "  check_mode:    {}\n"
-            "  show_helpers:  {}\n"
-            "  show_log:      {}\n"
-            "  test_mode:     {}\n"
-            "  use_defaults:  {}\n",
+            "  board_size: {}\n"
+            "  autoplay: {}\n"
+            "  check_mode: {}\n"
+            "  use_defaults: {}\n"
+            "  show_helpers: {}\n"
+            "  show_log: {}\n"
+            "  test_mode: {}",
             settings.board_size,
-            settings.autoplay_mode ? "true" : "false",
-            settings.check_mode ? "true" : "false",
-            settings.show_helpers ? "true" : "false",
-            settings.show_log ? "true" : "false",
-            settings.test_mode ? "true" : "false",
-            settings.use_defaults ? "true" : "false"
+            settings.autoplay_mode,
+            settings.check_mode,
+            settings.use_defaults,
+            settings.show_helpers,
+            settings.show_log,
+            settings.test_mode
         );
         return out;
     }

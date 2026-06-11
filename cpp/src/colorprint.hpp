@@ -92,16 +92,16 @@ void print_red(const T& object, bool bold = false)
 inline void print_error(const std::string& message)
 {
     auto [indent, text] = split_leading_whitespace(message);
-    const auto error_message
-        = fmt::format(fmt::fg(fmt::terminal_color::red), "{}Error: {}\n", indent, text);
-    std::cerr << error_message;
+    fmt::print(fmt::fg(fmt::terminal_color::red), "{}Error: {}", indent, text);
+    fmt::print("\n");
 }
 
 /// Print warning message with yellow colour.
 inline void print_warn(const std::string& message)
 {
     auto [indent, text] = split_leading_whitespace(message);
-    fmt::print(fmt::fg(fmt::terminal_color::yellow), "{}Warning: {}\n", indent, text);
+    fmt::print(fmt::fg(fmt::terminal_color::yellow), "{}Warning: {}", indent, text);
+    fmt::print("\n");
 }
 
 // Fallback with ANSI escape codes for stringstream

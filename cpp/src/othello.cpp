@@ -18,6 +18,7 @@
 namespace othello
 {
 
+/// Initialize Othello game.
 Othello::Othello(const Settings settings) :
     board(Board(settings.board_size)),
     settings(settings),
@@ -44,21 +45,22 @@ void Othello::play()
 /// Initialize game board and players for a new game.
 void Othello::init_game()
 {
+    // Re-use existing objects instead of initializing new ones
     if (games_played > 0) {
         board = Board(this->settings.board_size);
         player_black.reset();
         player_white.reset();
         rounds_played = 0;
+        game_log.clear();
     }
-
     if (this->settings.autoplay_mode) {
         // Computer plays both
         player_black.set_computer();
         player_white.set_computer();
-    } else if (
-        !this->settings.use_defaults && get_answer("Would you like to play against the computer")
-    )
-    {
+    } else if (this->settings.use_defaults) {
+        // Default: play as black against white computer player
+        player_white.set_computer();
+    } else if (get_answer("Would you like to play against the computer")) {
         if (get_answer("Would you like to play as black or white", "b", "w")) {
             player_white.set_computer();
         } else {
@@ -66,7 +68,8 @@ void Othello::init_game()
         }
     }
     if (!this->settings.check_mode) {
-        print_bold("\nPlayers:\n");
+        fmt::print(fmt::emphasis::bold, "\nPlayers:");
+        fmt::print("\n");
         print_status();
     }
 }
@@ -76,9 +79,7 @@ void Othello::game_loop()
 {
     while (board.can_play() && (player_black.can_play || player_white.can_play)) {
         ++rounds_played;
-        if (!this->settings.check_mode) {
-            fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========\n", rounds_played);
-        }
+        print_round_header();
         for (Player* player : {&player_black, &player_white}) {
             if (auto result = player->play_one_move(board); result.has_value()) {
                 game_log.push_back(fmt::format("{};{}", result.value(), board.log_entry()));
@@ -89,14 +90,10 @@ void Othello::game_loop()
         }
     }
     ++games_played;
-    if (!this->settings.check_mode) {
-        print_bold("\n================================\n");
-        print_green("The game is finished!\n\n", true);
-    }
+    print_game_end_footer();
 }
 
-/// Print game log which shows all moves made and the game board state after each move.
-void Othello::print_log() const
+std::string Othello::format_game_log() const
 {
     std::string formatted_log;
     size_t index = 1;
@@ -106,20 +103,43 @@ void Othello::print_log() const
             formatted_log += "\n";
         }
     }
+    return formatted_log;
+}
 
-    const auto hex_hash = calculate_sha256(formatted_log);
-
+void Othello::print_round_header() const
+{
     if (!this->settings.check_mode) {
-        print_bold("Game log:\n", fmt::terminal_color::yellow);
+        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========", rounds_played);
+        fmt::print("\n");
+    }
+}
+
+void Othello::print_game_end_footer() const
+{
+    if (!this->settings.check_mode) {
+        fmt::print(fmt::emphasis::bold, "\n================================");
+        fmt::print("\n");
+        fmt::print("{}The game is finished!\n{}\n", ansi::ANSI_BOLD_GREEN, ansi::ANSI_RESET);
+    }
+}
+
+/// Print game log which shows all moves made and the game board state after each move.
+void Othello::print_log() const
+{
+    const auto formatted_log = format_game_log();
+    if (!this->settings.check_mode) {
+        fmt::print("{}Game log:{}\n", ansi::ANSI_BOLD_YELLOW, ansi::ANSI_RESET);
         print(formatted_log);
     }
+    const auto hex_hash = calculate_sha256(formatted_log);
     print(hex_hash);
 }
 
 /// Print ending status and winner info.
 void Othello::print_result() const
 {
-    print_bold("Result:\n");
+    fmt::print(fmt::emphasis::bold, "Result:");
+    fmt::print("\n");
     print_status();
     fmt::print("\n");
 
@@ -142,36 +162,43 @@ void Othello::print_status() const
 /// Ask a question with two options, and return bool from user answer.
 bool Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no)
 {
-    // fmt library enables nice, modern string formatting,
-    // instead of having to use the horrible stringstream system:
-    // `std::cout << question << " (" << yes << "/" << no << ")? ";`
     fmt::print("{} ({}/{})? ", question, yes, no);
+    // Flush to ensure the question is displayed before reading input.
+    std::cout << std::flush;
     std::string input;
-    std::cin >> input;
-    std::ranges::transform(input, input.begin(), [](const unsigned char c) {
+    std::getline(std::cin, input);
+    auto answer = trim(input);
+    std::ranges::transform(answer, answer.begin(), [](const unsigned char c) {
         return std::tolower(c);
     });
-    return input == yes;
+    return answer == yes;
 }
 
 /// Ask and return the desired board size.
 size_t Othello::get_board_size()
 {
     fmt::print("Choose board size (default is {}): ", DEFAULT_BOARD_SIZE);
+    // Flush to ensure the question is displayed before reading input.
+    std::cout << std::flush;
     std::string input;
-    std::cin >> input;
+    std::getline(std::cin, input);
     try {
-        const size_t size = std::stoi(input);
-        if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
-            print_warn(
+        const int size = std::stoi(trim(input));
+        if (size < 0) {
+            throw std::invalid_argument("Negative board size");
+        }
+        const auto board_size = static_cast<size_t>(size);
+        if (board_size < MIN_BOARD_SIZE || board_size > MAX_BOARD_SIZE) {
+            print_yellow(
                 fmt::format(
-                    "Limiting board size to valid range {}...{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE
+                    "Limiting board size to valid range {}..{}", MIN_BOARD_SIZE, MAX_BOARD_SIZE
                 )
             );
+            fmt::print("\n");
         }
-        return std::clamp(size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
+        return std::clamp(board_size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
     } catch (const std::exception&) {
-        print_warn(fmt::format("Invalid size, defaulting to {}...\n", DEFAULT_BOARD_SIZE));
+        print_warn(fmt::format("Invalid size, defaulting to {}...", DEFAULT_BOARD_SIZE));
     }
     return DEFAULT_BOARD_SIZE;
 }
