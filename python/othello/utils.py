@@ -1,17 +1,12 @@
 """
 Utils
-Helper utilities for Othello game
+Helper utilities
 Akseli Lukkarila
 2019-2026
 """
 
 import hashlib
 import sys
-
-try:
-    from othello.version import GIT_BRANCH, GIT_COMMIT, BUILD_TIME, VERSION_NUMBER
-except ModuleNotFoundError:
-    from version import GIT_BRANCH, GIT_COMMIT, BUILD_TIME, VERSION_NUMBER
 
 
 def calculate_sha256(formatted_log: str) -> str:
@@ -33,8 +28,3 @@ def python_version() -> str:
     For example: 3.11.5
     """
     return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-
-
-def version_info() -> str:
-    """Return formatted build version information."""
-    return f"{VERSION_NUMBER} {BUILD_TIME} {GIT_BRANCH} {GIT_COMMIT}"

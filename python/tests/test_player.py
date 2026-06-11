@@ -1,33 +1,6 @@
-import pytest
-
-from othello.board import Board
-from othello.player import Player
-from othello.models import Disk, PlayerType
-
-
-@pytest.fixture
-def white_human():
-    return Player(Disk.WHITE)
-
-
-@pytest.fixture
-def black_human():
-    return Player(Disk.BLACK)
-
-
-@pytest.fixture
-def white_computer():
-    return Player(Disk.WHITE, player_type=PlayerType.COMPUTER)
-
-
-@pytest.fixture
-def black_computer():
-    return Player(Disk.BLACK, player_type=PlayerType.COMPUTER)
-
-
-@pytest.fixture
-def board_start_8():
-    return Board(8)
+from othello.models import Disk
+from othello.player import Player, PlayerType
+from othello.settings import PlayerSettings
 
 
 def test_new_player():
@@ -37,10 +10,11 @@ def test_new_player():
     assert player.computer() is False
     assert player.can_play is True
     assert player._rounds_played == 0
+    assert player._settings == PlayerSettings.default()
 
 
 def test_reset_player():
-    player = Player(Disk.WHITE)
+    player = Player(Disk.WHITE, PlayerSettings.default())
     player.can_play = False
     player._rounds_played = 10
     player.reset()
@@ -55,18 +29,16 @@ def test_set_human():
 
     player.set_computer()
     assert player.computer() is True
-    assert player.human() is False
+    assert player._player_type == PlayerType.COMPUTER
 
     player.set_human()
     assert player.human() is True
-    assert player.computer() is False
+    assert player._player_type == PlayerType.HUMAN
 
 
 def test_player_type_string():
     player = Player(Disk.BLACK)
-    assert player.human() is True
-    assert player._type_string() == "Human   "
+    assert player.type_string() == "Human   "
 
     player.set_computer()
-    assert player.computer() is True
-    assert player._type_string() == "Computer"
+    assert player.type_string() == "Computer"

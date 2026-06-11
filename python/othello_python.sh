@@ -24,7 +24,7 @@ update_version_information() {
     {
         echo '"""'
         echo 'Version'
-        echo 'Version information definitions'
+        echo 'Version information'
         echo 'Akseli Lukkarila'
         echo '2019-2026'
         echo '"""'
@@ -34,6 +34,13 @@ update_version_information() {
         echo "GIT_COMMIT = \"$GIT_COMMIT\""
         echo "BUILD_TIME = \"$BUILD_TIME\""
         echo "VERSION_NUMBER = \"$VERSION_NUMBER\""
+        echo ""
+        echo 'VERSION_STRING = f"Othello Python {VERSION_NUMBER} {BUILD_TIME} {GIT_BRANCH} {GIT_COMMIT}"'
+        echo ""
+        echo ""
+        echo 'def version_info() -> str:'
+        echo '    """Return version info string."""'
+        echo '    return VERSION_STRING'
     } > "$VERSION_FILE"
 }
 

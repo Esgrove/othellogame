@@ -1,21 +1,6 @@
 import pytest
 
-from othello.models import Disk, Square, Move, Step, Direction
-
-
-@pytest.fixture
-def white():
-    return Disk.WHITE
-
-
-@pytest.fixture
-def black():
-    return Disk.BLACK
-
-
-@pytest.fixture
-def empty():
-    return Disk.EMPTY
+from othello.models import Direction, Disk, Move, Square, Step
 
 
 @pytest.fixture
@@ -28,62 +13,53 @@ def move():
     return Move(Square(1, 1), disk=Disk.WHITE, value=1)
 
 
-def test_disk_other_disk_for_white(white):
-    assert white.opponent() == Disk.BLACK
+def test_step_addition():
+    result = Step(0, 0) + Step(1, 1)
+    assert result == Step(1, 1)
+
+    result = Step(-1, 0) + Step(1, 0)
+    assert result == Step(0, 0)
+
+    result += Step(-1, -1)
+    assert result == Step(-1, -1)
+
+    result += Step(1, 1)
+    assert result == Step(0, 0)
 
 
-def test_disk_other_disk_for_black(black):
-    assert black.opponent() == Disk.WHITE
+def test_square_addition():
+    result = Square(4, 4) + Square(1, 1)
+    assert result == Square(5, 5)
 
+    result = Square(4, 4) + Square(0, 0)
+    assert result == Square(4, 4)
 
-def test_disk_other_disk_for_empty(empty):
-    assert empty.opponent() == Disk.EMPTY
+    result = Square(4, 4) + Step(-1, 1)
+    assert result == Square(3, 5)
 
+    result += Square(0, 0)
+    assert result == Square(3, 5)
 
-def test_disk_get_board_string(empty):
-    assert empty.board_char() == "_"
+    another = Square(-3, -2) + Square(2, 3)
+    assert another == Square(-1, 1)
 
+    result += Step(-1, -1)
+    assert result == Square(2, 4)
 
-def test_square_string(square):
-    assert str(square) == "(1,1)"
+    result += Step(-1, -1)
+    assert result == Square(1, 3)
 
+    result += Step(-1, -1)
+    assert result == Square(0, 2)
 
-def test_move_string(move):
-    assert str(move) == "Square: (1,1) -> value: 1"
+    result += Step(-1, -1)
+    assert result == Square(-1, 1)
 
+    result += Step(1, -1)
+    assert result == Square(0, 0)
 
-def test_move_equal_operator(move):
-    assert move == Move(Square(1, 1), value=1)
-    assert not move == Move(Square(1, 1), value=0)
-    assert not move == Move(Square(1, 1), value=2)
-    assert not move == Move(Square(0, 1), value=1)
-    assert not move == Move(Square(0, 0), value=1)
-    assert not move == Move(Square(0, 0), value=0)
-
-
-def test_square_equal_operator(square):
-    assert square == Square(1, 1)
-    assert not square == Square(0, 0)
-    assert not square == Square(1, 0)
-    assert not square == Square(0, 1)
-
-
-def test_square_not_equal_operator(square):
-    assert square != Square(0, 0)
-    assert square != Square(0, 1)
-    assert square != Square(1, 0)
-    assert not square != Square(1, 1)
-
-
-def test_square_addition(square):
-    square_minus_one = Square(-1, -1)
-    square_zero = Square(0, 0)
-    square_two = Square(2, 2)
-    assert square == square + square_zero
-    assert square + square_minus_one == square_zero
-    assert square + square == square_two
-    square_two += square_minus_one
-    assert square_two == square
+    result += Step(-1, -1)
+    assert result == Square(-1, -1)
 
 
 def test_step_directions():
@@ -114,9 +90,15 @@ def test_step_directions():
 
 
 def test_disk_board_char():
-    assert Disk.BLACK.board_char(color=False) == "B"
-    assert Disk.EMPTY.board_char(color=False) == "_"
-    assert Disk.WHITE.board_char(color=False) == "W"
+    assert Disk.BLACK.board_char() == "B"
+    assert Disk.EMPTY.board_char() == "_"
+    assert Disk.WHITE.board_char() == "W"
+
+
+def test_disk_opponent():
+    assert Disk.BLACK.opponent() == Disk.WHITE
+    assert Disk.EMPTY.opponent() == Disk.EMPTY
+    assert Disk.WHITE.opponent() == Disk.BLACK
 
 
 def test_move_log_entry():
@@ -135,3 +117,58 @@ def test_move_log_entry():
         directions=[Direction(Step(1, 0), 1)],
     )
     assert w.log_entry() == "W:(0,0),1"
+
+
+def test_square_string(square):
+    assert str(square) == "(1,1)"
+
+
+def test_move_string(move):
+    assert str(move) == "Square: (1,1) -> value: 1"
+
+
+def test_move_equal_operator(move):
+    assert move == Move(Square(1, 1), disk=Disk.WHITE, value=1)
+    # Equality includes the disk
+    assert not move == Move(Square(1, 1), disk=Disk.BLACK, value=1)
+    assert not move == Move(Square(1, 1), disk=Disk.WHITE, value=0)
+    assert not move == Move(Square(1, 1), disk=Disk.WHITE, value=2)
+    assert not move == Move(Square(0, 1), disk=Disk.WHITE, value=1)
+    assert not move == Move(Square(0, 0), disk=Disk.WHITE, value=1)
+    assert not move == Move(Square(0, 0), disk=Disk.WHITE, value=0)
+
+
+def test_move_hash(move):
+    assert hash(move) == hash(Move(Square(1, 1), disk=Disk.WHITE, value=1))
+    assert hash(move) != hash(Move(Square(1, 1), disk=Disk.BLACK, value=1))
+    assert hash(move) != hash(Move(Square(1, 1), disk=Disk.WHITE, value=2))
+
+
+def test_square_equal_operator(square):
+    assert square == Square(1, 1)
+    assert not square == Square(0, 0)
+    assert not square == Square(1, 0)
+    assert not square == Square(0, 1)
+
+
+def test_square_not_equal_operator(square):
+    assert square != Square(0, 0)
+    assert square != Square(0, 1)
+    assert square != Square(1, 0)
+    assert not square != Square(1, 1)
+
+
+def test_square_comparison(square):
+    assert square < Square(2, 1)
+    assert square < Square(1, 2)
+    assert square <= Square(1, 1)
+    assert square >= Square(1, 1)
+    assert square > Square(0, 1)
+    assert square > Square(1, 0)
+
+
+def test_square_board_index(square):
+    assert square.board_index(8) == 9
+    assert Square(0, 0).board_index(8) == 0
+    assert Square(7, 7).board_index(8) == 63
+    assert Square(3, 2).board_index(4) == 11
