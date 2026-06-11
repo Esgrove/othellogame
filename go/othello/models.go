@@ -1,3 +1,10 @@
+//==========================================================
+// Models
+// Basic types and methods
+// Akseli Lukkarila
+// 2019-2026
+//==========================================================
+
 package othello
 
 import (
@@ -7,15 +14,7 @@ import (
 	"github.com/logrusorgru/aurora/v4"
 )
 
-// PlayerType Player can be controlled either by a human or computer.
-type PlayerType int
-
-const (
-	Human    PlayerType = 0
-	Computer PlayerType = 1
-)
-
-// Disk enum.
+// Disk Represents one game piece or lack of one.
 type Disk int
 
 const (
@@ -24,7 +23,7 @@ const (
 	White Disk = 1
 )
 
-// Step Represents a step direction on the board.
+// Step Represents one step direction on the board.
 type Step struct {
 	X int
 	Y int
@@ -37,8 +36,11 @@ type Square struct {
 }
 
 // Direction Represents a continuous line of squares in one direction.
+//
+// The Step field determines the direction on the board,
+// and Count describes how many consecutive squares in that direction there are.
 type Direction struct {
-	// The direction of travel on the board
+	// Direction of travel on the board
 	Step Step
 	// Number of consecutive same colour squares along this direction
 	Count int
@@ -52,10 +54,123 @@ type Move struct {
 	Directions []Direction
 }
 
+// BoardChar Returns a single character identifier string for the given disk.
+func (d Disk) BoardChar() string {
+	switch d {
+	case Black:
+		return "B"
+	case White:
+		return "W"
+	default:
+		return "_"
+	}
+}
+
+// BoardCharWithColor Returns a single character identifier string for the given disk.
+func (d Disk) BoardCharWithColor() string {
+	return aurora.Colorize(d.BoardChar(), d.DiskColor()).String()
+}
+
+// DiskColor Return the associated colour for this disk.
+func (d Disk) DiskColor() aurora.Color {
+	switch d {
+	case Black:
+		return aurora.MagentaFg
+	case White:
+		return aurora.CyanFg
+	default:
+		return aurora.WhiteFg
+	}
+}
+
+// DiskString Returns the disk formatted as a coloured string.
+func (d Disk) DiskString() string {
+	switch d {
+	case Black:
+		return aurora.Colorize("BLACK", d.DiskColor()).String()
+	case White:
+		return aurora.Colorize("WHITE", d.DiskColor()).String()
+	default:
+		return aurora.Colorize("EMPTY", d.DiskColor()).String()
+	}
+}
+
+// Opponent Return the opposing disk colour for this disk.
+func (d Disk) Opponent() Disk {
+	switch d {
+	case Black:
+		return White
+	case White:
+		return Black
+	default:
+		return Empty
+	}
+}
+
+// LogEntry Format move for log entry.
+func (m Move) LogEntry() string {
+	return fmt.Sprintf("%s:%s,%d", m.Disk.BoardChar(), m.Square, m.Value)
+}
+
+// AffectedSquares Get all the squares playing this move will change.
+func (m Move) AffectedSquares() []Square {
+	// Calculate the required size for the slice
+	totalSize := 0
+	for _, direction := range m.Directions {
+		totalSize += direction.Count
+	}
+	paths := make(Squares, 0, totalSize)
+	for _, direction := range m.Directions {
+		pos := m.Square.Add(direction.Step)
+		for i := 0; i < direction.Count; i++ {
+			paths = append(paths, pos)
+			pos = pos.Add(direction.Step)
+		}
+	}
+	sort.Sort(paths)
+	return paths
+}
+
+// Add Return a new square from adding a step to a square.
+func (s Square) Add(step Step) Square {
+	return Square{X: s.X + step.X, Y: s.Y + step.Y}
+}
+
+// BoardIndex Get the index of this square on the board.
+func (s Square) BoardIndex(boardSize int) int {
+	return s.Y*boardSize + s.X
+}
+
+// IsLessThan Custom comparison method since can't overload '<' operator in Go.
+func (s Square) IsLessThan(other Square) bool {
+	if s.X < other.X {
+		return true
+	} else if s.X == other.X {
+		return s.Y < other.Y
+	}
+	return false
+}
+
+// String Format step to string.
+func (s Step) String() string {
+	return fmt.Sprintf("[%d,%d]", s.X, s.Y)
+}
+
+// String Format square to string.
+func (s Square) String() string {
+	return fmt.Sprintf("(%d,%d)", s.X, s.Y)
+}
+
+// String Format move to string.
+func (m Move) String() string {
+	return fmt.Sprintf("Square: %s -> value: %d", m.Square, m.Value)
+}
+
 // Squares Implements sort.Interface for a slice of Square objects.
 type Squares []Square
 
-// MovesDescending Implements sort.Interface with custom sort order.
+// MovesDescending Implements sort.Interface with custom sort order:
+// descending value, then ascending square.
 type MovesDescending []Move
 
 func (m MovesDescending) Len() int      { return len(m) }
@@ -72,98 +187,3 @@ func (m MovesDescending) Less(i, j int) bool {
 func (s Squares) Len() int           { return len(s) }
 func (s Squares) Less(i, j int) bool { return s[i].IsLessThan(s[j]) }
 func (s Squares) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
-
-// BoardChar Returns a single character identifier string for the given disk.
-func (d Disk) BoardChar() string {
-	switch d {
-	case Black:
-		return "B"
-	case White:
-		return "W"
-	default:
-		return "_"
-	}
-}
-
-// BoardCharWithColor Returns a single character identifier string for the given disk.
-func (d Disk) BoardCharWithColor() string {
-	switch d {
-	case Black:
-		return aurora.Magenta("B").String()
-	case White:
-		return aurora.Cyan("W").String()
-	default:
-		return aurora.White("_").String()
-	}
-}
-
-// DiskString Returns the disk formatted as a coloured string.
-func (d Disk) DiskString() string {
-	switch d {
-	case Black:
-		return aurora.Magenta("BLACK").String()
-	case White:
-		return aurora.Cyan("WHITE").String()
-	default:
-		return aurora.White("EMPTY").String()
-	}
-}
-
-// Opponent Returns the opposing disk colour for this disk.
-func (d Disk) Opponent() Disk {
-	if d == Black {
-		return White
-	} else if d == White {
-		return Black
-	}
-	return Empty
-}
-
-// String Format step to string.
-func (s Step) String() string {
-	return fmt.Sprintf("[%d,%d]", s.X, s.Y)
-}
-
-// Add Return a new square from adding a step to a square.
-func (s Square) Add(step Step) Square {
-	return Square{X: s.X + step.X, Y: s.Y + step.Y}
-}
-
-// IsLessThan Custom comparison method since can't overload '<' operator in Go.
-func (s Square) IsLessThan(other Square) bool {
-	if s.X < other.X {
-		return true
-	} else if s.X == other.X {
-		return s.Y < other.Y
-	}
-	return false
-}
-
-// String Format square to string.
-func (s Square) String() string {
-	return fmt.Sprintf("(%d,%d)", s.X, s.Y)
-}
-
-// String Format move to string.
-func (m Move) String() string {
-	return fmt.Sprintf("Square: %s -> value: %d", m.Square, m.Value)
-}
-
-// LogEntry Format move for log entry.
-func (m Move) LogEntry() string {
-	return fmt.Sprintf("%s:%s,%d", m.Disk.BoardChar(), m.Square, m.Value)
-}
-
-// AffectedSquares Get all the squares playing this move will change.
-func (m Move) AffectedSquares() []Square {
-	var paths Squares
-	for _, direction := range m.Directions {
-		pos := m.Square.Add(direction.Step)
-		for i := 0; i < direction.Count; i++ {
-			paths = append(paths, pos)
-			pos = pos.Add(direction.Step)
-		}
-	}
-	sort.Sort(paths)
-	return paths
-}

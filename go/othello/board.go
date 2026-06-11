@@ -1,39 +1,48 @@
-// ==========================================================
+//==========================================================
 // Board
 // Defines the game board
 // Akseli Lukkarila
 // 2019-2026
-// ==========================================================
+//==========================================================
 
 package othello
 
 import (
-	"errors"
 	"fmt"
 	"sort"
+	"strconv"
+	"strings"
 
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/logrusorgru/aurora/v4"
 )
 
-// StepDirections contains all possible step directions for a square on the board.
-var StepDirections = [8]Step{
-	{X: -1, Y: -1},
-	{X: -1, Y: 0},
-	{X: -1, Y: 1},
-	{X: 0, Y: -1},
-	{X: 0, Y: 1},
-	{X: 1, Y: -1},
-	{X: 1, Y: 0},
-	{X: 1, Y: 1},
+const (
+	up    = 1
+	down  = -1
+	left  = -1
+	right = 1
+	still = 0
+)
+
+// All possible step directions for a square on the board.
+var stepDirections = [8]Step{
+	{X: down, Y: left},
+	{X: down, Y: right},
+	{X: down, Y: still},
+	{X: still, Y: left},
+	{X: still, Y: right},
+	{X: up, Y: left},
+	{X: up, Y: right},
+	{X: up, Y: still},
 }
 
 // Board Handles game board state and logic.
 type Board struct {
 	board        []Disk
-	size         int
 	emptySquares mapset.Set[Square]
 	indices      []int
+	size         int
 }
 
 // NewBoard Initialize a new game board with the given size.
@@ -47,45 +56,14 @@ func NewBoard(size int) Board {
 	}
 
 	// Keep track of empty squares on board to avoid checking already filled positions.
-	emptySquares := mapset.NewSet[Square]()
-	for y := range indices {
-		for x := range indices {
-			if board[y*size+x] == Empty {
-				emptySquares.Append(Square{
-					x,
-					y,
-				})
-			}
-		}
-	}
+	emptySquares := initEmptySquares(size, board)
 
 	return Board{
 		board:        board,
-		size:         size,
 		emptySquares: emptySquares,
 		indices:      indices,
+		size:         size,
 	}
-}
-
-// Initialize game board with starting disk positions.
-func initBoard(size int) []Disk {
-	board := make([]Disk, size*size)
-	for i := range board {
-		board[i] = Empty
-	}
-	// Set starting positions
-	var row int
-	if size%2 == 0 {
-		row = (size - 1) / 2
-	} else {
-		row = (size-1)/2 - 1
-	}
-	col := size / 2
-	board[row*size+row] = White
-	board[row*size+col] = Black
-	board[col*size+row] = Black
-	board[col*size+col] = White
-	return board
 }
 
 // CanPlay Return true if board contains empty squares.
@@ -94,44 +72,47 @@ func (b *Board) CanPlay() bool {
 }
 
 // PlaceDisk Update board for given disk placement.
-func (b *Board) PlaceDisk(playerMove *Move) {
-	start := playerMove.Square
-	if b.getSquare(&start) != Empty {
+func (b *Board) PlaceDisk(chosenMove *Move) {
+	start := chosenMove.Square
+	disk, ok := b.getSquare(&start)
+	if !ok {
+		panic(fmt.Sprintf("Invalid coordinates: %s", start))
+	}
+	if disk != Empty {
 		panic(fmt.Sprintf("Trying to place disk to an occupied square: %s!", start))
 	}
-	b.setSquare(&start, playerMove.Disk)
+	b.setSquare(&start, chosenMove.Disk)
 	b.emptySquares.Remove(start)
-	for _, direction := range playerMove.Directions {
-		pos := start.Add(direction.Step)
-		for i := 0; i < direction.Count; i++ {
-			b.setSquare(&pos, playerMove.Disk)
-			pos = pos.Add(direction.Step)
-		}
+	for _, square := range chosenMove.AffectedSquares() {
+		b.setSquare(&square, chosenMove.Disk)
 	}
 }
 
-// PossibleMoves Returns a list of possible moves for the given disk colour.
+// PossibleMoves Returns a list of possible moves for the given player.
 func (b *Board) PossibleMoves(disk Disk) []Move {
 	var moves []Move
 	opposingDisk := disk.Opponent()
 	for square := range b.emptySquares.Iter() {
 		var value int
 		var directions []Direction
-		for _, step := range StepDirections {
+		for _, step := range stepDirections {
 			pos := square.Add(step)
 			// Next square in this direction needs to be the opposing disk
-			if b.getSquare(&pos) != opposingDisk {
+			squareDisk, _ := b.getSquare(&pos)
+			if squareDisk != opposingDisk {
 				continue
 			}
 			var numSteps int
-			for b.getSquare(&pos) == opposingDisk {
+			// Keep stepping over opponents disks
+			for squareDisk == opposingDisk {
 				numSteps++
 				pos = pos.Add(step)
+				squareDisk, _ = b.getSquare(&pos)
 			}
-			// Valid move only if a line of opposing disks ends in own disk
-			if b.getSquare(&pos) == disk {
-				value += numSteps
+			// Valid move only if a line of opposing disks ends with own disk
+			if squareDisk == disk {
 				directions = append(directions, Direction{step, numSteps})
+				value += numSteps
 			}
 		}
 		if value > 0 {
@@ -149,8 +130,8 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 	return moves
 }
 
-// Print board with available move coordinates and the resulting points gained.
-func (b *Board) printPossibleMoves(moves []Move) {
+// PrintPossibleMoves Print board with available move coordinates and the resulting points gained.
+func (b *Board) PrintPossibleMoves(moves []Move) {
 	fmt.Println(aurora.Yellow(fmt.Sprintf("  Possible moves (%d):", len(moves))))
 	// Convert board from Disk enums to strings
 	formattedBoard := make([]string, len(b.board))
@@ -160,38 +141,45 @@ func (b *Board) printPossibleMoves(moves []Move) {
 	// Add possible moves to board
 	for _, possibleMove := range moves {
 		index := b.squareIndex(&possibleMove.Square)
-		formattedBoard[index] = aurora.Yellow(fmt.Sprintf("%d", possibleMove.Value)).String()
+		formattedBoard[index] = aurora.Yellow(strconv.Itoa(possibleMove.Value)).String()
 		fmt.Printf("  %s\n", possibleMove)
 	}
 	// Print board with move positions
-	fmt.Print("   ")
-	for i := range b.indices {
-		fmt.Printf(" %d", i)
+	headerParts := make([]string, 0, len(b.indices)+1)
+	headerParts = append(headerParts, "    ")
+	for _, i := range b.indices {
+		headerParts = append(headerParts, aurora.Bold(strconv.Itoa(i)).String())
 	}
-	for y := range b.indices {
-		fmt.Printf("\n  %d", y)
-		for x := range b.indices {
-			fmt.Printf(" %s", formattedBoard[y*b.size+x])
+	header := strings.Join(headerParts, " ")
+
+	rows := make([]string, 0, len(b.indices))
+	for _, y := range b.indices {
+		rowParts := make([]string, 0, len(b.indices))
+		for _, x := range b.indices {
+			rowParts = append(rowParts, formattedBoard[y*b.size+x])
 		}
+		row := strings.Join(rowParts, " ")
+		rows = append(rows, fmt.Sprintf("  %s %s", aurora.Bold(strconv.Itoa(y)), row))
 	}
-	fmt.Println()
+	board := strings.Join(rows, "\n")
+
+	fmt.Printf("%s\n%s\n", header, board)
 }
 
 // PrintScore Print current score for both players.
 func (b *Board) PrintScore() {
 	black, white := b.playerScores()
-	fmt.Println()
-	fmt.Println(b)
+	fmt.Printf("\n%s\n", b)
 	fmt.Printf("Score: %d | %d\n", aurora.Magenta(black), aurora.Cyan(white))
 }
 
-// Result Returns the winner disk color.
+// Result Returns the winning disk colour. Empty indicates a draw.
 func (b *Board) Result() Disk {
-	sum := b.score()
+	totalScore := b.score()
 	switch {
-	case sum > 0:
+	case totalScore > 0:
 		return White
-	case sum < 0:
+	case totalScore < 0:
 		return Black
 	default:
 		return Empty
@@ -212,26 +200,19 @@ func (b *Board) checkCoordinates(x, y int) bool {
 	return x >= 0 && x < b.size && y >= 0 && y < b.size
 }
 
-// Returns the state of the board (empty, white, black) at the given coordinates.
-//
-//nolint:unused
-func (b *Board) get(x, y int) (Disk, error) {
-	if b.checkCoordinates(x, y) {
-		return b.board[y*b.size+x], nil
-	}
-	return Empty, errors.New("invalid coordinates")
+// Check that the given square is valid (inside the board).
+func (b *Board) checkSquare(square *Square) bool {
+	return b.checkCoordinates(square.X, square.Y)
 }
 
 // Returns the state of the board (empty, white, black) at the given square.
-func (b *Board) getSquare(square *Square) Disk {
-	if b.checkCoordinates(square.X, square.Y) {
+// The boolean return value will be false if the square is outside the board.
+func (b *Board) getSquare(square *Square) (Disk, bool) {
+	if b.checkSquare(square) {
 		index := b.squareIndex(square)
-		return b.board[index]
+		return b.board[index], true
 	}
-	// Square is out of bounds.
-	// This probably should return a (Disk, error) instead,
-	// but that makes using this quite cumbersome...
-	return Empty
+	return Empty, false
 }
 
 // Map square to board index.
@@ -263,25 +244,59 @@ func (b *Board) score() int {
 	return sum
 }
 
-// Sets the given square to given value.
+// Sets the given square to the given value.
 func (b *Board) setSquare(square *Square, disk Disk) {
-	if !b.checkCoordinates(square.X, square.Y) {
-		panic("Invalid coordinates")
+	if !b.checkSquare(square) {
+		panic(fmt.Sprintf("Invalid coordinates: %s", square))
 	}
 	index := b.squareIndex(square)
 	b.board[index] = disk
 }
 
+// Initialize game board with starting disk positions.
+func initBoard(size int) []Disk {
+	// Initialize game board with empty disks
+	board := make([]Disk, size*size)
+	for i := range board {
+		board[i] = Empty
+	}
+	// Set starting positions
+	var row int
+	if size%2 == 0 {
+		row = (size - 1) / 2
+	} else {
+		row = (size-1)/2 - 1
+	}
+	col := size / 2
+	board[row*size+row] = White
+	board[row*size+col] = Black
+	board[col*size+row] = Black
+	board[col*size+col] = White
+	return board
+}
+
+// Initialize empty squares for the board.
+func initEmptySquares(size int, board []Disk) mapset.Set[Square] {
+	emptySquares := mapset.NewSet[Square]()
+	for i, disk := range board {
+		if disk == Empty {
+			emptySquares.Add(Square{X: i % size, Y: i / size})
+		}
+	}
+	return emptySquares
+}
+
 // String Format game board to string.
 func (b *Board) String() string {
-	text := " "
 	// Horizontal indices
-	for _, i := range b.indices {
-		text += fmt.Sprintf(" %d", i)
+	numbers := make([]string, len(b.indices))
+	for i, index := range b.indices {
+		numbers[i] = strconv.Itoa(index)
 	}
+	text := fmt.Sprintf("  %s", aurora.Bold(strings.Join(numbers, " ")))
 	for _, y := range b.indices {
 		// Vertical index
-		text += fmt.Sprintf("\n%d", y)
+		text += fmt.Sprintf("\n%s", aurora.Bold(strconv.Itoa(y)))
 		// Row values
 		for _, x := range b.indices {
 			disk := b.board[y*b.size+x]

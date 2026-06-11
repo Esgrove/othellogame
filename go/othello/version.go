@@ -18,10 +18,10 @@ var GitCommit string
 var BuildTime string
 var VersionNumber string
 
-// VersionInfo returns formatted build version info string.
+// VersionInfo Return version info string.
 func VersionInfo() string {
 	return fmt.Sprintf(
-		"%s %s %s %s",
+		"Othello Go %s %s %s %s",
 		VersionNumber, BuildTime, GitBranch, GitCommit,
 	)
 }

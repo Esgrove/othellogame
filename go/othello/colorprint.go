@@ -1,6 +1,6 @@
 //==========================================================
 // Colorprint
-// Interface for coloured printing
+// Interface for coloured terminal printing
 // Akseli Lukkarila
 // 2019-2026
 //==========================================================
@@ -9,6 +9,8 @@ package othello
 
 import (
 	"fmt"
+	"strings"
+	"unicode"
 
 	"github.com/logrusorgru/aurora/v4"
 )
@@ -16,17 +18,19 @@ import (
 // PrintError Print error message with red colour.
 // Supports optional Printf formatting.
 func PrintError(message string, values ...any) {
-	fmt.Println(aurora.Red(fmt.Sprintf("ERROR: "+message, values...)))
+	indent, text := splitLeadingWhitespace(fmt.Sprintf(message, values...))
+	fmt.Println(aurora.Red(fmt.Sprintf("%sError: %s", indent, text)))
 }
 
 // PrintWarn Print warning message with yellow colour.
 // Supports optional Printf formatting.
 func PrintWarn(message string, values ...any) {
-	fmt.Println(aurora.Yellow(fmt.Sprintf("WARNING: "+message, values...)))
+	indent, text := splitLeadingWhitespace(fmt.Sprintf(message, values...))
+	fmt.Println(aurora.Yellow(fmt.Sprintf("%sWarning: %s", indent, text)))
 }
 
-// PrintBold Print bold message with white colour.
-// Supports optional Printf formatting.
-func PrintBold(message string, values ...any) {
-	fmt.Println(aurora.Bold(fmt.Sprintf(message, values...)))
+// Split a string into the leading whitespace and the rest of the string.
+func splitLeadingWhitespace(message string) (string, string) {
+	text := strings.TrimLeftFunc(message, unicode.IsSpace)
+	return message[:len(message)-len(text)], text
 }

@@ -97,11 +97,20 @@ func initFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&noHelpers, "no-helpers", "n", false, "Hide disk placement hints")
 	cmd.Flags().BoolVarP(&test, "test", "t", false, "Enable test mode with deterministic computer moves")
 	cmd.Flags().BoolVarP(&version, "version", "v", false, "Print version and exit")
+	cmd.MarkFlagsMutuallyExclusive("autoplay", "default")
+}
+
+func main() {
+	CLI := Args()
+	if err := CLI.Execute(); err != nil {
+		othello.PrintError("%s", err)
+		os.Exit(1)
+	}
 }
 
 func runGame(_ *cobra.Command, args []string) {
 	if version {
-		fmt.Printf("Othello Go %s\n", othello.VersionInfo())
+		fmt.Println(othello.VersionInfo())
 		os.Exit(0)
 	}
 
@@ -109,15 +118,15 @@ func runGame(_ *cobra.Command, args []string) {
 
 	boardSize := resolveBoardSize(args)
 
-	settings := othello.NewSettings(
-		boardSize,
-		autoplay || check,
-		check,
-		!noHelpers,
-		log || check,
-		test || check,
-		defaultSettings,
-	)
+	settings := othello.Settings{
+		BoardSize:    boardSize,
+		AutoplayMode: autoplay || check,
+		CheckMode:    check,
+		ShowHelpers:  !noHelpers,
+		ShowLog:      log || check,
+		TestMode:     test || check,
+		UseDefaults:  defaultSettings,
+	}
 
 	game := othello.NewOthello(settings)
 	game.Play()
@@ -141,13 +150,5 @@ func resolveBoardSize(args []string) int {
 	} else {
 		// Otherwise ask user for board size
 		return othello.GetBoardSize()
-	}
-}
-
-func main() {
-	CLI := Args()
-	if err := CLI.Execute(); err != nil {
-		othello.PrintError(err.Error())
-		os.Exit(1)
 	}
 }
