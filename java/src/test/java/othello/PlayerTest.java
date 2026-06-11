@@ -10,30 +10,41 @@ public class PlayerTest {
 
     @Test
     public void newPlayer() {
-        Player player = Player.black(new PlayerSettings(false, true, false));
-        assertTrue(player.canPlay());
+        Player player = Player.black(PlayerSettings.defaultSettings());
+        assertEquals(Disk.BLACK, player.disk);
         assertTrue(player.human());
-        assertFalse(player.computer());
+        assertTrue(player.canPlay);
+        assertEquals(0, player.roundsPlayed);
+        assertEquals(PlayerSettings.defaultSettings(), player.settings);
     }
 
     @Test
     public void resetPlayer() {
-        Player player = Player.white(new PlayerSettings(false, true, false));
+        Player player = new Player(Disk.WHITE, PlayerSettings.defaultSettings());
+        player.canPlay = false;
+        player.roundsPlayed = 10;
         player.reset();
-        assertTrue(player.canPlay());
+        assertTrue(player.canPlay);
+        assertEquals(0, player.roundsPlayed);
     }
 
     @Test
-    public void setHumanAndComputer() {
-        Player player = Player.black(new PlayerSettings(false, true, false));
-        assertTrue(player.human());
-
+    public void setHuman() {
+        Player player = Player.black(PlayerSettings.defaultSettings());
         player.setComputer();
         assertTrue(player.computer());
-        assertFalse(player.human());
-
+        assertEquals(PlayerType.COMPUTER, player.playerType);
         player.setHuman();
         assertTrue(player.human());
-        assertFalse(player.computer());
+        assertEquals(PlayerType.HUMAN, player.playerType);
+    }
+
+    @Test
+    public void playerTypeString() {
+        Player player = Player.black(PlayerSettings.defaultSettings());
+        assertEquals("Human   ", player.typeString());
+
+        player.setComputer();
+        assertEquals("Computer", player.typeString());
     }
 }

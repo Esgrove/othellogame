@@ -2,24 +2,26 @@ package othello;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Parameters;
+import picocli.CommandLine.Spec;
 
-import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 import static othello.ColorPrint.printBold;
 import static othello.ColorPrint.printError;
-import static othello.ColorPrint.printColor;
-import static othello.ColorPrint.printWarn;
 import static othello.Settings.DEFAULT_BOARD_SIZE;
 import static othello.Settings.MAX_BOARD_SIZE;
 import static othello.Settings.MIN_BOARD_SIZE;
 
+/**
+ * Play Othello (Reversi) on the command line.
+ * <a href="https://en.wikipedia.org/wiki/Reversi">https://en.wikipedia.org/wiki/Reversi</a>
+ */
 @Command(
     name = "othello_java",
-    mixinStandardHelpOptions = true,
-    version = VersionInfo.VERSION_STRING,
     description = "A simple Othello CLI game implementation in Java\n",
     customSynopsis = "java -jar othello_java [<options>] [<size>]\n"
 )
@@ -45,7 +47,7 @@ public class Main implements Callable<Integer> {
     },
         description = "Autoplay and only print result"
     )
-    private boolean checkMode;
+    private boolean check;
 
     @Option(names = {
         "-d", "--default"
@@ -55,11 +57,19 @@ public class Main implements Callable<Integer> {
     private boolean useDefaults;
 
     @Option(names = {
+        "-h", "--help"
+    },
+        usageHelp = true,
+        description = "Show this help message and exit"
+    )
+    private boolean help;
+
+    @Option(names = {
         "-l", "--log"
     },
         description = "Show game log at the end"
     )
-    private boolean showLog;
+    private boolean log;
 
     @Option(names = {
         "-n", "--no-helpers"
@@ -73,21 +83,45 @@ public class Main implements Callable<Integer> {
     },
         description = "Enable test mode with deterministic computer moves"
     )
-    private boolean testMode;
+    private boolean test;
+
+    // Custom version flag instead of the picocli default,
+    // since picocli uses uppercase `-V` for the short version option.
+    @Option(names = {
+        "-v", "--version"
+    },
+        description = "Print version and exit"
+    )
+    private boolean version;
+
+    @Spec
+    private CommandSpec spec;
 
     @Override
     public Integer call() {
+        if (version) {
+            System.out.println(VersionInfo.versionInfo());
+            return 0;
+        }
+
+        if (autoplay && useDefaults) {
+            throw new ParameterException(
+                spec.commandLine(),
+                "-a/--autoplay cannot be used with -d/--default"
+            );
+        }
+
         printBold("OTHELLO GAME - JAVA", AnsiColor.GREEN);
 
-        Integer boardSize = resolveBoardSize(size, autoplay, useDefaults);
+        int boardSize = resolveBoardSize();
 
         Settings settings = new Settings(
             boardSize,
-            autoplay || checkMode,
-            checkMode,
+            autoplay || check,
+            check,
             !noHelpers,
-            showLog || checkMode,
-            testMode || checkMode,
+            log || check,
+            test || check,
             useDefaults
         );
 
@@ -95,32 +129,7 @@ public class Main implements Callable<Integer> {
         return 0;
     }
 
-    private static int getBoardSize() {
-        System.out.printf("Choose board size (default is %d): ", DEFAULT_BOARD_SIZE);
-
-        String input = System.console() != null ? System.console().readLine() : new Scanner(System.in).nextLine();
-
-        if (input == null || input.trim().isEmpty()) {
-            printColor("Invalid size, defaulting to %d...", AnsiColor.YELLOW);
-            return DEFAULT_BOARD_SIZE;
-        }
-
-        try {
-            int boardSize = Integer.parseInt(input.trim());
-            if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
-                printColor(
-                    "Limiting board size to valid range " + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE,
-                    AnsiColor.YELLOW
-                );
-            }
-            return Utils.clamp(boardSize, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
-        } catch (NumberFormatException ignored) {}
-
-        printWarn("Invalid size, defaulting to " + DEFAULT_BOARD_SIZE + "...");
-        return DEFAULT_BOARD_SIZE;
-    }
-
-    private Integer resolveBoardSize(Integer size, boolean autoplay, boolean useDefaults) {
+    private int resolveBoardSize() {
         // Try to read board size from command line args
         if (size != null) {
             if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
@@ -132,8 +141,8 @@ public class Main implements Callable<Integer> {
         } else if (autoplay || useDefaults) {
             return DEFAULT_BOARD_SIZE;
         } else {
-            // Otherwise ask the user for board size
-            return getBoardSize();
+            // Otherwise ask user for board size
+            return Othello.getBoardSize();
         }
     }
 

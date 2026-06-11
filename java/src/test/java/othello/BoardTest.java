@@ -3,15 +3,41 @@ package othello;
 import org.junit.jupiter.api.Test;
 
 import othello.Models.Disk;
+import othello.Models.Square;
+import othello.Utils.IntPair;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
     @Test
+    public void boardInitialization() {
+        int boardSize = 8;
+        Board board = new Board(boardSize);
+        assertEquals(boardSize, board.size);
+        // Check initial disk positions
+        assertEquals(Disk.WHITE, board.getSquare(new Square(3, 3)));
+        assertEquals(Disk.WHITE, board.getSquare(new Square(4, 4)));
+        assertEquals(Disk.BLACK, board.getSquare(new Square(3, 4)));
+        assertEquals(Disk.BLACK, board.getSquare(new Square(4, 3)));
+        // Rest of the board should be empty
+        assertEquals(Disk.EMPTY, board.getSquare(new Square(0, 0)));
+        assertEquals(Disk.EMPTY, board.getSquare(new Square(7, 7)));
+    }
+
+    @Test
     public void canPlay() {
         Board board = new Board(8);
         assertTrue(board.canPlay());
+    }
+
+    @Test
+    public void scoring() {
+        Board board = new Board(8);
+        IntPair scores = board.playerScores();
+        assertEquals(2, scores.first());
+        assertEquals(2, scores.second());
+        assertEquals(0, board.score());
     }
 
     @Test

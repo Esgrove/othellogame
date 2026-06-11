@@ -45,6 +45,9 @@ abstract class WriteVersionTask : DefaultTask() {
             """
             package othello;
 
+            /**
+             * Version information.
+             */
             public final class VersionInfo {
                 public static final String APP_NAME = "${appName.get()}";
                 public static final String BUILD_TIME = "$buildTime";
@@ -52,6 +55,13 @@ abstract class WriteVersionTask : DefaultTask() {
                 public static final String GIT_COMMIT = "$gitCommit";
                 public static final String VERSION_NUMBER = "${appVersion.get()}";
                 public static final String VERSION_STRING = "$formattedVersion";
+
+                /**
+                 * Return version info string.
+                 */
+                public static String versionInfo() {
+                    return VERSION_STRING;
+                }
             }
             """.trimIndent()
         )
@@ -103,7 +113,7 @@ val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper
 
 val writeVersionFile by tasks.registering(WriteVersionTask::class) {
     outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/java"))
-    appName.set(project.name)
+    appName.set("Othello Java")
     appVersion.set(project.version.toString())
     execOps.set(execHelper.map { it.execOps })
 }

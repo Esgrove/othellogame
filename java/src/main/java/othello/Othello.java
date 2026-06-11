@@ -8,25 +8,37 @@ import java.util.stream.IntStream;
 
 import othello.Models.Disk;
 
-/** Gameplay loop and main logic. */
+import static othello.Settings.DEFAULT_BOARD_SIZE;
+import static othello.Settings.MAX_BOARD_SIZE;
+import static othello.Settings.MIN_BOARD_SIZE;
+
+/**
+ * Gameplay loop and main logic.
+ */
 public class Othello {
-    private final Settings settings;
     private Board board;
+    private final Settings settings;
     private final Player playerBlack;
     private final Player playerWhite;
-    private int roundsPlayed = 0;
-    private int gamesPlayed = 0;
     private final List<String> gameLog = new ArrayList<>();
+    private int gamesPlayed = 0;
+    private int roundsPlayed = 0;
 
+    private static final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * Initialize Othello game.
+     */
     public Othello(Settings settings) {
-        this.settings = settings;
         this.board = new Board(settings.boardSize());
-        PlayerSettings playerSettings = settings.toPlayerSettings();
-        this.playerBlack = Player.black(playerSettings);
-        this.playerWhite = Player.white(playerSettings);
+        this.settings = settings;
+        this.playerBlack = Player.black(settings.toPlayerSettings());
+        this.playerWhite = Player.white(settings.toPlayerSettings());
     }
 
-    /** Play one full game of Othello. */
+    /**
+     * Play one full game of Othello.
+     */
     public void play() {
         do {
             initGame();
@@ -35,11 +47,14 @@ public class Othello {
             if (settings.showLog()) {
                 printLog();
             }
-        } while (!settings.autoplayMode() && getAnswer("Would you like to play again"));
+        } while (!settings.autoplayMode() && getAnswer("Would you like to play again", "y", "n"));
     }
 
-    /** Initialize game board and players for a new game. */
+    /**
+     * Initialize game board and players for a new game.
+     */
     private void initGame() {
+        // Re-use existing objects instead of initializing new ones
         if (gamesPlayed > 0) {
             board = new Board(settings.boardSize());
             playerBlack.reset();
@@ -48,11 +63,13 @@ public class Othello {
             gameLog.clear();
         }
         if (settings.autoplayMode()) {
+            // Computer plays both
             playerBlack.setComputer();
             playerWhite.setComputer();
         } else if (settings.useDefaults()) {
+            // Default: play as black against white computer player
             playerWhite.setComputer();
-        } else if (getAnswer("Would you like to play against the computer")) {
+        } else if (getAnswer("Would you like to play against the computer", "y", "n")) {
             if (getAnswer("Would you like to play as black or white", "b", "w")) {
                 playerWhite.setComputer();
             } else {
@@ -65,7 +82,9 @@ public class Othello {
         }
     }
 
-    /** Keep making moves until both players can't make a move anymore. */
+    /**
+     * Keep making moves until both players can't make a move any more.
+     */
     private void gameLoop() {
         while (board.canPlay() && (playerBlack.canPlay() || playerWhite.canPlay())) {
             roundsPlayed++;
@@ -77,41 +96,13 @@ public class Othello {
                 if (result != null) {
                     gameLog.add(result + ";" + board.logEntry());
                 }
-                printDivider();
+                if (!settings.checkMode()) {
+                    System.out.println("--------------------------------");
+                }
             }
         }
         gamesPlayed++;
         printGameEndFooter();
-    }
-
-    private void printRoundHeader() {
-        if (!settings.checkMode()) {
-            ColorPrint.printBold("\n=========== ROUND: " + roundsPlayed + " ===========");
-        }
-    }
-
-    private void printDivider() {
-        if (!settings.checkMode()) {
-            System.out.println("--------------------------------");
-        }
-    }
-
-    private void printGameEndFooter() {
-        if (!settings.checkMode()) {
-            ColorPrint.printBold("\n================================");
-            ColorPrint.printColor("The game is finished!\n", AnsiColor.GREEN);
-        }
-    }
-
-    /** Print game log with all moves and board states. */
-    private void printLog() {
-        String formattedLog = formatGameLog();
-        if (!settings.checkMode()) {
-            ColorPrint.printBold("Game log:", AnsiColor.YELLOW);
-            System.out.println(formattedLog);
-        }
-        String hash = Utils.calculateSha256(formattedLog);
-        System.out.println(hash);
     }
 
     private String formatGameLog() {
@@ -120,8 +111,34 @@ public class Othello {
             .collect(Collectors.joining("\n"));
     }
 
+    private void printRoundHeader() {
+        if (!settings.checkMode()) {
+            ColorPrint.printBold("\n=========== ROUND: " + roundsPlayed + " ===========");
+        }
+    }
+
+    private void printGameEndFooter() {
+        if (!settings.checkMode()) {
+            ColorPrint.printBold("\n================================");
+            ColorPrint.printBold("The game is finished!\n", AnsiColor.GREEN);
+        }
+    }
+
     /**
-     * Print final result and winner.
+     * Print game log which shows all moves made and the game board state after each move.
+     */
+    private void printLog() {
+        String formattedLog = formatGameLog();
+        if (!settings.checkMode()) {
+            ColorPrint.printBold("Game log:", AnsiColor.YELLOW);
+            System.out.println(formattedLog);
+        }
+        String hexHash = Utils.calculateSha256(formattedLog);
+        System.out.println(hexHash);
+    }
+
+    /**
+     * Print ending status and winner info.
      */
     private void printResult() {
         ColorPrint.printBold("Result:");
@@ -130,31 +147,47 @@ public class Othello {
 
         Disk winner = board.result();
         if (winner == Disk.EMPTY) {
-            ColorPrint.printBold("The game ended in a tie...\n");
+            System.out.println("The game ended in a tie...\n");
         } else {
-            ColorPrint.printBold("The winner is " + winner.name() + "!\n");
+            System.out.println("The winner is " + winner.diskString() + "!\n");
         }
     }
 
     /**
-     * Print current board and player status.
+     * Print current board and player info.
      */
     private void printStatus() {
         System.out.println(playerBlack);
-        System.out.println(playerWhite);
-        System.out.println();
+        System.out.println(playerWhite + "\n");
         System.out.println(board);
     }
 
-    /** Prompt the user and return their answer as boolean. */
-    private boolean getAnswer(String question) {
-        return getAnswer(question, "y", "n");
+    /**
+     * Ask a question with two options, and return bool from user answer.
+     */
+    private static boolean getAnswer(String question, String yes, String no) {
+        System.out.print(question + " (" + yes + "/" + no + ")? ");
+        String input = scanner.nextLine();
+        return input.trim().toLowerCase().equals(yes);
     }
 
-    private boolean getAnswer(String question, String yes, String no) {
-        System.out.print(question + " (" + yes + "/" + no + ")? ");
-        Scanner scanner = new Scanner(System.in);
-        String ans = scanner.nextLine();
-        return ans != null && !ans.isBlank() && ans.equalsIgnoreCase(yes);
+    /**
+     * Ask and return the desired board size.
+     */
+    public static int getBoardSize() {
+        System.out.print("Choose board size (default is " + DEFAULT_BOARD_SIZE + "): ");
+        String input = scanner.nextLine();
+        try {
+            int boardSize = Integer.parseInt(input.trim());
+            if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
+                ColorPrint.printColor(
+                    "Limiting board size to valid range " + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE,
+                    AnsiColor.YELLOW
+                );
+            }
+            return Utils.clamp(boardSize, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
+        } catch (NumberFormatException ignored) {}
+        ColorPrint.printWarn("Invalid size, defaulting to " + DEFAULT_BOARD_SIZE + "...");
+        return DEFAULT_BOARD_SIZE;
     }
 }

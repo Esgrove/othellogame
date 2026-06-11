@@ -1,64 +1,65 @@
 package othello;
 
+/**
+ * Interface for coloured terminal printing.
+ */
 public class ColorPrint {
     /**
-     * Format string with color.
-     */
-    public static String getColor(String text, AnsiColor color, boolean bold) {
-        // Check if the text contains a reset code already
-        String coloredText = text.replace(AnsiColor.RESET.toString(), AnsiColor.RESET + color.toString());
-
-        if (bold) {
-            return color + AnsiColor.BOLD.toString() + coloredText + AnsiColor.RESET;
-        }
-
-        return color + coloredText + AnsiColor.RESET;
-    }
-
-    /**
-     * Format string with color.
-     * <p>
-     * Overload with bold defaulting to false.
+     * Format string with colour.
      */
     public static String getColor(String text, AnsiColor color) {
-        return getColor(text, color, false);
+        return color + text + AnsiColor.RESET;
     }
 
     /**
-     * Print text with specified color.
+     * Format string as bold.
+     */
+    public static String getBold(String text) {
+        return AnsiColor.BOLD + text + AnsiColor.RESET.toString();
+    }
+
+    /**
+     * Format string as bold with colour.
+     */
+    public static String getBold(String text, AnsiColor color) {
+        return color.bold() + text + AnsiColor.RESET;
+    }
+
+    /**
+     * Print text with the given colour.
      */
     public static void printColor(String text, AnsiColor color) {
-        System.out.println(getColor(text, color, false));
+        System.out.println(getColor(text, color));
     }
 
     /**
      * Print bold text.
      */
     public static void printBold(String text) {
-        printBold(text, AnsiColor.WHITE);
+        System.out.println(getBold(text));
     }
 
     /**
-     * Print bold text with optional color.
+     * Print bold text with the given colour.
      */
     public static void printBold(String text, AnsiColor color) {
-        System.out.println(getColor(text, color, true));
+        System.out.println(getBold(text, color));
     }
 
     /**
-     * Print error message with red color.
+     * Print error message with red colour.
      */
     public static void printError(String message) {
         String[] split = splitLeadingWhitespace(message);
-        System.out.println(split[0] + getColor("Error: " + split[1], AnsiColor.RED, false));
+        System.out.println(getColor(split[0] + "Error: " + split[1], AnsiColor.RED));
     }
 
     /**
-     * Print warning message with yellow color.
+     * Print warning message with yellow colour.
      */
     public static void printWarn(String message) {
         String[] split = splitLeadingWhitespace(message);
-        System.out.println(split[0] + getColor("Warning: " + split[1], AnsiColor.YELLOW, false));
+        System.out.println(getColor(split[0] + "Warning: " + split[1], AnsiColor.YELLOW));
     }
 
     /**
