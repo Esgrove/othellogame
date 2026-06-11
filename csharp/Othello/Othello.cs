@@ -6,301 +6,169 @@
 // 2019-2026
 //==========================================================
 
-using Pastel;
 using System;
 using System.Collections.Generic;
-using System.CommandLine;
 using System.Drawing;
 using System.Linq;
 
 namespace Othello {
-    public class Program {
-        /// Gameplay loop and main logic.
-        internal sealed class Othello {
-            private Board _board;
-            private readonly Player _playerBlack;
-            private readonly Player _playerWhite;
-            private int _roundsPlayed;
-            private int _gamesPlayed;
-            private readonly Settings _settings;
-            private readonly List<string> _gameLog = [];
+    /// <summary>Gameplay loop and main logic.</summary>
+    internal sealed class Othello {
+        private Board _board;
+        private readonly Settings _settings;
+        private readonly Player _playerBlack;
+        private readonly Player _playerWhite;
+        private readonly List<string> _gameLog = [];
+        private int _gamesPlayed;
+        private int _roundsPlayed;
 
-            private Othello(Settings settings) {
-                _board = new Board(settings.BoardSize);
-                _settings = settings;
-                _gamesPlayed = 0;
-                _playerBlack = Player.Black(settings.ToPlayerSettings());
-                _playerWhite = Player.White(settings.ToPlayerSettings());
+        /// <summary>Initialize Othello game.</summary>
+        public Othello(Settings settings) {
+            _board = new Board(settings.BoardSize);
+            _settings = settings;
+            _playerBlack = Player.Black(settings.ToPlayerSettings());
+            _playerWhite = Player.White(settings.ToPlayerSettings());
+        }
+
+        /// <summary>Play one full game of Othello.</summary>
+        public void Play() {
+            while (true) {
+                InitGame();
+                GameLoop();
+                PrintResult();
+                if (_settings.ShowLog) {
+                    PrintLog();
+                }
+                if (_settings.AutoplayMode || !GetAnswer("Would you like to play again")) {
+                    break;
+                }
+            }
+        }
+
+        /// <summary>Initialize game board and players for a new game.</summary>
+        private void InitGame() {
+            // Re-use existing objects instead of initializing new ones
+            if (_gamesPlayed > 0) {
+                _board = new Board(_settings.BoardSize);
+                _playerBlack.Reset();
+                _playerWhite.Reset();
                 _roundsPlayed = 0;
+                _gameLog.Clear();
             }
-
-            /// Play one full game of Othello.
-            private void Play() {
-                while (true) {
-                    InitGame();
-                    GameLoop();
-                    PrintResult();
-                    if (_settings.ShowLog) {
-                        PrintLog();
-                    }
-                    if (_settings.AutoplayMode || !GetAnswer("Would you like to play again")) {
-                        break;
-                    }
-                }
-            }
-
-            /// Initialise game board and players for a new game.
-            private void InitGame() {
-                if (_gamesPlayed > 0) {
-                    _board = new Board(_settings.BoardSize);
-                    _playerBlack.Reset();
-                    _playerWhite.Reset();
-                    _roundsPlayed = 0;
-                    _gameLog.Clear();
-                }
-
-                if (_settings.AutoplayMode) {
-                    // Computer plays both
+            if (_settings.AutoplayMode) {
+                // Computer plays both
+                _playerBlack.SetComputer();
+                _playerWhite.SetComputer();
+            } else if (_settings.UseDefaults) {
+                // Default: play as black against white computer player
+                _playerWhite.SetComputer();
+            } else if (GetAnswer("Would you like to play against the computer")) {
+                if (GetAnswer("Would you like to play as black or white", "b", "w")) {
                     _playerWhite.SetComputer();
+                } else {
                     _playerBlack.SetComputer();
-                } else if (_settings.UseDefaults) {
-                    // Default: play as black against white computer player
-                    _playerWhite.SetComputer();
-                } else if (GetAnswer("Would you like to play against the computer")) {
-                    if (GetAnswer("Would you like to play as black or white", "b", "w")) {
-                        _playerWhite.SetComputer();
-                    } else {
-                        _playerBlack.SetComputer();
-                    }
-                }
-
-                if (!_settings.CheckMode) {
-                    Console.WriteLine("\nPlayers:".Pastel(Color.Silver));
-                    PrintStatus();
                 }
             }
-
-            /// Keep making moves until both players can't make a move any more.
-            private void GameLoop() {
-                while (_board.CanPlay() && (_playerBlack.CanPlay || _playerWhite.CanPlay)) {
-                    ++_roundsPlayed;
-                    PrintRoundHeader();
-                    foreach (Player player in new[] { _playerBlack, _playerWhite }) {
-                        string result = player.PlayOneMove(_board);
-                        if (result != null) {
-                            _gameLog.Add($"{result};{_board.LogEntry()}");
-                        }
-                        PrintDivider();
-                    }
-                }
-                ++_gamesPlayed;
-                PrintGameEndFooter();
-            }
-
-            private string FormatGameLog() {
-                string formattedLog = "";
-                int index = 1;
-                foreach (string line in _gameLog) {
-                    formattedLog += $"{index++:00}: {line}";
-                    if (index <= _gameLog.Count) {
-                        formattedLog += "\n";
-                    }
-                }
-                return formattedLog;
-            }
-
-            private void PrintRoundHeader() {
-                if (!_settings.CheckMode) {
-                    Console.WriteLine($"\n=========== ROUND: {_roundsPlayed} ===========");
-                }
-            }
-
-            private void PrintDivider() {
-                if (!_settings.CheckMode) {
-                    Console.WriteLine("--------------------------------");
-                }
-            }
-
-            private void PrintGameEndFooter() {
-                if (!_settings.CheckMode) {
-                    Console.WriteLine("\n================================");
-                    ColorPrint.WriteLine("The game is finished!", Color.Green);
-                }
-            }
-
-            private void PrintLog() {
-                string formattedLog = FormatGameLog();
-                if (!_settings.CheckMode) {
-                    ColorPrint.WriteLine("Game log:", Color.Yellow);
-                    Console.WriteLine(formattedLog);
-                }
-                string hexHash = Utils.CalculateSha256(formattedLog);
-                Console.WriteLine(hexHash);
-            }
-
-            /// Print ending status and winner info.
-            private void PrintResult() {
-                Console.WriteLine("Result:".Pastel(Color.Silver));
+            if (!_settings.CheckMode) {
+                Console.WriteLine(ColorPrint.Bold("\nPlayers:"));
                 PrintStatus();
-                Console.WriteLine("");
-
-                Disk winner = _board.Result();
-                Console.WriteLine(
-                    winner == Disk.Empty
-                        ? "The game ended in a tie...\n"
-                        : $"The winner is {winner.DiskString()}!\n"
-                );
             }
+        }
 
-            /// Print current board and player info.
-            private void PrintStatus() {
-                Console.WriteLine(_playerBlack);
-                Console.WriteLine(_playerWhite);
-                Console.WriteLine($"\n{_board}");
-            }
-
-            /// Ask a question with two options, and return bool from user answer.
-            private static bool GetAnswer(string question, string yes = "y", string no = "n") {
-                Console.Write($"{question} ({yes}/{no})? ");
-                string answer = Console.ReadLine();
-                return !string.IsNullOrEmpty(answer)
-                    && string.Equals(answer, yes, StringComparison.OrdinalIgnoreCase);
-            }
-
-            /// Ask and return the desired board size.
-            private static int GetBoardSize() {
-                Console.Write($"Choose board size (default is {Settings.DefaultBoardSize}): ");
-                if (int.TryParse(Console.ReadLine(), out int boardSize)) {
-                    if (boardSize is < Settings.MinBoardSize or > Settings.MaxBoardSize) {
-                        ColorPrint.Warn(
-                            $"Limiting board size to valid range {Settings.MinBoardSize}...{Settings.MaxBoardSize}"
-                        );
+        /// <summary>Keep making moves until both players can't make a move any more.</summary>
+        private void GameLoop() {
+            while (_board.CanPlay() && (_playerBlack.CanPlay || _playerWhite.CanPlay)) {
+                ++_roundsPlayed;
+                PrintRoundHeader();
+                foreach (Player player in new[] { _playerBlack, _playerWhite }) {
+                    string result = player.PlayOneMove(_board);
+                    if (result != null) {
+                        _gameLog.Add($"{result};{_board.LogEntry()}");
                     }
-                    return Math.Max(Settings.MinBoardSize, Math.Min(boardSize, Settings.MaxBoardSize));
-                }
-                ColorPrint.Warn($"Invalid size, defaulting to {Settings.DefaultBoardSize}...");
-                return Settings.DefaultBoardSize;
-            }
-
-            public static int Main(string[] args) {
-                Argument<int?> sizePositional = new(name: "size") {
-                    Description = $"Optional board size ({Settings.MinBoardSize}..{Settings.MaxBoardSize})"
-                };
-
-                Option<bool> autoplayOption = new(name: "--autoplay", aliases: ["-a"]) {
-                    Description = "Enable autoplay mode with computer control"
-                };
-
-                Option<bool> checkModeOption = new(name: "--check", aliases: ["-c"]) {
-                    Description = "Autoplay and only print result"
-                };
-
-                Option<bool> useDefaultSettingsOption = new(name: "--default", aliases: ["-d"]) {
-                    Description = "Play with default settings"
-                };
-
-                Option<bool> showLogOption = new(name: "--log", aliases: ["-l"]) {
-                    Description = "Show game log at the end"
-                };
-
-                Option<bool> hideHelpersOption = new(name: "--no-helpers", aliases: ["-n"]) {
-                    Description = "Hide disk placement hints"
-                };
-
-                Option<bool> testModeOption = new(name: "--test", aliases: ["-t"]) {
-                    Description = "Enable test mode with deterministic computer moves"
-                };
-
-                Option<bool> versionFlag = new(name: "--version", aliases: ["-v"]) {
-                    Description = "Print version and exit"
-                };
-
-                RootCommand rootCommand = new("A simple Othello CLI game implementation in C#");
-
-                // Remove default version option
-                Option defaultVersionOption = rootCommand.Options.FirstOrDefault(opt =>
-                    opt.Name == "--version"
-                    || opt.Aliases.Contains("--version")
-                    || opt.Aliases.Contains("-v")
-                );
-                if (defaultVersionOption != null) {
-                    rootCommand.Options.Remove(defaultVersionOption);
-                }
-
-                rootCommand.Arguments.Add(sizePositional);
-                rootCommand.Options.Add(autoplayOption);
-                rootCommand.Options.Add(checkModeOption);
-                rootCommand.Options.Add(useDefaultSettingsOption);
-                rootCommand.Options.Add(showLogOption);
-                rootCommand.Options.Add(hideHelpersOption);
-                rootCommand.Options.Add(testModeOption);
-                rootCommand.Options.Add(versionFlag);
-
-                rootCommand.SetAction(
-                    parseResult => {
-                        int? size = parseResult.GetValue(sizePositional);
-                        bool autoplay = parseResult.GetValue(autoplayOption);
-                        bool checkMode = parseResult.GetValue(checkModeOption);
-                        bool useDefaultSettings = parseResult.GetValue(useDefaultSettingsOption);
-                        bool showLog = parseResult.GetValue(showLogOption);
-                        bool hideHelpers = parseResult.GetValue(hideHelpersOption);
-                        bool testMode = parseResult.GetValue(testModeOption);
-                        bool version = parseResult.GetValue(versionFlag);
-
-                        if (version) {
-                            Console.WriteLine($"Othello C# {Utils.VersionInfo()}");
-                            Environment.Exit(0);
-                        }
-
-                        ColorPrint.WriteLine("OTHELLO GAME - C#", Color.Green);
-
-                        int boardSize = ResolveBoardSize(size, autoplay, useDefaultSettings);
-
-                        Settings settings = new(
-                            boardSize,
-                            autoplay || checkMode,
-                            checkMode,
-                            !hideHelpers,
-                            showLog || checkMode,
-                            testMode || checkMode,
-                            useDefaultSettings
-                        );
-
-                        new Othello(settings).Play();
+                    if (!_settings.CheckMode) {
+                        Console.WriteLine("--------------------------------");
                     }
-                );
-
-                try {
-                    ParseResult parseResult = rootCommand.Parse(args);
-                    return parseResult.Invoke();
-                } catch (OperationCanceledException) {
-                    Console.WriteLine("\ncancelled...");
-                    return 1;
-                } catch (Exception ex) {
-                    ColorPrint.Error($"An exception occurred: {ex}");
-                    return 1;
                 }
             }
+            ++_gamesPlayed;
+            PrintGameEndFooter();
+        }
 
-            private static int ResolveBoardSize(int? size, bool autoplay, bool useDefaultSettings) {
-                if (size != null) {
-                    // Try to read board size from command line args
-                    int boardSize = size.Value;
-                    if (boardSize is < Settings.MinBoardSize or > Settings.MaxBoardSize) {
-                        ColorPrint.Error($"Unsupported board size: {boardSize}");
-                        Environment.Exit(1);
-                    }
-                    Console.WriteLine($"Using board size: {boardSize}");
-                    return boardSize;
-                }
+        private string FormatGameLog() {
+            return string.Join(
+                "\n",
+                _gameLog.Select((line, index) => $"{index + 1:00}: {line}")
+            );
+        }
 
-                if (autoplay || useDefaultSettings) {
-                    return Settings.DefaultBoardSize;
-                }
-
-                // Otherwise ask the user for board size
-                return GetBoardSize();
+        private void PrintRoundHeader() {
+            if (!_settings.CheckMode) {
+                Console.WriteLine(ColorPrint.Bold($"\n=========== ROUND: {_roundsPlayed} ==========="));
             }
+        }
+
+        private void PrintGameEndFooter() {
+            if (!_settings.CheckMode) {
+                Console.WriteLine(ColorPrint.Bold("\n================================"));
+                Console.WriteLine(ColorPrint.Bold(ColorPrint.Get("The game is finished!\n", Color.Green)));
+            }
+        }
+
+        /// <summary>Print game log which shows all moves made and the game board state after each move.</summary>
+        private void PrintLog() {
+            string formattedLog = FormatGameLog();
+            if (!_settings.CheckMode) {
+                Console.WriteLine(ColorPrint.Bold(ColorPrint.Get("Game log:", Color.Yellow)));
+                Console.WriteLine(formattedLog);
+            }
+            string hexHash = Utils.CalculateSha256(formattedLog);
+            Console.WriteLine(hexHash);
+        }
+
+        /// <summary>Print ending status and winner info.</summary>
+        private void PrintResult() {
+            Console.WriteLine(ColorPrint.Bold("Result:"));
+            PrintStatus();
+            Console.WriteLine("");
+
+            Disk winner = _board.Result();
+            Console.WriteLine(
+                winner == Disk.Empty
+                    ? "The game ended in a tie...\n"
+                    : $"The winner is {winner.DiskString()}!\n"
+            );
+        }
+
+        /// <summary>Print current board and player info.</summary>
+        private void PrintStatus() {
+            Console.WriteLine(_playerBlack);
+            Console.WriteLine($"{_playerWhite}\n");
+            Console.WriteLine(_board);
+        }
+
+        /// <summary>Ask a question with two options, and return bool from user answer.</summary>
+        private static bool GetAnswer(string question, string yes = "y", string no = "n") {
+            Console.Write($"{question} ({yes}/{no})? ");
+            string answer = Console.ReadLine();
+            return answer != null
+                && string.Equals(answer.Trim(), yes, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>Ask and return the desired board size.</summary>
+        public static int GetBoardSize() {
+            Console.Write($"Choose board size (default is {Settings.DefaultBoardSize}): ");
+            string input = Console.ReadLine();
+            if (input != null && int.TryParse(input.Trim(), out int boardSize)) {
+                if (boardSize is < Settings.MinBoardSize or > Settings.MaxBoardSize) {
+                    ColorPrint.WriteLine(
+                        $"Limiting board size to valid range {Settings.MinBoardSize}..{Settings.MaxBoardSize}",
+                        Color.Yellow
+                    );
+                }
+                return Math.Clamp(boardSize, Settings.MinBoardSize, Settings.MaxBoardSize);
+            }
+            ColorPrint.PrintWarn($"Invalid size, defaulting to {Settings.DefaultBoardSize}...");
+            return Settings.DefaultBoardSize;
         }
     }
 }

@@ -8,146 +8,175 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Threading;
 
 namespace Othello {
-    /// Defines one player that can be either human or computer controlled.
+    /// <summary>Defines one player that can be either human or computer controlled.</summary>
     internal sealed class Player(Disk disk, PlayerSettings settings) {
         public bool CanPlay = true;
+        internal Disk Disk { get; } = disk;
         private PlayerType _playerType = PlayerType.Human;
-        private int _roundsPlayed;
+        internal int RoundsPlayed;
+        internal readonly PlayerSettings Settings = settings;
         private readonly Random _random = new();
 
-        /// Shorthand to initialize a new player for black disks.
+        /// <summary>Shorthand to initialize a new player for black disks.</summary>
         public static Player Black(PlayerSettings settings) {
             return new Player(Disk.Black, settings);
         }
 
-        /// Shorthand to initialize a new player for white disks.
+        /// <summary>Shorthand to initialize a new player for white disks.</summary>
         public static Player White(PlayerSettings settings) {
             return new Player(Disk.White, settings);
         }
 
 #nullable enable
-        /// Play one round as this player.
+        /// <summary>Play one round as this player.</summary>
         public string? PlayOneMove(Board board) {
-            if (!settings.CheckMode) {
-                Console.WriteLine($"Turn: {disk.DiskString()}");
+            if (!Settings.CheckMode) {
+                Console.WriteLine($"Turn: {Disk.DiskString()}");
             }
-            List<Move>? moves = board.PossibleMoves(disk);
-            if (moves.Count != 0) {
-                CanPlay = true;
-                if (Human() && settings is { ShowHelpers: true, CheckMode: false }) {
-                    board.PrintPossibleMoves(moves);
+            List<Move> moves = board.PossibleMoves(Disk);
+            if (moves.Count == 0) {
+                CanPlay = false;
+                if (!Settings.CheckMode) {
+                    ColorPrint.WriteLine("  No moves available...", Color.Yellow);
                 }
-                Move chosenMove = Human() ? GetHumanMove(moves) : GetComputerMove(moves);
-                board.PlaceDisk(chosenMove);
-                if (!settings.CheckMode) {
-                    board.PrintScore();
-                }
-                ++_roundsPlayed;
-                if (!settings.TestMode) {
-                    Thread.Sleep(1000);
-                }
-                return chosenMove.LogEntry();
+                return null;
             }
 
-            CanPlay = false;
-            if (!settings.CheckMode) {
-                ColorPrint.WriteLine("  No moves available...", Color.Yellow);
+            CanPlay = true;
+            if (Human() && Settings is { ShowHelpers: true, CheckMode: false }) {
+                board.PrintPossibleMoves(moves);
             }
-            return null;
+            Move chosenMove = Human() ? GetHumanMove(moves) : GetComputerMove(moves);
+            board.PlaceDisk(chosenMove);
+            if (!Settings.CheckMode) {
+                board.PrintScore();
+            }
+            ++RoundsPlayed;
+            if (!Settings.TestMode) {
+                Thread.Sleep(1000);
+            }
+            return chosenMove.LogEntry();
         }
-
 #nullable disable
 
-        /// Returns true if the player is human.
+        /// <summary>Reset player status for a new game.</summary>
+        public void Reset() {
+            CanPlay = true;
+            RoundsPlayed = 0;
+        }
+
+        /// <summary>Returns true if player is controlled by a human player.</summary>
         public bool Human() {
-            return _playerType == PlayerType.Human;
+            return _playerType.Human();
         }
 
-        /// Returns true if the player is controlled by computer.
+        /// <summary>Returns true if player is controlled by computer.</summary>
         public bool Computer() {
-            return _playerType == PlayerType.Computer;
+            return _playerType.Computer();
         }
 
-        /// Set player to be controlled by human.
-        public void SetHuman() {
-            _playerType = PlayerType.Human;
-        }
-
-        /// Set player to be controlled by computer.
-        public void SetComputer() {
-            _playerType = PlayerType.Computer;
-        }
-
-        /// Set player type.
+        /// <summary>Set the player as human or computer controlled.</summary>
         public void SetPlayerType(PlayerType playerType) {
             _playerType = playerType;
         }
 
-        /// Reset player status for a new game.
-        public void Reset() {
-            CanPlay = true;
-            _roundsPlayed = 0;
+        /// <summary>Set the player as human controlled.</summary>
+        public void SetHuman() {
+            SetPlayerType(PlayerType.Human);
         }
 
-        /// Return move chosen by computer.
+        /// <summary>Set the player as computer controlled.</summary>
+        public void SetComputer() {
+            SetPlayerType(PlayerType.Computer);
+        }
+
+        /// <summary>Return move chosen by computer.</summary>
         private Move GetComputerMove(List<Move> moves) {
-            if (!settings.CheckMode) {
+            if (!Settings.CheckMode) {
                 Console.WriteLine("  Computer plays...");
             }
             Move chosenMove;
-            if (settings.TestMode) {
+            if (Settings.TestMode) {
                 chosenMove = moves[0];
             } else {
                 // Wait a bit and pick a random move
                 Thread.Sleep(_random.Next(1000, 2000));
                 chosenMove = moves[_random.Next(moves.Count)];
             }
-            if (!settings.CheckMode) {
+            if (!Settings.CheckMode) {
                 Console.WriteLine($"  {chosenMove.Square} -> {chosenMove.Value}");
             }
             return chosenMove;
         }
 
-        /// Return move chosen by a human player.
+        /// <summary>Return move chosen by a human player.</summary>
         private Move GetHumanMove(List<Move> moves) {
             while (true) {
                 Square square = GetSquare();
                 // Check that the chosen square is actually one of the possible moves
-                if (moves.Exists(x => square.Equals(x.Square))) {
-                    return moves.Find(x => square.Equals(x.Square));
+                if (moves.Exists(move => square.Equals(move.Square))) {
+                    return moves.Find(move => square.Equals(move.Square));
                 }
-                ColorPrint.Error($"  Can't place a {disk.DiskString()} disk in square {square}!");
+                ColorPrint.PrintError($"  Can't place a {Disk.DiskString()} disk in square {square}!");
             }
         }
 
-        /// Ask a human player for square coordinates.
+        /// <summary>Ask human player for square coordinates.</summary>
         private static Square GetSquare() {
             while (true) {
-                try {
-                    Console.Write("  Give disk position (x,y): ");
-                    string coords = Console.ReadLine();
-                    if (string.IsNullOrEmpty(coords) || coords.Length != 3 || coords[1] != ',') {
-                        throw new FormatException("Invalid coordinates");
+                Console.Write("  Give disk position (x,y): ");
+                string input = Console.ReadLine();
+                if (input != null) {
+                    string[] values = input.Trim().Split(',');
+                    if (values.Length == 2
+                        && int.TryParse(values[0], NumberStyles.None, CultureInfo.InvariantCulture, out int x)
+                        && int.TryParse(values[1], NumberStyles.None, CultureInfo.InvariantCulture, out int y)
+                        && x >= 0
+                        && y >= 0
+                    ) {
+                        return new Square(x, y);
                     }
-                    int x = int.Parse(coords[..1], System.Globalization.CultureInfo.InvariantCulture);
-                    int y = int.Parse(coords[2..3], System.Globalization.CultureInfo.InvariantCulture);
-                    return new Square(x, y);
-                } catch (FormatException) {
-                    ColorPrint.Error("  Give coordinates in the form 'x,y'");
                 }
+                ColorPrint.PrintError("  Give coordinates in the form 'x,y'!");
             }
         }
 
-        /// Return player type description string.
-        private string TypeString() {
-            return Human() ? "Human   " : "Computer";
+        /// <summary>Return player type description string.</summary>
+        public string TypeString() {
+            return _playerType.TypeString();
         }
 
         public override string ToString() {
-            return $"{disk.DiskString()} | {TypeString()} | Moves: {_roundsPlayed}";
+            return $"{Disk.DiskString()} | {TypeString()} | Moves: {RoundsPlayed}";
+        }
+    }
+
+    /// <summary>Player can be controlled either by a human or computer.</summary>
+    public enum PlayerType {
+        Human,
+        Computer,
+    }
+
+    public static class PlayerTypeExtensions {
+        extension(PlayerType playerType) {
+            /// <summary>Check if the player is controlled by a human.</summary>
+            public bool Human() {
+                return playerType == PlayerType.Human;
+            }
+
+            /// <summary>Check if the player is controlled by a computer.</summary>
+            public bool Computer() {
+                return playerType == PlayerType.Computer;
+            }
+
+            /// <summary>Return player type description string.</summary>
+            public string TypeString() {
+                return playerType == PlayerType.Human ? "Human   " : "Computer";
+            }
         }
     }
 }

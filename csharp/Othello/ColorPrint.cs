@@ -10,9 +10,28 @@ using System;
 using System.Drawing;
 
 namespace Othello {
+    /// <summary>Interface for coloured terminal printing.</summary>
     public static class ColorPrint {
+        private static readonly bool UseColor;
+
+        static ColorPrint() {
+            // Disable colours when output is redirected or NO_COLOR is set,
+            // matching the behaviour of the Rust `colored` crate.
+            UseColor =
+                !Console.IsOutputRedirected
+                && string.IsNullOrEmpty(Environment.GetEnvironmentVariable("NO_COLOR"));
+            if (!UseColor) {
+                ConsoleExtensions.Disable();
+            }
+        }
+
         public static string Get<T>(T text, Color color) {
             return $"{text}".Pastel(color);
+        }
+
+        /// <summary>Format text with bold style.</summary>
+        public static string Bold<T>(T text) {
+            return UseColor ? $"\x1b[1m{text}\x1b[0m" : $"{text}";
         }
 
         public static void Write<T>(T text, Color color) {
@@ -23,19 +42,19 @@ namespace Othello {
             Console.WriteLine($"{text}".Pastel(color));
         }
 
-        /// Print error message with red colour.
-        public static void Error(string message) {
+        /// <summary>Print error message with red colour.</summary>
+        public static void PrintError(string message) {
             (string indent, string text) = SplitLeadingWhitespace(message);
             Console.WriteLine($"{indent}Error: {text}".Pastel(Color.Red));
         }
 
-        /// Print warning message with yellow colour.
-        public static void Warn(string message) {
+        /// <summary>Print warning message with yellow colour.</summary>
+        public static void PrintWarn(string message) {
             (string indent, string text) = SplitLeadingWhitespace(message);
             Console.WriteLine($"{indent}Warning: {text}".Pastel(Color.Yellow));
         }
 
-        /// Split a string into the leading whitespace and the rest of the string.
+        /// <summary>Split a string into the leading whitespace and the rest of the string.</summary>
         private static (string, string) SplitLeadingWhitespace(string message) {
             // Find the index of the first non-whitespace character.
             int indentSize = 0;

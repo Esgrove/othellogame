@@ -9,7 +9,7 @@
     <SelfContained>false</SelfContained>
     <TargetFramework>net10.0</TargetFramework>
     <Version>2.12.0</Version>
-    <StartupObject>Othello.Program.Othello</StartupObject>
+    <StartupObject>Othello.Program</StartupObject>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Esgrove/othellogame</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -33,9 +33,6 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <NoWarn>1701;1702;1716</NoWarn>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Program.cs" />
-  </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Othello.Tests" />
   </ItemGroup>
@@ -76,7 +73,7 @@
     <ItemGroup>
       <_VersionLines Include="// Generated automatically by MSBuild%3B DO NOT EDIT MANUALLY." />
       <_VersionLines Include="namespace Othello {" />
-      <_VersionLines Include="    public static class Version {" />
+      <_VersionLines Include="    public static partial class Version {" />
       <_VersionLines Include='        public const string BuildTime = "$(BuildTime)"%3B' />
       <_VersionLines Include='        public const string GitBranch = "$(GitBranch)"%3B' />
       <_VersionLines Include='        public const string GitCommit = "$(GitCommit)"%3B' />

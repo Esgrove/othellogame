@@ -2,25 +2,27 @@ namespace Othello.Tests {
     public class TestPlayer {
         [Fact]
         public void NewPlayer() {
-            Player player = Player.Black(new PlayerSettings(false, true, false));
-            Assert.True(player.CanPlay);
+            Player player = new(Disk.Black, PlayerSettings.Default());
+            Assert.Equal(Disk.Black, player.Disk);
             Assert.True(player.Human());
-            Assert.False(player.Computer());
+            Assert.True(player.CanPlay);
+            Assert.Equal(0, player.RoundsPlayed);
+            Assert.Equal(PlayerSettings.Default(), player.Settings);
         }
 
         [Fact]
         public void ResetPlayer() {
-            Player player = Player.White(new PlayerSettings(false, true, false));
+            Player player = new(Disk.White, PlayerSettings.Default());
             player.CanPlay = false;
+            player.RoundsPlayed = 10;
             player.Reset();
             Assert.True(player.CanPlay);
+            Assert.Equal(0, player.RoundsPlayed);
         }
 
         [Fact]
-        public void SetHumanAndComputer() {
-            Player player = Player.Black(new PlayerSettings(false, true, false));
-            Assert.True(player.Human());
-
+        public void SetHuman() {
+            Player player = new(Disk.Black, PlayerSettings.Default());
             player.SetComputer();
             Assert.True(player.Computer());
             Assert.False(player.Human());
@@ -28,6 +30,15 @@ namespace Othello.Tests {
             player.SetHuman();
             Assert.True(player.Human());
             Assert.False(player.Computer());
+        }
+
+        [Fact]
+        public void PlayerTypeString() {
+            Player player = new(Disk.Black, PlayerSettings.Default());
+            Assert.Equal("Human   ", player.TypeString());
+
+            player.SetComputer();
+            Assert.Equal("Computer", player.TypeString());
         }
     }
 }

@@ -11,7 +11,7 @@ using System.Text;
 namespace Othello {
     // Can't have a function without a class :(
     public static class Utils {
-        /// Calculate SHA256 hash for the given string.
+        /// <summary>Calculate SHA256 hash for the given string.</summary>
         public static string CalculateSha256(string input) {
             byte[] inputBytes = Encoding.UTF8.GetBytes(input);
             byte[] hashBytes = SHA256.HashData(inputBytes);
@@ -22,11 +22,6 @@ namespace Othello {
             }
 
             return builder.ToString();
-        }
-
-        /// Return version info string
-        public static string VersionInfo() {
-            return $"{Version.VersionNumber} {Version.BuildTime} {Version.GitBranch} {Version.GitCommit}";
         }
     }
 }

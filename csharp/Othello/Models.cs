@@ -10,20 +10,14 @@ using System.Collections.Generic;
 using System.Drawing;
 
 namespace Othello {
-    /// Player can be controlled either by a human or computer.
-    public enum PlayerType {
-        Human,
-        Computer,
-    }
-
-    /// Represents one game piece or lack of one.
+    /// <summary>Represents one game piece or lack of one.</summary>
     public enum Disk {
         Black = -1,
         Empty = 0,
         White = 1,
     }
 
-    /// Represents one step direction on the board.
+    /// <summary>Represents one step direction on the board.</summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Not relevant in this project")]
     public readonly struct Step(int x, int y) : IEquatable<Step> {
         public int X { get; } = x;
@@ -50,6 +44,10 @@ namespace Othello {
             y = Y;
         }
 
+        public static Step operator +(Step left, Step right) {
+            return new Step(left.X + right.X, left.Y + right.Y);
+        }
+
         public static bool operator ==(Step left, Step right) {
             return left.Equals(right);
         }
@@ -59,10 +57,15 @@ namespace Othello {
         }
     }
 
-    /// Represents one square location on the board.
+    /// <summary>Represents one square location on the board.</summary>
     public readonly struct Square(int x, int y) : IComparable<Square>, IEquatable<Square> {
         public int X { get; } = x;
         public int Y { get; } = y;
+
+        /// <summary>Get the index of this square on the board.</summary>
+        public int BoardIndex(int boardSize) {
+            return Y * boardSize + X;
+        }
 
         public static Square operator +(Square square, Step step) {
             return new Square(square.X + step.X, square.Y + step.Y);
@@ -122,12 +125,17 @@ namespace Othello {
         }
     }
 
+    /// <summary>
     /// Represents a continuous line of squares in one direction.
     ///
-    /// The step component determines the direction on the board,
+    /// The step field determines the direction on the board,
     /// and count describes how many consecutive squares in that direction there are.
+    /// </summary>
     public readonly struct Direction(Step step, int count) : IEquatable<Direction>, IComparable<Direction> {
+        /// <summary>Direction of travel on the board</summary>
         public Step Step { get; } = step;
+
+        /// <summary>Number of consecutive same colour squares along this direction</summary>
         public int Count { get; } = count;
 
         public void Deconstruct(out Step step, out int count) {
@@ -186,19 +194,19 @@ namespace Othello {
         }
     }
 
-    /// Represents one possible disk placement for the given disk colour.
-    public readonly struct Move(Square square, int value, Disk disk, List<Direction> directions) : IComparable<Move>, IEquatable<Move> {
+    /// <summary>Represents one possible disk placement for the given disk colour.</summary>
+    public readonly struct Move(Square square, Disk disk, int value, List<Direction> directions) : IComparable<Move>, IEquatable<Move> {
         public Square Square { get; } = square;
-        public int Value { get; } = value;
         public Disk Disk { get; } = disk;
+        public int Value { get; } = value;
         public List<Direction> Directions { get; } = directions;
 
-        /// Format move for log entry
+        /// <summary>Format move for log entry</summary>
         public string LogEntry() {
-            return $"{Disk.BoardChar(false)}:{Square},{Value}";
+            return $"{Disk.BoardChar()}:{Square},{Value}";
         }
 
-        /// Get all the squares playing this move will change.
+        /// <summary>Get all the squares playing this move will change.</summary>
         public List<Square> AffectedSquares() {
             List<Square> paths = [];
             foreach ((Step step, int count) in Directions) {
@@ -236,7 +244,7 @@ namespace Othello {
         }
 
         public override int GetHashCode() {
-            return HashCode.Combine(Square, Value, (int)Disk, Directions);
+            return HashCode.Combine(Square, Value, (int)Disk);
         }
 
         public static bool operator ==(Move left, Move right) {
@@ -256,37 +264,55 @@ namespace Othello {
         }
 
         public bool Equals(Move other) {
-            return Square.Equals(other.Square) && Value == other.Value && Disk == other.Disk && Equals(Directions, other.Directions);
+            return Square.Equals(other.Square) && Value == other.Value && Disk == other.Disk;
         }
     }
 
     public static class Extensions {
         extension(Disk disk) {
+            /// <summary>Returns a single character identifier string for the given disk.</summary>
+            public string BoardChar() {
+                return disk switch {
+                    Disk.Black => "B",
+                    Disk.Empty => "_",
+                    Disk.White => "W",
+                    _ => throw new ArgumentOutOfRangeException(nameof(disk)),
+                };
+            }
+
+            /// <summary>Returns a single character identifier string for the given disk.</summary>
+            public string BoardCharWithColor() {
+                return ColorPrint.Get(disk.BoardChar(), disk.DiskColor());
+            }
+
+            /// <summary>Return the associated colour for this disk.</summary>
             public Color DiskColor() {
-                if (disk == Disk.Empty) {
-                    return Color.White;
-                }
-                return disk == Disk.White ? Color.Cyan : Color.Magenta;
+                return disk switch {
+                    Disk.Black => Color.Magenta,
+                    Disk.Empty => Color.White,
+                    Disk.White => Color.Cyan,
+                    _ => throw new ArgumentOutOfRangeException(nameof(disk)),
+                };
             }
 
-            public Disk Opponent() {
-                if (disk == Disk.Empty) {
-                    return Disk.Empty;
-                }
-                return disk == Disk.White ? Disk.Black : Disk.White;
-            }
-
+            /// <summary>Returns the disk formatted as a coloured string.</summary>
             public string DiskString() {
-                return ColorPrint.Get(disk.ToString().ToUpperInvariant(), disk.DiskColor());
+                return disk switch {
+                    Disk.Black => ColorPrint.Get("BLACK", disk.DiskColor()),
+                    Disk.Empty => ColorPrint.Get("EMPTY", disk.DiskColor()),
+                    Disk.White => ColorPrint.Get("WHITE", disk.DiskColor()),
+                    _ => throw new ArgumentOutOfRangeException(nameof(disk)),
+                };
             }
 
-            public string BoardChar(bool color = true) {
-                if (disk == Disk.Empty) {
-                    return "_";
-                }
-
-                string diskChar = disk == Disk.White ? "W" : "B";
-                return color ? ColorPrint.Get(diskChar, disk.DiskColor()) : diskChar;
+            /// <summary>Return the opposing disk colour for this disk.</summary>
+            public Disk Opponent() {
+                return disk switch {
+                    Disk.Black => Disk.White,
+                    Disk.Empty => Disk.Empty,
+                    Disk.White => Disk.Black,
+                    _ => throw new ArgumentOutOfRangeException(nameof(disk)),
+                };
             }
         }
     }

@@ -1,9 +1,33 @@
 namespace Othello.Tests {
     public class TestBoard {
         [Fact]
+        public void BoardInitialization() {
+            const int boardSize = 8;
+            Board board = new(boardSize);
+            Assert.Equal(boardSize, board.Size);
+            // Check initial disk positions
+            Assert.Equal(Disk.White, board.GetSquare(new Square(3, 3)));
+            Assert.Equal(Disk.White, board.GetSquare(new Square(4, 4)));
+            Assert.Equal(Disk.Black, board.GetSquare(new Square(3, 4)));
+            Assert.Equal(Disk.Black, board.GetSquare(new Square(4, 3)));
+            // Rest of the board should be empty
+            Assert.Equal(Disk.Empty, board.GetSquare(new Square(0, 0)));
+            Assert.Equal(Disk.Empty, board.GetSquare(new Square(7, 7)));
+        }
+
+        [Fact]
         public void CanPlay() {
             Board board = new(8);
             Assert.True(board.CanPlay());
+        }
+
+        [Fact]
+        public void Scoring() {
+            Board board = new(8);
+            (int blackScore, int whiteScore) = board.PlayerScores();
+            Assert.Equal(2, blackScore);
+            Assert.Equal(2, whiteScore);
+            Assert.Equal(0, board.Score());
         }
 
         [Fact]
