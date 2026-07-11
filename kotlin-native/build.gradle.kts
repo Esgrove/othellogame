@@ -1,4 +1,6 @@
 import java.io.ByteArrayOutputStream
+import org.jetbrains.kotlin.gradle.plugin.mpp.DisableCacheInKotlinVersion
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeCacheApi
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 
 version = "2.0.0"
@@ -40,6 +42,13 @@ kotlin {
         binaries {
             executable {
                 entryPoint = "othello.main"
+                if (hostOs == "Linux") {
+                    @OptIn(KotlinNativeCacheApi::class)
+                    disableNativeCache(
+                        version = DisableCacheInKotlinVersion.`2_4_0`,
+                        reason = "Compiler caches cause duplicate symbol linker errors on Linux",
+                    )
+                }
             }
         }
     }
