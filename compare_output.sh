@@ -54,6 +54,7 @@ if [ "$BASH_PLATFORM" = windows ]; then
         kotlin-native/othello_kotlin.exe
         kotlin/othello_kotlin.sh
         python/othello_python.sh
+        typescript/othello_typescript.sh
     )
 else
     reference="rust/othello_rust"
@@ -65,6 +66,7 @@ else
         swift/othello_swift
         kotlin/othello_kotlin.sh
         python/othello_python.sh
+        typescript/othello_typescript.sh
     )
 fi
 

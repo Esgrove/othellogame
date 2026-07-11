@@ -61,8 +61,8 @@ Canonical output strings (for `-c` cross-language hash parity):
 | 8 | Java | Version flag is picocli's `-V`, not `-v` like all other implementations | `java/.../Main.java:21` |
 | 9 | Go | `PlayOneMove` helper-display condition missing the `!checkMode` guard | `go/othello/player.go:62` |
 | 10 | Python | `print_blue` passes `Color.red` | `python/othello/colorprint.py:84` |
-| 11 | TypeScript | `--no-helpers` broken: `showHelpers` is always `true` (Commander negated-flag + extra `!`) | `typescript/src/othello.ts:20,108` |
-| 12 | TypeScript | `--check` does not imply autoplay/log/test | `typescript/src/othello.ts:103-111` |
+| 11 | TypeScript | ~~`--no-helpers` broken: `showHelpers` is always `true` (Commander negated-flag + extra `!`)~~ **fixed** | `typescript/src/main.ts` |
+| 12 | TypeScript | ~~`--check` does not imply autoplay/log/test~~ **fixed** | `typescript/src/main.ts` |
 | 13 | Swift | `Sources/Othello/` contains 8 **dead, drifted copies** of the lib files (excluded in Package.swift) — should be deleted | `swift/Package.swift`, `swift/Sources/Othello/*` |
 | 14 | C++, C#, Java, Kotlin×2 | `get_square` input parsing requires exactly 3 chars (`x,y` single digits) — breaks on board size 10 | e.g. `cpp/src/player.cpp:138`, `csharp/Othello/Player.cs:132`, `java/.../Player.java:169`, `kotlin*/.../Player.kt:111` |
 
@@ -122,7 +122,6 @@ Common extras not in Rust (decide: port to Rust or drop):
 - Python: `_initialize_board` vs `init_board`; `_type_string` private vs Rust public.
 - Swift: `isHuman`/`isComputer` on PlayerType vs Rust `human`/`computer`; dead copy uses `calculateSHA256` vs lib `calculateSha256`.
 - Go: `CalculateSHA256` (initialism style) vs others `CalculateSha256`-shaped — pick one rule for initialisms.
-- TypeScript: `Board.boardSize` vs `size`; banner `"OTHELLO TYPESCRIPT"` vs `"OTHELLO GAME - TYPESCRIPT"`; version string says `"Othello Node"`.
 - Java: `stepDirections` constant not `STEP_DIRECTIONS` (static final convention).
 - Test names: Rust `set_human` vs `setHumanAndComputer`/`SetHumanAndComputer` (cs, go, java, kt, swift) — align one way or the other.
 
@@ -169,7 +168,7 @@ Common extras not in Rust (decide: port to Rust or drop):
 | **Kotlin-Native** | good | same as Kotlin + identifies itself as plain "Othello Kotlin" (no NATIVE distinction); Move member order differs from JVM file |
 | **Python** | good | game_log clear bug; Move.__eq__ ignores disk; broken `__le__`/`__ge__`; ERROR:/WARNING: prefixes; missing Step addition |
 | **Swift** | fair | delete 8 dead files in Sources/Othello; gameLog clear bug; placeDisk guard; testMode/checkMode swap; dim vs bold |
-| **TypeScript** | **skeleton** | No models, no board logic, no game loop, no sha256, no colorprint — essentially needs full implementation |
+| **TypeScript** | good | Full implementation unified with the Rust reference; included in check.sh and compare_output.sh |
 | **Zig** | **empty** | Directory exists, no source at all |
 
 ## H. Suggested unification order
@@ -179,6 +178,6 @@ Common extras not in Rust (decide: port to Rust or drop):
 3. Unify output strings (section F) — verify with `-c` check-mode hash across languages (`utils.calculate_sha256` of the game log makes this scriptable: run every binary with `-c -t <size>` and diff hashes).
 4. Structural alignment (sections C–E): add missing helpers, move `PlayerType`/`version_info`/Disk helpers to their canonical modules, reorder members to Rust order.
 5. Port missing tests (board_initialization, scoring, step/square addition, player_type_string are the common gaps; C++/C#/Go/Swift need test access to private members — follow Kotlin's `internal` approach or add test accessors).
-6. Bring TypeScript up to parity (it needs models.ts, settings.ts, colorprint.ts, version.ts, full board/player/othello implementations, sha256, and a separate main entry).
+6. ~~Bring TypeScript up to parity~~ Done: full implementation with models.ts, settings.ts, colorprint.ts, version.ts, board/player/othello, sha256, and a separate main entry.
 7. Swift cleanup: remove dead Sources/Othello copies; consider Kotlin Multiplatform merge for kotlin/kotlin-native.
 8. Decide zig/: implement or remove the empty directory.

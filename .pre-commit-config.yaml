@@ -109,3 +109,21 @@ repos:
         types: [file, swift]
         language: system
         files: ^swift/
+
+      - id: typescript-fmt
+        name: TypeScript format
+        description: Run oxfmt on files included in the commit.
+        entry: sh -c 'cd typescript && bunx oxfmt'
+        pass_filenames: false
+        types: [file, ts]
+        language: system
+        files: ^typescript/
+
+      - id: typescript-lint
+        name: TypeScript lint
+        description: Run oxlint on files included in the commit.
+        entry: sh -c 'cd typescript && bunx oxlint'
+        pass_filenames: false
+        types: [file, ts]
+        language: system
+        files: ^typescript/
