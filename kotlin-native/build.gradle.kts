@@ -40,8 +40,8 @@ kotlin {
 
     nativeTarget.apply {
         binaries {
-            executable {
-                entryPoint = "othello.main"
+            // Applies to all binaries, including the test executable
+            all {
                 if (hostOs == "Linux") {
                     @OptIn(KotlinNativeCacheApi::class)
                     disableNativeCache(
@@ -49,6 +49,9 @@ kotlin {
                         reason = "Compiler caches cause duplicate symbol linker errors on Linux",
                     )
                 }
+            }
+            executable {
+                entryPoint = "othello.main"
             }
         }
     }
