@@ -205,7 +205,10 @@ else()
     target_compile_options(othello_cpp PRIVATE
         -Wall -Wextra -Werror -pedantic
     )
-    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    # Skip native CPU targeting on CI:
+    # cached build artifacts are shared between runners with different CPUs,
+    # so natively-targeted code can crash with SIGILL on another runner.
+    if(CMAKE_BUILD_TYPE STREQUAL "Release" AND NOT DEFINED ENV{CI})
         target_compile_options(othello_cpp PRIVATE
             -march=native -mtune=native
         )
