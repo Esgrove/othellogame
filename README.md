@@ -22,7 +22,7 @@ yet small enough that it could be done in a weekend even when starting with a ne
 It is also easy to check that the code is working correctly,
 especially since it is possible to compare side-by-side with the other implementations.
 
-So far, I have added _C#_, _Swift_, _Rust_, _Go_, and _Kotlin_ implementations.
+So far, I have added _C#_, _Swift_, _Rust_, _Go_, _Kotlin_, _Java_, and _TypeScript_ implementations.
 I might still do a few other (modern) languages that interest me and/or have some hype around them,
 such as _[Zig](https://ziglang.org/)_, _[Mojo](https://www.modular.com/max/mojo)_, and _[Ruby](https://www.ruby-lang.org/)_.
 
@@ -97,7 +97,14 @@ Kotlin 2 and [Gradle](https://gradle.org/kotlin/).
 
 Java 21 and [Gradle](https://gradle.org).
 
+### TypeScript
+
+TypeScript 6 with the [Bun](https://bun.sh) runtime.
+Uses [chalk](https://github.com/chalk/chalk) for coloured text in the terminal,
+and [Commander.js](https://github.com/tj/commander.js) for the CLI.
+Formatting and linting with [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)
+and [oxlint](https://oxc.rs/docs/guide/usage/linter.html).
+
 ## TODO
 
 - Write some thoughts on the languages and their differences
-- Add unit tests for each language
