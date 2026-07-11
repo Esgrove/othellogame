@@ -11,6 +11,7 @@ use std::fmt;
 use colored::{ColoredString, Colorize};
 
 use crate::models::{Direction, Disk, Move, Square, Step};
+use crate::print_yellow;
 
 const UP: isize = 1;
 const DOWN: isize = -1;
@@ -121,10 +122,7 @@ impl Board {
 
     /// Print board with available move coordinates and the resulting points gained.
     pub fn print_possible_moves(&self, moves: &Vec<Move>) {
-        println!(
-            "{}",
-            format!("  Possible moves ({}):", moves.len()).yellow()
-        );
+        print_yellow!("  Possible moves ({}):", moves.len());
         // Convert board from Disk enums to strings
         let mut formatted_board: Vec<ColoredString> = self
             .board

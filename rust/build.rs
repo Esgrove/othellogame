@@ -26,11 +26,14 @@ fn main() {
 
     let version = std::env::var("CARGO_PKG_VERSION").unwrap_or_else(|_| "unknown".to_string());
 
+    let version_string = format!("Othello Rust {version} {build_time} {git_branch} {git_commit}");
+
     // Set compile time env variables
     println!("cargo:rustc-env=GIT_COMMIT={git_commit}");
     println!("cargo:rustc-env=GIT_BRANCH={git_branch}");
     println!("cargo:rustc-env=BUILD_TIME={build_time}");
     println!("cargo:rustc-env=VERSION_NUMBER={version}");
+    println!("cargo:rustc-env=VERSION_STRING={version_string}");
 
     // Tell Cargo to rerun if these change
     println!("cargo:rerun-if-changed=build.rs");

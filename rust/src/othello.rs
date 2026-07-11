@@ -7,14 +7,13 @@
 
 use std::io::{self, Write};
 
-use colored::Colorize;
-
 use crate::board::Board;
 use crate::colorprint::print_warn;
 use crate::models::Disk;
 use crate::player::Player;
 use crate::settings::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings};
 use crate::utils;
+use crate::{print_bold, print_green_bold, print_yellow, print_yellow_bold};
 
 /// Gameplay loop and main logic.
 pub struct Othello {
@@ -83,7 +82,7 @@ impl Othello {
             }
         }
         if !self.settings.check_mode {
-            println!("{}", "\nPlayers:".bold());
+            print_bold!("\nPlayers:");
             self.print_status();
         }
     }
@@ -118,17 +117,14 @@ impl Othello {
 
     fn print_round_header(&self) {
         if !self.settings.check_mode {
-            println!(
-                "{}",
-                format!("\n=========== ROUND: {} ===========", self.rounds_played).bold()
-            );
+            print_bold!("\n=========== ROUND: {} ===========", self.rounds_played);
         }
     }
 
     fn print_game_end_footer(&self) {
         if !self.settings.check_mode {
-            println!("{}", "\n================================".bold());
-            println!("{}", "The game is finished!\n".green().bold());
+            print_bold!("\n================================");
+            print_green_bold!("The game is finished!\n");
         }
     }
 
@@ -136,7 +132,7 @@ impl Othello {
     fn print_log(&self) {
         let formatted_log = self.format_game_log();
         if !self.settings.check_mode {
-            println!("{}", "Game log:".yellow().bold());
+            print_yellow_bold!("Game log:");
             println!("{formatted_log}");
         }
         let hex_hash = utils::calculate_sha256(&formatted_log);
@@ -145,7 +141,7 @@ impl Othello {
 
     /// Print ending status and winner info.
     fn print_result(&self) {
-        println!("{}", "Result:".bold());
+        print_bold!("Result:");
         self.print_status();
         println!();
 
@@ -184,12 +180,8 @@ impl Othello {
             && let Ok(board_size) = input.trim().parse::<usize>()
         {
             if !(MIN_BOARD_SIZE..=MAX_BOARD_SIZE).contains(&board_size) {
-                println!(
-                    "{}",
-                    format!(
-                        "Limiting board size to valid range {MIN_BOARD_SIZE}..{MAX_BOARD_SIZE}"
-                    )
-                    .yellow()
+                print_yellow!(
+                    "Limiting board size to valid range {MIN_BOARD_SIZE}..{MAX_BOARD_SIZE}"
                 );
             }
             return board_size.clamp(MIN_BOARD_SIZE, MAX_BOARD_SIZE);

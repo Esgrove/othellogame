@@ -8,12 +8,12 @@ use std::io::Write;
 use std::{fmt, io};
 use std::{thread, time::Duration};
 
-use colored::Colorize;
 use rand::{self, RngExt};
 
 use crate::board::Board;
 use crate::colorprint::print_error;
 use crate::models::{Disk, Move, Square};
+use crate::print_yellow;
 use crate::settings::PlayerSettings;
 
 /// Defines one player that can be either human or computer controlled.
@@ -64,7 +64,7 @@ impl Player {
         if moves.is_empty() {
             self.can_play = false;
             if !self.settings.check_mode {
-                println!("{}", "  No moves available...".yellow());
+                print_yellow!("  No moves available...");
             }
             None
         } else {
