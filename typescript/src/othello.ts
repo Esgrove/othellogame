@@ -1,5 +1,5 @@
 import { Command } from '@commander-js/extra-typings';
-import packageJson from '../package.json' assert { type: 'json' };
+import packageJson from '../package.json' with { type: 'json' };
 import chalk from 'chalk';
 import { clamp, Settings } from './utils.ts';
 import { Board } from './board.ts';
@@ -54,8 +54,6 @@ class Othello {
         const prompt = `Choose board size (default is ${DEFAULT_BOARD_SIZE}): `;
         process.stdout.write(prompt);
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         for await (const line of console) {
             const input = line.trim();
             if (input === '') {

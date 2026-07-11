@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { Player, PlayerSettings, PlayerType } from '../src/player.ts';
+import { Player, PlayerSettings } from '../src/player.ts';
 
 describe('player', () => {
     test('new black player', () => {
