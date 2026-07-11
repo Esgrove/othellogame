@@ -1,23 +1,31 @@
 exclude: ^(.idea|.vscode|swift/Package.resolved)
 
+# Run with prek (https://prek.j178.dev), a fast drop-in replacement for pre-commit.
+# Hooks with the same priority run concurrently, lower priority values run first.
+
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
-    # https://github.com/pre-commit/pre-commit-hooks
+  - repo: builtin
+    # Fast Rust implementations of pre-commit-hooks bundled with prek
     hooks:
       - id: check-added-large-files
-      - id: check-ast
+        priority: 1
       - id: check-case-conflict
-      - id: check-docstring-first
+        priority: 1
       - id: check-json
+        priority: 1
       - id: check-merge-conflict
+        priority: 1
       - id: check-toml
+        priority: 1
       - id: check-yaml
         args: [--allow-multiple-documents]
-      - id: debug-statements
+        priority: 1
       - id: end-of-file-fixer
+        priority: 1
       - id: mixed-line-ending
+        priority: 1
       - id: trailing-whitespace
+        priority: 1
 
   - repo: local
     hooks:
@@ -28,6 +36,7 @@ repos:
         types_or: [c, c++]
         language: system
         files: ^cpp/
+        priority: 1
 
       - id: gofmt
         name: Go format
@@ -37,6 +46,7 @@ repos:
         types: [file, go]
         language: system
         files: ^go/
+        priority: 1
 
       - id: golint
         name: Go lint
@@ -46,6 +56,7 @@ repos:
         types: [file, go]
         language: system
         files: ^go/
+        priority: 2
 
       - id: java
         name: Java format
@@ -55,6 +66,7 @@ repos:
         types: [file, java]
         language: system
         files: ^java/
+        priority: 1
 
       - id: kotlin
         name: Kotlin format
@@ -64,6 +76,7 @@ repos:
         types: [file, kotlin]
         language: system
         files: ^kotlin/
+        priority: 1
 
       - id: dotnet
         name: C# format
@@ -73,6 +86,7 @@ repos:
         types: [file, c#]
         language: system
         files: ^csharp/
+        priority: 1
 
       - id: python
         name: Python Ruff
@@ -82,6 +96,7 @@ repos:
         types: [file, python]
         language: system
         files: ^python/
+        priority: 1
 
       - id: rust-fmt
         name: Rust format
@@ -91,15 +106,17 @@ repos:
         types: [file, rust]
         language: system
         files: ^rust/
+        priority: 1
 
       - id: rust-clippy
         name: Rust lint
         description: Run cargo clippy on files included in the commit.
-        entry: sh -c 'cd rust && cargo clippy'
+        entry: sh -c 'cd rust && cargo clippy --fix --allow-dirty --allow-staged --all-targets -- -D warnings'
         pass_filenames: false
         types: [file, rust]
         language: system
         files: ^rust/
+        priority: 2
 
       - id: swiftformat
         name: Swift format
@@ -109,21 +126,24 @@ repos:
         types: [file, swift]
         language: system
         files: ^swift/
+        priority: 1
 
       - id: typescript-fmt
         name: TypeScript format
         description: Run oxfmt on files included in the commit.
-        entry: sh -c 'cd typescript && bunx oxfmt'
+        entry: sh -c 'cd typescript && bun format'
         pass_filenames: false
         types: [file, ts]
         language: system
         files: ^typescript/
+        priority: 1
 
       - id: typescript-lint
         name: TypeScript lint
         description: Run oxlint on files included in the commit.
-        entry: sh -c 'cd typescript && bunx oxlint'
+        entry: sh -c 'cd typescript && bun lint'
         pass_filenames: false
         types: [file, ts]
         language: system
         files: ^typescript/
+        priority: 2
