@@ -119,23 +119,17 @@ namespace Othello {
                 Console.WriteLine($"  {possibleMove}");
             }
             // Print board with move positions
-            string header = string.Join(
-                " ",
-                _indices.Select(i => ColorPrint.Bold(i)).Prepend("    ")
-            );
-
-            string board = string.Join(
-                "\n",
-                _indices.Select(y => {
-                    string row = string.Join(
-                        " ",
-                        _indices.Select(x => formattedBoard[y * Size + x])
-                    );
-                    return $"  {ColorPrint.Bold(y)} {row}";
-                })
-            );
-
-            Console.WriteLine($"{header}\n{board}");
+            Console.Write("    ");
+            foreach (int i in _indices) {
+                Console.Write($" {ColorPrint.Bold(i)}");
+            }
+            foreach (int y in _indices) {
+                Console.Write($"\n  {ColorPrint.Bold(y)}");
+                foreach (int x in _indices) {
+                    Console.Write($" {formattedBoard[y * Size + x]}");
+                }
+            }
+            Console.WriteLine();
         }
 
         /// <summary>Print current score for both players.</summary>

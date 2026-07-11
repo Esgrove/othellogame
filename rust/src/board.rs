@@ -139,31 +139,17 @@ impl Board {
             println!("  {possible_move}");
         }
         // Print board with move positions
-        let header: String = std::iter::once("    ".to_string())
-            .chain(
-                self.indices
-                    .iter()
-                    .map(|i| format!("{}", i.to_string().bold())),
-            )
-            .collect::<Vec<_>>()
-            .join(" ");
-
-        let board: String = self
-            .indices
-            .iter()
-            .map(|y| {
-                let row = self
-                    .indices
-                    .iter()
-                    .map(|x| formatted_board[y * self.size + x].to_string())
-                    .collect::<Vec<_>>()
-                    .join(" ");
-                format!("  {} {}", y.to_string().bold(), row)
-            })
-            .collect::<Vec<_>>()
-            .join("\n");
-
-        println!("{header}\n{board}");
+        print!("    ");
+        for i in &self.indices {
+            print!(" {}", i.to_string().bold());
+        }
+        for y in &self.indices {
+            print!("\n  {}", y.to_string().bold());
+            for x in &self.indices {
+                print!(" {}", formatted_board[y * self.size + x]);
+            }
+        }
+        println!();
     }
 
     /// Print current score for both players.

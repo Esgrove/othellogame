@@ -6,8 +6,8 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
-# Define project version here, normally would use git tags for this...
-PROJECT_VERSION="1.9.0"
+# Project version is defined in the VERSION file, normally would use git tags for this...
+PROJECT_VERSION=$(<"$DIR/VERSION")
 
 USAGE="Usage: $(basename "$0") [OPTIONS]
 

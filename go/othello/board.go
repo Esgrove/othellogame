@@ -145,25 +145,17 @@ func (b *Board) PrintPossibleMoves(moves []Move) {
 		fmt.Printf("  %s\n", possibleMove)
 	}
 	// Print board with move positions
-	headerParts := make([]string, 0, len(b.indices)+1)
-	headerParts = append(headerParts, "    ")
+	fmt.Print("    ")
 	for _, i := range b.indices {
-		headerParts = append(headerParts, aurora.Bold(strconv.Itoa(i)).String())
+		fmt.Printf(" %s", aurora.Bold(strconv.Itoa(i)))
 	}
-	header := strings.Join(headerParts, " ")
-
-	rows := make([]string, 0, len(b.indices))
 	for _, y := range b.indices {
-		rowParts := make([]string, 0, len(b.indices))
+		fmt.Printf("\n  %s", aurora.Bold(strconv.Itoa(y)))
 		for _, x := range b.indices {
-			rowParts = append(rowParts, formattedBoard[y*b.size+x])
+			fmt.Printf(" %s", formattedBoard[y*b.size+x])
 		}
-		row := strings.Join(rowParts, " ")
-		rows = append(rows, fmt.Sprintf("  %s %s", aurora.Bold(strconv.Itoa(y)), row))
 	}
-	board := strings.Join(rows, "\n")
-
-	fmt.Printf("%s\n%s\n", header, board)
+	fmt.Println()
 }
 
 // PrintScore Print current score for both players.

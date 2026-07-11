@@ -6,6 +6,153 @@ import org.gradle.api.provider.Property
 import org.gradle.api.services.*
 import org.gradle.api.tasks.*
 
+version = "2.0.0"
+
+plugins {
+    // Apply the application plugin to add support for building a CLI application in Java.
+    application
+    java
+
+    // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
+    id("com.diffplug.spotless") version "8.8.0"
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.junit/junit-bom
+    testImplementation(platform("org.junit:junit-bom:6.1.1"))
+
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+    testImplementation("org.junit.jupiter:junit-jupiter")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation("com.google.guava:guava:33.6.0-jre")
+
+    // https://mvnrepository.com/artifact/info.picocli/picocli
+    implementation("info.picocli:picocli:4.7.7")
+}
+
+// Apply a specific Java toolchain to ease working on different environments.
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass.set("othello.Main")
+}
+
+spotless {
+    ratchetFrom("origin/main")
+    java {
+        target("src/**/*.java")
+        eclipse().configFile("eclipse-format.xml")
+        formatAnnotations()
+    }
+}
+
+val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
+
+val writeVersionFile by tasks.registering(WriteVersionTask::class) {
+    outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/java"))
+    appName.set("Othello Java")
+    appVersion.set(project.version.toString())
+    execOps.set(execHelper.map { it.execOps })
+}
+
+sourceSets["main"].java {
+    srcDir("build/generated/sources/versioninfo/java")
+}
+
+tasks.named("compileJava") {
+    dependsOn(writeVersionFile)
+}
+
+tasks.register<JavaExec>("othello") {
+    group = "application"
+    mainClass.set("othello.Main")
+    classpath = sourceSets["main"].runtimeClasspath
+    standardInput = System.`in`
+
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    })
+}
+
+tasks.named<ProcessResources>("processResources") {
+    dependsOn(writeVersionFile)
+}
+
+tasks.test {
+    useJUnitPlatform()
+
+    testLogging {
+        events(
+            org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
+        )
+
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+        showCauses = true
+        showStackTraces = false
+    }
+}
+
+tasks.register("format") {
+    group = "formatting"
+    description = "Runs Spotless Apply to format code"
+    dependsOn("spotlessApply")
+}
+
+tasks.register("version") {
+    dependsOn(writeVersionFile)
+    val versionFile = layout.buildDirectory.file("generated/sources/versioninfo/java/othello/VersionInfo.java")
+    doLast {
+        val file = versionFile.get().asFile
+        println("Generated build info to: ${file.absolutePath}")
+        val versionLine = file.readLines().find { it.contains("VERSION_STRING") }
+        val versionString = versionLine
+            ?.substringAfter('=')
+            ?.trim()
+            ?.removePrefix("\"")
+            ?.removeSuffix(";")
+            ?.removeSuffix("\"")
+
+        println("Version: ${versionString ?: "info missing"}")
+    }
+}
+
+tasks.named("build") {
+    dependsOn("version")
+}
+
+tasks.register<Jar>("fatJar") {
+    group = "build"
+    archiveClassifier.set("all")
+
+    manifest {
+        attributes["Main-Class"] = "othello.Main"
+    }
+
+    from(sourceSets.main.get().output)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get()
+            .filter { it.name.endsWith("jar") }
+            .map { zipTree(it) }
+    })
+}
+
 abstract class ExecHelper @Inject constructor(val execOps: ExecOperations) :
     BuildService<BuildServiceParameters.None>
 
@@ -66,149 +213,4 @@ abstract class WriteVersionTask : DefaultTask() {
             """.trimIndent()
         )
     }
-}
-
-version = "1.1.0"
-
-plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
-    java
-
-    // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.8.0"
-}
-
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-}
-
-dependencies {
-    // https://mvnrepository.com/artifact/org.junit/junit-bom
-    testImplementation(platform("org.junit:junit-bom:6.1.1"))
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // https://mvnrepository.com/artifact/com.google.guava/guava
-    implementation("com.google.guava:guava:33.6.0-jre")
-
-    // https://mvnrepository.com/artifact/info.picocli/picocli
-    implementation("info.picocli:picocli:4.7.7")
-}
-
-// Apply a specific Java toolchain to ease working on different environments.
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-application {
-    mainClass.set("othello.Main")
-}
-
-val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
-
-val writeVersionFile by tasks.registering(WriteVersionTask::class) {
-    outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/java"))
-    appName.set("Othello Java")
-    appVersion.set(project.version.toString())
-    execOps.set(execHelper.map { it.execOps })
-}
-
-sourceSets["main"].java {
-    srcDir("build/generated/sources/versioninfo/java")
-}
-
-tasks.named("compileJava") {
-    dependsOn(writeVersionFile)
-}
-
-tasks.register<JavaExec>("othello") {
-    group = "application"
-    mainClass.set("othello.Main")
-    classpath = sourceSets["main"].runtimeClasspath
-    standardInput = System.`in`
-
-    javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    })
-}
-
-tasks.named<ProcessResources>("processResources") {
-    dependsOn(writeVersionFile)
-}
-
-tasks.test {
-    useJUnitPlatform()
-
-    testLogging {
-        events(
-            org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
-            org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
-            org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
-        )
-
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
-        showCauses = true
-        showStackTraces = false
-    }
-}
-
-spotless {
-    ratchetFrom("origin/main")
-    java {
-        target("src/**/*.java")
-        eclipse().configFile("eclipse-format.xml")
-        formatAnnotations()
-    }
-}
-
-tasks.register("format") {
-    group = "formatting"
-    description = "Runs Spotless Apply to format code"
-    dependsOn("spotlessApply")
-}
-
-tasks.register("version") {
-    dependsOn(writeVersionFile)
-    val versionFile = layout.buildDirectory.file("generated/sources/versioninfo/java/othello/VersionInfo.java")
-    doLast {
-        val file = versionFile.get().asFile
-        println("Generated build info to: ${file.absolutePath}")
-        val versionLine = file.readLines().find { it.contains("VERSION_STRING") }
-        val versionString = versionLine
-            ?.substringAfter('=')
-            ?.trim()
-            ?.removePrefix("\"")
-            ?.removeSuffix(";")
-            ?.removeSuffix("\"")
-
-        println("Version: ${versionString ?: "info missing"}")
-    }
-}
-
-tasks.named("build") {
-    dependsOn("version")
-}
-
-tasks.register<Jar>("fatJar") {
-    group = "build"
-    archiveClassifier.set("all")
-
-    manifest {
-        attributes["Main-Class"] = "othello.Main"
-    }
-
-    from(sourceSets.main.get().output)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    dependsOn(configurations.runtimeClasspath)
-    from({
-        configurations.runtimeClasspath.get()
-            .filter { it.name.endsWith("jar") }
-            .map { zipTree(it) }
-    })
 }

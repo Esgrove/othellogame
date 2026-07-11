@@ -9,59 +9,7 @@ import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
-abstract class ExecHelper @Inject constructor(val execOps: ExecOperations) :
-    BuildService<BuildServiceParameters.None>
-
-abstract class WriteVersionTask @Inject constructor(private val objects: ObjectFactory) :
-    DefaultTask() {
-
-    @get:OutputDirectory
-    abstract val outputDir: DirectoryProperty
-
-    @get:Input
-    abstract val appName: Property<String>
-
-    @get:Input
-    abstract val appVersion: Property<String>
-
-    @get:Internal
-    abstract val execOps: Property<ExecOperations>
-
-    @TaskAction
-    fun generate() {
-        fun execAndCapture(vararg args: String): String {
-            val out = ByteArrayOutputStream()
-            execOps.get().exec {
-                commandLine(*args)
-                standardOutput = out
-                isIgnoreExitValue = true
-            }
-            return out.toString().trim().ifBlank { "dev" }
-        }
-
-        val gitBranch = execAndCapture("git", "rev-parse", "--abbrev-ref", "HEAD")
-        val gitCommit = execAndCapture("git", "rev-parse", "--short", "HEAD")
-        val buildTime = execAndCapture("date", "-u", "+%Y-%m-%d_%H%M")
-        val formattedVersion = "${appName.get()} ${appVersion.get()} $buildTime $gitBranch $gitCommit"
-
-        val file = outputDir.get().file("othello/VersionInfo.kt").asFile
-        file.parentFile.mkdirs()
-        file.writeText(
-            """
-            package othello
-
-            object VersionInfo {
-                const val APP_NAME = "${appName.get()}"
-                const val BUILD_TIME = "$buildTime"
-                const val GIT_BRANCH = "$gitBranch"
-                const val GIT_COMMIT = "$gitCommit"
-                const val VERSION_NUMBER = "${appVersion.get()}"
-                const val VERSION_STRING = "$formattedVersion"
-            }
-            """.trimIndent(),
-        )
-    }
-}
+version = "2.0.0"
 
 val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
 
@@ -71,8 +19,6 @@ val writeVersionFile by tasks.registering(WriteVersionTask::class) {
     appVersion.set(project.version.toString())
     execOps.set(execHelper.map { it.execOps })
 }
-
-version = "1.8.1"
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.4.0"
@@ -99,6 +45,16 @@ dependencies {
     implementation("com.squareup.okio:okio:3.17.0")
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+application {
+    mainClass.set("othello.MainKt")
+}
+
 sourceSets["main"].kotlin {
     srcDir("build/generated/sources/versioninfo/kotlin")
 }
@@ -115,16 +71,6 @@ testing {
             useKotlinTest("1.8.10")
         }
     }
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
-}
-
-application {
-    mainClass.set("othello.MainKt")
 }
 
 tasks.jar {
@@ -183,5 +129,59 @@ tasks.test {
         events("PASSED", "FAILED", "SKIPPED")
         showStandardStreams = true
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+    }
+}
+
+abstract class ExecHelper @Inject constructor(val execOps: ExecOperations) :
+    BuildService<BuildServiceParameters.None>
+
+abstract class WriteVersionTask @Inject constructor(private val objects: ObjectFactory) :
+    DefaultTask() {
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @get:Input
+    abstract val appName: Property<String>
+
+    @get:Input
+    abstract val appVersion: Property<String>
+
+    @get:Internal
+    abstract val execOps: Property<ExecOperations>
+
+    @TaskAction
+    fun generate() {
+        fun execAndCapture(vararg args: String): String {
+            val out = ByteArrayOutputStream()
+            execOps.get().exec {
+                commandLine(*args)
+                standardOutput = out
+                isIgnoreExitValue = true
+            }
+            return out.toString().trim().ifBlank { "dev" }
+        }
+
+        val gitBranch = execAndCapture("git", "rev-parse", "--abbrev-ref", "HEAD")
+        val gitCommit = execAndCapture("git", "rev-parse", "--short", "HEAD")
+        val buildTime = execAndCapture("date", "-u", "+%Y-%m-%d_%H%M")
+        val formattedVersion = "${appName.get()} ${appVersion.get()} $buildTime $gitBranch $gitCommit"
+
+        val file = outputDir.get().file("othello/VersionInfo.kt").asFile
+        file.parentFile.mkdirs()
+        file.writeText(
+            """
+            package othello
+
+            object VersionInfo {
+                const val APP_NAME = "${appName.get()}"
+                const val BUILD_TIME = "$buildTime"
+                const val GIT_BRANCH = "$gitBranch"
+                const val GIT_COMMIT = "$gitCommit"
+                const val VERSION_NUMBER = "${appVersion.get()}"
+                const val VERSION_STRING = "$formattedVersion"
+            }
+            """.trimIndent(),
+        )
     }
 }
