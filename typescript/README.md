@@ -57,10 +57,12 @@ bun test
 
 Uses [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) and
 [oxlint](https://oxc.rs/docs/guide/usage/linter.html).
+Linting runs the TypeScript compiler typecheck first.
 
 ```shell
 bun format
 bun lint
+bun typecheck
 ```
 
 ## Version info

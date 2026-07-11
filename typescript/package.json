@@ -23,8 +23,9 @@
     "format": "oxfmt \"**/*.{ts,tsx,js,mjs}\"",
     "format:check": "oxfmt --check \"**/*.{ts,tsx,js,mjs}\"",
     "fmt": "bun format",
-    "lint": "oxlint --fix",
-    "lint:check": "oxlint"
+    "lint": "bun typecheck && oxlint --fix",
+    "lint:check": "bun typecheck && oxlint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^15.0.0",
