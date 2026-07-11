@@ -10,9 +10,13 @@ PROJECT_PATH="$REPO_ROOT/swift"
 
 VERSION_NUMBER=$(cat "$PROJECT_PATH/VERSION")
 
+FORCE_BUILD=false
 RUN_TESTS=false
 for arg in "$@"; do
     case "$arg" in
+        -f | --force)
+            FORCE_BUILD=true
+            ;;
         -t | --test)
             RUN_TESTS=true
             ;;
@@ -30,8 +34,10 @@ fi
 
 cd "$PROJECT_PATH"
 
-# Touch main source file to trigger rebuild so version info gets updated
-touch Sources/Othello/main.swift
+if [ "$FORCE_BUILD" = true ]; then
+    # Touch main source file to trigger rebuild so version info gets updated
+    touch Sources/Othello/main.swift
+fi
 
 swift build --configuration release
 

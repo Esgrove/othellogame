@@ -78,6 +78,7 @@
       <_VersionLines Include='        public const string GitBranch = "$(GitBranch)"%3B' />
       <_VersionLines Include='        public const string GitCommit = "$(GitCommit)"%3B' />
       <_VersionLines Include='        public const string VersionNumber = "$(Version)"%3B' />
+      <_VersionLines Include='        public const string VersionString = "Othello C# $(Version) $(BuildTime) $(GitBranch) $(GitCommit)"%3B' />
       <_VersionLines Include="    }" />
       <_VersionLines Include="}" />
     </ItemGroup>

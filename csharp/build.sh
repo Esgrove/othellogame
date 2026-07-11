@@ -8,6 +8,7 @@ Build Othello C# binary.
 OPTIONS: All options are optional
     -h | --help                 Display these instructions.
     -b | --build-type <type>    Specify build type. Default is 'Release'.
+    -f | --force                Force rebuild of main file so version info gets updated.
     -t | --test                 Run tests.
     -v | --verbose              Display commands being executed.
 "
@@ -19,6 +20,7 @@ source "$DIR/../common.sh"
 
 init_options() {
     BUILD_TYPE="Release"
+    FORCE_BUILD=false
     RUN_TESTS=false
 
     while [ $# -gt 0 ]; do
@@ -30,6 +32,9 @@ init_options() {
             -b | --build-type)
                 BUILD_TYPE="$2"
                 shift
+                ;;
+            -f | --force)
+                FORCE_BUILD=true
                 ;;
             -t | --test)
                 RUN_TESTS=true
@@ -76,8 +81,10 @@ build_project() {
     fi
 
     echo "Building Othello C# $BUILD_TYPE for $RUNTIME"
-    # Touch main file to trigger rebuild so version info gets updated
-    touch Othello/Othello.cs
+    if [ "$FORCE_BUILD" = true ]; then
+        # Touch main file to trigger rebuild so version info gets updated
+        touch Othello/Othello.cs
+    fi
     time dotnet publish \
         Othello/Othello.csproj \
         --configuration "$BUILD_TYPE" \

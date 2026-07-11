@@ -42,6 +42,13 @@ uv sync --all-groups --upgrade
 
 ## Run
 
+Build with the build script,
+which installs dependencies and updates the version information:
+
+```shell
+./build.sh
+```
+
 ```shell
 # with virtual env active
 python3 othello/othello.py
@@ -87,5 +94,4 @@ uv run ruff check --fix
 
 Version number is defined in [pyproject.toml](./pyproject.toml).
 Version info (version number, git commit, branch, build time) is generated
-by the [othello_python.sh](./othello_python.sh) launcher script,
-which writes `othello/version.py` before each run.
+by the [build.sh](./build.sh) script, which writes `othello/version.py`.

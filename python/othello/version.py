@@ -6,12 +6,11 @@ Akseli Lukkarila
 """
 
 # Updated by build script, do not edit manually!
-GIT_BRANCH = "main"
-GIT_COMMIT = "700e89d"
-BUILD_TIME = "2026-06-11_1440"
-VERSION_NUMBER = "3.1.0"
-
-VERSION_STRING = f"Othello Python {VERSION_NUMBER} {BUILD_TIME} {GIT_BRANCH} {GIT_COMMIT}"
+BUILD_TIME = "2026-07-11_1845"
+GIT_BRANCH = "unify-implementations"
+GIT_COMMIT = "dc53baf"
+VERSION_NUMBER = "4.0.0"
+VERSION_STRING = "Othello Python 4.0.0 2026-07-11_1845 unify-implementations dc53baf"
 
 
 def version_info() -> str:

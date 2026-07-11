@@ -9,7 +9,7 @@ namespace Othello {
     public static partial class Version {
         /// <summary>Return version info string</summary>
         public static string VersionInfo() {
-            return $"Othello C# {VersionNumber} {BuildTime} {GitBranch} {GitCommit}";
+            return VersionString;
         }
     }
 }
