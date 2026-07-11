@@ -38,7 +38,7 @@ inline std::ostream& operator<<(std::ostream& out, const PlayerType& player_type
 class Player
 {
 public:
-    /// Initialize new player for the given disk color.
+    /// Initialize new player for the given disk colour.
     explicit Player(const Disk disk, const PlayerSettings settings) : disk(disk), settings(settings)
     {}
 

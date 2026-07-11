@@ -27,8 +27,7 @@ std::optional<std::string> Player::play_one_move(Board& board)
     if (moves.empty()) {
         can_play = false;
         if (!this->settings.check_mode) {
-            print_yellow("  No moves available...");
-            fmt::print("\n");
+            print_yellow("  No moves available...\n");
         }
         return std::nullopt;
     }

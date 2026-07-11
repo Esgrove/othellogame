@@ -18,12 +18,10 @@ std::string board_char(const Disk& disk)
     switch (disk) {
         case Disk::black:
             return "B";
-        case Disk::empty:
-            return "_";
         case Disk::white:
             return "W";
         default:
-            return "?";
+            return "_";
     }
 }
 
@@ -40,8 +38,6 @@ fmt::terminal_color disk_color(const Disk& disk)
     switch (disk) {
         case Disk::black:
             return magenta;
-        case Disk::empty:
-            return white;
         case Disk::white:
             return cyan;
         default:
@@ -85,7 +81,7 @@ std::vector<Square> Move::affected_squares() const
 
     std::vector<Square> paths(total_size);
 
-    // Insert directly to container since it has been pre-allocated to the correct size.
+    // Insert directly to the container since it has been pre-allocated to the correct size.
     // This way avoids the overhead of dynamically resizing the container.
     auto paths_iterator = paths.begin();
     for (const auto& [step, count] : directions) {

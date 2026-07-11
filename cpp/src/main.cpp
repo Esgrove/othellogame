@@ -54,8 +54,7 @@ struct Args {
     std::optional<size_t> size;
     bool autoplay;
     bool check;
-    // `default` is a reserved keyword in C++, so `default_settings` is used instead
-    bool default_settings;
+    bool use_defaults;
     bool log;
     bool no_helpers;
     bool test;
@@ -73,7 +72,7 @@ struct Args {
         }
         autoplay = parsed_args["autoplay"].as<bool>();
         check = parsed_args["check"].as<bool>();
-        default_settings = parsed_args["default"].as<bool>();
+        use_defaults = parsed_args["default"].as<bool>();
         log = parsed_args["log"].as<bool>();
         no_helpers = parsed_args["no-helpers"].as<bool>();
         test = parsed_args["test"].as<bool>();
@@ -94,7 +93,7 @@ size_t resolve_board_size(const Args& args)
         fmt::println("Using board size: {}", size);
         return size;
     }
-    if (args.autoplay || args.default_settings) {
+    if (args.autoplay || args.use_defaults) {
         return othello::DEFAULT_BOARD_SIZE;
     }
     // Otherwise ask user for board size
@@ -115,12 +114,12 @@ int main(const int argc, const char* argv[])
             return 0;
         }
         // `autoplay` conflicts with `default`
-        if (args.autoplay && args.default_settings) {
+        if (args.autoplay && args.use_defaults) {
             print_error("the argument '-a/--autoplay' cannot be used with '-d/--default'");
             return 1;
         }
 
-        fmt::print("{}OTHELLO GAME - C++{}\n", ansi::ANSI_BOLD_GREEN, ansi::ANSI_RESET);
+        print_green_bold("OTHELLO GAME - C++\n");
 
         const size_t board_size = resolve_board_size(args);
 
@@ -131,7 +130,7 @@ int main(const int argc, const char* argv[])
             !args.no_helpers,
             args.log || args.check,
             args.test || args.check,
-            args.default_settings
+            args.use_defaults
         );
 
         othello::Othello(settings).play();

@@ -116,5 +116,6 @@ struct Settings {
 
 template<>
 struct fmt::formatter<othello::Settings> : ostream_formatter {};
+
 template<>
 struct fmt::formatter<othello::PlayerSettings> : ostream_formatter {};

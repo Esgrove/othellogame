@@ -42,66 +42,80 @@ std::string get_color(const T& object, const fmt::terminal_color color)
 }
 
 /// Print text with colour.
-template<Formattable T>
-void print_color(const T& object, const fmt::terminal_color color = fmt::terminal_color::white)
+template<typename... T>
+void print_color(const fmt::terminal_color color, fmt::format_string<T...> format, T&&... args)
 {
-    fmt::print(fmt::fg(color), "{}", object);
+    fmt::print(fmt::fg(color), format, std::forward<T>(args)...);
 }
 
 /// Print bold text.
-template<Formattable T>
-void print_bold(const T& object, const fmt::terminal_color color = fmt::terminal_color::white)
+template<typename... T>
+void print_bold(fmt::format_string<T...> format, T&&... args)
 {
-    fmt::print(fmt::emphasis::bold | fmt::fg(color), "{}", object);
+    fmt::print(fmt::emphasis::bold, format, std::forward<T>(args)...);
+}
+
+/// Print bold text with colour.
+template<typename... T>
+void print_color_bold(const fmt::terminal_color color, fmt::format_string<T...> format, T&&... args)
+{
+    fmt::print(fmt::emphasis::bold | fmt::fg(color), format, std::forward<T>(args)...);
 }
 
 /// Print text in green.
-template<Formattable T>
-void print_green(const T& object, bool bold = false)
+template<typename... T>
+void print_green(fmt::format_string<T...> format, T&&... args)
 {
-    if (bold) {
-        print_bold(object, fmt::terminal_color::green);
-    } else {
-        print_color(object, fmt::terminal_color::green);
-    }
+    print_color(fmt::terminal_color::green, format, std::forward<T>(args)...);
+}
+
+/// Print bold text in green.
+template<typename... T>
+void print_green_bold(fmt::format_string<T...> format, T&&... args)
+{
+    print_color_bold(fmt::terminal_color::green, format, std::forward<T>(args)...);
 }
 
 /// Print text in yellow.
-template<Formattable T>
-void print_yellow(const T& object, bool bold = false)
+template<typename... T>
+void print_yellow(fmt::format_string<T...> format, T&&... args)
 {
-    if (bold) {
-        print_bold(object, fmt::terminal_color::yellow);
-    } else {
-        print_color(object, fmt::terminal_color::yellow);
-    }
+    print_color(fmt::terminal_color::yellow, format, std::forward<T>(args)...);
+}
+
+/// Print bold text in yellow.
+template<typename... T>
+void print_yellow_bold(fmt::format_string<T...> format, T&&... args)
+{
+    print_color_bold(fmt::terminal_color::yellow, format, std::forward<T>(args)...);
 }
 
 /// Print text in red.
-template<Formattable T>
-void print_red(const T& object, bool bold = false)
+template<typename... T>
+void print_red(fmt::format_string<T...> format, T&&... args)
 {
-    if (bold) {
-        print_bold(object, fmt::terminal_color::red);
-    } else {
-        print_color(object, fmt::terminal_color::red);
-    }
+    print_color(fmt::terminal_color::red, format, std::forward<T>(args)...);
 }
 
-/// Print error message with red colour.
+/// Print bold text in red.
+template<typename... T>
+void print_red_bold(fmt::format_string<T...> format, T&&... args)
+{
+    print_color_bold(fmt::terminal_color::red, format, std::forward<T>(args)...);
+}
+
+/// Print an error message with red colour.
 inline void print_error(const std::string& message)
 {
     auto [indent, text] = split_leading_whitespace(message);
-    fmt::print(fmt::fg(fmt::terminal_color::red), "{}Error: {}", indent, text);
-    fmt::print("\n");
+    fmt::print(fmt::fg(fmt::terminal_color::red), "{}Error: {}\n", indent, text);
 }
 
-/// Print warning message with yellow colour.
+/// Print a warning message with yellow colour.
 inline void print_warn(const std::string& message)
 {
     auto [indent, text] = split_leading_whitespace(message);
-    fmt::print(fmt::fg(fmt::terminal_color::yellow), "{}Warning: {}", indent, text);
-    fmt::print("\n");
+    fmt::print(fmt::fg(fmt::terminal_color::yellow), "{}Warning: {}\n", indent, text);
 }
 
 // Fallback with ANSI escape codes for stringstream
@@ -130,7 +144,7 @@ namespace ansi
 
 [[maybe_unused]] static constexpr auto ANSI_RESET = "\033[0m";
 
-// Stream manipulators for easy ANSI color usage with stringstreams.
+// Stream manipulators for easy ANSI colour usage with stringstreams.
 // Example usage: std::cout << ansi::red << "example" << ansi::reset << "\n";
 
 template<class T, class Traits>

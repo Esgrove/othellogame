@@ -68,8 +68,7 @@ void Othello::init_game()
         }
     }
     if (!this->settings.check_mode) {
-        fmt::print(fmt::emphasis::bold, "\nPlayers:");
-        fmt::print("\n");
+        print_bold("\nPlayers:\n");
         print_status();
     }
 }
@@ -109,17 +108,15 @@ std::string Othello::format_game_log() const
 void Othello::print_round_header() const
 {
     if (!this->settings.check_mode) {
-        fmt::print(fmt::emphasis::bold, "\n=========== ROUND: {} ===========", rounds_played);
-        fmt::print("\n");
+        print_bold("\n=========== ROUND: {} ===========\n", rounds_played);
     }
 }
 
 void Othello::print_game_end_footer() const
 {
     if (!this->settings.check_mode) {
-        fmt::print(fmt::emphasis::bold, "\n================================");
-        fmt::print("\n");
-        fmt::print("{}The game is finished!\n{}\n", ansi::ANSI_BOLD_GREEN, ansi::ANSI_RESET);
+        print_bold("\n================================\n");
+        print_color_bold(fmt::terminal_color::green, "The game is finished!\n\n");
     }
 }
 
@@ -128,7 +125,7 @@ void Othello::print_log() const
 {
     const auto formatted_log = format_game_log();
     if (!this->settings.check_mode) {
-        fmt::print("{}Game log:{}\n", ansi::ANSI_BOLD_YELLOW, ansi::ANSI_RESET);
+        print_yellow_bold("Game log:\n");
         print(formatted_log);
     }
     const auto hex_hash = calculate_sha256(formatted_log);
@@ -138,8 +135,7 @@ void Othello::print_log() const
 /// Print ending status and winner info.
 void Othello::print_result() const
 {
-    fmt::print(fmt::emphasis::bold, "Result:");
-    fmt::print("\n");
+    print_bold("Result:\n");
     print_status();
     fmt::print("\n");
 
@@ -190,11 +186,8 @@ size_t Othello::get_board_size()
         const auto board_size = static_cast<size_t>(size);
         if (board_size < MIN_BOARD_SIZE || board_size > MAX_BOARD_SIZE) {
             print_yellow(
-                fmt::format(
-                    "Limiting board size to valid range {}..{}", MIN_BOARD_SIZE, MAX_BOARD_SIZE
-                )
+                "Limiting board size to valid range {}..{}\n", MIN_BOARD_SIZE, MAX_BOARD_SIZE
             );
-            fmt::print("\n");
         }
         return std::clamp(board_size, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
     } catch (const std::exception&) {
