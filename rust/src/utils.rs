@@ -7,7 +7,8 @@
 use sha2::{Digest, Sha256};
 
 /// Calculate SHA256 hash for the given string.
-pub fn calculate_sha256(formatted_log: &String) -> String {
+#[must_use]
+pub fn calculate_sha256(formatted_log: &str) -> String {
     let hash = Sha256::digest(formatted_log.as_bytes());
     base16ct::lower::encode_string(&hash)
 }

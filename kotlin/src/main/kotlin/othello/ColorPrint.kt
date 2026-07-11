@@ -1,5 +1,6 @@
 package othello
 
+/** Defines ANSI escape codes for adding colours to console output. */
 enum class AnsiColor(internal val code: String) {
     CYAN("36"),
     GREEN("32"),
@@ -38,6 +39,36 @@ fun printBold(text: String, color: AnsiColor? = null) {
     } else {
         println(getColor(text, AnsiColor.BOLD))
     }
+}
+
+/** Print text in green. */
+fun printGreen(text: String) {
+    printColor(text, AnsiColor.GREEN)
+}
+
+/** Print bold text in green. */
+fun printGreenBold(text: String) {
+    printBold(text, AnsiColor.GREEN)
+}
+
+/** Print text in yellow. */
+fun printYellow(text: String) {
+    printColor(text, AnsiColor.YELLOW)
+}
+
+/** Print bold text in yellow. */
+fun printYellowBold(text: String) {
+    printBold(text, AnsiColor.YELLOW)
+}
+
+/** Print text in red. */
+fun printRed(text: String) {
+    printColor(text, AnsiColor.RED)
+}
+
+/** Print bold text in red. */
+fun printRedBold(text: String) {
+    printBold(text, AnsiColor.RED)
 }
 
 /** Print error message with red colour. */

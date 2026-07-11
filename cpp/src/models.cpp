@@ -7,13 +7,13 @@
 
 #include "models.hpp"
 
-#include <algorithm>  // std::sort
+#include <algorithm>  // std::ranges::sort
 #include <numeric>    // std::accumulate
 
 namespace othello
 {
 /// Returns a single character identifier string for the given disk.
-std::string board_char(const Disk& disk)
+std::string board_char(const Disk disk)
 {
     switch (disk) {
         case Disk::black:
@@ -25,14 +25,14 @@ std::string board_char(const Disk& disk)
     }
 }
 
-/// Returns a single character identifier string for the given disk.
-std::string board_char_with_color(const Disk& disk)
+/// Returns a coloured single character identifier string for the given disk.
+std::string board_char_with_color(const Disk disk)
 {
     return get_color(board_char(disk), disk_color(disk));
 }
 
 /// Return the associated colour for this disk.
-fmt::terminal_color disk_color(const Disk& disk)
+fmt::terminal_color disk_color(const Disk disk)
 {
     using enum fmt::terminal_color;
     switch (disk) {
@@ -46,7 +46,7 @@ fmt::terminal_color disk_color(const Disk& disk)
 }
 
 /// Returns the disk formatted as a coloured string.
-std::string disk_string(const Disk& disk)
+std::string disk_string(const Disk disk)
 {
     const auto color = disk_color(disk);
     switch (disk) {
@@ -91,7 +91,7 @@ std::vector<Square> Move::affected_squares() const
             pos += step;
         }
     }
-    std::sort(paths.begin(), paths.end());
+    std::ranges::sort(paths);
     return paths;
 }
 

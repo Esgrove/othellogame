@@ -11,8 +11,13 @@ import (
 	"fmt"
 )
 
+// MinBoardSize Minimum allowed board size.
 const MinBoardSize int = 4
+
+// MaxBoardSize Maximum allowed board size.
 const MaxBoardSize int = 10
+
+// DefaultBoardSize Default board size when none is given.
 const DefaultBoardSize int = 8
 
 // Settings Game settings.

@@ -28,7 +28,7 @@ std::string calculate_sha256(const std::string& text);
 ///
 /// Requires that the stream insertion operator `<<` has been implemented for the given object.
 template<Streamable T>
-void print(T object, const bool newline = true, std::ostream& out = std::cout)
+void print(const T& object, const bool newline = true, std::ostream& out = std::cout)
 {
     out << object;
     if (newline) {

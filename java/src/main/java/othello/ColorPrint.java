@@ -47,6 +47,48 @@ public class ColorPrint {
     }
 
     /**
+     * Print text with green colour.
+     */
+    public static void printGreen(String text) {
+        printColor(text, AnsiColor.GREEN);
+    }
+
+    /**
+     * Print bold text with green colour.
+     */
+    public static void printGreenBold(String text) {
+        printBold(text, AnsiColor.GREEN);
+    }
+
+    /**
+     * Print text with yellow colour.
+     */
+    public static void printYellow(String text) {
+        printColor(text, AnsiColor.YELLOW);
+    }
+
+    /**
+     * Print bold text with yellow colour.
+     */
+    public static void printYellowBold(String text) {
+        printBold(text, AnsiColor.YELLOW);
+    }
+
+    /**
+     * Print text with red colour.
+     */
+    public static void printRed(String text) {
+        printColor(text, AnsiColor.RED);
+    }
+
+    /**
+     * Print bold text with red colour.
+     */
+    public static void printRedBold(String text) {
+        printBold(text, AnsiColor.RED);
+    }
+
+    /**
      * Print error message with red colour.
      */
     public static void printError(String message) {

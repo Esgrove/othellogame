@@ -15,12 +15,12 @@ from typing import Self
 
 try:
     from othello.board import Board
-    from othello.colorprint import Color, print_color, print_error
+    from othello.colorprint import print_error, print_yellow
     from othello.models import Disk, Move, Square
     from othello.settings import PlayerSettings
 except ModuleNotFoundError:
     from board import Board
-    from colorprint import Color, print_color, print_error
+    from colorprint import print_error, print_yellow
     from models import Disk, Move, Square
     from settings import PlayerSettings
 
@@ -57,7 +57,7 @@ class Player:
         if not moves:
             self.can_play = False
             if not self._settings.check_mode:
-                print_color("  No moves available...", Color.yellow)
+                print_yellow("  No moves available...")
 
             return None
 

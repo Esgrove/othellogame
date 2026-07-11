@@ -26,7 +26,7 @@ export function boardChar(disk: Disk): string {
     }
 }
 
-/** Returns a single character identifier string for the given disk. */
+/** Returns a coloured single character identifier string for the given disk. */
 export function boardCharWithColor(disk: Disk): string {
     return diskColor(disk)(boardChar(disk));
 }
@@ -69,6 +69,7 @@ export function opponent(disk: Disk): Disk {
 
 /** Represents one step direction on the board. */
 export class Step {
+    /** Initialize a new step for the given x and y offsets. */
     constructor(
         readonly x: number,
         readonly y: number,
@@ -77,6 +78,7 @@ export class Step {
 
 /** Represents one square location on the board. */
 export class Square {
+    /** Initialize a new square for the given x and y coordinates. */
     constructor(
         readonly x: number,
         readonly y: number,
@@ -87,6 +89,12 @@ export class Square {
         return new Square(this.x + step.x, this.y + step.y);
     }
 
+    /** Get the index of this square on the board. */
+    boardIndex(boardSize: number): number {
+        return this.y * boardSize + this.x;
+    }
+
+    /** Check if this square is equal to another square. */
     equals(other: Square): boolean {
         return this.x === other.x && this.y === other.y;
     }
@@ -96,6 +104,7 @@ export class Square {
         return a.x - b.x || a.y - b.y;
     }
 
+    /** Format square coordinates as a string. */
     toString(): string {
         return `(${this.x},${this.y})`;
     }
@@ -108,6 +117,7 @@ export class Square {
  * and `count` describes how many consecutive squares in that direction there are.
  */
 export class Direction {
+    /** Initialize a new direction for the given step and count. */
     constructor(
         readonly step: Step,
         readonly count: number,
@@ -116,6 +126,7 @@ export class Direction {
 
 /** Represents one possible disk placement for the given disk colour. */
 export class Move {
+    /** Initialize a new move for the given square, disk, value, and directions. */
     constructor(
         readonly square: Square,
         readonly disk: Disk,

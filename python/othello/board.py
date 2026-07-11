@@ -6,10 +6,10 @@ Akseli Lukkarila
 """
 
 try:
-    from othello.colorprint import Color, get_color, print_color
+    from othello.colorprint import Color, get_color, print_yellow
     from othello.models import Direction, Disk, Move, Square, Step
 except ModuleNotFoundError:
-    from colorprint import Color, get_color, print_color
+    from colorprint import Color, get_color, print_yellow
     from models import Direction, Disk, Move, Square, Step
 
 UP = 1
@@ -35,6 +35,7 @@ class Board:
     """Handles game board state and logic."""
 
     def __init__(self, size=8):
+        """Initialize a new board for the given board size."""
         board = self._init_board(size)
         # Index list (0...size) to avoid repeating same range in loops.
         # Not really needed in Python but kept here to more closely match other implementations...
@@ -97,7 +98,7 @@ class Board:
 
     def print_possible_moves(self, moves: list[Move]) -> None:
         """Print board with available move coordinates and the resulting points gained."""
-        print_color(f"  Possible moves ({len(moves)}):", Color.yellow)
+        print_yellow(f"  Possible moves ({len(moves)}):")
         # Convert board from Disk enums to strings
         formatted_board = [disk.board_char_with_color() for disk in self._board]
         # Add possible moves to board

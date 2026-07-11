@@ -1,4 +1,4 @@
-//! # Types
+//! # Models
 //! Basic types and methods.
 //!
 //! Akseli Lukkarila
@@ -56,6 +56,7 @@ pub struct Move {
 
 impl Disk {
     /// Returns a single character identifier string for the given disk.
+    #[must_use]
     pub fn board_char(self) -> String {
         match self {
             Self::Black => String::from("B"),
@@ -64,12 +65,14 @@ impl Disk {
         }
     }
 
-    /// Returns a single character identifier string for the given disk.
+    /// Returns a coloured single character identifier string for the given disk.
+    #[must_use]
     pub fn board_char_with_color(self) -> ColoredString {
         self.board_char().color(self.disk_color())
     }
 
     /// Return the associated colour for this disk.
+    #[must_use]
     pub const fn disk_color(self) -> Color {
         match self {
             Self::Black => Color::Magenta,
@@ -79,6 +82,7 @@ impl Disk {
     }
 
     /// Returns the disk formatted as a coloured string.
+    #[must_use]
     pub fn disk_string(self) -> ColoredString {
         match self {
             Self::Black => "BLACK".color(self.disk_color()),
@@ -88,6 +92,7 @@ impl Disk {
     }
 
     /// Return the opposing disk colour for this disk.
+    #[must_use]
     pub const fn opponent(self) -> Self {
         match self {
             Self::Black => Self::White,
@@ -99,11 +104,13 @@ impl Disk {
 
 impl Move {
     /// Format move for log entry
+    #[must_use]
     pub fn log_entry(&self) -> String {
         format!("{}:{},{}", self.disk.board_char(), self.square, self.value)
     }
 
     /// Get all the squares playing this move will change.
+    #[must_use]
     pub fn affected_squares(&self) -> Vec<Square> {
         // Calculate the required size for the vector
         let total_size: usize = self.directions.iter().map(|dir| dir.count).sum();
@@ -123,6 +130,7 @@ impl Move {
 impl Square {
     #[allow(dead_code)]
     /// Get the index of this square on the board.
+    #[must_use]
     pub const fn board_index(&self, board_size: usize) -> usize {
         self.y as usize * board_size + self.x as usize
     }

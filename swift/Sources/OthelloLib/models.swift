@@ -25,7 +25,7 @@ enum Disk: Int {
         }
     }
 
-    /// Returns a single character identifier string for the given disk.
+    /// Returns a coloured single character identifier string for the given disk.
     func boardCharWithColor() -> String {
         getColor(self.boardChar(), self.diskColor())
     }

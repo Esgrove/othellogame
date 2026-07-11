@@ -82,6 +82,7 @@ struct Args {
     }
 };
 
+/// Resolve the board size to use from CLI arguments, or by asking the user.
 size_t resolve_board_size(const Args& args)
 {
     // Try to read board size from command line args

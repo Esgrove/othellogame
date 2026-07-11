@@ -10,8 +10,8 @@ import picocli.CommandLine.Spec;
 
 import java.util.concurrent.Callable;
 
-import static othello.ColorPrint.printBold;
 import static othello.ColorPrint.printError;
+import static othello.ColorPrint.printGreenBold;
 import static othello.Settings.DEFAULT_BOARD_SIZE;
 import static othello.Settings.MAX_BOARD_SIZE;
 import static othello.Settings.MIN_BOARD_SIZE;
@@ -111,7 +111,7 @@ public class Main implements Callable<Integer> {
             );
         }
 
-        printBold("OTHELLO GAME - JAVA", AnsiColor.GREEN);
+        printGreenBold("OTHELLO GAME - JAVA");
 
         int boardSize = resolveBoardSize();
 
@@ -129,6 +129,9 @@ public class Main implements Callable<Integer> {
         return 0;
     }
 
+    /**
+     * Resolve the board size to use from CLI arguments, or by asking the user.
+     */
     private int resolveBoardSize() {
         // Try to read board size from command line args
         if (size != null) {

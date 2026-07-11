@@ -32,6 +32,7 @@ class Board {
     private let indices: [Int]
     let size: Int
 
+    /// Initialize a new board for the given board size.
     init(size: Int) {
         let board = Self.initBoard(size)
         // Index list (0...size) to avoid repeating same range in loops.
@@ -94,15 +95,13 @@ class Board {
                 moves.append(Move(square: square, disk: disk, value: value, directions: directions))
             }
         }
-        if !moves.isEmpty {
-            moves.sort()
-        }
+        moves.sort()
         return moves
     }
 
     /// Print board with available move coordinates and the resulting points gained.
     func printPossibleMoves(_ moves: [Move]) {
-        print("  Possible moves (\(moves.count)):".yellow())
+        printYellow("  Possible moves (\(moves.count)):")
         // Convert board from Disk enums to strings
         var formattedBoard = self.board.map { $0.boardCharWithColor() }
 

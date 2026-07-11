@@ -6,18 +6,17 @@
 // 2019-2026
 //==========================================================
 
-import ColorizeSwift
 import Foundation
 
 /// Gameplay loop and main logic.
 public class Othello {
-    var board: Board
-    var settings: Settings
-    var playerBlack: Player
-    var playerWhite: Player
-    var gameLog: [String] = []
-    var gamesPlayed: Int = 0
-    var roundsPlayed: Int = 0
+    private var board: Board
+    private var settings: Settings
+    private var playerBlack: Player
+    private var playerWhite: Player
+    private var gameLog: [String] = []
+    private var gamesPlayed: Int = 0
+    private var roundsPlayed: Int = 0
 
     /// Initialize Othello game.
     public init(_ settings: Settings) {
@@ -43,7 +42,7 @@ public class Othello {
     }
 
     /// Initialize game board and players for a new game.
-    func initGame() {
+    private func initGame() {
         // Re-use existing objects instead of initializing new ones
         if self.gamesPlayed > 0 {
             self.board = Board(size: self.settings.boardSize)
@@ -67,13 +66,13 @@ public class Othello {
             }
         }
         if !self.settings.checkMode {
-            print("\nPlayers:".bold())
+            printBold("\nPlayers:")
             self.printStatus()
         }
     }
 
     /// Keep making moves until both players can't make a move any more.
-    func gameLoop() {
+    private func gameLoop() {
         while self.board.canPlay(), self.playerBlack.canPlay || self.playerWhite.canPlay {
             self.roundsPlayed += 1
             self.printRoundHeader()
@@ -90,31 +89,34 @@ public class Othello {
         self.printGameEndFooter()
     }
 
-    func formatGameLog() -> String {
+    /// Format game log with line numbers for each move.
+    private func formatGameLog() -> String {
         self.gameLog
             .enumerated()
             .map { index, line in String(format: "%02d: %@", index + 1, line) }
             .joined(separator: "\n")
     }
 
-    func printRoundHeader() {
+    /// Print header for the current round.
+    private func printRoundHeader() {
         if !self.settings.checkMode {
-            print("\n=========== ROUND: \(self.roundsPlayed) ===========".bold())
+            printBold("\n=========== ROUND: \(self.roundsPlayed) ===========")
         }
     }
 
-    func printGameEndFooter() {
+    /// Print footer after the game has ended.
+    private func printGameEndFooter() {
         if !self.settings.checkMode {
-            print("\n================================".bold())
-            print(getColor("The game is finished!\n", TerminalStyle.green, bold: true))
+            printBold("\n================================")
+            printGreenBold("The game is finished!\n")
         }
     }
 
     /// Print game log which shows all moves made and the game board state after each move.
-    func printLog() {
+    private func printLog() {
         let formattedLog = self.formatGameLog()
         if !self.settings.checkMode {
-            print(getColor("Game log:", TerminalStyle.yellow, bold: true))
+            printYellowBold("Game log:")
             print(formattedLog)
         }
         let hexHash = calculateSha256(formattedLog)
@@ -122,8 +124,8 @@ public class Othello {
     }
 
     /// Print ending status and winner info.
-    func printResult() {
-        print("Result:".bold())
+    private func printResult() {
+        printBold("Result:")
         self.printStatus()
         print("")
 
@@ -136,14 +138,14 @@ public class Othello {
     }
 
     /// Print current board and player info.
-    func printStatus() {
+    private func printStatus() {
         print(self.playerBlack)
         print("\(self.playerWhite)\n")
         print(self.board)
     }
 
     /// Ask a question with two options, and return bool from user answer.
-    static func getAnswer(_ question: String, yes: String = "y", no: String = "n") -> Bool {
+    private static func getAnswer(_ question: String, yes: String = "y", no: String = "n") -> Bool {
         print("\(question) (\(yes)/\(no))? ", terminator: "")
         guard let input = readLine() else {
             return false
@@ -154,16 +156,15 @@ public class Othello {
     /// Ask and return the desired board size.
     public static func getBoardSize() -> Int {
         print("Choose board size (default is \(DEFAULT_BOARD_SIZE)): ", terminator: "")
-        if let input = readLine(),
-           let boardSize = Int(input.trimmingCharacters(in: .whitespaces))
-        {
-            if boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE {
-                print("Limiting board size to valid range \(MIN_BOARD_SIZE)..\(MAX_BOARD_SIZE)"
-                    .yellow())
-            }
-            return boardSize.clamp(min: MIN_BOARD_SIZE, max: MAX_BOARD_SIZE)
+        guard let input = readLine(),
+              let boardSize = Int(input.trimmingCharacters(in: .whitespaces))
+        else {
+            printWarn("Invalid size, defaulting to \(DEFAULT_BOARD_SIZE)...")
+            return DEFAULT_BOARD_SIZE
         }
-        printWarn("Invalid size, defaulting to \(DEFAULT_BOARD_SIZE)...")
-        return DEFAULT_BOARD_SIZE
+        if boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE {
+            printYellow("Limiting board size to valid range \(MIN_BOARD_SIZE)..\(MAX_BOARD_SIZE)")
+        }
+        return boardSize.clamp(min: MIN_BOARD_SIZE, max: MAX_BOARD_SIZE)
     }
 }

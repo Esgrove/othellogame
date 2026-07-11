@@ -7,8 +7,11 @@
 use std::fmt;
 use std::fmt::Display;
 
+/// Minimum allowed board size.
 pub const MIN_BOARD_SIZE: usize = 4;
+/// Maximum allowed board size.
 pub const MAX_BOARD_SIZE: usize = 10;
+/// Default board size when none is given.
 pub const DEFAULT_BOARD_SIZE: usize = 8;
 
 /// Game settings.

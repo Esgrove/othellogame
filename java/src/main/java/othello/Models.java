@@ -24,6 +24,9 @@ public class Models {
             this.value = value;
         }
 
+        /**
+         * Returns the numeric value for this disk.
+         */
         public int value() {
             return value;
         }
@@ -40,7 +43,7 @@ public class Models {
         }
 
         /**
-         * Returns a single character identifier string for the given disk.
+         * Returns a coloured single character identifier string for the given disk.
          */
         public String boardCharWithColor() {
             return ColorPrint.getColor(boardChar(), diskColor());
@@ -84,6 +87,9 @@ public class Models {
      * Represents one step direction on the board.
      */
     public record Step(int x, int y) {
+        /**
+         * Returns a new step that is the sum of this step and the given step.
+         */
         public Step add(Step step) {
             return new Step(x + step.x(), y + step.y());
         }
@@ -98,10 +104,16 @@ public class Models {
      * Represents one square location on the board.
      */
     public record Square(int x, int y) implements Comparable<Square> {
+        /**
+         * Returns a new square that is the sum of this square and the given step.
+         */
         public Square add(Step step) {
             return new Square(x + step.x(), y + step.y());
         }
 
+        /**
+         * Returns a new square that is the sum of this square and the given square.
+         */
         public Square add(Square square) {
             return new Square(x + square.x(), y + square.y());
         }
@@ -131,8 +143,8 @@ public class Models {
      * Represents a continuous line of squares in one direction.
      *
      * <p>
-     * The {@code step} component determines the direction on the board, and {@code count} describes how many
-     * consecutive squares in that direction there are.
+     * The {@code step} field determines the direction on the board, and {@code count} describes how many consecutive
+     * squares in that direction there are.
      * </p>
      */
     public record Direction(Step step, int count) {}
@@ -174,6 +186,7 @@ public class Models {
                 .compare(this, other);
         }
 
+        // Custom equality that excludes `directions` to match the other implementations.
         @Override
         public boolean equals(Object other) {
             return other instanceof Move move

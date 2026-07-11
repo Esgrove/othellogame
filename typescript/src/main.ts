@@ -7,9 +7,8 @@
 //==========================================================
 
 import { Command } from '@commander-js/extra-typings';
-import chalk from 'chalk';
 
-import { printError } from './colorprint.ts';
+import { printError, printGreenBold } from './colorprint.ts';
 import { Othello } from './othello.ts';
 import { DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings } from './settings.ts';
 import { versionInfo } from './version.ts';
@@ -42,7 +41,7 @@ process.on('SIGINT', () => {
     process.exit(1);
 });
 
-console.log(chalk.green.bold('OTHELLO GAME - TYPESCRIPT'));
+printGreenBold('OTHELLO GAME - TYPESCRIPT');
 
 /** Resolve the board size to use from CLI arguments, or by asking the user. */
 async function resolveBoardSize(): Promise<number> {

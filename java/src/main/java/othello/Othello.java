@@ -105,22 +105,31 @@ public class Othello {
         printGameEndFooter();
     }
 
+    /**
+     * Format game log with line numbers for each move.
+     */
     private String formatGameLog() {
         return IntStream.range(0, gameLog.size())
             .mapToObj(i -> String.format("%02d: %s", i + 1, gameLog.get(i)))
             .collect(Collectors.joining("\n"));
     }
 
+    /**
+     * Print header for the current round.
+     */
     private void printRoundHeader() {
         if (!settings.checkMode()) {
             ColorPrint.printBold("\n=========== ROUND: " + roundsPlayed + " ===========");
         }
     }
 
+    /**
+     * Print footer after the game has ended.
+     */
     private void printGameEndFooter() {
         if (!settings.checkMode()) {
             ColorPrint.printBold("\n================================");
-            ColorPrint.printBold("The game is finished!\n", AnsiColor.GREEN);
+            ColorPrint.printGreenBold("The game is finished!\n");
         }
     }
 
@@ -130,7 +139,7 @@ public class Othello {
     private void printLog() {
         String formattedLog = formatGameLog();
         if (!settings.checkMode()) {
-            ColorPrint.printBold("Game log:", AnsiColor.YELLOW);
+            ColorPrint.printYellowBold("Game log:");
             System.out.println(formattedLog);
         }
         String hexHash = Utils.calculateSha256(formattedLog);
@@ -180,9 +189,8 @@ public class Othello {
         try {
             int boardSize = Integer.parseInt(input.trim());
             if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
-                ColorPrint.printColor(
-                    "Limiting board size to valid range " + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE,
-                    AnsiColor.YELLOW
+                ColorPrint.printYellow(
+                    "Limiting board size to valid range " + MIN_BOARD_SIZE + ".." + MAX_BOARD_SIZE
                 );
             }
             return Utils.clamp(boardSize, MIN_BOARD_SIZE, MAX_BOARD_SIZE);

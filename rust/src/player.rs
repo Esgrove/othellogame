@@ -96,12 +96,14 @@ impl Player {
     }
 
     /// Returns true if player is controlled by a human player.
+    #[must_use]
     pub fn human(&self) -> bool {
         self.player_type.human()
     }
 
     /// Returns true if player is controlled by computer.
     #[allow(dead_code)]
+    #[must_use]
     pub fn computer(&self) -> bool {
         self.player_type.computer()
     }
@@ -189,6 +191,7 @@ impl Player {
     }
 
     /// Return player type description string.
+    #[must_use]
     pub fn type_string(&self) -> String {
         self.player_type.to_string()
     }

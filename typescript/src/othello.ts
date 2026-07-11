@@ -6,10 +6,8 @@
 // 2019-2026
 //==========================================================
 
-import chalk from 'chalk';
-
 import { Board } from './board.ts';
-import { printWarn } from './colorprint.ts';
+import { printBold, printGreenBold, printWarn, printYellow, printYellowBold } from './colorprint.ts';
 import { Disk, diskString } from './models.ts';
 import { Player } from './player.ts';
 import { DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings } from './settings.ts';
@@ -73,7 +71,7 @@ export class Othello {
             }
         }
         if (!this.settings.checkMode) {
-            console.log(chalk.bold('\nPlayers:'));
+            printBold('\nPlayers:');
             this.printStatus();
         }
     }
@@ -97,20 +95,23 @@ export class Othello {
         this.printGameEndFooter();
     }
 
+    /** Format game log with line numbers for each move. */
     private formatGameLog(): string {
         return this.gameLog.map((line, index) => `${String(index + 1).padStart(2, '0')}: ${line}`).join('\n');
     }
 
+    /** Print header for the current round. */
     private printRoundHeader(): void {
         if (!this.settings.checkMode) {
-            console.log(chalk.bold(`\n=========== ROUND: ${this.roundsPlayed} ===========`));
+            printBold(`\n=========== ROUND: ${this.roundsPlayed} ===========`);
         }
     }
 
+    /** Print footer after the game has ended. */
     private printGameEndFooter(): void {
         if (!this.settings.checkMode) {
-            console.log(chalk.bold('\n================================'));
-            console.log(chalk.green.bold('The game is finished!\n'));
+            printBold('\n================================');
+            printGreenBold('The game is finished!\n');
         }
     }
 
@@ -118,7 +119,7 @@ export class Othello {
     private printLog(): void {
         const formattedLog = this.formatGameLog();
         if (!this.settings.checkMode) {
-            console.log(chalk.yellow.bold('Game log:'));
+            printYellowBold('Game log:');
             console.log(formattedLog);
         }
         const hexHash = calculateSha256(formattedLog);
@@ -127,7 +128,7 @@ export class Othello {
 
     /** Print ending status and winner info. */
     private printResult(): void {
-        console.log(chalk.bold('Result:'));
+        printBold('Result:');
         this.printStatus();
         console.log('');
 
@@ -160,7 +161,7 @@ export class Othello {
         const boardSize = parseInt(input.trim());
         if (!isNaN(boardSize)) {
             if (boardSize < MIN_BOARD_SIZE || boardSize > MAX_BOARD_SIZE) {
-                console.log(chalk.yellow(`Limiting board size to valid range ${MIN_BOARD_SIZE}..${MAX_BOARD_SIZE}`));
+                printYellow(`Limiting board size to valid range ${MIN_BOARD_SIZE}..${MAX_BOARD_SIZE}`);
             }
             return clamp(boardSize, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
         }

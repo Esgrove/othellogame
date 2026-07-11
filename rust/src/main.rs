@@ -92,6 +92,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+/// Resolve the board size to use from CLI arguments, or by asking the user.
 fn resolve_board_size(args: &Args) -> Result<usize> {
     // Try to read board size from command line args
     if let Some(size) = args.size {

@@ -13,6 +13,7 @@
 #include <fmt/ostream.h>
 #include <fmt/ranges.h>
 #include <fmt/std.h>
+#include <string_view>  // std::string_view
 
 #include <cctype>    // std::isspace
 #include <concepts>  // template concepts
@@ -21,7 +22,9 @@
 #include <utility>   // std::pair
 
 /// Split a string into the leading whitespace and the rest of the string.
-inline std::pair<std::string, std::string> split_leading_whitespace(const std::string& message)
+inline std::pair<std::string_view, std::string_view> split_leading_whitespace(
+    const std::string_view message
+)
 {
     // Find the index of the first non-whitespace character.
     size_t indent_size = 0;
@@ -105,14 +108,14 @@ void print_red_bold(fmt::format_string<T...> format, T&&... args)
 }
 
 /// Print an error message with red colour.
-inline void print_error(const std::string& message)
+inline void print_error(const std::string_view message)
 {
     auto [indent, text] = split_leading_whitespace(message);
     fmt::print(fmt::fg(fmt::terminal_color::red), "{}Error: {}\n", indent, text);
 }
 
 /// Print a warning message with yellow colour.
-inline void print_warn(const std::string& message)
+inline void print_warn(const std::string_view message)
 {
     auto [indent, text] = split_leading_whitespace(message);
     fmt::print(fmt::fg(fmt::terminal_color::yellow), "{}Warning: {}\n", indent, text);

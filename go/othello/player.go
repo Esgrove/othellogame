@@ -11,8 +11,6 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-
-	"github.com/logrusorgru/aurora/v4"
 )
 
 // Player Defines one player that can be either human or computer controlled.
@@ -67,7 +65,7 @@ func (p *Player) PlayOneMove(board *Board) *string {
 	if len(moves) == 0 {
 		p.CanPlay = false
 		if !p.settings.CheckMode {
-			fmt.Println(aurora.Yellow("  No moves available..."))
+			PrintYellow("  No moves available...")
 		}
 		return nil
 	}
@@ -168,7 +166,7 @@ func getSquare() Square {
 		fmt.Print("  Give disk position (x,y): ")
 		var x, y int
 		if _, err := fmt.Scanf("%d,%d", &x, &y); err == nil && x >= 0 && y >= 0 {
-			return Square{x, y}
+			return Square{X: x, Y: y}
 		}
 		PrintError("  Give coordinates in the form 'x,y'!")
 	}

@@ -9,13 +9,14 @@
 
 #include "colorprint.hpp"
 
-#include <algorithm>  // std::sort, std::transform
+#include <algorithm>  // std::ranges::sort, std::ranges::transform
 #include <numeric>    // std::accumulate, std::iota
 #include <ranges>     // std::ranges::transform (requires C++20)
 #include <stdexcept>  // exceptions
 
 namespace othello
 {
+/// Initialize a new board for the given board size.
 Board::Board(const size_t size) :
     board(init_board(size)),
     // Keep track of empty squares on board to avoid checking already filled positions.
@@ -83,9 +84,7 @@ std::vector<Move> Board::possible_moves(Disk disk) const
             moves.emplace_back(square, disk, value, directions);
         }
     }
-    if (!moves.empty()) {
-        std::sort(moves.begin(), moves.end());
-    }
+    std::ranges::sort(moves);
     return moves;
 }
 
@@ -155,13 +154,13 @@ std::string Board::log_entry() const
 }
 
 /// Check that the given coordinates are valid (inside the board).
-bool Board::check_coordinates(const int& x, const int& y) const
+constexpr bool Board::check_coordinates(const int x, const int y) const
 {
     return 0 <= x && x < static_cast<int>(size) && 0 <= y && y < static_cast<int>(size);
 }
 
 /// Check that the given square is valid (inside the board).
-bool Board::check_square(const Square& square) const
+constexpr bool Board::check_square(const Square& square) const
 {
     return check_coordinates(square.x, square.y);
 }
@@ -173,7 +172,7 @@ std::optional<Disk> Board::get_square(const Square& square) const
 }
 
 /// Map square to board index.
-size_t Board::square_index(const Square& square) const
+constexpr size_t Board::square_index(const Square& square) const
 {
     return static_cast<size_t>(square.y) * size + static_cast<size_t>(square.x);
 }

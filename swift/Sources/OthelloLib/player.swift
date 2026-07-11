@@ -5,7 +5,6 @@
 // 2019-2026
 //==========================================================
 
-import ColorizeSwift
 import Foundation
 
 /// Defines one player that can be either human or computer controlled.
@@ -41,7 +40,7 @@ class Player {
         if moves.isEmpty {
             self.canPlay = false
             if !self.settings.checkMode {
-                print("  No moves available...".yellow())
+                printYellow("  No moves available...")
             }
             return nil
         }
@@ -78,7 +77,7 @@ class Player {
     }
 
     /// Set the player as human or computer controlled.
-    func setPlayerType(_ playerType: PlayerType) {
+    private func setPlayerType(_ playerType: PlayerType) {
         self.playerType = playerType
     }
 
@@ -93,7 +92,7 @@ class Player {
     }
 
     /// Return move chosen by computer.
-    func getComputerMove(_ moves: [Move]) -> Move {
+    private func getComputerMove(_ moves: [Move]) -> Move {
         if !self.settings.checkMode {
             print("  Computer plays...")
         }
@@ -103,7 +102,11 @@ class Player {
         } else {
             // Wait a bit and pick a random move
             Thread.sleep(forTimeInterval: Double.random(in: 1 ..< 2))
-            chosenMove = moves.randomElement()!
+            guard let randomMove = moves.randomElement() else {
+                // Moves are guaranteed to be non-empty, fall back to the first move
+                return moves[0]
+            }
+            chosenMove = randomMove
         }
         if !self.settings.checkMode {
             print("  \(chosenMove.square) -> \(chosenMove.value)")
@@ -112,7 +115,7 @@ class Player {
     }
 
     /// Return move chosen by a human player.
-    func getHumanMove(_ moves: [Move]) -> Move {
+    private func getHumanMove(_ moves: [Move]) -> Move {
         while true {
             let square = Self.getSquare()
             // Check that the chosen square is actually one of the possible moves
@@ -124,7 +127,7 @@ class Player {
     }
 
     /// Ask human player for square coordinates.
-    static func getSquare() -> Square {
+    private static func getSquare() -> Square {
         while true {
             print("  Give disk position (x,y): ", terminator: "")
             guard let input = readLine() else {

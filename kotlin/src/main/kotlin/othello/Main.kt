@@ -10,6 +10,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import kotlin.system.exitProcess
 
+/** Command line arguments. */
 class OthelloKotlin : CliktCommand("othello_kotlin") {
     private val size by argument(
         "size",
@@ -39,7 +40,7 @@ class OthelloKotlin : CliktCommand("othello_kotlin") {
             exitProcess(0)
         }
 
-        printBold("OTHELLO GAME - KOTLIN", AnsiColor.GREEN)
+        printGreenBold("OTHELLO GAME - KOTLIN")
 
         val boardSize = resolveBoardSize()
 
@@ -56,6 +57,7 @@ class OthelloKotlin : CliktCommand("othello_kotlin") {
         Othello(settings).play()
     }
 
+    /** Resolve the board size to use from CLI arguments, or by asking the user. */
     private fun resolveBoardSize(): Int {
         // Try to read board size from command line args
         if (size != null) {

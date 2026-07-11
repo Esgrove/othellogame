@@ -5,10 +5,8 @@
 // 2019-2026
 //==========================================================
 
-import chalk from 'chalk';
-
 import type { Board } from './board.ts';
-import { printError } from './colorprint.ts';
+import { printError, printYellow } from './colorprint.ts';
 import { Disk, diskString, Move, Square } from './models.ts';
 import { PlayerSettings } from './settings.ts';
 import { readLine } from './utils.ts';
@@ -52,7 +50,7 @@ export class Player {
         if (moves.length === 0) {
             this.canPlay = false;
             if (!this.settings.checkMode) {
-                console.log(chalk.yellow('  No moves available...'));
+                printYellow('  No moves available...');
             }
             return null;
         }

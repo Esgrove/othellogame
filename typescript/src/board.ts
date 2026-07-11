@@ -7,6 +7,7 @@
 
 import chalk from 'chalk';
 
+import { printYellow } from './colorprint.ts';
 import { boardChar, boardCharWithColor, Direction, Disk, Move, opponent, Square, Step } from './models.ts';
 
 const UP = 1;
@@ -37,6 +38,7 @@ export class Board {
     private readonly indices: number[];
     readonly size: number;
 
+    /** Initialize a new board for the given board size. */
     constructor(size: number) {
         this.board = Board.initBoard(size);
         this.emptySquares = Board.initEmptySquares(this.board);
@@ -96,15 +98,13 @@ export class Board {
                 moves.push(new Move(square, disk, value, directions));
             }
         }
-        if (moves.length > 0) {
-            moves.sort(Move.compare);
-        }
+        moves.sort(Move.compare);
         return moves;
     }
 
     /** Print board with available move coordinates and the resulting points gained. */
     printPossibleMoves(moves: Move[]): void {
-        console.log(chalk.yellow(`  Possible moves (${moves.length}):`));
+        printYellow(`  Possible moves (${moves.length}):`);
         // Convert board from Disk enums to strings
         const formattedBoard = this.board.map(boardCharWithColor);
         // Add possible moves to board

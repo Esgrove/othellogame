@@ -11,8 +11,6 @@ package othello
 import (
 	"fmt"
 	"strings"
-
-	"github.com/logrusorgru/aurora/v4"
 )
 
 // Othello Gameplay loop and main logic.
@@ -79,7 +77,7 @@ func (o *Othello) initGame() {
 		}
 	}
 	if !o.settings.CheckMode {
-		fmt.Println(aurora.Bold("\nPlayers:"))
+		PrintBold("\nPlayers:")
 		o.printStatus()
 	}
 }
@@ -102,7 +100,7 @@ func (o *Othello) gameLoop() {
 	o.printGameEndFooter()
 }
 
-// Format game log lines with line numbers.
+// Format game log with line numbers for each move.
 func (o *Othello) formatGameLog() string {
 	lines := make([]string, len(o.gameLog))
 	for index, line := range o.gameLog {
@@ -111,18 +109,18 @@ func (o *Othello) formatGameLog() string {
 	return strings.Join(lines, "\n")
 }
 
-// Print round header.
+// Print header for the current round.
 func (o *Othello) printRoundHeader() {
 	if !o.settings.CheckMode {
-		fmt.Println(aurora.Bold(fmt.Sprintf("\n=========== ROUND: %d ===========", o.roundsPlayed)))
+		PrintBold(fmt.Sprintf("\n=========== ROUND: %d ===========", o.roundsPlayed))
 	}
 }
 
-// Print game end footer.
+// Print footer after the game has ended.
 func (o *Othello) printGameEndFooter() {
 	if !o.settings.CheckMode {
-		fmt.Println(aurora.Bold("\n================================"))
-		fmt.Println(aurora.Green("The game is finished!\n").Bold())
+		PrintBold("\n================================")
+		PrintGreenBold("The game is finished!\n")
 	}
 }
 
@@ -130,7 +128,7 @@ func (o *Othello) printGameEndFooter() {
 func (o *Othello) printLog() {
 	formattedLog := o.formatGameLog()
 	if !o.settings.CheckMode {
-		fmt.Println(aurora.Yellow("Game log:").Bold())
+		PrintYellowBold("Game log:")
 		fmt.Println(formattedLog)
 	}
 	hexHash := CalculateSHA256(formattedLog)
@@ -139,7 +137,7 @@ func (o *Othello) printLog() {
 
 // Print ending status and winner info.
 func (o *Othello) printResult() {
-	fmt.Println(aurora.Bold("Result:"))
+	PrintBold("Result:")
 	o.printStatus()
 	fmt.Println()
 
@@ -174,9 +172,9 @@ func GetBoardSize() int {
 	var input int
 	if _, err := fmt.Scanf("%d", &input); err == nil {
 		if input < MinBoardSize || input > MaxBoardSize {
-			fmt.Println(aurora.Yellow(fmt.Sprintf(
+			PrintYellow(fmt.Sprintf(
 				"Limiting board size to valid range %d..%d", MinBoardSize, MaxBoardSize,
-			)))
+			))
 		}
 		return Clamp(input, MinBoardSize, MaxBoardSize)
 	}

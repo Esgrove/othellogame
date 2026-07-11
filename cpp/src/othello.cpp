@@ -92,6 +92,7 @@ void Othello::game_loop()
     print_game_end_footer();
 }
 
+/// Format game log with line numbers for each move.
 std::string Othello::format_game_log() const
 {
     std::string formatted_log;
@@ -105,6 +106,7 @@ std::string Othello::format_game_log() const
     return formatted_log;
 }
 
+/// Print header for the current round.
 void Othello::print_round_header() const
 {
     if (!this->settings.check_mode) {
@@ -112,6 +114,7 @@ void Othello::print_round_header() const
     }
 }
 
+/// Print footer after the game has ended.
 void Othello::print_game_end_footer() const
 {
     if (!this->settings.check_mode) {
@@ -156,7 +159,11 @@ void Othello::print_status() const
 }
 
 /// Ask a question with two options, and return bool from user answer.
-bool Othello::get_answer(const std::string& question, const std::string& yes, const std::string& no)
+bool Othello::get_answer(
+    const std::string_view question,
+    const std::string_view yes,
+    const std::string_view no
+)
 {
     fmt::print("{} ({}/{})? ", question, yes, no);
     // Flush to ensure the question is displayed before reading input.

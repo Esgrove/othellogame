@@ -106,6 +106,7 @@ impl Othello {
         self.print_game_end_footer();
     }
 
+    /// Format game log with line numbers for each move.
     fn format_game_log(&self) -> String {
         self.game_log
             .iter()
@@ -115,12 +116,14 @@ impl Othello {
             .join("\n")
     }
 
+    /// Print header for the current round.
     fn print_round_header(&self) {
         if !self.settings.check_mode {
             print_bold!("\n=========== ROUND: {} ===========", self.rounds_played);
         }
     }
 
+    /// Print footer after the game has ended.
     fn print_game_end_footer(&self) {
         if !self.settings.check_mode {
             print_bold!("\n================================");

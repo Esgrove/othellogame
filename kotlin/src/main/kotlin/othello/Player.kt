@@ -2,7 +2,11 @@ package othello
 
 import kotlin.random.Random
 
-/** Defines one player that can be either human or computer controlled. */
+/**
+ * Defines one player that can be either human or computer controlled.
+ *
+ * @constructor Initialize new player for the given disk color.
+ */
 class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
     internal var canPlay = true
     internal var playerType = PlayerType.Human
@@ -16,6 +20,7 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
         /** Shorthand to initialize a new player for white disks. */
         fun white(settings: PlayerSettings): Player = Player(Disk.White, settings)
 
+        /** Get a default player. */
         fun default(): Player = Player(Disk.Black, PlayerSettings.default())
     }
 
@@ -28,7 +33,7 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
         if (moves.isEmpty()) {
             canPlay = false
             if (!settings.checkMode) {
-                printColor("  No moves available...", AnsiColor.YELLOW)
+                printYellow("  No moves available...")
             }
             return null
         }

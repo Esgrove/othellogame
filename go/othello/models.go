@@ -9,7 +9,7 @@ package othello
 
 import (
 	"fmt"
-	"sort"
+	"slices"
 
 	"github.com/logrusorgru/aurora/v4"
 )
@@ -66,7 +66,7 @@ func (d Disk) BoardChar() string {
 	}
 }
 
-// BoardCharWithColor Returns a single character identifier string for the given disk.
+// BoardCharWithColor Returns a coloured single character identifier string for the given disk.
 func (d Disk) BoardCharWithColor() string {
 	return aurora.Colorize(d.BoardChar(), d.DiskColor()).String()
 }
@@ -119,15 +119,15 @@ func (m Move) AffectedSquares() []Square {
 	for _, direction := range m.Directions {
 		totalSize += direction.Count
 	}
-	paths := make(Squares, 0, totalSize)
+	paths := make([]Square, 0, totalSize)
 	for _, direction := range m.Directions {
 		pos := m.Square.Add(direction.Step)
-		for i := 0; i < direction.Count; i++ {
+		for range direction.Count {
 			paths = append(paths, pos)
 			pos = pos.Add(direction.Step)
 		}
 	}
-	sort.Sort(paths)
+	slices.SortFunc(paths, Square.Compare)
 	return paths
 }
 
@@ -141,14 +141,12 @@ func (s Square) BoardIndex(boardSize int) int {
 	return s.Y*boardSize + s.X
 }
 
-// IsLessThan Custom comparison method since can't overload '<' operator in Go.
-func (s Square) IsLessThan(other Square) bool {
-	if s.X < other.X {
-		return true
-	} else if s.X == other.X {
-		return s.Y < other.Y
+// Compare Compare two squares in ascending order by x-coordinate, then y-coordinate.
+func (s Square) Compare(other Square) int {
+	if s.X != other.X {
+		return s.X - other.X
 	}
-	return false
+	return s.Y - other.Y
 }
 
 // String Format step to string.
@@ -165,25 +163,3 @@ func (s Square) String() string {
 func (m Move) String() string {
 	return fmt.Sprintf("Square: %s -> value: %d", m.Square, m.Value)
 }
-
-// Squares Implements sort.Interface for a slice of Square objects.
-type Squares []Square
-
-// MovesDescending Implements sort.Interface with custom sort order:
-// descending value, then ascending square.
-type MovesDescending []Move
-
-func (m MovesDescending) Len() int      { return len(m) }
-func (m MovesDescending) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
-func (m MovesDescending) Less(i, j int) bool {
-	if m[i].Value > m[j].Value {
-		return true
-	} else if m[i].Value == m[j].Value {
-		return m[i].Square.IsLessThan(m[j].Square)
-	}
-	return false
-}
-
-func (s Squares) Len() int           { return len(s) }
-func (s Squares) Less(i, j int) bool { return s[i].IsLessThan(s[j]) }
-func (s Squares) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }

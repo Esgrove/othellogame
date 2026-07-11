@@ -14,7 +14,7 @@ enum class Disk(val value: Int) {
         White -> "W"
     }
 
-    /** Returns a single character identifier string for the given disk. */
+    /** Returns a coloured single character identifier string for the given disk. */
     fun boardCharWithColor(): String = getColor(boardChar(), diskColor())
 
     /** Return the associated colour for this disk. */
@@ -39,11 +39,7 @@ enum class Disk(val value: Int) {
 data class Step(val x: Int, val y: Int) : Comparable<Step> {
     operator fun plus(other: Step): Step = Step(x + other.x, y + other.y)
 
-    override fun compareTo(other: Step): Int = when {
-        x < other.x || (x <= other.x && y < other.y) -> -1
-        x > other.x || (x >= other.x && y > other.y) -> 1
-        else -> 0
-    }
+    override fun compareTo(other: Step): Int = compareValuesBy(this, other, { it.x }, { it.y })
 
     override fun toString(): String = "[$x,$y]"
 }
@@ -57,11 +53,7 @@ data class Square(val x: Int, val y: Int) : Comparable<Square> {
 
     operator fun plus(step: Step): Square = Square(x + step.x, y + step.y)
 
-    override fun compareTo(other: Square): Int = when {
-        x < other.x || (x <= other.x && y < other.y) -> -1
-        x > other.x || (x >= other.x && y > other.y) -> 1
-        else -> 0
-    }
+    override fun compareTo(other: Square): Int = compareValuesBy(this, other, { it.x }, { it.y })
 
     override fun toString(): String = "($x,$y)"
 }
@@ -85,12 +77,8 @@ data class Direction(
 }
 
 /** Represents one possible disk placement for the given disk colour. */
-data class Move(
-    val square: Square,
-    val disk: Disk,
-    val value: Int,
-    val directions: List<Direction>,
-) : Comparable<Move> {
+class Move(val square: Square, val disk: Disk, val value: Int, val directions: List<Direction>) :
+    Comparable<Move> {
     /** Format move for log entry */
     fun logEntry(): String = "${disk.boardChar()}:$square,$value"
 

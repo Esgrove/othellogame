@@ -41,6 +41,13 @@ describe('models', () => {
         }
     });
 
+    test('square board index', () => {
+        expect(new Square(1, 1).boardIndex(8)).toBe(9);
+        expect(new Square(0, 0).boardIndex(8)).toBe(0);
+        expect(new Square(7, 7).boardIndex(8)).toBe(63);
+        expect(new Square(3, 2).boardIndex(4)).toBe(11);
+    });
+
     test('square to string', () => {
         expect(new Square(3, 2).toString()).toBe('(3,2)');
         expect(`${new Square(0, 0)}`).toBe('(0,0)');

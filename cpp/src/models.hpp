@@ -9,6 +9,7 @@
 
 #include "colorprint.hpp"
 
+#include <compare>  // three-way comparison
 #include <string>   // string
 #include <utility>  // move
 #include <vector>
@@ -24,14 +25,9 @@ struct Step {
 
     friend std::ostream& operator<<(std::ostream& out, const Step& step);
 
-    bool operator<(const Step& other) const
-    {
-        return x < other.x || (x <= other.x && y < other.y);
-    }
-    bool operator==(const Step& other) const
-    {
-        return x == other.x && y == other.y;
-    }
+    // Ordered by x, then y. Also provides the implicitly defaulted `==`.
+    auto operator<=>(const Step& other) const = default;
+
     Step operator+(const Step& other) const
     {
         return {x + other.x, y + other.y};
@@ -60,14 +56,9 @@ struct Square {
 
     friend std::ostream& operator<<(std::ostream& out, const Square& square);
 
-    bool operator<(const Square& other) const
-    {
-        return x < other.x || (x <= other.x && y < other.y);
-    }
-    bool operator==(const Square& other) const
-    {
-        return x == other.x && y == other.y;
-    }
+    // Ordered by x, then y. Also provides the implicitly defaulted `==`.
+    auto operator<=>(const Square& other) const = default;
+
     Square operator+(const Square& other) const
     {
         return {x + other.x, y + other.y};
@@ -100,14 +91,8 @@ struct Square {
 struct Direction {
     constexpr Direction(const Step step, const size_t count) : step(step), count(count) {}
 
-    bool operator<(const Direction& other) const
-    {
-        return step < other.step || (step == other.step && count < other.count);
-    }
-    bool operator==(const Direction& other) const
-    {
-        return step == other.step && count == other.count;
-    }
+    // Ordered by step, then count. Also provides the implicitly defaulted `==`.
+    auto operator<=>(const Direction& other) const = default;
 
     /// Direction of travel on the board
     Step step;
@@ -135,10 +120,19 @@ struct Move {
 
     friend std::ostream& operator<<(std::ostream& out, const Move& move);
 
-    bool operator<(const Move& other) const
+    // Largest value with the smallest coordinates first.
+    // Weak ordering since moves with equal value and square may still differ.
+    std::weak_ordering operator<=>(const Move& other) const
     {
-        // Largest value with the smallest coordinates first
-        return value > other.value || (value == other.value && square < other.square);
+        if (const auto cmp = other.value <=> value; cmp != 0) {
+            return cmp;
+        }
+        return square <=> other.square;
+    }
+    // Equality compares square, value, and disk, excluding directions.
+    bool operator==(const Move& other) const
+    {
+        return square == other.square && value == other.value && disk == other.disk;
     }
 
     Square square;
@@ -148,19 +142,19 @@ struct Move {
 };
 
 /// Returns a single character identifier string for the given disk.
-[[nodiscard]] std::string board_char(const Disk& disk);
+[[nodiscard]] std::string board_char(Disk disk);
 
-/// Returns a single character identifier string for the given disk.
-[[nodiscard]] std::string board_char_with_color(const Disk& disk);
+/// Returns a coloured single character identifier string for the given disk.
+[[nodiscard]] std::string board_char_with_color(Disk disk);
 
 /// Return the associated colour for this disk.
-[[nodiscard]] fmt::terminal_color disk_color(const Disk& disk);
+[[nodiscard]] fmt::terminal_color disk_color(Disk disk);
 
 /// Returns the disk formatted as a coloured string.
-[[nodiscard]] std::string disk_string(const Disk& disk);
+[[nodiscard]] std::string disk_string(Disk disk);
 
 /// Return the opposing disk colour for this disk.
-[[nodiscard]] constexpr Disk opponent(const Disk& disk)
+[[nodiscard]] constexpr Disk opponent(const Disk disk)
 {
     switch (disk) {
         case Disk::black:
@@ -174,7 +168,7 @@ struct Move {
     }
 }
 
-inline std::ostream& operator<<(std::ostream& out, const Disk& disk)
+inline std::ostream& operator<<(std::ostream& out, const Disk disk)
 {
     return out << disk_string(disk);
 }

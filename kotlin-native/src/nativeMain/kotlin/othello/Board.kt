@@ -26,6 +26,7 @@ class Board(internal val size: Int) {
         )
     }
 
+    /** Initialize a new board for the given board size. */
     init {
         board = initBoard()
 
@@ -87,7 +88,7 @@ class Board(internal val size: Int) {
 
     /** Print board with available move coordinates and the resulting points gained. */
     fun printPossibleMoves(moves: Collection<Move>) {
-        printColor("  Possible moves (${moves.size}):", AnsiColor.YELLOW)
+        printYellow("  Possible moves (${moves.size}):")
         // Convert board from Disk enums to strings
         val formattedBoard = ArrayList<String>(board.size)
         formattedBoard.addAll(board.map { it.boardCharWithColor() })
@@ -205,18 +206,16 @@ class Board(internal val size: Int) {
         return emptySquares
     }
 
-    override fun toString(): String {
-        val builder = StringBuilder()
+    override fun toString(): String = buildString {
         // Horizontal indices
-        builder.append("  ${getColor(indices.joinToString(" "), AnsiColor.BOLD)}")
-        for (y in indices) {
+        append("  ${getColor(this@Board.indices.joinToString(" "), AnsiColor.BOLD)}")
+        for (y in this@Board.indices) {
             // Vertical index
-            builder.append("\n${getColor(y.toString(), AnsiColor.BOLD)}")
+            append("\n${getColor(y.toString(), AnsiColor.BOLD)}")
             // Row values
-            for (x in indices) {
-                builder.append(" ${board[y * size + x].boardCharWithColor()}")
+            for (x in this@Board.indices) {
+                append(" ${board[y * size + x].boardCharWithColor()}")
             }
         }
-        return builder.toString()
     }
 }

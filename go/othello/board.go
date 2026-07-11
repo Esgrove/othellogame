@@ -9,7 +9,7 @@ package othello
 
 import (
 	"fmt"
-	"sort"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -45,7 +45,7 @@ type Board struct {
 	size         int
 }
 
-// NewBoard Initialize a new game board with the given size.
+// NewBoard Initialize a new board for the given board size.
 func NewBoard(size int) Board {
 	board := initBoard(size)
 
@@ -111,7 +111,7 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 			}
 			// Valid move only if a line of opposing disks ends with own disk
 			if squareDisk == disk {
-				directions = append(directions, Direction{step, numSteps})
+				directions = append(directions, Direction{Step: step, Count: numSteps})
 				value += numSteps
 			}
 		}
@@ -124,15 +124,19 @@ func (b *Board) PossibleMoves(disk Disk) []Move {
 			})
 		}
 	}
-	if len(moves) > 0 {
-		sort.Sort(MovesDescending(moves))
-	}
+	// Sort moves by descending value, with ascending square as a tiebreaker
+	slices.SortFunc(moves, func(a, b Move) int {
+		if a.Value != b.Value {
+			return b.Value - a.Value
+		}
+		return a.Square.Compare(b.Square)
+	})
 	return moves
 }
 
 // PrintPossibleMoves Print board with available move coordinates and the resulting points gained.
 func (b *Board) PrintPossibleMoves(moves []Move) {
-	fmt.Println(aurora.Yellow(fmt.Sprintf("  Possible moves (%d):", len(moves))))
+	PrintYellow(fmt.Sprintf("  Possible moves (%d):", len(moves)))
 	// Convert board from Disk enums to strings
 	formattedBoard := make([]string, len(b.board))
 	for i, disk := range b.board {
@@ -180,11 +184,12 @@ func (b *Board) Result() Disk {
 
 // LogEntry Get board status string for game log.
 func (b *Board) LogEntry() string {
-	result := ""
+	var result strings.Builder
+	result.Grow(len(b.board))
 	for _, disk := range b.board {
-		result += disk.BoardChar()
+		result.WriteString(disk.BoardChar())
 	}
-	return result
+	return result.String()
 }
 
 // Check that the given coordinates are valid (inside the board).
@@ -247,11 +252,8 @@ func (b *Board) setSquare(square *Square, disk Disk) {
 
 // Initialize game board with starting disk positions.
 func initBoard(size int) []Disk {
-	// Initialize game board with empty disks
+	// A new slice is zero-filled, which already means Empty disks
 	board := make([]Disk, size*size)
-	for i := range board {
-		board[i] = Empty
-	}
 	// Set starting positions
 	var row int
 	if size%2 == 0 {

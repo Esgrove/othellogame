@@ -13,9 +13,6 @@ import (
 	"os"
 	"strconv"
 
-	// https://github.com/logrusorgru/aurora
-	"github.com/logrusorgru/aurora/v4"
-
 	// https://github.com/spf13/cobra
 	"github.com/spf13/cobra"
 
@@ -114,7 +111,7 @@ func runGame(_ *cobra.Command, args []string) {
 		os.Exit(0)
 	}
 
-	fmt.Println(aurora.Green("OTHELLO GAME - GO").Bold())
+	othello.PrintGreenBold("OTHELLO GAME - GO")
 
 	boardSize := resolveBoardSize(args)
 
@@ -132,6 +129,7 @@ func runGame(_ *cobra.Command, args []string) {
 	game.Play()
 }
 
+// resolveBoardSize Resolve the board size to use from CLI arguments, or by asking the user.
 func resolveBoardSize(args []string) int {
 	// Try to read board size from command line args
 	if len(args) == 1 {

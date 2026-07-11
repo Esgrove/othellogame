@@ -23,14 +23,39 @@ func getColor(_ message: some Any, _ color: TerminalStyleCode, bold: Bool = fals
     return color.open + text + TerminalStyle.reset.open
 }
 
-/// Print text with specified colour.
-func printColor(_ message: some Any, _ color: TerminalStyleCode, bold: Bool = false) {
-    print(getColor(message, color, bold: bold))
+/// Print bold text.
+func printBold(_ text: String) {
+    print(text.bold())
 }
 
-/// Print bold text with specified colour.
-func printBold(_ message: some Any, color: TerminalStyleCode = TerminalStyle.lightGray) {
-    print(getColor(message, color, bold: true))
+/// Print text in green.
+func printGreen(_ text: String) {
+    print(text.green())
+}
+
+/// Print bold text in green.
+public func printGreenBold(_ text: String) {
+    print(getColor(text, TerminalStyle.green, bold: true))
+}
+
+/// Print text in yellow.
+func printYellow(_ text: String) {
+    print(text.yellow())
+}
+
+/// Print bold text in yellow.
+func printYellowBold(_ text: String) {
+    print(getColor(text, TerminalStyle.yellow, bold: true))
+}
+
+/// Print text in red.
+func printRed(_ text: String) {
+    print(text.red())
+}
+
+/// Print bold text in red.
+func printRedBold(_ text: String) {
+    print(getColor(text, TerminalStyle.red, bold: true))
 }
 
 /// Print error message with red colour.

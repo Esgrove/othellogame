@@ -5,8 +5,11 @@
 // 2019-2026
 //==========================================================
 
+/// Minimum allowed board size.
 public let MIN_BOARD_SIZE: Int = 4
+/// Maximum allowed board size.
 public let MAX_BOARD_SIZE: Int = 10
+/// Default board size when none is given.
 public let DEFAULT_BOARD_SIZE: Int = 8
 
 /// Game settings.
@@ -19,6 +22,7 @@ public struct Settings {
     var testMode: Bool
     var useDefaults: Bool
 
+    /// Initialize game settings with the given values.
     public init(
         boardSize: Int,
         autoplayMode: Bool,

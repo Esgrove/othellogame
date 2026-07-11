@@ -73,20 +73,23 @@ class Othello(private val settings: Settings) {
         printGameEndFooter()
     }
 
+    /** Format game log with line numbers for each move. */
     private fun formatGameLog(): String = gameLog
         .mapIndexed { index, line -> "${(index + 1).toString().padStart(2, '0')}: $line" }
         .joinToString("\n")
 
+    /** Print header for the current round. */
     private fun printRoundHeader() {
         if (!settings.checkMode) {
             printBold("\n=========== ROUND: $roundsPlayed ===========")
         }
     }
 
+    /** Print footer after the game has ended. */
     private fun printGameEndFooter() {
         if (!settings.checkMode) {
             printBold("\n================================")
-            printBold("The game is finished!\n", AnsiColor.GREEN)
+            printGreenBold("The game is finished!\n")
         }
     }
 
@@ -94,7 +97,7 @@ class Othello(private val settings: Settings) {
     private fun printLog() {
         val formattedLog = formatGameLog()
         if (!settings.checkMode) {
-            printBold("Game log:", AnsiColor.YELLOW)
+            printYellowBold("Game log:")
             println(formattedLog)
         }
         val hexHash = calculateSha256(formattedLog)
@@ -136,9 +139,8 @@ class Othello(private val settings: Settings) {
             val boardSize = readlnOrNull()?.trim()?.toIntOrNull()
             if (boardSize != null) {
                 if (boardSize !in MIN_BOARD_SIZE..MAX_BOARD_SIZE) {
-                    printColor(
+                    printYellow(
                         "Limiting board size to valid range $MIN_BOARD_SIZE..$MAX_BOARD_SIZE",
-                        AnsiColor.YELLOW,
                     )
                 }
                 return boardSize.coerceIn(MIN_BOARD_SIZE, MAX_BOARD_SIZE)

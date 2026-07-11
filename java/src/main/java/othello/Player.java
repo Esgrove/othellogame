@@ -61,7 +61,7 @@ public class Player {
         if (moves.isEmpty()) {
             canPlay = false;
             if (!settings.checkMode()) {
-                ColorPrint.printColor("  No moves available...", AnsiColor.YELLOW);
+                ColorPrint.printYellow("  No moves available...");
             }
             return null;
         }

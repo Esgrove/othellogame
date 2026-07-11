@@ -8,6 +8,7 @@
 
 #pragma once
 #include "player.hpp"
+#include <string_view>
 
 namespace othello
 {
@@ -32,9 +33,9 @@ private:
     void print_status() const;
 
     static bool get_answer(
-        const std::string& question,
-        const std::string& yes = "y",
-        const std::string& no = "n"
+        std::string_view question,
+        std::string_view yes = "y",
+        std::string_view no = "n"
     );
 
     Board board;

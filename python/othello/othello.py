@@ -13,7 +13,14 @@ import click
 
 try:
     from othello.board import Board
-    from othello.colorprint import Color, print_bold, print_color, print_error, print_warn
+    from othello.colorprint import (
+        print_bold,
+        print_error,
+        print_green_bold,
+        print_warn,
+        print_yellow,
+        print_yellow_bold,
+    )
     from othello.models import Disk
     from othello.player import Player
     from othello.settings import DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings
@@ -21,7 +28,14 @@ try:
     from othello.version import version_info
 except ModuleNotFoundError:
     from board import Board
-    from colorprint import Color, print_bold, print_color, print_error, print_warn
+    from colorprint import (
+        print_bold,
+        print_error,
+        print_green_bold,
+        print_warn,
+        print_yellow,
+        print_yellow_bold,
+    )
     from models import Disk
     from player import Player
     from settings import DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings
@@ -98,23 +112,25 @@ class Othello:
         self._print_game_end_footer()
 
     def _format_game_log(self) -> str:
-        """Format game log entries to one string with line numbers."""
+        """Format game log with line numbers for each move."""
         return "\n".join(f"{index:02}: {line}" for index, line in enumerate(self.game_log, start=1))
 
     def _print_round_header(self):
+        """Print header for the current round."""
         if not self.settings.check_mode:
             print_bold(f"\n=========== ROUND: {self.rounds_played} ===========")
 
     def _print_game_end_footer(self):
+        """Print footer after the game has ended."""
         if not self.settings.check_mode:
             print_bold("\n================================")
-            print_bold("The game is finished!\n", Color.green)
+            print_green_bold("The game is finished!\n")
 
     def _print_log(self):
         """Print game log which shows all moves made and the game board state after each move."""
         formatted_log = self._format_game_log()
         if not self.settings.check_mode:
-            print_bold("Game log:", Color.yellow)
+            print_yellow_bold("Game log:")
             print(formatted_log)
 
         hex_hash = calculate_sha256(formatted_log)
@@ -150,9 +166,8 @@ class Othello:
         try:
             ans = int(input(f"Choose board size (default is {DEFAULT_BOARD_SIZE}): ").strip())
             if ans < MIN_BOARD_SIZE or ans > MAX_BOARD_SIZE:
-                print_color(
-                    f"Limiting board size to valid range {MIN_BOARD_SIZE}..{MAX_BOARD_SIZE}",
-                    Color.yellow,
+                print_yellow(
+                    f"Limiting board size to valid range {MIN_BOARD_SIZE}..{MAX_BOARD_SIZE}"
                 )
             return clamp(ans, MIN_BOARD_SIZE, MAX_BOARD_SIZE)
         except ValueError:
@@ -229,7 +244,7 @@ def main(size, autoplay, check, default, log, no_helpers, test, version):
         print(version_info())
         sys.exit(0)
 
-    print_bold("OTHELLO GAME - PYTHON", Color.green)
+    print_green_bold("OTHELLO GAME - PYTHON")
     try:
         board_size = resolve_board_size(size, autoplay, default)
         settings = Settings(
@@ -248,6 +263,7 @@ def main(size, autoplay, check, default, log, no_helpers, test, version):
 
 
 def resolve_board_size(size: int | None, autoplay: bool, default: bool) -> int:
+    """Resolve the board size to use from CLI arguments, or by asking the user."""
     # Try to read board size from command line args
     if size is not None:
         if size < MIN_BOARD_SIZE or size > MAX_BOARD_SIZE:

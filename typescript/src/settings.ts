@@ -5,12 +5,16 @@
 // 2019-2026
 //==========================================================
 
+/** Minimum allowed board size. */
 export const MIN_BOARD_SIZE = 4;
+/** Maximum allowed board size. */
 export const MAX_BOARD_SIZE = 10;
+/** Default board size when none is given. */
 export const DEFAULT_BOARD_SIZE = 8;
 
 /** Player settings. */
 export class PlayerSettings {
+    /** Initialize new player settings with the given values. */
     constructor(
         readonly showHelpers: boolean,
         readonly checkMode: boolean,
@@ -25,6 +29,7 @@ export class PlayerSettings {
 
 /** Game settings. */
 export class Settings {
+    /** Initialize new game settings with the given values. */
     constructor(
         readonly boardSize: number,
         readonly autoplayMode: boolean,

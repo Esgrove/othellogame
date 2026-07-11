@@ -5,6 +5,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 
+/**
+ * Helper utilities.
+ */
 public class Utils {
     /**
      * Clamp value to given range.

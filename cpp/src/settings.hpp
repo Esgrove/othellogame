@@ -11,8 +11,11 @@
 
 namespace othello
 {
+/// Minimum allowed board size.
 static constexpr size_t MIN_BOARD_SIZE = 4;
+/// Maximum allowed board size.
 static constexpr size_t MAX_BOARD_SIZE = 10;
+/// Default board size when none is given.
 static constexpr size_t DEFAULT_BOARD_SIZE = 8;
 
 /// Player settings.

@@ -20,6 +20,7 @@ static VERSION_STRING: &str = env!("VERSION_STRING");
 
 /// Return version info string
 #[inline]
+#[must_use]
 pub fn version_info() -> &'static str {
     VERSION_STRING
 }

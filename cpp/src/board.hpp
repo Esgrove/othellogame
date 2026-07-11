@@ -49,10 +49,10 @@ public:
     [[nodiscard]] std::string log_entry() const;
 
 private:
-    [[nodiscard]] bool check_coordinates(const int& x, const int& y) const;
-    [[nodiscard]] bool check_square(const Square& square) const;
+    [[nodiscard]] constexpr bool check_coordinates(int x, int y) const;
+    [[nodiscard]] constexpr bool check_square(const Square& square) const;
     [[nodiscard]] std::optional<Disk> get_square(const Square& square) const;
-    [[nodiscard]] size_t square_index(const Square& square) const;
+    [[nodiscard]] constexpr size_t square_index(const Square& square) const;
     [[nodiscard]] std::tuple<int, int> player_scores() const;
     [[nodiscard]] int score() const;
     void set_square(const Square& square, Disk disk);

@@ -1,7 +1,12 @@
 package othello
 
+/** Minimum allowed board size. */
 const val MIN_BOARD_SIZE = 4
+
+/** Maximum allowed board size. */
 const val MAX_BOARD_SIZE = 10
+
+/** Default board size when none is given. */
 const val DEFAULT_BOARD_SIZE = 8
 
 /** Game settings. */
@@ -15,6 +20,7 @@ data class Settings(
     val useDefaults: Boolean,
 ) {
     companion object {
+        /** Get default game settings. */
         fun default(): Settings = Settings(
             boardSize = DEFAULT_BOARD_SIZE,
             autoplayMode = false,
@@ -45,6 +51,7 @@ data class PlayerSettings(
     val testMode: Boolean,
 ) {
     companion object {
+        /** Get default player settings. */
         fun default(): PlayerSettings = PlayerSettings(
             showHelpers = true,
             checkMode = false,

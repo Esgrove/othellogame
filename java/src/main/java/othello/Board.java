@@ -18,7 +18,7 @@ import othello.Utils.IntPair;
 
 import static othello.ColorPrint.getBold;
 import static othello.ColorPrint.getColor;
-import static othello.ColorPrint.printColor;
+import static othello.ColorPrint.printYellow;
 
 /**
  * Handles game board state and logic.
@@ -47,6 +47,9 @@ public class Board {
     private final List<Integer> indices;
     final int size;
 
+    /**
+     * Initialize a new board for the given board size.
+     */
     public Board(int size) {
         this.board = initBoard(size);
 
@@ -75,10 +78,10 @@ public class Board {
         Square start = chosenMove.square();
         Disk oldDisk = getSquare(start);
         if (oldDisk == null) {
-            throw new RuntimeException("Invalid coordinates: " + start);
+            throw new IllegalArgumentException("Invalid coordinates: " + start);
         }
         if (oldDisk != Disk.EMPTY) {
-            throw new RuntimeException("Trying to place disk to an occupied square: " + start + "!");
+            throw new IllegalStateException("Trying to place disk to an occupied square: " + start + "!");
         }
         setSquare(start, chosenMove.disk());
         emptySquares.remove(start);
@@ -118,9 +121,7 @@ public class Board {
                 moves.add(new Move(square, disk, value, directions));
             }
         }
-        if (!moves.isEmpty()) {
-            moves.sort(null);
-        }
+        moves.sort(null);
         return moves;
     }
 
@@ -128,7 +129,7 @@ public class Board {
      * Print board with available move coordinates and the resulting points gained.
      */
     public void printPossibleMoves(Collection<Move> moves) {
-        printColor("  Possible moves (" + moves.size() + "):", AnsiColor.YELLOW);
+        printYellow("  Possible moves (" + moves.size() + "):");
         // Convert board from Disk enums to strings
         List<String> formattedBoard = new ArrayList<>(board.size());
         for (Disk disk : board) {
@@ -141,21 +142,17 @@ public class Board {
             System.out.println("  " + possibleMove);
         }
         // Print board with move positions
-        StringBuilder header = new StringBuilder("    ");
+        System.out.print("    ");
         for (int i : indices) {
-            header.append(" ").append(getBold(Integer.toString(i)));
+            System.out.print(" " + getBold(Integer.toString(i)));
         }
-        StringBuilder boardString = new StringBuilder();
         for (int y : indices) {
-            boardString.append("  ").append(getBold(Integer.toString(y)));
+            System.out.print("\n  " + getBold(Integer.toString(y)));
             for (int x : indices) {
-                boardString.append(" ").append(formattedBoard.get(y * size + x));
-            }
-            if (y < size - 1) {
-                boardString.append("\n");
+                System.out.print(" " + formattedBoard.get(y * size + x));
             }
         }
-        System.out.println(header + "\n" + boardString);
+        System.out.println();
     }
 
     /**
@@ -252,7 +249,7 @@ public class Board {
      */
     private void setSquare(Square square, Disk disk) {
         if (!checkSquare(square)) {
-            throw new RuntimeException("Invalid coordinates: " + square);
+            throw new IllegalArgumentException("Invalid coordinates: " + square);
         }
         board.set(squareIndex(square), disk);
     }

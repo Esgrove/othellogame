@@ -5,6 +5,7 @@ Akseli Lukkarila
 2019-2026
 """
 
+from dataclasses import dataclass, field
 from enum import IntEnum
 from functools import total_ordering
 from typing import Self
@@ -35,7 +36,7 @@ class Disk(IntEnum):
                 raise NotImplementedError("Unknown disk type")
 
     def board_char_with_color(self) -> str:
-        """Returns a single character identifier string for the given disk."""
+        """Returns a coloured single character identifier string for the given disk."""
         return get_color(self.board_char(), self.disk_color())
 
     def disk_color(self) -> Color:
@@ -70,25 +71,12 @@ class Disk(IntEnum):
         return self.disk_string()
 
 
-@total_ordering
+@dataclass(frozen=True, order=True)
 class Step:
     """Represents one step direction on the board."""
 
-    def __init__(self, x: int, y: int):
-        self.x: int = x
-        self.y: int = y
-
-    def __getitem__(self, key) -> int:
-        # enable iteration so values can be unpacked: x,y = Step
-        if key == 0:
-            return self.x
-        elif key == 1:
-            return self.y
-        raise IndexError
-
-    def __hash__(self) -> int:
-        # needed to enable using this class in sets or as a dictionary key
-        return hash((self.x, self.y))
+    x: int
+    y: int
 
     def __add__(self, other) -> Self:
         if isinstance(other, Step):
@@ -101,71 +89,43 @@ class Step:
         # += operator
         return self + other
 
-    def __eq__(self, other) -> bool:
-        if isinstance(other, Step):
-            # another way: `(self.x, self.y) == (other.x, other.y)`
-            return self.x == other.x and self.y == other.y
-        elif len(other) == 2:
-            return self.x == other[0] and self.y == other[1]
-        return NotImplemented
-
-    def __lt__(self, other) -> bool:
-        if isinstance(other, Step):
-            return self.x < other.x or (self.x == other.x and self.y < other.y)
-        elif len(other) == 2:
-            return self.x < other[0] or (self.x == other[0] and self.y < other[1])
-        return NotImplemented
-
     def __str__(self) -> str:
         """Convert to string."""
         return f"[{self.x},{self.y}]"
 
     def __repr__(self) -> str:
         """Display Step with direction arrow."""
-        # `match` does not work here without the unpacking step :(
-        if self == (-1, -1):
-            return f"{self} ↙"
-        elif self == (-1, 0):
-            return f"{self} ←"
-        elif self == (-1, 1):
-            return f"{self} ↖"
-        elif self == (0, -1):
-            return f"{self} ↓"
-        elif self == (0, 1):
-            return f"{self} ↑"
-        elif self == (1, -1):
-            return f"{self} ↘"
-        elif self == (1, 0):
-            return f"{self} →"
-        elif self == (1, 1):
-            return f"{self} ↗"
+        match (self.x, self.y):
+            case (-1, -1):
+                return f"{self} ↙"
+            case (-1, 0):
+                return f"{self} ←"
+            case (-1, 1):
+                return f"{self} ↖"
+            case (0, -1):
+                return f"{self} ↓"
+            case (0, 1):
+                return f"{self} ↑"
+            case (1, -1):
+                return f"{self} ↘"
+            case (1, 0):
+                return f"{self} →"
+            case (1, 1):
+                return f"{self} ↗"
 
         return str(self)
 
 
-@total_ordering
+@dataclass(frozen=True, order=True)
 class Square:
     """Represents one square location on the board."""
 
-    def __init__(self, x: int, y: int):
-        self.x: int = x
-        self.y: int = y
+    x: int
+    y: int
 
     def board_index(self, board_size: int) -> int:
         """Get the index of this square on the board."""
         return self.y * board_size + self.x
-
-    def __getitem__(self, key) -> int:
-        # enable iteration so coordinates can be unpacked: x,y = Square
-        if key == 0:
-            return self.x
-        elif key == 1:
-            return self.y
-        raise IndexError
-
-    def __hash__(self) -> int:
-        # needed to enable using this class in sets or as a dictionary key
-        return hash((self.x, self.y))
 
     def __add__(self, other) -> Self:
         # enable addition for a pair of squares,
@@ -184,25 +144,11 @@ class Square:
         # other + self
         return self + other
 
-    def __eq__(self, other) -> bool:
-        if isinstance(other, Square):
-            return self.x == other.x and self.y == other.y
-        elif len(other) == 2:
-            return self.x == other[0] and self.y == other[1]
-        return NotImplemented
-
-    def __lt__(self, other) -> bool:
-        if isinstance(other, Square):
-            return self.x < other.x or (self.x == other.x and self.y < other.y)
-        elif len(other) == 2:
-            return self.x < other[0] or (self.x == other[0] and self.y < other[1])
-        return NotImplemented
-
     def __str__(self) -> str:
         return f"({self.x},{self.y})"
 
 
-@total_ordering
+@dataclass(frozen=True, order=True)
 class Direction:
     """Represents a continuous line of squares in one direction.
 
@@ -210,11 +156,10 @@ class Direction:
     and count describes how many consecutive squares in that direction there are.
     """
 
-    def __init__(self, step: Step, count: int):
-        self.step: Step = step
-        self.count: int = count
+    step: Step
+    count: int
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: int) -> Step | int:
         # Enable iteration so values can be unpacked: step, count = Direction
         if key == 0:
             return self.step
@@ -222,32 +167,19 @@ class Direction:
             return self.count
         raise IndexError
 
-    def __hash__(self) -> int:
-        return hash((self.step, self.count))
-
-    def __eq__(self, other) -> bool:
-        if isinstance(other, Direction):
-            return self.step == other.step and self.count == other.count
-        return NotImplemented
-
-    def __lt__(self, other) -> bool:
-        if isinstance(other, Direction):
-            return self.step < other.step or (self.step == other.step and self.count < other.count)
-        return NotImplemented
-
     def __str__(self) -> str:
         return f"{self.step}:{self.count}"
 
 
 @total_ordering
+@dataclass(eq=False)
 class Move:
     """Represents one possible disk placement for the given disk colour."""
 
-    def __init__(self, square: Square, disk=Disk.EMPTY, value=0, directions=None):
-        self.square: Square = square
-        self.disk: Disk = disk
-        self.value: int = value
-        self.directions: list[Direction] = directions if directions is not None else []
+    square: Square
+    disk: Disk = Disk.EMPTY
+    value: int = 0
+    directions: list[Direction] = field(default_factory=list)
 
     def log_entry(self) -> str:
         """Format move for log entry."""
