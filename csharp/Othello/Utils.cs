@@ -8,25 +8,20 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Othello {
-    // Can't have a function without a class :(
-    public static class Utils {
-        /// Calculate SHA256 hash for the given string.
-        public static string CalculateSha256(string input) {
-            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-            byte[] hashBytes = SHA256.HashData(inputBytes);
+namespace Othello;
 
-            StringBuilder builder = new();
-            foreach (byte b in hashBytes) {
-                builder.Append(b.ToString("x2", System.Globalization.CultureInfo.InvariantCulture));
-            }
+// Can't have a function without a class :(
+public static class Utils {
+    /// <summary>Calculate SHA256 hash for the given string.</summary>
+    public static string CalculateSha256(string input) {
+        byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+        byte[] hashBytes = SHA256.HashData(inputBytes);
 
-            return builder.ToString();
+        StringBuilder builder = new();
+        foreach (byte b in hashBytes) {
+            builder.Append(b.ToString("x2", System.Globalization.CultureInfo.InvariantCulture));
         }
 
-        /// Return version info string
-        public static string VersionInfo() {
-            return $"{Version.VersionNumber} {Version.BuildTime} {Version.GitBranch} {Version.GitCommit}";
-        }
+        return builder.ToString();
     }
 }

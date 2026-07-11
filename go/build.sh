@@ -6,8 +6,8 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
-# Define project version here, normally would use git tags for this...
-PROJECT_VERSION="1.9.0"
+# Project version is defined in the VERSION file, normally would use git tags for this...
+PROJECT_VERSION=$(<"$DIR/VERSION")
 
 USAGE="Usage: $(basename "$0") [OPTIONS]
 
@@ -15,11 +15,13 @@ Build Othello Go binary.
 
 OPTIONS: All options are optional
     -h | --help       Display these instructions.
+    -f | --force      Force rebuild of main file so version info gets updated.
     -t | --test       Run tests.
     -v | --verbose    Display commands being executed.
 "
 
 init_options() {
+    FORCE_BUILD=false
     RUN_TESTS=false
 
     while [ $# -gt 0 ]; do
@@ -27,6 +29,9 @@ init_options() {
             -h | --help)
                 echo "$USAGE"
                 exit 1
+                ;;
+            -f | --force)
+                FORCE_BUILD=true
                 ;;
             -t | --test)
                 RUN_TESTS=true
@@ -65,14 +70,19 @@ build_project() {
     echo "GIT_COMMIT: $GIT_COMMIT"
     echo "GIT_BRANCH: $GIT_BRANCH"
 
+    VERSION_STRING="Othello Go $PROJECT_VERSION $BUILD_TIME $GIT_BRANCH $GIT_COMMIT"
     VERSION_INFO="-X othello_go/othello.GitBranch=$GIT_BRANCH \
                   -X othello_go/othello.GitCommit=$GIT_COMMIT \
                   -X othello_go/othello.BuildTime=$BUILD_TIME \
-                  -X othello_go/othello.VersionNumber=$PROJECT_VERSION"
+                  -X othello_go/othello.VersionNumber=$PROJECT_VERSION \
+                  -X 'othello_go/othello.VersionString=$VERSION_STRING'"
 
     cd "$PROJECT_PATH"
     rm -f "$EXECUTABLE"
-    touch main.go
+    if [ "$FORCE_BUILD" = true ]; then
+        # Touch main file to trigger rebuild so version info gets updated
+        touch main.go
+    fi
     time go build -v -ldflags "$VERSION_INFO"
     print_green "Build successful"
 

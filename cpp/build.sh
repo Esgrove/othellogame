@@ -9,6 +9,7 @@ OPTIONS: All options are optional
     -h | --help                 Display these instructions.
     -b | --build-type <type>    Specify build type for CMake. Default is 'Release'.
     -c | --clean                Clean temporary files before building.
+    -f | --force                Force rebuild of main file so version info gets updated.
     -n | --ninja                Use Ninja generator instead of Visual Studio on Windows.
     -t | --test                 Build and run tests.
     -v | --verbose              Display commands being executed.
@@ -25,6 +26,7 @@ init_options() {
     BUILD_TESTS_FLAG=OFF
     BUILD_TYPE="Release"
     CLEAN=false
+    FORCE_BUILD=false
     USE_NINJA=false
 
     while [ $# -gt 0 ]; do
@@ -41,6 +43,9 @@ init_options() {
                 CLEAN=true
                 print_magenta "Cleaning..."
                 git -C "$DIR" clean -fdx
+                ;;
+            -f | --force)
+                FORCE_BUILD=true
                 ;;
             -n | --ninja)
                 USE_NINJA=true
@@ -127,8 +132,10 @@ build_project() {
 
     export CCACHE_DIR="$CMAKE_BUILD_DIR/ccache"
 
-    # Touch main file to trigger rebuild so version info gets updated
-    touch "$PROJECT_PATH/src/main.cpp"
+    if [ "$FORCE_BUILD" = true ]; then
+        # Touch main file to trigger rebuild so version info gets updated
+        touch "$PROJECT_PATH/src/main.cpp"
+    fi
 
     print_magenta "Building Othello C++..."
 

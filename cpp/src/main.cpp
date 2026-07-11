@@ -6,9 +6,10 @@
 // 2019-2026
 //==========================================================
 
+#include "colorprint.hpp"
 #include "cxxopts.hpp"
 #include "othello.hpp"
-#include "utils.hpp"
+#include "version.hpp"
 
 #include <optional>
 
@@ -48,17 +49,17 @@ inline cxxopts::Options cli_arguments()
     return options;
 }
 
-/// CLI arguments
+/// Command line arguments
 struct Args {
     std::optional<size_t> size;
+    bool autoplay;
+    bool check;
+    bool use_defaults;
+    bool log;
+    bool no_helpers;
+    bool test;
     bool version;
     bool help;
-    bool autoplay;
-    bool check_mode;
-    bool show_helpers;
-    bool show_log;
-    bool test_mode;
-    bool use_defaults;
     std::string usage;
 
     /// Parse arguments directly with constructor
@@ -69,70 +70,75 @@ struct Args {
         if (parsed_args.count("size") > 0) {
             size = parsed_args["size"].as<size_t>();
         }
+        autoplay = parsed_args["autoplay"].as<bool>();
+        check = parsed_args["check"].as<bool>();
+        use_defaults = parsed_args["default"].as<bool>();
+        log = parsed_args["log"].as<bool>();
+        no_helpers = parsed_args["no-helpers"].as<bool>();
+        test = parsed_args["test"].as<bool>();
         version = parsed_args["version"].as<bool>();
         help = parsed_args["help"].as<bool>();
-        autoplay = parsed_args["autoplay"].as<bool>();
-        check_mode = parsed_args["check"].as<bool>();
-        show_helpers = !parsed_args["no-helpers"].as<bool>();
-        show_log = parsed_args["log"].as<bool>();
-        test_mode = parsed_args["test"].as<bool>();
-        use_defaults = parsed_args["default"].as<bool>();
         usage = options.help({"Optional"});
     }
 };
 
+/// Resolve the board size to use from CLI arguments, or by asking the user.
+size_t resolve_board_size(const Args& args)
+{
+    // Try to read board size from command line args
+    if (args.size.has_value()) {
+        const auto size = args.size.value();
+        if (size < othello::MIN_BOARD_SIZE || size > othello::MAX_BOARD_SIZE) {
+            throw std::invalid_argument(fmt::format("Unsupported board size: {}", size));
+        }
+        fmt::println("Using board size: {}", size);
+        return size;
+    }
+    if (args.autoplay || args.use_defaults) {
+        return othello::DEFAULT_BOARD_SIZE;
+    }
+    // Otherwise ask user for board size
+    return othello::Othello::get_board_size();
+}
+
 int main(const int argc, const char* argv[])
 {
     try {
-        const auto
-            [size,
-             version,
-             help,
-             autoplay,
-             check_mode,
-             show_helpers,
-             show_log,
-             test_mode,
-             use_defaults,
-             usage] = Args(argc, argv);
+        const Args args(argc, argv);
 
-        if (version) {
-            othello::print_version();
+        if (args.version) {
+            fmt::print("{}\n", version::version_info());
             return 0;
         }
-        if (help) {
-            fmt::print("{}", usage);
+        if (args.help) {
+            fmt::print("{}", args.usage);
             return 0;
         }
-
-        print_green("OTHELLO GAME - C++\n", true);
-
-        size_t board_size;
-        if (size.has_value()) {
-            board_size = size.value();
-            if (board_size < othello::MIN_BOARD_SIZE || board_size > othello::MAX_BOARD_SIZE) {
-                print_error(fmt::format("Unsupported board size: {}", board_size));
-                return 1;
-            }
-            fmt::println("Using board size: {}", board_size);
-        } else if (autoplay || use_defaults) {
-            board_size = othello::DEFAULT_BOARD_SIZE;
-        } else {
-            board_size = othello::Othello::get_board_size();
+        // `autoplay` conflicts with `default`
+        if (args.autoplay && args.use_defaults) {
+            print_error("the argument '-a/--autoplay' cannot be used with '-d/--default'");
+            return 1;
         }
+
+        print_green_bold("OTHELLO GAME - C++\n");
+
+        const size_t board_size = resolve_board_size(args);
 
         const othello::Settings settings(
             board_size,
-            autoplay || check_mode,
-            check_mode,
-            show_helpers,
-            show_log || check_mode,
-            test_mode || check_mode,
-            use_defaults
+            args.autoplay || args.check,
+            args.check,
+            !args.no_helpers,
+            args.log || args.check,
+            args.test || args.check,
+            args.use_defaults
         );
 
         othello::Othello(settings).play();
     } catch (const cxxopts::exceptions::exception& e) {
+        print_error(e.what());
+        return 1;
+    } catch (const std::exception& e) {
         print_error(e.what());
         return 1;
     }

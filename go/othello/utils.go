@@ -13,7 +13,10 @@ import (
 	"encoding/hex"
 )
 
-// CalculateSHA256 returns the SHA256 hash for the given string.
+// CalculateSHA256 Calculate SHA256 hash for the given string.
+//
+// Note: deliberately named `CalculateSHA256` instead of `CalculateSha256`,
+// following the Go naming convention for initialisms.
 func CalculateSHA256(input string) string {
 	data := []byte(input)
 	hash := sha256.Sum256(data)

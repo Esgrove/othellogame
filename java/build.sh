@@ -8,9 +8,13 @@ source "$DIR/../common.sh"
 
 cd "$DIR"
 
+FORCE_BUILD=false
 RUN_TESTS=false
 for arg in "$@"; do
     case "$arg" in
+        -f | --force)
+            FORCE_BUILD=true
+            ;;
         -t | --test)
             RUN_TESTS=true
             ;;
@@ -19,8 +23,10 @@ done
 
 print_magenta "Building Othello Java..."
 
-# Touch main file to trigger rebuild so version info gets updated
-touch src/main/java/othello/Main.java
+if [ "$FORCE_BUILD" = true ]; then
+    # Touch main file to trigger rebuild so version info gets updated
+    touch src/main/java/othello/Main.java
+fi
 
 rm -rf build/libs/othello_java-*-all.jar
 

@@ -1,101 +1,131 @@
-namespace Othello.Tests {
-    public class TestModels {
-        [Fact]
-        public void StepEquals() {
-            Step step1 = new(1, 1);
-            Step step2 = new(1, 1);
+namespace Othello.Tests;
 
-            Assert.Equal(step1, step2);
-        }
+public class TestModels {
+    [Fact]
+    public void StepAddition() {
+        Step result = new Step(0, 0) + new Step(1, 1);
+        Assert.Equal(new Step(1, 1), result);
 
-        [Fact]
-        public void StepNotEquals() {
-            Step step1 = new(1, 1);
-            Step step2 = new(2, 2);
+        result = new Step(-1, 0) + new Step(1, 0);
+        Assert.Equal(new Step(0, 0), result);
 
-            Assert.NotEqual(step1, step2);
-        }
+        result += new Step(-1, -1);
+        Assert.Equal(new Step(-1, -1), result);
 
-        [Fact]
-        public void SquareAddStep() {
-            Square square = new(4, 4);
-            Step step = new(-1, 1);
+        result += new Step(1, 1);
+        Assert.Equal(new Step(0, 0), result);
+    }
 
-            Square result = square + step;
+    [Fact]
+    public void SquareAddition() {
+        Square result = new Square(4, 4) + new Square(1, 1);
+        Assert.Equal(new Square(5, 5), result);
 
-            Assert.Equal(new Square(3, 5), result);
-        }
+        result = new Square(4, 4) + new Square(0, 0);
+        Assert.Equal(new Square(4, 4), result);
 
-        [Fact]
-        public void SquareCompareToSquare() {
-            Square square1 = new(1, 2);
-            Square square2 = new(2, 1);
+        result = new Square(4, 4) + new Step(-1, 1);
+        Assert.Equal(new Square(3, 5), result);
 
-            Assert.True(square1.CompareTo(square2) < 0);
-            Assert.True(square2.CompareTo(square1) > 0);
-        }
+        result += new Square(0, 0);
+        Assert.Equal(new Square(3, 5), result);
 
-        [Fact]
-        public void SquareAdditionWithStep() {
-            Square square = new(4, 4);
-            Step step = new(-1, 1);
-            Square expectedSquare = new(3, 5);
+        Square another = new Square(-3, -2) + new Square(2, 3);
+        Assert.Equal(new Square(-1, 1), another);
 
-            Square resultSquare = square + step;
+        result += new Step(-1, -1);
+        Assert.Equal(new Square(2, 4), result);
 
-            Assert.Equal(expectedSquare, resultSquare);
-        }
+        result += new Step(-1, -1);
+        Assert.Equal(new Square(1, 3), result);
 
-        [Theory]
-        [InlineData(-1, -1, 0, 0)]
-        [InlineData(-1, 0, 0, 1)]
-        [InlineData(-1, 1, 0, 2)]
-        [InlineData(0, -1, 1, 0)]
-        [InlineData(0, 1, 1, 2)]
-        [InlineData(1, -1, 2, 0)]
-        [InlineData(1, 0, 2, 1)]
-        [InlineData(1, 1, 2, 2)]
-        public void SquareStepDirections(int stepX, int stepY, int expectedX, int expectedY) {
-            Square origin = new(1, 1);
-            Step step = new(stepX, stepY);
-            Square expectedResult = new(expectedX, expectedY);
+        result += new Step(-1, -1);
+        Assert.Equal(new Square(0, 2), result);
 
-            Square result = origin + step;
+        result += new Step(-1, -1);
+        Assert.Equal(new Square(-1, 1), result);
 
-            Assert.Equal(expectedResult, result);
-        }
+        result += new Step(1, -1);
+        Assert.Equal(new Square(0, 0), result);
 
-        [Fact]
-        public void DiskBoardChar() {
-            Assert.Equal("B", Disk.Black.BoardChar(color: false));
-            Assert.Equal("_", Disk.Empty.BoardChar(color: false));
-            Assert.Equal("W", Disk.White.BoardChar(color: false));
-        }
+        result += new Step(-1, -1);
+        Assert.Equal(new Square(-1, -1), result);
+    }
 
-        [Fact]
-        public void DiskOpponent() {
-            Assert.Equal(Disk.White, Disk.Black.Opponent());
-            Assert.Equal(Disk.Empty, Disk.Empty.Opponent());
-            Assert.Equal(Disk.Black, Disk.White.Opponent());
-        }
+    [Theory]
+    [InlineData(-1, -1, 0, 0)]
+    [InlineData(-1, 0, 0, 1)]
+    [InlineData(-1, 1, 0, 2)]
+    [InlineData(0, -1, 1, 0)]
+    [InlineData(0, 1, 1, 2)]
+    [InlineData(1, -1, 2, 0)]
+    [InlineData(1, 0, 2, 1)]
+    [InlineData(1, 1, 2, 2)]
+    public void StepDirections(int stepX, int stepY, int expectedX, int expectedY) {
+        Square origin = new(1, 1);
+        Step step = new(stepX, stepY);
+        Square expectedResult = new(expectedX, expectedY);
 
-        [Fact]
-        public void MoveLogEntry() {
-            Move b = new(
-                new Square(3, 2),
-                10,
-                Disk.Black,
-                [new Direction(new Step(1, 0), 10)]
-            );
-            Assert.Equal("B:(3,2),10", b.LogEntry());
+        Square result = origin + step;
 
-            Move w = new(
-                new Square(0, 0),
-                1,
-                Disk.White,
-                [new Direction(new Step(1, 0), 1)]
-            );
-            Assert.Equal("W:(0,0),1", w.LogEntry());
-        }
+        Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public void DiskBoardChar() {
+        Assert.Equal("B", Disk.Black.BoardChar());
+        Assert.Equal("_", Disk.Empty.BoardChar());
+        Assert.Equal("W", Disk.White.BoardChar());
+    }
+
+    [Fact]
+    public void DiskOpponent() {
+        Assert.Equal(Disk.White, Disk.Black.Opponent());
+        Assert.Equal(Disk.Empty, Disk.Empty.Opponent());
+        Assert.Equal(Disk.Black, Disk.White.Opponent());
+    }
+
+    [Fact]
+    public void MoveLogEntry() {
+        Move b = new(
+            new Square(3, 2),
+            Disk.Black,
+            10,
+            [new Direction(new Step(1, 0), 10)]
+        );
+        Assert.Equal("B:(3,2),10", b.LogEntry());
+
+        Move w = new(
+            new Square(0, 0),
+            Disk.White,
+            1,
+            [new Direction(new Step(1, 0), 1)]
+        );
+        Assert.Equal("W:(0,0),1", w.LogEntry());
+    }
+
+    [Fact]
+    public void StepEquals() {
+        Step step1 = new(1, 1);
+        Step step2 = new(1, 1);
+
+        Assert.Equal(step1, step2);
+    }
+
+    [Fact]
+    public void StepNotEquals() {
+        Step step1 = new(1, 1);
+        Step step2 = new(2, 2);
+
+        Assert.NotEqual(step1, step2);
+    }
+
+    [Fact]
+    public void SquareCompareToSquare() {
+        Square square1 = new(1, 2);
+        Square square2 = new(2, 1);
+
+        Assert.True(square1.CompareTo(square2) < 0);
+        Assert.True(square2.CompareTo(square1) > 0);
     }
 }

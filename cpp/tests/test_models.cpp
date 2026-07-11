@@ -1,5 +1,4 @@
 #include "models.hpp"
-#include "utils.hpp"
 
 #include <gtest/gtest.h>
 
@@ -22,20 +21,16 @@ TEST(step, addition)
     ASSERT_EQ(result.y, 5);
 
     result = Step {0, 0} + Step {1, 1};
-    ASSERT_EQ(result.x, 1);
-    ASSERT_EQ(result.y, 1);
+    ASSERT_EQ(result, Step(1, 1));
 
     result = Step {-1, 0} + Step {1, 0};
-    ASSERT_EQ(result.x, 0);
-    ASSERT_EQ(result.y, 0);
+    ASSERT_EQ(result, Step(0, 0));
 
     result += Step {-1, -1};
-    ASSERT_EQ(result.x, -1);
-    ASSERT_EQ(result.y, -1);
+    ASSERT_EQ(result, Step(-1, -1));
 
     result += Step {1, 1};
-    ASSERT_EQ(result.x, 0);
-    ASSERT_EQ(result.y, 0);
+    ASSERT_EQ(result, Step(0, 0));
 }
 
 TEST(step, comparison)
@@ -64,49 +59,40 @@ TEST(square, comparison)
     ASSERT_FALSE(square1 == square2);
 }
 
-TEST(square, addition_with_square)
+TEST(square, addition)
 {
-    const Square square2(1, 2);
-    const Square square1(3, 4);
-    Square result = square1 + square2;
-    ASSERT_EQ(result.x, 4);
-    ASSERT_EQ(result.y, 6);
-
-    result = Square {4, 4} + Square {1, 1};
-    ASSERT_EQ(result.x, 5);
-    ASSERT_EQ(result.y, 5);
+    Square result = Square {4, 4} + Square {1, 1};
+    ASSERT_EQ(result, Square(5, 5));
 
     result = Square {4, 4} + Square {0, 0};
-    ASSERT_EQ(result.x, 4);
-    ASSERT_EQ(result.y, 4);
+    ASSERT_EQ(result, Square(4, 4));
 
     result = Square {4, 4} + Step {-1, 1};
-    ASSERT_EQ(result.x, 3);
-    ASSERT_EQ(result.y, 5);
+    ASSERT_EQ(result, Square(3, 5));
 
     result += Square {0, 0};
-    ASSERT_EQ(result.x, 3);
-    ASSERT_EQ(result.y, 5);
+    ASSERT_EQ(result, Square(3, 5));
 
     const Square another = Square {-3, -2} + Square {2, 3};
-    ASSERT_EQ(another.x, -1);
-    ASSERT_EQ(another.y, 1);
-}
-
-TEST(square, addition_with_step)
-{
-    const Square square(3, 4);
-    constexpr Step step(1, 2);
-    Square result = square + step;
-    ASSERT_EQ(result.x, 4);
-    ASSERT_EQ(result.y, 6);
+    ASSERT_EQ(another, Square(-1, 1));
 
     result += Step {-1, -1};
-    ASSERT_EQ(result.x, 3);
-    ASSERT_EQ(result.y, 5);
-    result += Step {1, 0};
-    ASSERT_EQ(result.x, 4);
-    ASSERT_EQ(result.y, 5);
+    ASSERT_EQ(result, Square(2, 4));
+
+    result += Step {-1, -1};
+    ASSERT_EQ(result, Square(1, 3));
+
+    result += Step {-1, -1};
+    ASSERT_EQ(result, Square(0, 2));
+
+    result += Step {-1, -1};
+    ASSERT_EQ(result, Square(-1, 1));
+
+    result += Step {1, -1};
+    ASSERT_EQ(result, Square(0, 0));
+
+    result += Step {-1, -1};
+    ASSERT_EQ(result, Square(-1, -1));
 }
 
 TEST(square, step_directions)
@@ -141,17 +127,24 @@ TEST(square, step_directions)
 
 TEST(disk, board_char)
 {
-    EXPECT_EQ(board_char(Disk::black, false), "B");
-    EXPECT_EQ(board_char(Disk::empty, false), "_");
-    EXPECT_EQ(board_char(Disk::white, false), "W");
+    EXPECT_EQ(board_char(Disk::black), "B");
+    EXPECT_EQ(board_char(Disk::empty), "_");
+    EXPECT_EQ(board_char(Disk::white), "W");
+}
+
+TEST(disk, opponent)
+{
+    EXPECT_EQ(opponent(Disk::black), Disk::white);
+    EXPECT_EQ(opponent(Disk::empty), Disk::empty);
+    EXPECT_EQ(opponent(Disk::white), Disk::black);
 }
 
 TEST(move, log_entry)
 {
-    Move b(Square {3, 2}, Disk::black, 10, {Direction(Step {1, 0}, 10)});
+    const Move b(Square {3, 2}, Disk::black, 10, {Direction(Step {1, 0}, 10)});
     EXPECT_EQ(b.log_entry(), "B:(3,2),10");
 
-    Move w(Square {0, 0}, Disk::white, 1, {Direction(Step {1, 0}, 1)});
+    const Move w(Square {0, 0}, Disk::white, 1, {Direction(Step {1, 0}, 1)});
     EXPECT_EQ(w.log_entry(), "W:(0,0),1");
 }
 

@@ -7,21 +7,15 @@
 
 package othello
 
-import (
-	"fmt"
-)
-
 // Variables set at build time.
 
+var BuildTime string
 var GitBranch string
 var GitCommit string
-var BuildTime string
 var VersionNumber string
+var VersionString string
 
-// VersionInfo returns formatted build version info string.
+// VersionInfo Return version info string.
 func VersionInfo() string {
-	return fmt.Sprintf(
-		"%s %s %s %s",
-		VersionNumber, BuildTime, GitBranch, GitCommit,
-	)
+	return VersionString
 }

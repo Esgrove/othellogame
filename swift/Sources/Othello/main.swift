@@ -9,7 +9,6 @@
 //==========================================================
 
 import ArgumentParser
-import ColorizeSwift
 import Foundation
 import OthelloLib
 
@@ -43,13 +42,19 @@ struct OthelloSwift: ParsableCommand {
     @Flag(name: .shortAndLong, help: "Print version and exit")
     var version: Bool = false
 
+    mutating func validate() throws {
+        if self.autoplay, self.defaultSettings {
+            throw ValidationError("'--autoplay' cannot be used with '--default'")
+        }
+    }
+
     mutating func run() throws {
         if self.version {
-            print("Othello Swift \(versionInfo())")
+            print(versionInfo())
             Self.exit(withError: ExitCode.success)
         }
 
-        print("OTHELLO GAME - SWIFT".bold().green())
+        printGreenBold("OTHELLO GAME - SWIFT")
 
         let boardSize = self.resolveBoardSize()
 
@@ -66,6 +71,7 @@ struct OthelloSwift: ParsableCommand {
         Othello(settings).play()
     }
 
+    /// Resolve the board size to use from CLI arguments, or by asking the user.
     private func resolveBoardSize() -> Int {
         // Try to read board size from command line args
         let boardSize: Int = self.size ?? 0

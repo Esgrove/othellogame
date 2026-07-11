@@ -8,12 +8,12 @@ use std::io::Write;
 use std::{fmt, io};
 use std::{thread, time::Duration};
 
-use colored::Colorize;
 use rand::{self, RngExt};
 
 use crate::board::Board;
 use crate::colorprint::print_error;
 use crate::models::{Disk, Move, Square};
+use crate::print_yellow;
 use crate::settings::PlayerSettings;
 
 /// Defines one player that can be either human or computer controlled.
@@ -35,11 +35,11 @@ pub enum PlayerType {
 
 impl Player {
     /// Initialize new player for the given disk color.
-    pub const fn new(disk: Disk, settings: PlayerSettings, player_type: PlayerType) -> Self {
+    pub const fn new(disk: Disk, settings: PlayerSettings) -> Self {
         Self {
             can_play: true,
             disk,
-            player_type,
+            player_type: PlayerType::Human,
             rounds_played: 0,
             settings,
         }
@@ -47,12 +47,12 @@ impl Player {
 
     /// Shorthand to initialize a new player for black disks.
     pub const fn black(settings: PlayerSettings) -> Self {
-        Self::new(Disk::Black, settings, PlayerType::Human)
+        Self::new(Disk::Black, settings)
     }
 
     /// Shorthand to initialize a new player for white disks.
     pub const fn white(settings: PlayerSettings) -> Self {
-        Self::new(Disk::White, settings, PlayerType::Computer)
+        Self::new(Disk::White, settings)
     }
 
     /// Play one round as this player.
@@ -64,7 +64,7 @@ impl Player {
         if moves.is_empty() {
             self.can_play = false;
             if !self.settings.check_mode {
-                println!("{}", "  No moves available...".yellow());
+                print_yellow!("  No moves available...");
             }
             None
         } else {
@@ -96,12 +96,14 @@ impl Player {
     }
 
     /// Returns true if player is controlled by a human player.
+    #[must_use]
     pub fn human(&self) -> bool {
         self.player_type.human()
     }
 
     /// Returns true if player is controlled by computer.
     #[allow(dead_code)]
+    #[must_use]
     pub fn computer(&self) -> bool {
         self.player_type.computer()
     }
@@ -189,6 +191,7 @@ impl Player {
     }
 
     /// Return player type description string.
+    #[must_use]
     pub fn type_string(&self) -> String {
         self.player_type.to_string()
     }
@@ -256,7 +259,7 @@ mod tests {
 
     #[test]
     fn reset_player() {
-        let mut player = Player::new(Disk::White, PlayerSettings::default(), PlayerType::Human);
+        let mut player = Player::new(Disk::White, PlayerSettings::default());
         player.can_play = false;
         player.rounds_played = 10;
         player.reset();

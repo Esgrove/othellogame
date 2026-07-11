@@ -1,11 +1,23 @@
+//==========================================================
+// Settings
+// Defines game settings
+// Akseli Lukkarila
+// 2019-2026
+//==========================================================
+
 package othello
 
 import (
 	"fmt"
 )
 
+// MinBoardSize Minimum allowed board size.
 const MinBoardSize int = 4
+
+// MaxBoardSize Maximum allowed board size.
 const MaxBoardSize int = 10
+
+// DefaultBoardSize Default board size when none is given.
 const DefaultBoardSize int = 8
 
 // Settings Game settings.
@@ -26,44 +38,54 @@ type PlayerSettings struct {
 	TestMode    bool
 }
 
-func NewPlayerSettings(showHelpers, checkMode, testMode bool) PlayerSettings {
-	return PlayerSettings{
-		ShowHelpers: showHelpers,
-		CheckMode:   checkMode,
-		TestMode:    testMode,
-	}
-}
-
-func NewSettings(
-	boardSize int,
-	autoplayMode, checkMode, showHelpers, showLog, testMode, useDefaults bool,
-) Settings {
-	return Settings{
-		BoardSize:    boardSize,
-		AutoplayMode: autoplayMode,
-		CheckMode:    checkMode,
-		ShowHelpers:  showHelpers,
-		ShowLog:      showLog,
-		TestMode:     testMode,
-		UseDefaults:  useDefaults,
-	}
-}
-
+// ToPlayerSettings Get player setting values from overall game settings.
 func (s Settings) ToPlayerSettings() PlayerSettings {
-	return NewPlayerSettings(s.ShowHelpers, s.CheckMode, s.TestMode)
+	return PlayerSettings{
+		ShowHelpers: s.ShowHelpers,
+		CheckMode:   s.CheckMode,
+		TestMode:    s.TestMode,
+	}
 }
 
+// DefaultSettings Get the default game settings.
+func DefaultSettings() Settings {
+	return Settings{
+		BoardSize:    8,
+		AutoplayMode: false,
+		CheckMode:    false,
+		ShowHelpers:  true,
+		ShowLog:      false,
+		TestMode:     false,
+		UseDefaults:  false,
+	}
+}
+
+// DefaultPlayerSettings Get the default player settings.
+func DefaultPlayerSettings() PlayerSettings {
+	return PlayerSettings{
+		ShowHelpers: true,
+		CheckMode:   false,
+		TestMode:    false,
+	}
+}
+
+// String Format settings to string.
 func (s Settings) String() string {
 	return fmt.Sprintf(
-		`Settings:
-			BoardSize: %d
-			AutoplayMode: %t
-			CheckMode: %t
-			ShowHelpers: %t
-			ShowLog: %t
-			TestMode: %t
-			useDefaults: %t
-		`,
-		s.BoardSize, s.AutoplayMode, s.CheckMode, s.ShowHelpers, s.ShowLog, s.TestMode, s.UseDefaults,
+		"Settings:\n"+
+			"  board_size: %d\n"+
+			"  autoplay: %t\n"+
+			"  check_mode: %t\n"+
+			"  use_defaults: %t\n"+
+			"  show_helpers: %t\n"+
+			"  show_log: %t\n"+
+			"  test_mode: %t",
+		s.BoardSize,
+		s.AutoplayMode,
+		s.CheckMode,
+		s.UseDefaults,
+		s.ShowHelpers,
+		s.ShowLog,
+		s.TestMode,
 	)
 }

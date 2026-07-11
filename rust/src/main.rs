@@ -16,7 +16,6 @@ mod version;
 
 use anyhow::Result;
 use clap::Parser;
-use colored::Colorize;
 
 use crate::othello::Othello;
 use crate::settings::{DEFAULT_BOARD_SIZE, MAX_BOARD_SIZE, MIN_BOARD_SIZE, Settings};
@@ -75,7 +74,7 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    println!("{}", "OTHELLO GAME - RUST".green().bold());
+    print_green_bold!("OTHELLO GAME - RUST");
 
     let board_size = resolve_board_size(&args)?;
 
@@ -93,6 +92,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+/// Resolve the board size to use from CLI arguments, or by asking the user.
 fn resolve_board_size(args: &Args) -> Result<usize> {
     // Try to read board size from command line args
     if let Some(size) = args.size {

@@ -2,7 +2,11 @@ package othello
 
 import kotlin.random.Random
 
-/** Defines one player that can be either human or computer controlled.*/
+/**
+ * Defines one player that can be either human or computer controlled.
+ *
+ * @constructor Initialize new player for the given disk color.
+ */
 class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
     internal var canPlay = true
     internal var playerType = PlayerType.Human
@@ -10,73 +14,73 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
     private val random = Random
 
     companion object {
+        /** Shorthand to initialize a new player for black disks. */
         fun black(settings: PlayerSettings): Player = Player(Disk.Black, settings)
 
+        /** Shorthand to initialize a new player for white disks. */
         fun white(settings: PlayerSettings): Player = Player(Disk.White, settings)
 
-        fun default(): Player = Player(
-            disk = Disk.Black,
-            settings = PlayerSettings.default(),
-        )
+        /** Get a default player. */
+        fun default(): Player = Player(Disk.Black, PlayerSettings.default())
     }
 
-    /** Play one round as this player.*/
+    /** Play one round as this player. */
     fun playOneMove(board: Board): String? {
         if (!settings.checkMode) {
             println("Turn: ${disk.diskString()}")
         }
         val moves = board.possibleMoves(disk)
-        if (moves.isNotEmpty()) {
-            canPlay = true
-            if (human() && settings.showHelpers && !settings.checkMode) {
-                board.printPossibleMoves(moves)
-            }
-            val chosenMove = if (human()) getHumanMove(moves) else getComputerMove(moves)
-            board.placeDisk(chosenMove)
+        if (moves.isEmpty()) {
+            canPlay = false
             if (!settings.checkMode) {
-                board.printScore()
+                printYellow("  No moves available...")
             }
-            roundsPlayed++
-            if (!settings.testMode) {
-                Thread.sleep(1000)
-            }
-            return chosenMove.logEntry()
+            return null
         }
-        canPlay = false
-        if (!settings.checkMode) {
-            printColor("  No moves available...", AnsiColor.YELLOW)
-        }
-        return null
-    }
-
-    /** Reset player status for a new game.*/
-    fun reset() {
-        roundsPlayed = 0
         canPlay = true
+        if (human() && settings.showHelpers && !settings.checkMode) {
+            board.printPossibleMoves(moves)
+        }
+        val chosenMove = if (human()) getHumanMove(moves) else getComputerMove(moves)
+        board.placeDisk(chosenMove)
+        if (!settings.checkMode) {
+            board.printScore()
+        }
+        roundsPlayed++
+        if (!settings.testMode) {
+            Thread.sleep(1000)
+        }
+        return chosenMove.logEntry()
     }
 
-    /** Returns true if the player is human. */
+    /** Reset player status for a new game. */
+    fun reset() {
+        canPlay = true
+        roundsPlayed = 0
+    }
+
+    /** Returns true if player is controlled by a human player. */
     fun human(): Boolean = playerType.human()
 
-    /** Returns true if the player is controlled by computer. */
+    /** Returns true if player is controlled by computer. */
     fun computer(): Boolean = playerType.computer()
 
-    /** Set the player as human controlled.*/
-    fun setHuman() {
-        this.playerType = PlayerType.Human
-    }
-
-    /** Set the player as computer controlled.*/
-    fun setComputer() {
-        this.playerType = PlayerType.Computer
-    }
-
-    /** Set the player type.*/
+    /** Set the player as human or computer controlled. */
     fun setPlayerType(playerType: PlayerType) {
         this.playerType = playerType
     }
 
-    /** Return move chosen by computer.*/
+    /** Set the player as human controlled. */
+    fun setHuman() {
+        setPlayerType(PlayerType.Human)
+    }
+
+    /** Set the player as computer controlled. */
+    fun setComputer() {
+        setPlayerType(PlayerType.Computer)
+    }
+
+    /** Return move chosen by computer. */
     private fun getComputerMove(moves: List<Move>): Move {
         if (!settings.checkMode) {
             println("  Computer plays...")
@@ -94,7 +98,7 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
         return chosenMove
     }
 
-    /** Return move chosen by a human player.*/
+    /** Return move chosen by a human player. */
     private fun getHumanMove(moves: List<Move>): Move {
         while (true) {
             val square = getSquare()
@@ -103,34 +107,49 @@ class Player(internal val disk: Disk, internal val settings: PlayerSettings) {
             if (validMove != null) {
                 return validMove
             }
-            printError("  Can't place a ${disk.diskString()} disk in square $square")
+            printError("  Can't place a ${disk.diskString()} disk in square $square!")
         }
     }
 
-    /** Ask human player for square coordinates.*/
+    /** Ask human player for square coordinates. */
     private fun getSquare(): Square {
         while (true) {
-            try {
-                print("  Give disk position (x,y): ")
-                val coordinates = readlnOrNull() ?: ""
-
-                if (coordinates.length != 3 || coordinates[1] != ',') {
-                    throw IllegalArgumentException()
-                }
-
-                val x = coordinates[0].digitToInt()
-                val y = coordinates[2].digitToInt()
-
-                return Square(x, y)
-            } catch (_: IllegalArgumentException) {
-                printError("  Give coordinates in the form 'x,y'")
+            print("  Give disk position (x,y): ")
+            val input = readlnOrNull()
+            if (input == null) {
+                printError("  Input failed. Please try again.")
+                continue
             }
+            val values = input.trim().split(',')
+            if (values.size == 2) {
+                val x = values[0].toIntOrNull() ?: -1
+                val y = values[1].toIntOrNull() ?: -1
+                if (x >= 0 && y >= 0) {
+                    return Square(x, y)
+                }
+            }
+            printError("  Give coordinates in the form 'x,y'!")
         }
     }
 
-    /** Return player type description string.*/
+    /** Return player type description string. */
     internal fun typeString(): String = playerType.toString()
 
     override fun toString(): String =
         "${disk.diskString()} | ${typeString()} | Moves: $roundsPlayed"
+}
+
+/** Player can be controlled either by a human or computer. */
+enum class PlayerType {
+    Human,
+    Computer,
+    ;
+
+    /** Check if the player is controlled by a human. */
+    fun human(): Boolean = this == Human
+
+    /** Check if the player is controlled by a computer. */
+    fun computer(): Boolean = this == Computer
+
+    override fun toString(): String = if (this == Human) "Human   " else "Computer"
 }

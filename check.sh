@@ -18,6 +18,7 @@ if [ "$BASH_PLATFORM" = windows ]; then
         #swift/othello_swift.exe
         kotlin/othello_kotlin.sh
         python/othello_python.sh
+        typescript/othello_typescript.sh
     )
 else
     executables=(
@@ -29,6 +30,7 @@ else
         swift/othello_swift
         kotlin/othello_kotlin.sh
         python/othello_python.sh
+        typescript/othello_typescript.sh
     )
 fi
 

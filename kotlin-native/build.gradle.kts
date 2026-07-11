@@ -1,5 +1,141 @@
 import java.io.ByteArrayOutputStream
+import org.jetbrains.kotlin.gradle.plugin.mpp.DisableCacheInKotlinVersion
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeCacheApi
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
+
+version = "2.0.0"
+
+val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
+
+val writeVersionFile = tasks.register<WriteVersionTask>("writeVersionFile") {
+    outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/kotlin"))
+    appName.set("Othello Kotlin")
+    appVersion.set(project.version.toString())
+    execOps.set(execHelper.map { it.execOps })
+}
+
+plugins {
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinxSerialization)
+
+    // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
+    id("com.diffplug.spotless") version "8.0.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    val hostOs = System.getProperty("os.name")
+    val isArm64 = System.getProperty("os.arch") == "aarch64"
+    val isMingwX64 = hostOs.startsWith("Windows")
+    val nativeTarget = when {
+        hostOs == "Mac OS X" && isArm64 -> macosArm64("native")
+        hostOs == "Linux" && isArm64 -> linuxArm64("native")
+        hostOs == "Linux" && !isArm64 -> linuxX64("native")
+        isMingwX64 -> mingwX64("native")
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+    }
+
+    nativeTarget.apply {
+        binaries {
+            // Applies to all binaries, including the test executable
+            all {
+                if (hostOs == "Linux") {
+                    @OptIn(KotlinNativeCacheApi::class)
+                    disableNativeCache(
+                        version = DisableCacheInKotlinVersion.`2_4_0`,
+                        reason = "Compiler caches cause duplicate symbol linker errors on Linux",
+                    )
+                }
+            }
+            executable {
+                entryPoint = "othello.main"
+            }
+        }
+    }
+
+    sourceSets {
+        val commonMain by getting
+        val commonTest by getting
+
+        val nativeMain by getting {
+            kotlin.srcDir("build/generated/sources/versioninfo/kotlin")
+            dependsOn(commonMain)
+            dependencies {
+                implementation(libs.kotlinxSerializationJson)
+                // https://github.com/ajalt/clikt
+                implementation("com.github.ajalt.clikt:clikt:5.0.3")
+                // https://github.com/square/okio
+                implementation("com.squareup.okio:okio:3.16.2")
+            }
+        }
+
+        val nativeTest by getting {
+            dependsOn(commonTest)
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+    }
+}
+
+spotless {
+    ratchetFrom("origin/main")
+    kotlin {
+        ktlint("1.8.0").setEditorConfigPath("$projectDir/.editorconfig")
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configureEach {
+    dependsOn(writeVersionFile)
+}
+
+tasks.named("spotlessKotlin") {
+    dependsOn(writeVersionFile)
+}
+
+tasks.register("format") {
+    group = "formatting"
+    description = "Runs Spotless Apply to format code"
+    dependsOn("spotlessApply")
+}
+
+tasks.register("version") {
+    dependsOn(writeVersionFile)
+    val versionFile = layout.buildDirectory.file(
+        "generated/sources/versioninfo/kotlin/othello/VersionInfo.kt",
+    )
+    doLast {
+        val file = versionFile.get().asFile
+        println("Generated build info to: ${file.absolutePath}")
+        val versionLine = file.readLines().find { it.contains("VERSION_STRING") }
+        val versionString = versionLine
+            ?.substringAfter('=')
+            ?.trim()
+            ?.removePrefix("\"")
+            ?.removeSuffix(";")
+            ?.removeSuffix("\"")
+
+        println("Version: ${versionString ?: "info missing"}")
+    }
+}
+
+tasks.named("build") {
+    dependsOn("version")
+}
+
+tasks.withType<KotlinNativeTest>().configureEach {
+    testLogging {
+        events("PASSED", "FAILED", "SKIPPED")
+        showStandardStreams = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+        showExceptions = true
+        showCauses = true
+        showStackTraces = false
+    }
+}
 
 abstract class ExecHelper @Inject constructor(val execOps: ExecOperations) :
     BuildService<BuildServiceParameters.None>
@@ -52,130 +188,5 @@ abstract class WriteVersionTask @Inject constructor(private val objects: ObjectF
             }
             """.trimIndent(),
         )
-    }
-}
-
-val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
-
-val writeVersionFile by tasks.registering(WriteVersionTask::class) {
-    outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/kotlin"))
-    appName.set("Othello Kotlin")
-    appVersion.set(project.version.toString())
-    execOps.set(execHelper.map { it.execOps })
-}
-
-version = "2.0.0"
-
-plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinxSerialization)
-
-    // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.0.0"
-}
-
-repositories {
-    mavenCentral()
-}
-
-kotlin {
-    val hostOs = System.getProperty("os.name")
-    val isArm64 = System.getProperty("os.arch") == "aarch64"
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" && isArm64 -> macosArm64("native")
-        hostOs == "Mac OS X" && !isArm64 -> macosX64("native")
-        hostOs == "Linux" && isArm64 -> linuxArm64("native")
-        hostOs == "Linux" && !isArm64 -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    }
-
-    nativeTarget.apply {
-        binaries {
-            executable {
-                entryPoint = "othello.main"
-            }
-        }
-    }
-
-    sourceSets {
-        val commonMain by getting
-        val commonTest by getting
-
-        val nativeMain by getting {
-            kotlin.srcDir("build/generated/sources/versioninfo/kotlin")
-            dependsOn(commonMain)
-            dependencies {
-                implementation(libs.kotlinxSerializationJson)
-                // https://github.com/ajalt/clikt
-                implementation("com.github.ajalt.clikt:clikt:5.0.3")
-                // https://github.com/square/okio
-                implementation("com.squareup.okio:okio:3.16.2")
-            }
-        }
-
-        val nativeTest by getting {
-            dependsOn(commonTest)
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
-    }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configureEach {
-    dependsOn(writeVersionFile)
-}
-
-spotless {
-    ratchetFrom("origin/main")
-    kotlin {
-        ktlint("1.8.0").setEditorConfigPath("$projectDir/.editorconfig")
-    }
-}
-
-tasks.named("spotlessKotlin") {
-    dependsOn(writeVersionFile)
-}
-
-tasks.register("format") {
-    group = "formatting"
-    description = "Runs Spotless Apply to format code"
-    dependsOn("spotlessApply")
-}
-
-tasks.register("version") {
-    dependsOn(writeVersionFile)
-    val versionFile = layout.buildDirectory.file(
-        "generated/sources/versioninfo/kotlin/othello/VersionInfo.kt",
-    )
-    doLast {
-        val file = versionFile.get().asFile
-        println("Generated build info to: ${file.absolutePath}")
-        val versionLine = file.readLines().find { it.contains("VERSION_STRING") }
-        val versionString = versionLine
-            ?.substringAfter('=')
-            ?.trim()
-            ?.removePrefix("\"")
-            ?.removeSuffix(";")
-            ?.removeSuffix("\"")
-
-        println("Version: ${versionString ?: "info missing"}")
-    }
-}
-
-tasks.named("build") {
-    dependsOn("version")
-}
-
-tasks.withType<KotlinNativeTest>().configureEach {
-    testLogging {
-        events("PASSED", "FAILED", "SKIPPED")
-        showStandardStreams = true
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
-        showExceptions = true
-        showCauses = true
-        showStackTraces = false
     }
 }

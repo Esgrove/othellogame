@@ -88,9 +88,9 @@ class ModelsTest {
 
     @Test
     fun diskBoardChar() {
-        assertEquals("B", Disk.Black.boardChar(color = false))
-        assertEquals("_", Disk.Empty.boardChar(color = false))
-        assertEquals("W", Disk.White.boardChar(color = false))
+        assertEquals("B", Disk.Black.boardChar())
+        assertEquals("_", Disk.Empty.boardChar())
+        assertEquals("W", Disk.White.boardChar())
     }
 
     @Test

@@ -6,38 +6,46 @@ import java.util.Scanner;
 
 import othello.Models.Disk;
 import othello.Models.Move;
-import othello.Models.PlayerType;
 import othello.Models.Square;
 
 /**
  * Defines one player that can be either human or computer controlled.
  */
 public class Player {
-    private final Disk disk;
-    private final PlayerSettings settings;
-    private boolean canPlay = true;
-    private PlayerType playerType = PlayerType.HUMAN;
-    private int roundsPlayed = 0;
+    boolean canPlay = true;
+    final Disk disk;
+    PlayerType playerType = PlayerType.HUMAN;
+    int roundsPlayed = 0;
+    final PlayerSettings settings;
 
     private static final Random random = new Random();
     private static final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Initialize new player for the given disk color.
+     */
     public Player(Disk disk, PlayerSettings settings) {
         this.disk = disk;
         this.settings = settings;
     }
 
-    /** Shorthand to initialize a new player for black disks. */
+    /**
+     * Shorthand to initialize a new player for black disks.
+     */
     public static Player black(PlayerSettings settings) {
         return new Player(Disk.BLACK, settings);
     }
 
-    /** Shorthand to initialize a new player for white disks. */
+    /**
+     * Shorthand to initialize a new player for white disks.
+     */
     public static Player white(PlayerSettings settings) {
         return new Player(Disk.WHITE, settings);
     }
 
-    /** Return true if player can make a move. */
+    /**
+     * Return true if player can make a move.
+     */
     public boolean canPlay() {
         return canPlay;
     }
@@ -47,75 +55,75 @@ public class Player {
      */
     public String playOneMove(Board board) {
         if (!settings.checkMode()) {
-            System.out.println("Turn: " + disk.name());
+            System.out.println("Turn: " + disk.diskString());
         }
         List<Move> moves = board.possibleMoves(disk);
-        if (!moves.isEmpty()) {
-            canPlay = true;
-            if (human() && settings.showHelpers() && !settings.checkMode()) {
-                board.printPossibleMoves(moves);
-            }
-            Move chosenMove = human() ? getHumanMove(moves) : getComputerMove(moves);
-            board.placeDisk(chosenMove);
+        if (moves.isEmpty()) {
+            canPlay = false;
             if (!settings.checkMode()) {
-                board.printScore();
+                ColorPrint.printYellow("  No moves available...");
             }
-            roundsPlayed++;
-            if (!settings.testMode()) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ignored) {}
-            }
-            return chosenMove.logEntry();
+            return null;
         }
-        canPlay = false;
+        canPlay = true;
+        if (human() && settings.showHelpers() && !settings.checkMode()) {
+            board.printPossibleMoves(moves);
+        }
+        Move chosenMove = human() ? getHumanMove(moves) : getComputerMove(moves);
+        board.placeDisk(chosenMove);
         if (!settings.checkMode()) {
-            ColorPrint.printColor("  No moves available...", AnsiColor.YELLOW);
+            board.printScore();
         }
-        return null;
+        roundsPlayed++;
+        if (!settings.testMode()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException _) {}
+        }
+        return chosenMove.logEntry();
     }
 
     /**
      * Reset player status for a new game.
      */
     public void reset() {
-        roundsPlayed = 0;
         canPlay = true;
+        roundsPlayed = 0;
     }
 
     /**
-     * Returns true if the player is human.
+     * Returns true if player is controlled by a human player.
      */
     public boolean human() {
         return playerType.human();
     }
 
     /**
-     * Returns true if the player is controlled by computer.
+     * Returns true if player is controlled by computer.
      */
     public boolean computer() {
         return playerType.computer();
     }
 
     /**
+     * Set the player as human or computer controlled.
+     */
+    public void setPlayerType(PlayerType playerType) {
+        this.playerType = playerType;
+    }
+
+    /**
      * Set the player as human controlled.
      */
     public void setHuman() {
-        this.playerType = PlayerType.HUMAN;
+        setPlayerType(PlayerType.HUMAN);
     }
 
     /**
      * Set the player as computer controlled.
      */
     public void setComputer() {
-        this.playerType = PlayerType.COMPUTER;
-    }
-
-    /**
-     * Set the player type.
-     */
-    public void setPlayerType(PlayerType playerType) {
-        this.playerType = playerType;
+        setPlayerType(PlayerType.COMPUTER);
     }
 
     /**
@@ -132,7 +140,7 @@ public class Player {
             // Wait a bit and pick a random move
             try {
                 Thread.sleep(1000 + random.nextInt(1000));
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException _) {}
             chosenMove = moves.get(random.nextInt(moves.size()));
         }
         if (!settings.checkMode()) {
@@ -147,48 +155,73 @@ public class Player {
     private Move getHumanMove(List<Move> moves) {
         while (true) {
             Square square = getSquare();
+            // Check that the chosen square is actually one of the possible moves
             for (Move move : moves) {
-                // Check that the chosen square is actually one of the possible moves
                 if (move.square().equals(square)) {
                     return move;
                 }
             }
-            ColorPrint.printError("  Can't place a " + disk.name() + " disk in square " + square);
+            ColorPrint.printError("  Can't place a " + disk.diskString() + " disk in square " + square + "!");
         }
     }
 
     /**
      * Ask human player for square coordinates.
      */
-    private Square getSquare() {
+    private static Square getSquare() {
         while (true) {
-            try {
-                System.out.print("  Give disk position (x,y): ");
-                String input = scanner.nextLine().trim();
-
-                if (input.length() != 3 || input.charAt(1) != ',') {
-                    throw new IllegalArgumentException();
-                }
-
-                int x = Integer.parseInt(input.substring(0, 1));
-                int y = Integer.parseInt(input.substring(2, 3));
-
-                return new Square(x, y);
-            } catch (IllegalArgumentException e) {
-                ColorPrint.printError("  Give coordinates in the form 'x,y'");
+            System.out.print("  Give disk position (x,y): ");
+            String input = scanner.nextLine();
+            String[] values = input.trim().split(",");
+            if (values.length == 2) {
+                try {
+                    int x = Integer.parseInt(values[0]);
+                    int y = Integer.parseInt(values[1]);
+                    if (x >= 0 && y >= 0) {
+                        return new Square(x, y);
+                    }
+                } catch (NumberFormatException _) {}
             }
+            ColorPrint.printError("  Give coordinates in the form 'x,y'!");
         }
     }
 
     /**
      * Return player type description string.
      */
-    private String typeString() {
+    public String typeString() {
         return playerType.toString();
     }
 
     @Override
     public String toString() {
-        return disk.name() + " | " + typeString() + " | Moves: " + roundsPlayed;
+        return disk.diskString() + " | " + typeString() + " | Moves: " + roundsPlayed;
+    }
+}
+
+/**
+ * Player can be controlled either by a human or computer.
+ */
+enum PlayerType {
+    HUMAN,
+    COMPUTER;
+
+    /**
+     * Check if the player is controlled by a human.
+     */
+    public boolean human() {
+        return this == HUMAN;
+    }
+
+    /**
+     * Check if the player is controlled by a computer.
+     */
+    public boolean computer() {
+        return this == COMPUTER;
+    }
+
+    @Override
+    public String toString() {
+        return this == HUMAN ? "Human   " : "Computer";
     }
 }

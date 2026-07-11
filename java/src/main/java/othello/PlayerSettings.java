@@ -3,15 +3,12 @@ package othello;
 /**
  * Player settings.
  */
-public record PlayerSettings(boolean checkMode, boolean showHelpers, boolean testMode) {
+public record PlayerSettings(boolean showHelpers, boolean checkMode, boolean testMode) {
 
-    @Override
-    public String toString() {
-        return String.format(
-            "PlayerSettings(checkMode=%b, showHelpers=%b, testMode=%b)",
-            checkMode,
-            showHelpers,
-            testMode
-        );
+    /**
+     * Get default player settings.
+     */
+    public static PlayerSettings defaultSettings() {
+        return new PlayerSettings(true, false, false);
     }
 }

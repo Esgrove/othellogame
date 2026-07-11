@@ -11,11 +11,9 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-
-	"github.com/logrusorgru/aurora/v4"
 )
 
-// Player Defines one player (human or computer).
+// Player Defines one player that can be either human or computer controlled.
 type Player struct {
 	CanPlay      bool
 	disk         Disk
@@ -24,22 +22,36 @@ type Player struct {
 	settings     PlayerSettings
 }
 
-// NewPlayer Initialize new player for the given disk.
+// PlayerType Player can be controlled either by a human or computer.
+type PlayerType int
+
+const (
+	Human    PlayerType = 0
+	Computer PlayerType = 1
+)
+
+// NewPlayer Initialize new player for the given disk colour.
 func NewPlayer(disk Disk, settings PlayerSettings) *Player {
 	return &Player{
+		CanPlay:    true,
 		disk:       disk,
 		playerType: Human,
-		CanPlay:    true,
 		settings:   settings,
 	}
 }
 
 // BlackPlayer Shorthand to initialize a new player for black disks.
+//
+// Note: deliberately named `BlackPlayer` instead of `Black`
+// to avoid a name collision with the package-level `Black` disk constant.
 func BlackPlayer(settings PlayerSettings) *Player {
 	return NewPlayer(Black, settings)
 }
 
 // WhitePlayer Shorthand to initialize a new player for white disks.
+//
+// Note: deliberately named `WhitePlayer` instead of `White`
+// to avoid a name collision with the package-level `White` disk constant.
 func WhitePlayer(settings PlayerSettings) *Player {
 	return NewPlayer(White, settings)
 }
@@ -53,14 +65,14 @@ func (p *Player) PlayOneMove(board *Board) *string {
 	if len(moves) == 0 {
 		p.CanPlay = false
 		if !p.settings.CheckMode {
-			fmt.Println("  No moves available...")
+			PrintYellow("  No moves available...")
 		}
 		return nil
 	}
 
 	p.CanPlay = true
-	if p.Human() && p.settings.ShowHelpers {
-		board.printPossibleMoves(moves)
+	if p.Human() && p.settings.ShowHelpers && !p.settings.CheckMode {
+		board.PrintPossibleMoves(moves)
 	}
 	var chosenMove Move
 	if p.Human() {
@@ -79,6 +91,40 @@ func (p *Player) PlayOneMove(board *Board) *string {
 	logEntry := chosenMove.LogEntry()
 
 	return &logEntry
+}
+
+// Reset player status for a new game.
+func (p *Player) Reset() {
+	p.CanPlay = true
+	p.roundsPlayed = 0
+}
+
+// Human Returns true if player is controlled by a human player.
+func (p *Player) Human() bool {
+	return p.playerType.Human()
+}
+
+// IsComputer Returns true if player is controlled by computer.
+//
+// Note: deliberately named `IsComputer` instead of `Computer`
+// to avoid confusion with the package-level `Computer` player type constant.
+func (p *Player) IsComputer() bool {
+	return p.playerType.Computer()
+}
+
+// SetPlayerType Set the player as human or computer controlled.
+func (p *Player) SetPlayerType(playerType PlayerType) {
+	p.playerType = playerType
+}
+
+// SetHuman Set the player as human controlled.
+func (p *Player) SetHuman() {
+	p.SetPlayerType(Human)
+}
+
+// SetComputer Set the player as computer controlled.
+func (p *Player) SetComputer() {
+	p.SetPlayerType(Computer)
 }
 
 // Return move chosen by computer.
@@ -103,59 +149,42 @@ func (p *Player) getComputerMove(moves []Move) Move {
 // Return move chosen by a human player.
 func (p *Player) getHumanMove(moves []Move) Move {
 	for {
-		square := p.getSquare()
+		square := getSquare()
 		// Check that the chosen square is actually one of the possible moves
 		for _, validMove := range moves {
 			if validMove.Square == square {
 				return validMove
 			}
 		}
-		fmt.Printf("  Can't place a %s disk in square %s!\n", p.disk.DiskString(), square)
+		PrintError("  Can't place a %s disk in square %s!", p.disk.DiskString(), square)
 	}
 }
 
 // Ask human player for square coordinates.
-func (p *Player) getSquare() Square {
+func getSquare() Square {
 	for {
 		fmt.Print("  Give disk position (x,y): ")
 		var x, y int
-		_, err := fmt.Scanf("%d,%d", &x, &y)
-		if err == nil && x >= 0 && y >= 0 {
-			return Square{x, y}
+		if _, err := fmt.Scanf("%d,%d", &x, &y); err == nil && x >= 0 && y >= 0 {
+			return Square{X: x, Y: y}
 		}
-		fmt.Print(aurora.Red("  Give coordinates in the form 'x,y'\n\n"))
+		PrintError("  Give coordinates in the form 'x,y'!")
 	}
 }
 
-// Reset player status for a new game.
-func (p *Player) Reset() {
-	p.CanPlay = true
-	p.roundsPlayed = 0
+// Return player type description string.
+func (p *Player) typeString() string {
+	return p.playerType.String()
 }
 
-// Human Return whether the player is human controlled.
-func (p *Player) Human() bool {
-	return p.playerType == Human
+// Human Check if the player is controlled by a human.
+func (t PlayerType) Human() bool {
+	return t == Human
 }
 
-// IsComputer Return whether the player is computer controlled.
-func (p *Player) IsComputer() bool {
-	return p.playerType == Computer
-}
-
-// SetHuman Set the player as human controlled.
-func (p *Player) SetHuman() {
-	p.playerType = Human
-}
-
-// SetComputer Set the player as computer controlled.
-func (p *Player) SetComputer() {
-	p.playerType = Computer
-}
-
-// SetPlayerType Set the player type.
-func (p *Player) SetPlayerType(playerType PlayerType) {
-	p.playerType = playerType
+// Computer Check if the player is controlled by a computer.
+func (t PlayerType) Computer() bool {
+	return t == Computer
 }
 
 // String Return formatted player info string.
@@ -163,9 +192,9 @@ func (p *Player) String() string {
 	return fmt.Sprintf("%s | %s | Moves: %d", p.disk.DiskString(), p.typeString(), p.roundsPlayed)
 }
 
-// Return player type description string.
-func (p *Player) typeString() string {
-	if p.playerType == Human {
+// String Return player type description string.
+func (t PlayerType) String() string {
+	if t == Human {
 		return "Human   "
 	}
 	return "Computer"

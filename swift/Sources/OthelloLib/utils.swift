@@ -5,7 +5,6 @@
 // 2019-2026
 //==========================================================
 
-import ColorizeSwift
 import Crypto
 import Foundation
 
@@ -18,6 +17,7 @@ public func calculateSha256(_ text: String) -> String {
 }
 
 extension Comparable {
+    /// Clamp value to the given minimum and maximum values.
     func clamp(min: Self, max: Self) -> Self {
         Swift.max(min, Swift.min(self, max))
     }

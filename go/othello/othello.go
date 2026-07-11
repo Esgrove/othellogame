@@ -11,19 +11,17 @@ package othello
 import (
 	"fmt"
 	"strings"
-
-	"github.com/logrusorgru/aurora/v4"
 )
 
 // Othello Gameplay loop and main logic.
 type Othello struct {
 	board        Board
 	settings     Settings
-	gamesPlayed  int
 	playerBlack  Player
 	playerWhite  Player
-	roundsPlayed int
 	gameLog      []string
+	gamesPlayed  int
+	roundsPlayed int
 }
 
 // NewOthello Initialize Othello game.
@@ -33,6 +31,7 @@ func NewOthello(settings Settings) Othello {
 		settings:     settings,
 		playerBlack:  *BlackPlayer(settings.ToPlayerSettings()),
 		playerWhite:  *WhitePlayer(settings.ToPlayerSettings()),
+		gameLog:      []string{},
 		roundsPlayed: 0,
 		gamesPlayed:  0,
 	}
@@ -47,14 +46,15 @@ func (o *Othello) Play() {
 		if o.settings.ShowLog {
 			o.printLog()
 		}
-		if o.settings.AutoplayMode || !GetAnswer("Would you like to play again", "y", "n") {
+		if o.settings.AutoplayMode || !getAnswer("Would you like to play again", "y", "n") {
 			break
 		}
 	}
 }
 
-// Initialise game board and players for a new game.
+// Initialize game board and players for a new game.
 func (o *Othello) initGame() {
+	// Re-use existing objects instead of initializing new ones
 	if o.gamesPlayed > 0 {
 		o.board = NewBoard(o.settings.BoardSize)
 		o.playerBlack.Reset()
@@ -62,7 +62,6 @@ func (o *Othello) initGame() {
 		o.roundsPlayed = 0
 		o.gameLog = []string{}
 	}
-
 	if o.settings.AutoplayMode {
 		// Computer plays both
 		o.playerBlack.SetComputer()
@@ -70,8 +69,8 @@ func (o *Othello) initGame() {
 	} else if o.settings.UseDefaults {
 		// Default: play as black against white computer player
 		o.playerWhite.SetComputer()
-	} else if GetAnswer("Would you like to play against the computer", "y", "n") {
-		if GetAnswer("Would you like to play as black or white", "b", "w") {
+	} else if getAnswer("Would you like to play against the computer", "y", "n") {
+		if getAnswer("Would you like to play as black or white", "b", "w") {
 			o.playerWhite.SetComputer()
 		} else {
 			o.playerBlack.SetComputer()
@@ -85,15 +84,11 @@ func (o *Othello) initGame() {
 
 // Keep making moves until both players can't make a move any more.
 func (o *Othello) gameLoop() {
-	players := []*Player{&o.playerBlack, &o.playerWhite}
 	for o.board.CanPlay() && (o.playerBlack.CanPlay || o.playerWhite.CanPlay) {
 		o.roundsPlayed++
-		if !o.settings.CheckMode {
-			PrintBold("\n=========== ROUND: %d ===========", o.roundsPlayed)
-		}
-		for _, player := range players {
-			result := player.PlayOneMove(&o.board)
-			if result != nil {
+		o.printRoundHeader()
+		for _, player := range []*Player{&o.playerBlack, &o.playerWhite} {
+			if result := player.PlayOneMove(&o.board); result != nil {
 				o.gameLog = append(o.gameLog, fmt.Sprintf("%s;%s", *result, o.board.LogEntry()))
 			}
 			if !o.settings.CheckMode {
@@ -102,23 +97,38 @@ func (o *Othello) gameLoop() {
 		}
 	}
 	o.gamesPlayed++
+	o.printGameEndFooter()
+}
+
+// Format game log with line numbers for each move.
+func (o *Othello) formatGameLog() string {
+	lines := make([]string, len(o.gameLog))
+	for index, line := range o.gameLog {
+		lines[index] = fmt.Sprintf("%02d: %s", index+1, line)
+	}
+	return strings.Join(lines, "\n")
+}
+
+// Print header for the current round.
+func (o *Othello) printRoundHeader() {
 	if !o.settings.CheckMode {
-		PrintBold("\n================================")
-		fmt.Println(aurora.Green("The game is finished!"))
+		PrintBold(fmt.Sprintf("\n=========== ROUND: %d ===========", o.roundsPlayed))
 	}
 }
 
-// Print ending status and winner info.
-func (o *Othello) printLog() {
-	formattedLog := ""
-	for index, line := range o.gameLog {
-		formattedLog += fmt.Sprintf("%02d: %s", index+1, line)
-		if index < len(o.gameLog)-1 {
-			formattedLog += "\n"
-		}
-	}
+// Print footer after the game has ended.
+func (o *Othello) printGameEndFooter() {
 	if !o.settings.CheckMode {
-		fmt.Println(aurora.Yellow("Game log:").Bold())
+		PrintBold("\n================================")
+		PrintGreenBold("The game is finished!\n")
+	}
+}
+
+// Print game log which shows all moves made and the game board state after each move.
+func (o *Othello) printLog() {
+	formattedLog := o.formatGameLog()
+	if !o.settings.CheckMode {
+		PrintYellowBold("Game log:")
 		fmt.Println(formattedLog)
 	}
 	hexHash := CalculateSHA256(formattedLog)
@@ -127,7 +137,7 @@ func (o *Othello) printLog() {
 
 // Print ending status and winner info.
 func (o *Othello) printResult() {
-	PrintBold("\nResult:")
+	PrintBold("Result:")
 	o.printStatus()
 	fmt.Println()
 
@@ -142,13 +152,13 @@ func (o *Othello) printResult() {
 // Print current board and player info.
 func (o *Othello) printStatus() {
 	fmt.Println(o.playerBlack.String())
-	fmt.Print(o.playerWhite.String() + "\n\n")
+	fmt.Printf("%s\n\n", o.playerWhite.String())
 	fmt.Println(o.board.String())
 }
 
-// GetAnswer Ask a question with two options, and return bool from user answer.
-func GetAnswer(text, yes, no string) bool {
-	fmt.Printf("%s (%s/%s)? ", text, yes, no)
+// Ask a question with two options, and return bool from user answer.
+func getAnswer(question, yes, no string) bool {
+	fmt.Printf("%s (%s/%s)? ", question, yes, no)
 	var input string
 	if _, err := fmt.Scanln(&input); err == nil {
 		return strings.ToLower(strings.TrimSpace(input)) == yes
@@ -160,12 +170,14 @@ func GetAnswer(text, yes, no string) bool {
 func GetBoardSize() int {
 	fmt.Printf("Choose board size (default is %d): ", DefaultBoardSize)
 	var input int
-	_, err := fmt.Scanf("%d", &input)
-	if err != nil {
-		PrintWarn("Invalid size, defaulting to %d...", DefaultBoardSize)
-		return DefaultBoardSize
-	} else if input < MinBoardSize || input > MaxBoardSize {
-		PrintWarn("Limiting board size to valid range %d...%d", MinBoardSize, MaxBoardSize)
+	if _, err := fmt.Scanf("%d", &input); err == nil {
+		if input < MinBoardSize || input > MaxBoardSize {
+			PrintYellow(fmt.Sprintf(
+				"Limiting board size to valid range %d..%d", MinBoardSize, MaxBoardSize,
+			))
+		}
+		return Clamp(input, MinBoardSize, MaxBoardSize)
 	}
-	return Clamp(input, MinBoardSize, MaxBoardSize)
+	PrintWarn("Invalid size, defaulting to %d...", DefaultBoardSize)
+	return DefaultBoardSize
 }

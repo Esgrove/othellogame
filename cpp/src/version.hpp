@@ -15,6 +15,12 @@ static constexpr auto BUILD_TIME = COMPILE_TIME_BUILD_TIME;
 static constexpr auto VERSION_NUMBER = COMPILE_TIME_VERSION_NUMBER;
 static constexpr auto VERSION_STRING = COMPILE_TIME_VERSION_STRING;
 
+/// Return version info string
+[[nodiscard]] constexpr const char* version_info()
+{
+    return VERSION_STRING;
+}
+
 /// Compile-time formatted version string.
 ///
 /// Enable once supported by all implementations.

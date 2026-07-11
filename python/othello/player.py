@@ -5,94 +5,102 @@ Akseli Lukkarila
 2019-2026
 """
 
+from __future__ import annotations
+
 import random
 import time
+
+from enum import IntEnum
 from typing import Self
 
 try:
     from othello.board import Board
-    from othello.colorprint import Color, print_color, print_error
-    from othello.models import Disk, Square, Move, PlayerType
+    from othello.colorprint import print_error, print_yellow
+    from othello.models import Disk, Move, Square
     from othello.settings import PlayerSettings
 except ModuleNotFoundError:
     from board import Board
-    from colorprint import Color, print_color, print_error
-    from models import Disk, Move, PlayerType, Square
+    from colorprint import print_error, print_yellow
+    from models import Disk, Move, Square
     from settings import PlayerSettings
 
 
 class Player:
     """Defines one player that can be either human or computer controlled."""
 
-    def __init__(self, disk: Disk, settings=PlayerSettings.default(), player_type=PlayerType.HUMAN):
+    def __init__(self, disk: Disk, settings: PlayerSettings | None = None):
+        """Initialize new player for the given disk color."""
         self.can_play: bool = True
         self._disk: Disk = disk
-        self._player_type: PlayerType = player_type
+        self._player_type: PlayerType = PlayerType.HUMAN
         self._rounds_played: int = 0
-        self._settings: PlayerSettings = settings
+        self._settings: PlayerSettings = (
+            settings if settings is not None else PlayerSettings.default()
+        )
 
     @classmethod
     def black(cls, settings: PlayerSettings) -> Self:
         """Shorthand to initialize a new player for black disks."""
-        return Player(Disk.BLACK, settings, PlayerType.HUMAN)
+        return cls(Disk.BLACK, settings)
 
     @classmethod
     def white(cls, settings: PlayerSettings) -> Self:
         """Shorthand to initialize a new player for white disks."""
-        return Player(Disk.WHITE, settings, PlayerType.COMPUTER)
+        return cls(Disk.WHITE, settings)
 
     def play_one_move(self, board: Board) -> str | None:
         """Play one round as this player."""
         if not self._settings.check_mode:
-            print(f"Turn: {str(self._disk)}")
+            print(f"Turn: {self._disk}")
 
-        if moves := board.possible_moves(self._disk):
-            self.can_play = True
-            if self.human() and self._settings.show_helpers and not self._settings.check_mode:
-                board.print_possible_moves(moves)
-
-            chosen_move = (
-                self._get_human_move(moves) if self.human() else self._get_computer_move(moves)
-            )
-            board.place_disk(chosen_move)
+        moves = board.possible_moves(self._disk)
+        if not moves:
+            self.can_play = False
             if not self._settings.check_mode:
-                board.print_score()
-            self._rounds_played += 1
-            if not self._settings.test_mode:
-                time.sleep(1)
+                print_yellow("  No moves available...")
 
-            return chosen_move.log_entry()
+            return None
 
-        self.can_play = False
+        self.can_play = True
+        if self.human() and self._settings.show_helpers and not self._settings.check_mode:
+            board.print_possible_moves(moves)
+
+        chosen_move = (
+            self._get_human_move(moves) if self.human() else self._get_computer_move(moves)
+        )
+        board.place_disk(chosen_move)
         if not self._settings.check_mode:
-            print_color("  No moves available...", Color.yellow)
+            board.print_score()
+        self._rounds_played += 1
+        if not self._settings.test_mode:
+            time.sleep(1)
 
-        return None
-
-    def human(self) -> bool:
-        """Returns true if the player is human."""
-        return self._player_type.human()
-
-    def computer(self) -> bool:
-        """Returns true if the player is controlled by computer."""
-        return self._player_type.computer()
+        return chosen_move.log_entry()
 
     def reset(self) -> None:
         """Reset player status for a new game."""
         self.can_play = True
         self._rounds_played = 0
 
+    def human(self) -> bool:
+        """Returns true if player is controlled by a human player."""
+        return self._player_type.human()
+
+    def computer(self) -> bool:
+        """Returns true if player is controlled by computer."""
+        return self._player_type.computer()
+
+    def set_player_type(self, player_type: PlayerType) -> None:
+        """Set the player as human or computer controlled."""
+        self._player_type = player_type
+
     def set_human(self) -> None:
         """Set the player as human controlled."""
-        self._player_type = PlayerType.HUMAN
+        self.set_player_type(PlayerType.HUMAN)
 
     def set_computer(self) -> None:
         """Set the player as computer controlled."""
-        self._player_type = PlayerType.COMPUTER
-
-    def set_player_type(self, player_type: PlayerType) -> None:
-        """Set the player type."""
-        self._player_type = player_type
+        self.set_player_type(PlayerType.COMPUTER)
 
     def _get_computer_move(self, moves: list[Move]) -> Move:
         """Return move chosen by computer."""
@@ -126,16 +134,40 @@ class Player:
     def _get_square() -> Square:
         """Ask human player for square coordinates."""
         while True:
-            try:
-                pos = input("  Give disk position (x,y): ")
-                x, y = (int(i) for i in pos.split(",") if i.strip())
-                return Square(x, y)
-            except ValueError:
-                print_error("  Give coordinates in the form 'x,y'!")
+            pos = input("  Give disk position (x,y): ")
+            values = pos.strip().split(",")
+            if len(values) == 2:
+                try:
+                    x = int(values[0])
+                    y = int(values[1])
+                except ValueError:
+                    x, y = -1, -1
+                if x >= 0 and y >= 0:
+                    return Square(x, y)
 
-    def _type_string(self) -> str:
+            print_error("  Give coordinates in the form 'x,y'!")
+
+    def type_string(self) -> str:
         """Return player type description string."""
         return str(self._player_type)
 
     def __str__(self) -> str:
-        return f"{str(self._disk)} | {self._type_string()} | Moves: {self._rounds_played}"
+        return f"{self._disk} | {self.type_string()} | Moves: {self._rounds_played}"
+
+
+class PlayerType(IntEnum):
+    """Player can be controlled either by a human or computer."""
+
+    HUMAN = 0
+    COMPUTER = 1
+
+    def human(self) -> bool:
+        """Check if the player is controlled by a human."""
+        return self == PlayerType.HUMAN
+
+    def computer(self) -> bool:
+        """Check if the player is controlled by a computer."""
+        return self == PlayerType.COMPUTER
+
+    def __str__(self) -> str:
+        return "Human   " if self == PlayerType.HUMAN else "Computer"

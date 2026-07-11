@@ -6,59 +6,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.services.*
 import org.gradle.api.tasks.*
 
-abstract class ExecHelper @Inject constructor(val execOps: ExecOperations) :
-    BuildService<BuildServiceParameters.None>
-
-abstract class WriteVersionTask : DefaultTask() {
-    @get:OutputDirectory
-    abstract val outputDir: DirectoryProperty
-
-    @get:Input
-    abstract val appName: Property<String>
-
-    @get:Input
-    abstract val appVersion: Property<String>
-
-    @get:Internal
-    abstract val execOps: Property<ExecOperations>
-
-    @TaskAction
-    fun generate() {
-        fun execAndCapture(vararg args: String): String {
-            val out = ByteArrayOutputStream()
-            execOps.get().exec {
-                commandLine(*args)
-                standardOutput = out
-                isIgnoreExitValue = true
-            }
-            return out.toString().trim().ifBlank { "dev" }
-        }
-
-        val gitBranch = execAndCapture("git", "rev-parse", "--abbrev-ref", "HEAD")
-        val gitCommit = execAndCapture("git", "rev-parse", "--short", "HEAD")
-        val buildTime = execAndCapture("date", "-u", "+%Y-%m-%d_%H%M")
-        val formattedVersion = "${appName.get()} ${appVersion.get()} $buildTime $gitBranch $gitCommit"
-
-        val file = outputDir.get().file("othello/VersionInfo.java").asFile
-        file.parentFile.mkdirs()
-        file.writeText(
-            """
-            package othello;
-
-            public final class VersionInfo {
-                public static final String APP_NAME = "${appName.get()}";
-                public static final String BUILD_TIME = "$buildTime";
-                public static final String GIT_BRANCH = "$gitBranch";
-                public static final String GIT_COMMIT = "$gitCommit";
-                public static final String VERSION_NUMBER = "${appVersion.get()}";
-                public static final String VERSION_STRING = "$formattedVersion";
-            }
-            """.trimIndent()
-        )
-    }
-}
-
-version = "1.1.0"
+version = "2.0.0"
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
@@ -77,8 +25,10 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/org.junit/junit-bom
     testImplementation(platform("org.junit:junit-bom:6.1.1"))
+
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
     testImplementation("org.junit.jupiter:junit-jupiter")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // https://mvnrepository.com/artifact/com.google.guava/guava
@@ -91,7 +41,7 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -99,11 +49,20 @@ application {
     mainClass.set("othello.Main")
 }
 
+spotless {
+    ratchetFrom("origin/main")
+    java {
+        target("src/**/*.java")
+        eclipse().configFile("eclipse-format.xml")
+        formatAnnotations()
+    }
+}
+
 val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
 
-val writeVersionFile by tasks.registering(WriteVersionTask::class) {
+val writeVersionFile = tasks.register<WriteVersionTask>("writeVersionFile") {
     outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/java"))
-    appName.set(project.name)
+    appName.set("Othello Java")
     appVersion.set(project.version.toString())
     execOps.set(execHelper.map { it.execOps })
 }
@@ -123,7 +82,7 @@ tasks.register<JavaExec>("othello") {
     standardInput = System.`in`
 
     javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     })
 }
 
@@ -144,15 +103,6 @@ tasks.test {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
         showCauses = true
         showStackTraces = false
-    }
-}
-
-spotless {
-    ratchetFrom("origin/main")
-    java {
-        target("src/**/*.java")
-        eclipse().configFile("eclipse-format.xml")
-        formatAnnotations()
     }
 }
 
@@ -201,4 +151,66 @@ tasks.register<Jar>("fatJar") {
             .filter { it.name.endsWith("jar") }
             .map { zipTree(it) }
     })
+}
+
+abstract class ExecHelper @Inject constructor(val execOps: ExecOperations) :
+    BuildService<BuildServiceParameters.None>
+
+abstract class WriteVersionTask : DefaultTask() {
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @get:Input
+    abstract val appName: Property<String>
+
+    @get:Input
+    abstract val appVersion: Property<String>
+
+    @get:Internal
+    abstract val execOps: Property<ExecOperations>
+
+    @TaskAction
+    fun generate() {
+        fun execAndCapture(vararg args: String): String {
+            val out = ByteArrayOutputStream()
+            execOps.get().exec {
+                commandLine(*args)
+                standardOutput = out
+                isIgnoreExitValue = true
+            }
+            return out.toString().trim().ifBlank { "dev" }
+        }
+
+        val gitBranch = execAndCapture("git", "rev-parse", "--abbrev-ref", "HEAD")
+        val gitCommit = execAndCapture("git", "rev-parse", "--short", "HEAD")
+        val buildTime = execAndCapture("date", "-u", "+%Y-%m-%d_%H%M")
+        val formattedVersion = "${appName.get()} ${appVersion.get()} $buildTime $gitBranch $gitCommit"
+
+        val file = outputDir.get().file("othello/VersionInfo.java").asFile
+        file.parentFile.mkdirs()
+        file.writeText(
+            """
+            package othello;
+
+            /**
+             * Version information.
+             */
+            public final class VersionInfo {
+                public static final String APP_NAME = "${appName.get()}";
+                public static final String BUILD_TIME = "$buildTime";
+                public static final String GIT_BRANCH = "$gitBranch";
+                public static final String GIT_COMMIT = "$gitCommit";
+                public static final String VERSION_NUMBER = "${appVersion.get()}";
+                public static final String VERSION_STRING = "$formattedVersion";
+
+                /**
+                 * Return version info string.
+                 */
+                public static String versionInfo() {
+                    return VERSION_STRING;
+                }
+            }
+            """.trimIndent()
+        )
+    }
 }

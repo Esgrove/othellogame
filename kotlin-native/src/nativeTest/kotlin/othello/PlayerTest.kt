@@ -2,17 +2,14 @@ package othello
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class PlayerTest {
     @Test
     fun newPlayer() {
         val player = Player.default()
-
         assertEquals(Disk.Black, player.disk)
         assertTrue(player.human())
-        assertFalse(player.computer())
         assertTrue(player.canPlay)
         assertEquals(0, player.roundsPlayed)
         assertEquals(PlayerSettings.default(), player.settings)
@@ -20,7 +17,7 @@ class PlayerTest {
 
     @Test
     fun resetPlayer() {
-        val player = Player.white(PlayerSettings.default())
+        val player = Player(Disk.White, PlayerSettings.default())
         player.canPlay = false
         player.roundsPlayed = 10
         player.reset()
@@ -29,18 +26,14 @@ class PlayerTest {
     }
 
     @Test
-    fun setHumanAndComputer() {
+    fun setHuman() {
         val player = Player.default()
-
-        assertTrue(player.human())
-
         player.setComputer()
         assertTrue(player.computer())
-        assertFalse(player.human())
-
+        assertEquals(PlayerType.Computer, player.playerType)
         player.setHuman()
         assertTrue(player.human())
-        assertFalse(player.computer())
+        assertEquals(PlayerType.Human, player.playerType)
     }
 
     @Test

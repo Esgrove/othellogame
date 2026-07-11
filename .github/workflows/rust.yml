@@ -23,6 +23,10 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
+  # Override `target-cpu=native` from .cargo/config.toml:
+  # cached build artifacts are shared between runners with different CPUs,
+  # so natively-targeted code can crash with SIGILL on another runner.
+  RUSTFLAGS: ""
 
 defaults:
   run:

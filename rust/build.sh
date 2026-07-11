@@ -6,9 +6,13 @@ DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../common.sh
 source "$DIR/../common.sh"
 
+FORCE_BUILD=false
 RUN_TESTS=false
 for arg in "$@"; do
     case "$arg" in
+        -f | --force)
+            FORCE_BUILD=true
+            ;;
         -t | --test)
             RUN_TESTS=true
             ;;
@@ -25,8 +29,11 @@ fi
 
 cd "$REPO_ROOT/rust"
 
-# Touch main source file to ensure rebuild and updated version info
-touch src/main.rs
+if [ "$FORCE_BUILD" = true ]; then
+    # Touch build script to rerun it so version info gets updated,
+    # since it only reruns when build.rs itself changes (cargo:rerun-if-changed).
+    touch build.rs
+fi
 
 cargo build --release
 

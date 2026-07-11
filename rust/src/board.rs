@@ -11,6 +11,7 @@ use std::fmt;
 use colored::{ColoredString, Colorize};
 
 use crate::models::{Direction, Disk, Move, Square, Step};
+use crate::print_yellow;
 
 const UP: isize = 1;
 const DOWN: isize = -1;
@@ -39,6 +40,7 @@ pub struct Board {
 }
 
 impl Board {
+    /// Initialize a new board for the given board size.
     pub fn new(size: usize) -> Self {
         let board = Self::init_board(size);
         // Index list (0...size) to avoid repeating same range in loops.
@@ -58,6 +60,7 @@ impl Board {
     }
 
     /// Return true if board contains empty squares.
+    #[must_use]
     pub fn can_play(&self) -> bool {
         !self.empty_squares.is_empty()
     }
@@ -80,6 +83,7 @@ impl Board {
     }
 
     /// Returns a list of possible moves for the given player.
+    #[must_use]
     pub fn possible_moves(&self, disk: Disk) -> Vec<Move> {
         let mut moves: Vec<Move> = Vec::new();
         let opposing_disk = disk.opponent();
@@ -113,18 +117,13 @@ impl Board {
                 });
             }
         }
-        if !moves.is_empty() {
-            moves.sort();
-        }
+        moves.sort();
         moves
     }
 
     /// Print board with available move coordinates and the resulting points gained.
-    pub fn print_possible_moves(&self, moves: &Vec<Move>) {
-        println!(
-            "{}",
-            format!("  Possible moves ({}):", moves.len()).yellow()
-        );
+    pub fn print_possible_moves(&self, moves: &[Move]) {
+        print_yellow!("  Possible moves ({}):", moves.len());
         // Convert board from Disk enums to strings
         let mut formatted_board: Vec<ColoredString> = self
             .board
@@ -139,31 +138,17 @@ impl Board {
             println!("  {possible_move}");
         }
         // Print board with move positions
-        let header: String = std::iter::once("    ".to_string())
-            .chain(
-                self.indices
-                    .iter()
-                    .map(|i| format!("{}", i.to_string().bold())),
-            )
-            .collect::<Vec<_>>()
-            .join(" ");
-
-        let board: String = self
-            .indices
-            .iter()
-            .map(|y| {
-                let row = self
-                    .indices
-                    .iter()
-                    .map(|x| formatted_board[y * self.size + x].to_string())
-                    .collect::<Vec<_>>()
-                    .join(" ");
-                format!("  {} {}", y.to_string().bold(), row)
-            })
-            .collect::<Vec<_>>()
-            .join("\n");
-
-        println!("{header}\n{board}");
+        print!("    ");
+        for i in &self.indices {
+            print!(" {}", i.to_string().bold());
+        }
+        for y in &self.indices {
+            print!("\n  {}", y.to_string().bold());
+            for x in &self.indices {
+                print!(" {}", formatted_board[y * self.size + x]);
+            }
+        }
+        println!();
     }
 
     /// Print current score for both players.
@@ -178,6 +163,7 @@ impl Board {
     }
 
     /// Returns the winning disk colour. Empty indicates a draw.
+    #[must_use]
     pub fn result(&self) -> Disk {
         let total_score = self.score();
         match total_score.cmp(&0) {
@@ -188,6 +174,7 @@ impl Board {
     }
 
     /// Get board status string for game log.
+    #[must_use]
     pub fn log_entry(&self) -> String {
         self.board.iter().map(|&disk| disk.board_char()).collect()
     }

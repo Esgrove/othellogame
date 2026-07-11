@@ -10,7 +10,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import kotlin.system.exitProcess
 
-class OthelloKotlin : CliktCommand("Othello Kotlin") {
+/** Command line arguments. */
+class OthelloKotlin : CliktCommand("othello_kotlin") {
     private val size by argument(
         "size",
         help = "Optional board size ($MIN_BOARD_SIZE..$MAX_BOARD_SIZE)",
@@ -29,12 +30,17 @@ class OthelloKotlin : CliktCommand("Othello Kotlin") {
     override fun help(context: Context) = "A simple Othello CLI game implementation in Kotlin"
 
     override fun run() {
+        if (autoplay && default) {
+            printError("the argument '--autoplay' cannot be used with '--default'")
+            exitProcess(2)
+        }
+
         if (version) {
             println(VersionInfo.VERSION_STRING)
             exitProcess(0)
         }
 
-        printBold("OTHELLO GAME - KOTLIN", AnsiColor.GREEN)
+        printGreenBold("OTHELLO GAME - KOTLIN")
 
         val boardSize = resolveBoardSize()
 
@@ -51,6 +57,7 @@ class OthelloKotlin : CliktCommand("Othello Kotlin") {
         Othello(settings).play()
     }
 
+    /** Resolve the board size to use from CLI arguments, or by asking the user. */
     private fun resolveBoardSize(): Int {
         // Try to read board size from command line args
         if (size != null) {
@@ -64,7 +71,8 @@ class OthelloKotlin : CliktCommand("Othello Kotlin") {
         } else if (autoplay || default) {
             return DEFAULT_BOARD_SIZE
         } else {
-            return getBoardSize()
+            // Otherwise ask user for board size
+            return Othello.getBoardSize()
         }
     }
 }

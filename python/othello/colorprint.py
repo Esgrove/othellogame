@@ -1,11 +1,9 @@
 """
 Colorprint
-Color print helper
+Interface for coloured terminal printing
 Akseli Lukkarila
-2019-2025
+2019-2026
 """
-
-import sys
 
 import colorama
 
@@ -24,17 +22,18 @@ class Color:
     yellow = colorama.Fore.YELLOW
 
 
-def get_color(text: str, color=Color.white, bold=False) -> str:
+def get_color(text: str, color: str = "", bold: bool = False) -> str:
     """Format string with colour using Colorama."""
-    return f"{colorama.Style.BRIGHT if bold else ''}{color}{text}{colorama.Style.RESET_ALL}"
+    if bold and color:
+        # Combine bold and colour into a single ANSI escape sequence
+        # to match the output of the Rust `colored` crate
+        return f"\033[1;{color[2:]}{text}{colorama.Style.RESET_ALL}"
+    if bold or color:
+        return f"{colorama.Style.BRIGHT if bold else color}{text}{colorama.Style.RESET_ALL}"
+    return text
 
 
-def print_bold(text: str, color=Color.white, **kwargs):
-    """Print bold text."""
-    print(get_color(text, color, True), **kwargs)
-
-
-def print_color(text: str, color=Color.white, bold=False, **kwargs):
+def print_color(text: str, color: str = "", bold: bool = False, **kwargs):
     """
     Print text with specified colour using Colorama.
 
@@ -50,49 +49,54 @@ def print_color(text: str, color=Color.white, bold=False, **kwargs):
     print(get_color(text, color, bold), **kwargs)
 
 
-def print_error_and_exit(message: str, exit_code=1):
-    """Print error message and exit with given exit code."""
-    print_error(message)
-    sys.exit(exit_code)
+def print_bold(text: str):
+    """Print bold text."""
+    print_color(text, bold=True)
 
 
-def print_error(message: str, bold=False, **kwargs):
+def print_green(text: str):
+    """Print text in green."""
+    print_color(text, Color.green)
+
+
+def print_green_bold(text: str):
+    """Print bold text in green."""
+    print_color(text, Color.green, bold=True)
+
+
+def print_yellow(text: str):
+    """Print text in yellow."""
+    print_color(text, Color.yellow)
+
+
+def print_yellow_bold(text: str):
+    """Print bold text in yellow."""
+    print_color(text, Color.yellow, bold=True)
+
+
+def print_red(text: str):
+    """Print text in red."""
+    print_color(text, Color.red)
+
+
+def print_red_bold(text: str):
+    """Print bold text in red."""
+    print_color(text, Color.red, bold=True)
+
+
+def print_error(message: str, **kwargs):
     """Print error message with red colour."""
     indent, text = _split_leading_whitespace(message)
-    print_color(f"{indent}ERROR: {text}", Color.red, bold, **kwargs)
+    print_color(f"{indent}Error: {text}", Color.red, **kwargs)
 
 
-def print_warn(message: str, bold=False, **kwargs):
+def print_warn(message: str, **kwargs):
     """Print warning message with yellow colour."""
     indent, text = _split_leading_whitespace(message)
-    print_color(f"{indent}WARNING: {text}", Color.yellow, bold, **kwargs)
+    print_color(f"{indent}Warning: {text}", Color.yellow, **kwargs)
 
 
-def print_green(text: str, bold=False, **kwargs):
-    print_color(text, Color.green, bold, **kwargs)
-
-
-def print_yellow(text: str, bold=False, **kwargs):
-    print_color(text, Color.yellow, bold, **kwargs)
-
-
-def print_red(text: str, bold=False, **kwargs):
-    print_color(text, Color.red, bold, **kwargs)
-
-
-def print_blue(text: str, bold=False, **kwargs):
-    print_color(text, Color.red, bold, **kwargs)
-
-
-def print_magenta(text: str, bold=False, **kwargs):
-    print_color(text, Color.magenta, bold, **kwargs)
-
-
-def print_cyan(text: str, bold=False, **kwargs):
-    print_color(text, Color.cyan, bold, **kwargs)
-
-
-def _split_leading_whitespace(message: str) -> (str, str):
+def _split_leading_whitespace(message: str) -> tuple[str, str]:
     """Split a string into the leading whitespace and the rest of the string."""
     indent_size = next((i for i, c in enumerate(message) if not c.isspace()), len(message))
     indent = message[:indent_size]

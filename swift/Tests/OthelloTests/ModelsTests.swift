@@ -1,6 +1,55 @@
 @testable import OthelloLib
 import Testing
 
+@Test func stepAddition() {
+    var result = Step(x: 0, y: 0) + Step(x: 1, y: 1)
+    #expect(result == Step(x: 1, y: 1))
+
+    result = Step(x: -1, y: 0) + Step(x: 1, y: 0)
+    #expect(result == Step(x: 0, y: 0))
+
+    result += Step(x: -1, y: -1)
+    #expect(result == Step(x: -1, y: -1))
+
+    result += Step(x: 1, y: 1)
+    #expect(result == Step(x: 0, y: 0))
+}
+
+@Test func squareAddition() {
+    var result = Square(x: 4, y: 4) + Square(x: 1, y: 1)
+    #expect(result == Square(x: 5, y: 5))
+
+    result = Square(x: 4, y: 4) + Square(x: 0, y: 0)
+    #expect(result == Square(x: 4, y: 4))
+
+    result = Square(x: 4, y: 4) + Step(x: -1, y: 1)
+    #expect(result == Square(x: 3, y: 5))
+
+    result += Square(x: 0, y: 0)
+    #expect(result == Square(x: 3, y: 5))
+
+    let another = Square(x: -3, y: -2) + Square(x: 2, y: 3)
+    #expect(another == Square(x: -1, y: 1))
+
+    result += Step(x: -1, y: -1)
+    #expect(result == Square(x: 2, y: 4))
+
+    result += Step(x: -1, y: -1)
+    #expect(result == Square(x: 1, y: 3))
+
+    result += Step(x: -1, y: -1)
+    #expect(result == Square(x: 0, y: 2))
+
+    result += Step(x: -1, y: -1)
+    #expect(result == Square(x: -1, y: 1))
+
+    result += Step(x: 1, y: -1)
+    #expect(result == Square(x: 0, y: 0))
+
+    result += Step(x: -1, y: -1)
+    #expect(result == Square(x: -1, y: -1))
+}
+
 @Test func stepDirections() {
     let origin = Square(x: 1, y: 1)
     let steps: [(Step, Square)] = [
@@ -19,9 +68,9 @@ import Testing
 }
 
 @Test func diskBoardChar() {
-    #expect(Disk.black.boardChar(color: false) == "B")
-    #expect(Disk.empty.boardChar(color: false) == "_")
-    #expect(Disk.white.boardChar(color: false) == "W")
+    #expect(Disk.black.boardChar() == "B")
+    #expect(Disk.empty.boardChar() == "_")
+    #expect(Disk.white.boardChar() == "W")
 }
 
 @Test func diskOpponent() {

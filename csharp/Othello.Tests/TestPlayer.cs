@@ -1,33 +1,44 @@
-namespace Othello.Tests {
-    public class TestPlayer {
-        [Fact]
-        public void NewPlayer() {
-            Player player = Player.Black(new PlayerSettings(false, true, false));
-            Assert.True(player.CanPlay);
-            Assert.True(player.Human());
-            Assert.False(player.Computer());
-        }
+namespace Othello.Tests;
 
-        [Fact]
-        public void ResetPlayer() {
-            Player player = Player.White(new PlayerSettings(false, true, false));
-            player.CanPlay = false;
-            player.Reset();
-            Assert.True(player.CanPlay);
-        }
+public class TestPlayer {
+    [Fact]
+    public void NewPlayer() {
+        Player player = new(Disk.Black, PlayerSettings.Default());
+        Assert.Equal(Disk.Black, player.Disk);
+        Assert.True(player.Human());
+        Assert.True(player.CanPlay);
+        Assert.Equal(0, player.RoundsPlayed);
+        Assert.Equal(PlayerSettings.Default(), player.Settings);
+    }
 
-        [Fact]
-        public void SetHumanAndComputer() {
-            Player player = Player.Black(new PlayerSettings(false, true, false));
-            Assert.True(player.Human());
+    [Fact]
+    public void ResetPlayer() {
+        Player player = new(Disk.White, PlayerSettings.Default());
+        player.CanPlay = false;
+        player.RoundsPlayed = 10;
+        player.Reset();
+        Assert.True(player.CanPlay);
+        Assert.Equal(0, player.RoundsPlayed);
+    }
 
-            player.SetComputer();
-            Assert.True(player.Computer());
-            Assert.False(player.Human());
+    [Fact]
+    public void SetHuman() {
+        Player player = new(Disk.Black, PlayerSettings.Default());
+        player.SetComputer();
+        Assert.True(player.Computer());
+        Assert.False(player.Human());
 
-            player.SetHuman();
-            Assert.True(player.Human());
-            Assert.False(player.Computer());
-        }
+        player.SetHuman();
+        Assert.True(player.Human());
+        Assert.False(player.Computer());
+    }
+
+    [Fact]
+    public void PlayerTypeString() {
+        Player player = new(Disk.Black, PlayerSettings.Default());
+        Assert.Equal("Human   ", player.TypeString());
+
+        player.SetComputer();
+        Assert.Equal("Computer", player.TypeString());
     }
 }
