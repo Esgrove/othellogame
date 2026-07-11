@@ -5,7 +5,7 @@ version = "2.0.0"
 
 val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
 
-val writeVersionFile by tasks.registering(WriteVersionTask::class) {
+val writeVersionFile = tasks.register<WriteVersionTask>("writeVersionFile") {
     outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/kotlin"))
     appName.set("Othello Kotlin")
     appVersion.set(project.version.toString())
@@ -30,7 +30,6 @@ kotlin {
     val isMingwX64 = hostOs.startsWith("Windows")
     val nativeTarget = when {
         hostOs == "Mac OS X" && isArm64 -> macosArm64("native")
-        hostOs == "Mac OS X" && !isArm64 -> macosX64("native")
         hostOs == "Linux" && isArm64 -> linuxArm64("native")
         hostOs == "Linux" && !isArm64 -> linuxX64("native")
         isMingwX64 -> mingwX64("native")

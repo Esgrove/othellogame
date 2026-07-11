@@ -95,7 +95,7 @@ Kotlin 2 and [Gradle](https://gradle.org/kotlin/).
 
 ### Java
 
-Java 21 and [Gradle](https://gradle.org).
+Java 25 and [Gradle](https://gradle.org).
 
 ### TypeScript
 

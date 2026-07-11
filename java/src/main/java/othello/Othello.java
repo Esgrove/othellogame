@@ -186,7 +186,7 @@ public class Othello {
                 );
             }
             return Utils.clamp(boardSize, MIN_BOARD_SIZE, MAX_BOARD_SIZE);
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException _) {}
         ColorPrint.printWarn("Invalid size, defaulting to " + DEFAULT_BOARD_SIZE + "...");
         return DEFAULT_BOARD_SIZE;
     }

@@ -13,7 +13,7 @@ version = "2.0.0"
 
 val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
 
-val writeVersionFile by tasks.registering(WriteVersionTask::class) {
+val writeVersionFile = tasks.register<WriteVersionTask>("writeVersionFile") {
     outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/kotlin"))
     appName.set("Othello Kotlin")
     appVersion.set(project.version.toString())
@@ -40,7 +40,16 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:33.6.0-jre")
     // https://github.com/ajalt/clikt
-    implementation("com.github.ajalt.clikt:clikt:5.1.0")
+    implementation("com.github.ajalt.clikt:clikt:5.1.0") {
+        // Exclude native terminal interface providers (JNA / FFM / Graal FFI):
+        // they call restricted native methods, which Java 24+ warns about and will
+        // eventually block unless native access is explicitly granted.
+        // Mordant is only used for clikt help formatting, so the pure-Java
+        // fallback terminal detection is sufficient.
+        exclude(group = "com.github.ajalt.mordant", module = "mordant-jvm-jna")
+        exclude(group = "com.github.ajalt.mordant", module = "mordant-jvm-ffm")
+        exclude(group = "com.github.ajalt.mordant", module = "mordant-jvm-graal-ffi")
+    }
     // https://github.com/square/okio
     implementation("com.squareup.okio:okio:3.17.0")
 }
@@ -66,7 +75,7 @@ tasks.named("compileKotlin") {
 testing {
     suites {
         // Configure the built-in test suite
-        val test by getting(JvmTestSuite::class) {
+        named<JvmTestSuite>("test") {
             // Use Kotlin Test framework
             useKotlinTest("1.8.10")
         }

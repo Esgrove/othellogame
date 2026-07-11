@@ -78,7 +78,7 @@ public class Player {
         if (!settings.testMode()) {
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException _) {}
         }
         return chosenMove.logEntry();
     }
@@ -140,7 +140,7 @@ public class Player {
             // Wait a bit and pick a random move
             try {
                 Thread.sleep(1000 + random.nextInt(1000));
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException _) {}
             chosenMove = moves.get(random.nextInt(moves.size()));
         }
         if (!settings.checkMode()) {
@@ -180,7 +180,7 @@ public class Player {
                     if (x >= 0 && y >= 0) {
                         return new Square(x, y);
                     }
-                } catch (NumberFormatException ignored) {}
+                } catch (NumberFormatException _) {}
             }
             ColorPrint.printError("  Give coordinates in the form 'x,y'!");
         }

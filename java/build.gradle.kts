@@ -41,7 +41,7 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -60,7 +60,7 @@ spotless {
 
 val execHelper = gradle.sharedServices.registerIfAbsent("execHelper", ExecHelper::class) {}
 
-val writeVersionFile by tasks.registering(WriteVersionTask::class) {
+val writeVersionFile = tasks.register<WriteVersionTask>("writeVersionFile") {
     outputDir.set(layout.buildDirectory.dir("generated/sources/versioninfo/java"))
     appName.set("Othello Java")
     appVersion.set(project.version.toString())
@@ -82,7 +82,7 @@ tasks.register<JavaExec>("othello") {
     standardInput = System.`in`
 
     javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     })
 }
 
