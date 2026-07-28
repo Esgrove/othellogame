@@ -23,10 +23,10 @@ val writeVersionFile = tasks.register<WriteVersionTask>("writeVersionFile") {
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.4.10"
     // https://github.com/GradleUp/shadow
-    id("com.gradleup.shadow") version "9.6.0"
+    id("com.gradleup.shadow") version "9.6.1"
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.8.0"
+    id("com.diffplug.spotless") version "8.9.0"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -51,7 +51,7 @@ dependencies {
         exclude(group = "com.github.ajalt.mordant", module = "mordant-jvm-graal-ffi")
     }
     // https://github.com/square/okio
-    implementation("com.squareup.okio:okio:3.17.0")
+    implementation("com.squareup.okio:okio:3.18.0")
 }
 
 java {
