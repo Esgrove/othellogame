@@ -14,7 +14,7 @@ plugins {
     java
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.8.0"
+    id("com.diffplug.spotless") version "8.9.0"
 }
 
 repositories {
