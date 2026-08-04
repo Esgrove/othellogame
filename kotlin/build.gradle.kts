@@ -51,7 +51,7 @@ dependencies {
         exclude(group = "com.github.ajalt.mordant", module = "mordant-jvm-graal-ffi")
     }
     // https://github.com/square/okio
-    implementation("com.squareup.okio:okio:3.18.0")
+    implementation("com.squareup.okio:okio:3.18.1")
 }
 
 java {
