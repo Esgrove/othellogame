@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Pastel" Version="8.0.0" />
-    <PackageReference Include="System.CommandLine" Version="2.0.10" />
+    <PackageReference Include="System.CommandLine" Version="2.0.11" />
   </ItemGroup>
   <!-- Generate Version.g.cs with git and build info at compile time -->
   <Target Name="GenerateVersionInfo" BeforeTargets="CoreCompile">
