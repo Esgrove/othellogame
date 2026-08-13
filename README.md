@@ -8,7 +8,7 @@ Since then, I figured that this could actually be a useful personal project to:
 
 1. try out and learn new languages by re-implementing it,
 2. compare different languages easily with each other, and
-3. be a practical syntax, formatting, and tooling reference for each language.
+3. be a practical syntax and tooling reference for each language.
 
 I have cleaned up and improved both my old implementations in Python and C++,
 the two languages I have been using the most.
@@ -24,7 +24,7 @@ especially since it is possible to compare side-by-side with the other implement
 
 So far, I have added _C#_, _Swift_, _Rust_, _Go_, _Kotlin_, _Java_, and _TypeScript_ implementations.
 I might still do a few other (modern) languages that interest me and/or have some hype around them,
-such as _[Zig](https://ziglang.org/)_, _[Mojo](https://www.modular.com/max/mojo)_, and _[Ruby](https://www.ruby-lang.org/)_.
+such as _[Mojo](https://www.modular.com/max/mojo)_, Clojure, Haskell, and _[Ruby](https://www.ruby-lang.org/)_.
 
 In the meantime, there's probably still room to improve in the current implementations,
 especially in the languages that I haven't been actively using so much.
