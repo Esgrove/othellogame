@@ -26,7 +26,7 @@ plugins {
     id("com.gradleup.shadow") version "9.6.1"
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.10.1"
+    id("com.diffplug.spotless") version "8.10.2"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -51,7 +51,7 @@ dependencies {
         exclude(group = "com.github.ajalt.mordant", module = "mordant-jvm-graal-ffi")
     }
     // https://github.com/square/okio
-    implementation("com.squareup.okio:okio:3.18.1")
+    implementation("com.squareup.okio:okio:3.18.2")
 }
 
 java {
