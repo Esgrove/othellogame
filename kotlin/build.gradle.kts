@@ -38,7 +38,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.google.guava:guava:33.7.1-jre")
+    implementation("com.google.guava:guava:33.7.2-jre")
     // https://github.com/ajalt/clikt
     implementation("com.github.ajalt.clikt:clikt:5.1.0") {
         // Exclude native terminal interface providers (JNA / FFM / Graal FFI):
