@@ -21,12 +21,12 @@ val writeVersionFile = tasks.register<WriteVersionTask>("writeVersionFile") {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.4.20"
+    id("org.jetbrains.kotlin.jvm") version "2.4.21"
     // https://github.com/GradleUp/shadow
     id("com.gradleup.shadow") version "9.6.1"
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.10.3"
+    id("com.diffplug.spotless") version "8.10.4"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
