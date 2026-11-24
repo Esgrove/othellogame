@@ -26,7 +26,7 @@ plugins {
     id("com.gradleup.shadow") version "9.6.1"
 
     // https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless
-    id("com.diffplug.spotless") version "8.11.0"
+    id("com.diffplug.spotless") version "8.12.0"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -40,7 +40,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:33.8.0-jre")
     // https://github.com/ajalt/clikt
-    implementation("com.github.ajalt.clikt:clikt:5.1.0") {
+    implementation("com.github.ajalt.clikt:clikt:5.2.1") {
         // Exclude native terminal interface providers (JNA / FFM / Graal FFI):
         // they call restricted native methods, which Java 24+ warns about and will
         // eventually block unless native access is explicitly granted.
